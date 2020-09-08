@@ -31,6 +31,7 @@ int32_t PCXEncodeByte (uint8_t byt, uint8_t cnt, CFile& cf);
 int32_t PCXEncodeLine (uint8_t *inBuff, int32_t inLen, CFile& cf);
 
 /* PCX Header data nType */
+#pragma pack(push, 1)
 typedef struct {
 	uint8_t   Manufacturer;
 	uint8_t   Version;
@@ -47,7 +48,8 @@ typedef struct {
 	uint8_t   Nplanes;
 	int16_t   BytesPerLine;
 	uint8_t   filler[60];
-} __pack__ PCXHeader;
+} PCXHeader;
+#pragma pack(pop)
 
 #define PCXHEADER_SIZE 128
 

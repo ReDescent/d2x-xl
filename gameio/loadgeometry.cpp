@@ -387,11 +387,13 @@ int16_t ConvertD1Texture (int16_t nD1Texture, int32_t bForce)
 
 //------------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tRgbColord {
 	double red;
 	double green;
 	double blue;
-} __pack__ tRgbColord;
+} tRgbColord;
+#pragma pack(pop)
 
 void ReadColor (CFile& cf, CFaceColor *pColor, int32_t bFloatData, int32_t bRegisterColor)
 {

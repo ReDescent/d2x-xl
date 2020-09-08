@@ -27,18 +27,20 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define FADE_LEVELS				31
 #define FADE_RATE					16		//	gots to be a power of 2, else change the code in DiminishPaletteTowardsNormal
 
+#pragma pack(push, 1)
 typedef struct tBGR {
 	uint8_t	b,g,r;
-} __pack__ tBGR;
+} tBGR;
 
 typedef struct tRGB {
 	uint8_t	r,g,b;
-} __pack__ tRGB;
+} tRGB;
 
 typedef union tPalette {
 	uint8_t			raw [PALETTE_SIZE * 3];
 	CRGBColor	rgb [PALETTE_SIZE];
-} __pack__ tPalette;
+} tPalette;
+#pragma pack(pop)
 
 class CComputedColor : public CRGBColor {
 	public:

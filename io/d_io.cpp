@@ -19,31 +19,6 @@
 #define lseek(a,b,c) _lseek(a,b,c)
 #endif
 
-#if 0
-long filelength(int fd) {
-	long old_pos, size;
-
-	if ((old_pos = lseek(fd, 0, SEEK_CUR)) == -1 ||
-	    (size = lseek(fd, 0, SEEK_END)) == -1 ||
-	    (lseek(fd, old_pos, SEEK_SET)) == -1)
-		return -1L;
-	return size;
-}
-#endif
-
-long ffilelength(FILE *file)
-{
-	long old_pos, size;
-
-	if ((old_pos = ftell(file)) == -1 ||
-	    fseek(file, 0, SEEK_END) == -1 ||
-	    (size = ftell(file)) == -1 ||
-	    fseek(file, old_pos, SEEK_SET) == -1)
-		return -1L;
-	return size;
-}
-
-
 ulong d_getdiskfree()
 {
  // FIXME:

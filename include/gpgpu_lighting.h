@@ -18,11 +18,12 @@
 
 //------------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tVertLightIndex {
 	int16_t			nVertex;
 	int16_t			nLights;
 	CFloatVector	color;
-} __pack__ tVertLightIndex;
+} tVertLightIndex;
 
 typedef struct tVertLightData {
 	int16_t					nVertices;
@@ -30,7 +31,8 @@ typedef struct tVertLightData {
 	CFloatVector		buffers [GPGPU_LIGHT_BUFFERS][GPGPU_LIGHT_BUF_SIZE];
 	CFloatVector		colors [GPGPU_LIGHT_BUF_SIZE];
 	tVertLightIndex	index [GPGPU_LIGHT_BUF_SIZE];
-} __pack__ tVertLightData;
+} tVertLightData;
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 

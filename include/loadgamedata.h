@@ -30,6 +30,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define TMI_GOAL_HOARD  32  //this is used to remap the goals
 #define TMI_PRODUCER     64  //this is used to remap the goals
 
+#pragma pack(push, 1)
 typedef struct {
 	uint8_t		flags;     //values defined above
 	uint8_t		pad[3];    //keep alignment
@@ -38,7 +39,7 @@ typedef struct {
 	int16_t		nEffectClip; //the tEffectInfo that changes this, or -1
 	int16_t		destroyed; //bitmap to show when destroyed, or -1
 	int16_t		slide_u,slide_v;    //slide rates of texture, stored in 8:8 fix
-} __pack__ tTexMapInfo;
+} tTexMapInfo;
 
 typedef struct {
 	char			filename[13];
@@ -46,7 +47,8 @@ typedef struct {
 	fix			lighting;		// 0 to 1
 	fix			damage;			//how much damage being against this does
 	int32_t		nEffectClip;		//if not -1, the tEffectInfo that changes this   
-} __pack__ tTexMapInfoD1;
+} tTexMapInfoD1;
+#pragma pack(pop)
 
 extern int32_t Num_tmaps;
 #ifdef EDITOR

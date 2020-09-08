@@ -115,27 +115,30 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //------------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tRGBA {
 	uint8_t	r,g,b,a;
-} __pack__ tRGBA;
+} tRGBA;
 
 typedef struct tABGR {
 	uint8_t	a, b, g, r;
-} __pack__ tABGR;
+} tABGR;
 
 typedef struct tBGRA {
 	uint8_t	b, g, r, a;
-} __pack__ tBGRA;
+} tBGRA;
 
 typedef struct tARGB {
 	uint8_t	a, r, g, b;
-} __pack__ tARGB;
+} tARGB;
+#pragma pack(pop)
 
 typedef struct alias {
 	char aliasname [FILENAME_LEN];
 	char filename [FILENAME_LEN];
 } alias;
 
+#pragma pack(push, 1)
 typedef struct tPIGBitmapHeader {
 	char name [8];
 	uint8_t dflags;           // bits 0-5 anim frame num, bit 6 abm flag
@@ -145,7 +148,7 @@ typedef struct tPIGBitmapHeader {
 	uint8_t flags;
 	uint8_t avgColor;
 	int32_t offset;
-} __pack__ tPIGBitmapHeader;
+} tPIGBitmapHeader;
 
 typedef struct tPIGBitmapHeaderD1 {
 	char name [8];
@@ -155,7 +158,7 @@ typedef struct tPIGBitmapHeaderD1 {
 	uint8_t flags;
 	uint8_t avgColor;
 	int32_t offset;
-} __pack__ tPIGBitmapHeaderD1;
+} tPIGBitmapHeaderD1;
 
 #define PIGBITMAPHEADER_D1_SIZE 17 // no wh_extra
 
@@ -164,20 +167,21 @@ typedef struct tPIGSoundHeader {
 	int32_t length;
 	int32_t data_length;
 	int32_t offset;
-} __pack__ tPIGSoundHeader;
+} tPIGSoundHeader;
 
 // an index into the bitmap collection of the piggy file
 typedef struct tBitmapIndex {
 	uint16_t index;
-} __pack__ tBitmapIndex;
+} tBitmapIndex;
 
 typedef struct tBitmapFile {
 	char    name [15];
-} __pack__ tBitmapFile;
+} tBitmapFile;
 
 typedef struct tSoundFile {
 	char    name [15];
-} __pack__ tSoundFile;
+} tSoundFile;
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 

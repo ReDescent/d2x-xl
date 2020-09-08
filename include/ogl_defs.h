@@ -78,19 +78,21 @@ void OglSetFOV (double fov);
 
 //-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef union tTexCoord2f {
 	float a [2];
 	struct {
 		float	u, v;
 		} v;
-	} __pack__ tTexCoord2f;
+} tTexCoord2f;
 
 typedef union tTexCoord3f {
 	float a [3];
 	struct {
 		float	u, v, l;
 		} v;
-	} __pack__ tTexCoord3f;
+} tTexCoord3f;
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 

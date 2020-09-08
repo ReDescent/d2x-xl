@@ -37,38 +37,41 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //------------------------------------------------------------------------------
 
-class __pack__ CSubModelData {
-	public:
+#pragma pack(push, 1)
+class CSubModelData {
+public:
 #if 1
-		int32_t		ptrs [MAX_SUBMODELS];
-		CFixVector	offsets [MAX_SUBMODELS];
-		CFixVector	norms [MAX_SUBMODELS];   // norm for sep plane
-		CFixVector	pnts [MAX_SUBMODELS];    // point on sep plane
-		fix			rads [MAX_SUBMODELS];       // radius for each submodel
-		uint8_t		parents [MAX_SUBMODELS];    // what is parent for each submodel
-		CFixVector	mins [MAX_SUBMODELS];
-		CFixVector	maxs [MAX_SUBMODELS];
+    int32_t		ptrs [MAX_SUBMODELS];
+    CFixVector	offsets [MAX_SUBMODELS];
+    CFixVector	norms [MAX_SUBMODELS];   // norm for sep plane
+    CFixVector	pnts [MAX_SUBMODELS];    // point on sep plane
+    fix			rads [MAX_SUBMODELS];       // radius for each submodel
+    uint8_t		parents [MAX_SUBMODELS];    // what is parent for each submodel
+    CFixVector	mins [MAX_SUBMODELS];
+    CFixVector	maxs [MAX_SUBMODELS];
 #else
-		CArray<int32_t>		ptrs ;//[MAX_SUBMODELS];
-		CArray<CFixVector>	offsets ;//[MAX_SUBMODELS];
-		CArray<CFixVector>	norms ;//[MAX_SUBMODELS];   // norm for sep plane
-		CArray<CFixVector>	pnts ;//[MAX_SUBMODELS];    // point on sep plane
-		CArray<fix>				rads ;//[MAX_SUBMODELS];       // radius for each submodel
-		CArray<uint8_t>		parents ;//[MAX_SUBMODELS];    // what is parent for each submodel
-		CArray<CFixVector>	mins ;//[MAX_SUBMODELS];
-		CArray<CFixVector>	maxs ;//[MAX_SUBMODELS];
+    CArray<int32_t>		ptrs ;//[MAX_SUBMODELS];
+    CArray<CFixVector>	offsets ;//[MAX_SUBMODELS];
+    CArray<CFixVector>	norms ;//[MAX_SUBMODELS];   // norm for sep plane
+    CArray<CFixVector>	pnts ;//[MAX_SUBMODELS];    // point on sep plane
+    CArray<fix>				rads ;//[MAX_SUBMODELS];       // radius for each submodel
+    CArray<uint8_t>		parents ;//[MAX_SUBMODELS];    // what is parent for each submodel
+    CArray<CFixVector>	mins ;//[MAX_SUBMODELS];
+    CArray<CFixVector>	maxs ;//[MAX_SUBMODELS];
 #endif
 
-	public:
-		CSubModelData () { Create (); }
-		void Create (void);
-		void Setup (uint8_t* pData);
-		void Destroy (void);
-	};
+public:
+    CSubModelData () { Create (); }
+    void Create (void);
+    void Setup (uint8_t* pData);
+    void Destroy (void);
+};
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 //used to describe a polygon model
 
+#pragma pack(push, 1)
 typedef struct tPolyModelInfo {
 		uint16_t			nId;
 		int16_t			nType;
@@ -81,7 +84,8 @@ typedef struct tPolyModelInfo {
 		uint16_t			nFirstTexture;
 		uint8_t			nSimplerModel;	// alternate model with less detail (0 if none, nModel+1 else)
 		bool				bCustom;
-} __pack__ tPolyModelInfo;
+} tPolyModelInfo;
+#pragma pack(pop)
 
 class CPolyModel : public CByteArray {
 	private:

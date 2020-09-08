@@ -25,12 +25,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifdef _WIN32
 # include <stdlib.h> // this is where minand max are defined
 #endif
-//#ifndef min
-//#	define min(a,b) (((a)>(b))?(b):(a))
-//#endif
-//#ifndef max
-//#	define max(a,b) (((a)<(b))?(b):(a))
-//#endif
 
 #if defined(_WIN32)
 # ifdef __MINGW32__
@@ -58,7 +52,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 // the following stuff has nothing to do with types but needed everywhere,
 // and since this file is included everywhere, it's here.
 #ifdef __GNUC__
-# define __pack__ __attribute__((packed))
+# define __pack__
 #elif defined(_WIN32)
 # pragma pack(push, packing)
 # pragma pack(1)

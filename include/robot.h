@@ -40,17 +40,18 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define RI_CLOAKED_ALWAYS           1
 #define RI_CLOAKED_EXCEPT_FIRING    2
 
+#pragma pack(push, 1)
 //describes the position of a certain joint
 typedef struct tJointPos {
 	int16_t jointnum;
 	CAngleVector angles;
-} __pack__ tJointPos;
+} tJointPos;
 
 //describes a list of joint positions
 typedef struct jointlist {
 	int16_t n_joints;
 	int16_t offset;
-} __pack__ jointlist;
+} jointlist;
 
 //robot info flags
 #define RIF_BIG_RADIUS  1   //pad the radius to fix robots firing through walls
@@ -125,7 +126,7 @@ typedef struct tRobotInfo {
 
 	int32_t     always_0xabcd;      // debugging
 
-} __pack__ tRobotInfo;
+} tRobotInfo;
 
 typedef struct D1Robot_info {
 	int32_t		nModel;								// which polygon model?
@@ -170,8 +171,8 @@ typedef struct D1Robot_info {
 
 	int32_t		always_0xabcd;							// debugging
 
-} __pack__ D1Robot_info;
-
+} D1Robot_info;
+#pragma pack(pop)
 
 
 #define MAX_ROBOT_TYPES 100      // maximum number of robot types

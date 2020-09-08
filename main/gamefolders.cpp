@@ -211,129 +211,127 @@ return 0;
 
 int32_t MakeFolder (char* pszAppFolder, const char* pszFolder = "", const char* pszSubFolder = "")
 {
-if (pszSubFolder && *pszSubFolder) {
-#if 0
-	if (!GetAppFolder (pszFolder, pszAppFolder, pszSubFolder, "")) {
-		AppendSlash (pszAppFolder);
-		return 1;
-		}
-#endif
-	if (pszFolder && *pszFolder) {
-		char szFolder [FILENAME_LEN];
-		strcpy (szFolder, pszFolder);
-		AppendSlash (szFolder);
-		sprintf (pszAppFolder, "%s%s", szFolder, pszSubFolder);
-		}
-	}
-AppendSlash (pszAppFolder);
+    if (pszSubFolder && *pszSubFolder) {
+        if (pszFolder && *pszFolder) {
+            char szFolder [FILENAME_LEN];
+            strcpy (szFolder, pszFolder);
+            AppendSlash (szFolder);
+            sprintf (pszAppFolder, "%s%s", szFolder, pszSubFolder);
+        }
+    }
+    AppendSlash (pszAppFolder);
 
-FFS	ffs;
+    FFS	ffs;
 
-PrintLog (0, "looking for folder '%s' ...", pszAppFolder);
-if (!FFF (pszAppFolder, &ffs, 1)) {
-	PrintLog (0, "found\n");
-	return 1;
-	}
+    PrintLog (0, "looking for folder '%s' ...", pszAppFolder);
+    if (!FFF (pszAppFolder, &ffs, 1)) {
+        PrintLog (0, "found\n");
+        return 1;
+    }
 
-PrintLog (0, "failed\n");
-PrintLog (0, "trying to create folder '%s' ...", pszAppFolder);
-pszAppFolder [strlen (pszAppFolder) - 1] = '\0'; // remove trailing slash
-int32_t nResult = CFile::MkDir (pszAppFolder) > -1;
-if (nResult)
-	PrintLog (0, "worked\n");
-else
-	PrintLog (0, "failed\n");
-AppendSlash (pszAppFolder);
-return nResult;
+    PrintLog (0, "failed\n");
+    PrintLog (0, "trying to create folder '%s' ...", pszAppFolder);
+    pszAppFolder [strlen (pszAppFolder) - 1] = '\0'; // remove trailing slash
+
+    int32_t nResult = CFile::MkDir (pszAppFolder) > -1;
+    if (nResult) {
+        PrintLog (0, "worked\n");
+    }
+    else {
+        PrintLog (0, "failed\n");
+    }
+    AppendSlash (pszAppFolder);
+    return nResult;
 }
 
 // ----------------------------------------------------------------------------
 
 int32_t MakeTexSubFolders (char* pszParentFolder)
 {
-if (!*pszParentFolder)
-	return 0;
+    if (!*pszParentFolder)
+        return 0;
 
-	static char szTexSubFolders [4][4] = {"256", "128", "64", "dxt"};
+    static char szTexSubFolders [4][4] = {"256", "128", "64", "dxt"};
 
-	char	szFolder [FILENAME_LEN];
+    char szFolder [FILENAME_LEN];
 
-for (int32_t i = 0; i < 4; i++) {
-	sprintf (szFolder, "%s%s", pszParentFolder, szTexSubFolders [i]);
-	if (!MakeFolder (szFolder))
-		return 0;
-	}
-return 1;
+    for (int32_t i = 0; i < 4; i++) {
+        sprintf (szFolder, "%s%s", pszParentFolder, szTexSubFolders [i]);
+        if (!MakeFolder (szFolder)) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 // ----------------------------------------------------------------------------
 
 static int32_t GetSystemFolders (int32_t& nSharedFolderMode, int32_t& nUserFolderMode)
 {
-PrintLog (1, "\nLooking for system folders\n");
+    PrintLog (1, "\nLooking for system folders\n");
 #if defined (_WIN32)
 
-if (!FindDataFolder (appConfig.Text ("-datadir")) &&
-	 !FindDataFolder (getenv ("DESCENT2")) &&
-	 !FindDataFolder (appConfig [1], true) &&
-	 !FindDataFolder (DEFAULT_GAME_FOLDER))
-	return 0;
+    if (!FindDataFolder (appConfig.Text ("-datadir")) &&
+        !FindDataFolder (getenv ("DESCENT2")) &&
+        !FindDataFolder (appConfig [1], true) &&
+        !FindDataFolder (DEFAULT_GAME_FOLDER))
+        return 0;
 
-nUserFolderMode = !*CheckFolder (gameFolders.user.szRoot, appConfig.Text ("-userdir"), "");
-if (nUserFolderMode)
-	*gameFolders.user.szRoot = '\0';
+    nUserFolderMode = !*CheckFolder (gameFolders.user.szRoot, appConfig.Text ("-userdir"), "");
+    if (nUserFolderMode)
+        *gameFolders.user.szRoot = '\0';
 
-nSharedFolderMode = !*CheckFolder (gameFolders.var.szRoot, appConfig.Text ("-cachedir"), "");
-if (nSharedFolderMode)
-	*gameFolders.var.szRoot = '\0';
+    nSharedFolderMode = !*CheckFolder (gameFolders.var.szRoot, appConfig.Text ("-cachedir"), "");
+    if (nSharedFolderMode)
+        *gameFolders.var.szRoot = '\0';
 
 #elif defined (__linux__)
 
-*gameFolders.szSharePath = '\0';
-if (*SHAREPATH) {
-	if (strstr (SHAREPATH, "games"))
-		sprintf (gameFolders.szSharePath, "%s/d2x-xl", SHAREPATH);
-	else
-		sprintf (gameFolders.szSharePath, "%s/games/d2x-xl", SHAREPATH);
-	}
+    *gameFolders.szSharePath = '\0';
+    if (*SHAREPATH) {
+        if (strstr (SHAREPATH, "games"))
+            sprintf (gameFolders.szSharePath, "%s/d2x-xl", SHAREPATH);
+        else
+            sprintf (gameFolders.szSharePath, "%s/games/d2x-xl", SHAREPATH);
+        }
 
-if (!FindDataFolder (appConfig.Text ("-datadir")) &&
-	 !FindDataFolder (gameFolders.szSharePath) &&
-	 !FindDataFolder (getenv ("DESCENT2")) &&
-	 !FindDataFolder (appConfig [1], true) &&
-	 !FindDataFolder (DEFAULT_GAME_FOLDER)) 
-	return 0;
+    if (!FindDataFolder (appConfig.Text ("-datadir")) &&
+        !FindDataFolder (gameFolders.szSharePath) &&
+        !FindDataFolder (getenv ("DESCENT2")) &&
+        !FindDataFolder (appConfig [1], true) &&
+        !FindDataFolder (DEFAULT_GAME_FOLDER))
+        return 0;
 
-nUserFolderMode = !*CheckFolder (gameFolders.user.szRoot, appConfig.Text ("-userdir"), "");
-if (nUserFolderMode && !*CheckFolder (gameFolders.user.szRoot, getenv ("HOME"), ""))
-	*gameFolders.user.szRoot = '\0';
+    nUserFolderMode = !*CheckFolder (gameFolders.user.szRoot, appConfig.Text ("-userdir"), "");
+    if (nUserFolderMode && !*CheckFolder (gameFolders.user.szRoot, getenv ("HOME"), ""))
+        *gameFolders.user.szRoot = '\0';
 
-nSharedFolderMode = !*CheckFolder (gameFolders.var.szRoot, appConfig.Text ("-cachedir"), "");
-if (nSharedFolderMode && !*CheckFolder (gameFolders.var.szRoot, SHARED_ROOT_FOLDER, ""))
-	*gameFolders.var.szRoot = '\0';
+    nSharedFolderMode = !*CheckFolder (gameFolders.var.szRoot, appConfig.Text ("-cachedir"), "");
+    if (nSharedFolderMode && !*CheckFolder (gameFolders.var.szRoot, SHARED_ROOT_FOLDER, ""))
+        *gameFolders.var.szRoot = '\0';
 
 #	else //__macosx__
 
-if (!FindDataFolder (appConfig.Text ("-datadir")) &&
-	 !FindDataFolder (appConfig [1], true) &&
-	 !FindDataFolder (DEFAULT_GAME_FOLDER)) {
-	GetOSXAppFolder (gameFolders.game.szRoot, gameFolders.game.szRoot);
-	if (!FindDataFolder (gameFolders.game.szRoot))
-		return 0;
-	}
+    if (!FindDataFolder (appConfig.Text ("-datadir")) &&
+        !FindDataFolder (appConfig [1], true) &&
+        !FindDataFolder (DEFAULT_GAME_FOLDER)) {
+        GetOSXAppFolder (gameFolders.game.szRoot, gameFolders.game.szRoot);
+        if (!FindDataFolder (gameFolders.game.szRoot))
+            return 0;
+        }
 
-nUserFolderMode = !*CheckFolder (gameFolders.user.szRoot, appConfig.Text ("-userdir"), "");
-if (nUserFolderMode)
-	*gameFolders.user.szRoot = '\0';
+    nUserFolderMode = !*CheckFolder (gameFolders.user.szRoot, appConfig.Text ("-userdir"), "");
+    if (nUserFolderMode)
+        *gameFolders.user.szRoot = '\0';
 
-nSharedFolderMode = !*CheckFolder (gameFolders.var.szRoot, appConfig.Text ("-cachedir"), "");
-if (nSharedFolderMode)
-	*gameFolders.var.szRoot = '\0';
+    nSharedFolderMode = !*CheckFolder (gameFolders.var.szRoot, appConfig.Text ("-cachedir"), "");
+    if (nSharedFolderMode)
+        *gameFolders.var.szRoot = '\0';
 
 #endif // __macosx__
 
-PrintLog (-1);
-return 1;
+    PrintLog (-1);
+    return 1;
 }
 
 // ----------------------------------------------------------------------------
@@ -343,54 +341,52 @@ static int32_t MakeCacheFolders (int32_t nSharedFolderMode, int32_t nUserFolderM
 PrintLog (1, "\nCreating cache folders\n");
 
 #ifdef __macosx__
-
-if (*gameFolders.user.szRoot)
-	strcpy (gameFolders.user.szCache, gameFolders.user.szRoot);
-else {
-	strcpy (gameFolders.user.szRoot, gameFolders.game.szRoot);
-	if (!MakeFolder (gameFolders.user.szCache, gameFolders.user.szRoot, CACHE_FOLDER))
-		strcpy (gameFolders.user.szCache, gameFolders.user.szRoot);	// if user cache folder cannot be created, put everything in the application folder
-	}
-if (*gameFolders.var.szRoot) 
-	strcpy (gameFolders.var.szCache, gameFolders.var.szRoot); // user-supplied shared cache folder
-else {
-	strcpy (gameFolders.var.szRoot, GetMacOSXCacheFolder ());
-	if (MakeFolder (gameFolders.var.szRoot)) 
-		strcpy (gameFolders.var.szCache, gameFolders.var.szRoot);
-	else {	// fall back to user cache folder if folder cannot be created
-		strcpy (gameFolders.var.szRoot, gameFolders.user.szRoot);
-		strcpy (gameFolders.var.szCache, gameFolders.user.szCache);
-		}
-	}
-
+    if (*gameFolders.user.szRoot)
+        strcpy (gameFolders.user.szCache, gameFolders.user.szRoot);
+    else {
+        strcpy (gameFolders.user.szRoot, gameFolders.game.szRoot);
+        if (!MakeFolder (gameFolders.user.szCache, gameFolders.user.szRoot, CACHE_FOLDER))
+            strcpy (gameFolders.user.szCache, gameFolders.user.szRoot);	// if user cache folder cannot be created, put everything in the application folder
+        }
+    if (*gameFolders.var.szRoot)
+        strcpy (gameFolders.var.szCache, gameFolders.var.szRoot); // user-supplied shared cache folder
+    else {
+        strcpy (gameFolders.var.szRoot, GetMacOSXCacheFolder ());
+        if (MakeFolder (gameFolders.var.szRoot))
+            strcpy (gameFolders.var.szCache, gameFolders.var.szRoot);
+        else {	// fall back to user cache folder if folder cannot be created
+            strcpy (gameFolders.var.szRoot, gameFolders.user.szRoot);
+            strcpy (gameFolders.var.szCache, gameFolders.user.szCache);
+            }
+        }
 #else
 
 if (!*gameFolders.user.szRoot) {
-#	ifdef __linux__
-	strcpy (gameFolders.user.szRoot, *gameFolders.var.szRoot ? gameFolders.var.szRoot : gameFolders.game.szRoot);
-	nUserFolderMode = 0;
-#	else
-	strcpy (gameFolders.user.szRoot, gameFolders.game.szRoot);
-	nUserFolderMode = 1;
-#	endif
-	}
-if (nUserFolderMode)
-	MakeFolder (gameFolders.user.szCache, gameFolders.user.szRoot, USER_CACHE_FOLDER);
-else
-	strcpy (gameFolders.user.szCache, gameFolders.user.szRoot);
+    #	ifdef __linux__
+        strcpy (gameFolders.user.szRoot, *gameFolders.var.szRoot ? gameFolders.var.szRoot : gameFolders.game.szRoot);
+        nUserFolderMode = 0;
+    #	else
+        strcpy (gameFolders.user.szRoot, gameFolders.game.szRoot);
+        nUserFolderMode = 1;
+    #	endif
+        }
+    if (nUserFolderMode)
+        MakeFolder (gameFolders.user.szCache, gameFolders.user.szRoot, USER_CACHE_FOLDER);
+    else
+        strcpy (gameFolders.user.szCache, gameFolders.user.szRoot);
 
-if (!*gameFolders.var.szRoot) {
-	strcpy (gameFolders.var.szRoot, *gameFolders.user.szRoot ? gameFolders.user.szRoot : gameFolders.game.szRoot);
-	strcpy (gameFolders.var.szCache, *gameFolders.user.szCache ? gameFolders.user.szCache : gameFolders.game.szRoot);
-	nSharedFolderMode = -1;
-	}
-PrintLog (0, "shared folder mode = %s\n", nSharedFolderMode ? "auto" : "user");
-if (!nSharedFolderMode)
-	strcpy (gameFolders.var.szCache, gameFolders.var.szRoot);
-else if ((nSharedFolderMode > 0) && !MakeFolder (gameFolders.var.szCache, gameFolders.var.szRoot, SHARED_CACHE_FOLDER)) {
-	strcpy (gameFolders.var.szRoot, gameFolders.user.szRoot);	 // fall back
-	strcpy (gameFolders.var.szCache, gameFolders.user.szCache);
-	}
+    if (!*gameFolders.var.szRoot) {
+        strcpy (gameFolders.var.szRoot, *gameFolders.user.szRoot ? gameFolders.user.szRoot : gameFolders.game.szRoot);
+        strcpy (gameFolders.var.szCache, *gameFolders.user.szCache ? gameFolders.user.szCache : gameFolders.game.szRoot);
+        nSharedFolderMode = -1;
+        }
+    PrintLog (0, "shared folder mode = %s\n", nSharedFolderMode ? "auto" : "user");
+    if (!nSharedFolderMode)
+        strcpy (gameFolders.var.szCache, gameFolders.var.szRoot);
+    else if ((nSharedFolderMode > 0) && !MakeFolder (gameFolders.var.szCache, gameFolders.var.szRoot, SHARED_CACHE_FOLDER)) {
+        strcpy (gameFolders.var.szRoot, gameFolders.user.szRoot);	 // fall back
+        strcpy (gameFolders.var.szCache, gameFolders.user.szCache);
+}
 
 #endif // __macosx__
 
@@ -523,74 +519,74 @@ return 1;
 
 void GetAppFolders (bool bInit)
 {
-if (bInit)
-	memset (&gameFolders, 0, sizeof (gameFolders));
-*gameFolders.user.szRoot =
-*gameFolders.game.szRoot =
-*gameFolders.game.szData [0] =
-*gameFolders.game.szData [1] =
-*gameFolders.var.szCache =
-*gameFolders.user.szCache = '\0';
+    if (bInit)
+        memset (&gameFolders, 0, sizeof (gameFolders));
+    *gameFolders.user.szRoot =
+    *gameFolders.game.szRoot =
+    *gameFolders.game.szData [0] =
+    *gameFolders.game.szData [1] =
+    *gameFolders.var.szCache =
+    *gameFolders.user.szCache = '\0';
 
-int32_t nSharedFolderMode, nUserFolderMode;
+    int32_t nSharedFolderMode, nUserFolderMode;
 
-if (!GetSystemFolders (nSharedFolderMode, nUserFolderMode)) {
-	if (bInit)
-		return;
-	PrintLog (-1, "Could not locate game data\n");
-	Error ("Could not locate game data");
-	exit (1);
-	}
+    if (!GetSystemFolders (nSharedFolderMode, nUserFolderMode)) {
+        if (bInit)
+            return;
+        PrintLog (-1, "Could not locate game data\n");
+        Error ("Could not locate game data");
+        exit (1);
+    }
 
-if (CheckDataFolder (gameFolders.game.szRoot)) {
-	Error (TXT_NO_HOG2);
-	exit (1);
-	}
+    if (CheckDataFolder (gameFolders.game.szRoot)) {
+        Error (TXT_NO_HOG2);
+        exit (1);
+    }
 
-/*---*/PrintLog (0, "\ngame app folder = '%s'\n", gameFolders.game.szRoot);
-/*---*/PrintLog (0, "game data folder = '%s'\n", gameFolders.game.szData [0]);
+    /*---*/PrintLog (0, "\ngame app folder = '%s'\n", gameFolders.game.szRoot);
+    /*---*/PrintLog (0, "game data folder = '%s'\n", gameFolders.game.szData [0]);
 
-#ifndef _WIN32
-if (*gameFolders.game.szRoot)
-	chdir (gameFolders.game.szRoot);
-#endif
+    #ifndef _WIN32
+    if (*gameFolders.game.szRoot)
+        chdir (gameFolders.game.szRoot);
+    #endif
 
-MakeCacheFolders (nSharedFolderMode, nUserFolderMode);
+    MakeCacheFolders (nSharedFolderMode, nUserFolderMode);
 
-/*---*/PrintLog (0, "\nshared data folder = '%s'\n", gameFolders.var.szCache);
-/*---*/PrintLog (0, "user data folder = '%s'\n", gameFolders.user.szCache);
+    /*---*/PrintLog (0, "\nshared data folder = '%s'\n", gameFolders.var.szCache);
+    /*---*/PrintLog (0, "user data folder = '%s'\n", gameFolders.user.szCache);
 
-if (!MakeGameFolders ())
-	return;
+    if (!MakeGameFolders ())
+        return;
 
-if (!MakeSharedFolders () && strcmp (gameFolders.var.szCache, gameFolders.user.szCache)) {
-	strcpy (gameFolders.var.szCache, gameFolders.user.szCache);
-	MakeSharedFolders ();
-	}
-MakeUserFolders (nUserFolderMode);
-PrintLog (0, "\n");
+    if (!MakeSharedFolders () && strcmp (gameFolders.var.szCache, gameFolders.user.szCache)) {
+        strcpy (gameFolders.var.szCache, gameFolders.user.szCache);
+        MakeSharedFolders ();
+        }
+    MakeUserFolders (nUserFolderMode);
+    PrintLog (0, "\n");
 }
 
 // ----------------------------------------------------------------------------
 
 void ResetModFolders (void)
 {
-gameStates.app.bHaveMod = 0;
-*gameFolders.mods.szName =
-*gameFolders.mods.szCache =
-*gameFolders.mods.szMusic =
-*gameFolders.mods.szSounds [0] =
-*gameFolders.mods.szSounds [1] =
-*gameFolders.mods.szCurrent =
-*gameFolders.mods.szTextures [0] =
-*gameFolders.mods.szTextures [1] =
-*gameFolders.var.szTextures [3] =
-*gameFolders.var.szTextures [4] =
-*gameFolders.mods.szModels [0] =
-*gameFolders.var.szModels [1] =
-*gameFolders.var.szModels [2] = 
-*gameFolders.mods.szWallpapers = '\0';
-sprintf (gameOpts->menus.altBg.szName [1], "default.tga");
+    gameStates.app.bHaveMod = 0;
+    *gameFolders.mods.szName =
+    *gameFolders.mods.szCache =
+    *gameFolders.mods.szMusic =
+    *gameFolders.mods.szSounds [0] =
+    *gameFolders.mods.szSounds [1] =
+    *gameFolders.mods.szCurrent =
+    *gameFolders.mods.szTextures [0] =
+    *gameFolders.mods.szTextures [1] =
+    *gameFolders.var.szTextures [3] =
+    *gameFolders.var.szTextures [4] =
+    *gameFolders.mods.szModels [0] =
+    *gameFolders.var.szModels [1] =
+    *gameFolders.var.szModels [2] =
+    *gameFolders.mods.szWallpapers = '\0';
+    sprintf (gameOpts->menus.altBg.szName [1], "default.tga");
 }
 
 // ----------------------------------------------------------------------------
@@ -598,108 +594,108 @@ sprintf (gameOpts->menus.altBg.szName [1], "default.tga");
 void MakeModFolders (const char* pszMission, int32_t nLevel)
 {
 
-	static int32_t nLoadingScreen = -1;
-	static int32_t nShuffledLevels [24];
+    static int32_t nLoadingScreen = -1;
+    static int32_t nShuffledLevels [24];
 
-int32_t bDefault, bBuiltIn;
+    int32_t bDefault, bBuiltIn;
 
-ResetModFolders ();
-if (gameStates.app.bDemoData)
-	return;
+    ResetModFolders ();
+    if (gameStates.app.bDemoData) {
+        return;
+    }
 
-if ((bDefault = (*pszMission == '\0')))
-	pszMission = missionManager [missionManager.nCurrentMission].szMissionName;
-else
-	CFile::SplitPath (pszMission, NULL, gameFolders.mods.szName, NULL);
+    if ((bDefault = (*pszMission == '\0'))) {
+        pszMission = missionManager [missionManager.nCurrentMission].szMissionName;
+    }
+    else {
+        CFile::SplitPath (pszMission, NULL, gameFolders.mods.szName, NULL);
+    }
 
-#if 1
-if ((bBuiltIn = missionManager.IsBuiltIn (pszMission)))
-	strcpy (gameFolders.mods.szName, (bBuiltIn == 1) ? "descent" : "descent2");
-#else
-if ((bBuiltIn = (strstr (pszMission, "Descent: First Strike") != NULL) ? 1 : 0))
-	strcpy (gameFolders.mods.szName, "descent");
-else if ((bBuiltIn = (strstr (pszMission, "Descent 2: Counterstrike!") != NULL) ? 2 : 0))
-	strcpy (gameFolders.mods.szName, "descent2");
-else if ((bBuiltIn = (strstr (pszMission, "d2x.hog") != NULL) ? 3 : 0))
-	strcpy (gameFolders.mods.szName, "descent2");
-#endif
-else if (bDefault)
-	return;
+    if ((bBuiltIn = missionManager.IsBuiltIn (pszMission))) {
+        strcpy (gameFolders.mods.szName, (bBuiltIn == 1) ? "descent" : "descent2");
+    }
+    else if (bDefault) {
+        return;
+    }
 
-if (bBuiltIn && !gameOpts->app.bEnableMods)
-	return;
+    if (bBuiltIn && !gameOpts->app.bEnableMods) {
+        return;
+    }
 
-if (GetAppFolder (gameFolders.mods.szRoot, gameFolders.mods.szCurrent, gameFolders.mods.szName, "")) 
-	*gameFolders.mods.szName = '\0';
-else {
-	sprintf (gameFolders.mods.szCache, "%s%s/", gameFolders.var.szMods, gameFolders.mods.szName);	// e.g. /var/cache/d2x-xl/mods/mymod/
-	MakeFolder (gameFolders.mods.szCache);
-	sprintf (gameFolders.mods.szSounds [0], "%s%s/", gameFolders.mods.szCurrent, SOUND_FOLDER);
-	if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szTextures [0], TEXTURE_FOLDER, ""))
-		*gameFolders.mods.szTextures [0] = '\0';
-	else {
-		sprintf (gameFolders.var.szTextures [3], "%s%s/", gameFolders.mods.szCache, TEXTURE_FOLDER);	// e.g. /var/cache/d2x-xl/mods/mymod/textures/
-		MakeFolder (gameFolders.var.szTextures [3]);
-		//gameOpts->render.textures.bUseHires [0] = 1;
-		}
-#if 0
-	if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szModels [0], MODEL_FOLDER, "*.ase") &&
-		 GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szModels [0], MODEL_FOLDER, "*.oof"))
-#else
-	if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szModels [0], MODEL_FOLDER, "*"))
-#endif
-		*gameFolders.mods.szModels [0] = '\0';
-	else {
-		sprintf (gameFolders.var.szModels [1], "%s%s/", gameFolders.mods.szCache, MODEL_FOLDER);
-		MakeFolder (gameFolders.var.szModels [1]);
-		}
-	if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szWallpapers, WALLPAPER_FOLDER, "*.tga")) {
-		*gameFolders.mods.szWallpapers = '\0';
-		*gameOpts->menus.altBg.szName [1] = '\0';
-		}
-	else {
-		if (nLevel < 0)
-			sprintf (gameOpts->menus.altBg.szName [1], "slevel%02d.tga", -nLevel);
-		else if (nLevel > 0) {
-			// chose a random custom loading screen for missions other than D2:CS that do not have their own custom loading screens
-			if ((bBuiltIn == 2) && (missionManager.IsBuiltIn (hogFileManager.MissionName ()) != 2)) {
-				if (nLoadingScreen < 0) { // create a random offset the first time this function is called and use it later on
-					int32_t i;
-					for (i = 0; i < 24; i++)
-						nShuffledLevels [i] = i + 1;
-					//gameStates.app.SRand ();
-					for (i = 0; i < 23; i++) {
-						int32_t h = 23 - i;
-						int32_t j = h ? Rand (h) : 0;
-						Swap (nShuffledLevels [i], nShuffledLevels [i + j]);
-						}
-					}
-				nLoadingScreen = (nLoadingScreen + 1) % 24;
-				nLevel = nShuffledLevels [nLoadingScreen];
-				}
-			sprintf (gameOpts->menus.altBg.szName [1], "level%02d.tga", nLevel);
-			}
-		else 
-			sprintf (gameOpts->menus.altBg.szName [1], "default.tga");
-		backgroundManager.Rebuild ();
-		}
-	if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szMusic, MUSIC_FOLDER, "*.ogg"))
-		*gameFolders.mods.szMusic = '\0';
-	MakeTexSubFolders (gameFolders.var.szTextures [3]);
-	MakeTexSubFolders (gameFolders.var.szModels [1]);
-	gameStates.app.bHaveMod = 1;
-	}
+    if (GetAppFolder (gameFolders.mods.szRoot, gameFolders.mods.szCurrent, gameFolders.mods.szName, "")) {
+        *gameFolders.mods.szName = '\0';
+    }
+    else {
+        sprintf (gameFolders.mods.szCache, "%s%s/", gameFolders.var.szMods, gameFolders.mods.szName);	// e.g. /var/cache/d2x-xl/mods/mymod/
+        MakeFolder (gameFolders.mods.szCache);
+        sprintf (gameFolders.mods.szSounds [0], "%s%s/", gameFolders.mods.szCurrent, SOUND_FOLDER);
+        if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szTextures [0], TEXTURE_FOLDER, "")) {
+            *gameFolders.mods.szTextures [0] = '\0';
+        }
+        else {
+            sprintf (gameFolders.var.szTextures [3], "%s%s/", gameFolders.mods.szCache, TEXTURE_FOLDER);	// e.g. /var/cache/d2x-xl/mods/mymod/textures/
+            MakeFolder (gameFolders.var.szTextures [3]);
+        }
+
+        if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szModels [0], MODEL_FOLDER, "*")) {
+            *gameFolders.mods.szModels [0] = '\0';
+        }
+        else {
+            sprintf (gameFolders.var.szModels [1], "%s%s/", gameFolders.mods.szCache, MODEL_FOLDER);
+            MakeFolder (gameFolders.var.szModels [1]);
+        }
+
+        if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szWallpapers, WALLPAPER_FOLDER, "*.tga")) {
+            *gameFolders.mods.szWallpapers = '\0';
+            *gameOpts->menus.altBg.szName [1] = '\0';
+            }
+        else {
+            if (nLevel < 0)
+                sprintf (gameOpts->menus.altBg.szName [1], "slevel%02d.tga", -nLevel);
+            else if (nLevel > 0) {
+                // chose a random custom loading screen for missions other than D2:CS that do not have their own custom loading screens
+                if ((bBuiltIn == 2) && (missionManager.IsBuiltIn (hogFileManager.MissionName ()) != 2)) {
+                    if (nLoadingScreen < 0) { // create a random offset the first time this function is called and use it later on
+                        int32_t i;
+                        for (i = 0; i < 24; i++)
+                            nShuffledLevels [i] = i + 1;
+                        //gameStates.app.SRand ();
+                        for (i = 0; i < 23; i++) {
+                            int32_t h = 23 - i;
+                            int32_t j = h ? Rand (h) : 0;
+                            Swap (nShuffledLevels [i], nShuffledLevels [i + j]);
+                            }
+                        }
+                    nLoadingScreen = (nLoadingScreen + 1) % 24;
+                    nLevel = nShuffledLevels [nLoadingScreen];
+                    }
+                sprintf (gameOpts->menus.altBg.szName [1], "level%02d.tga", nLevel);
+            }
+            else {
+                sprintf (gameOpts->menus.altBg.szName [1], "default.tga");
+            }
+            backgroundManager.Rebuild ();
+        }
+        if (GetAppFolder (gameFolders.mods.szCurrent, gameFolders.mods.szMusic, MUSIC_FOLDER, "*.ogg")) {
+            *gameFolders.mods.szMusic = '\0';
+        }
+        MakeTexSubFolders (gameFolders.var.szTextures [3]);
+        MakeTexSubFolders (gameFolders.var.szModels [1]);
+        gameStates.app.bHaveMod = 1;
+    }
 }
 
 // ----------------------------------------------------------------------------
 
 char* LevelFolder (int32_t nLevel)
 {
-if (nLevel < 0)
-	sprintf (gameFolders.mods.szLevel, "slevel%02d/", -nLevel);
-else
-	sprintf (gameFolders.mods.szLevel, "level%02d/", nLevel);
-return gameFolders.mods.szLevel;
+    if (nLevel < 0) {
+        sprintf (gameFolders.mods.szLevel, "slevel%02d/", -nLevel);
+    }
+    else {
+        sprintf (gameFolders.mods.szLevel, "level%02d/", nLevel);
+    }
+    return gameFolders.mods.szLevel;
 }
 
 // ----------------------------------------------------------------------------

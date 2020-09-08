@@ -5,24 +5,26 @@
 
 namespace Mesh {
 
-	typedef struct tEdge {
-		int32_t			nNext;
-		uint16_t			verts [2];
-		int32_t			tris [2];
-		float				fLength;
-		} __pack__ tEdge;
+#pragma pack(push, 1)
+typedef struct tEdge {
+    int32_t			nNext;
+    uint16_t			verts [2];
+    int32_t			tris [2];
+    float				fLength;
+}  tEdge;
 
-	typedef struct tTriangle {
-		int32_t			nFace;
-		int32_t			nIndex;
-		int32_t			lines [3];
-		uint16_t			index [3];
-		int16_t			nPass;
-		int16_t			nId;
-		tTexCoord2f	texCoord [3];
-		tTexCoord2f	ovlTexCoord [3];
-		CFloatVector	color [3];
-	} __pack__ tTriangle;
+typedef struct tTriangle {
+    int32_t			nFace;
+    int32_t			nIndex;
+    int32_t			lines [3];
+    uint16_t			index [3];
+    int16_t			nPass;
+    int16_t			nId;
+    tTexCoord2f	texCoord [3];
+    tTexCoord2f	ovlTexCoord [3];
+    CFloatVector	color [3];
+}  tTriangle;
+#pragma pack(pop)
 
 class CTriMeshBuilder {
 	private:

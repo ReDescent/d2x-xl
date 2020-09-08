@@ -117,6 +117,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 // This is the stuff that is permanent for an AI CObject and is
 // therefore saved to disk.
+#pragma pack(push, 1)
 typedef struct tAIStaticInfo {
 	uint8_t  behavior;               //
 	int8_t   flags[MAX_AI_FLAGS];    // various flags, meaning defined by constants
@@ -128,7 +129,8 @@ typedef struct tAIStaticInfo {
 	int16_t	nDangerLaser;
 	int32_t	nDangerLaserSig;
 	fix		xDyingStartTime;       // Time at which this robot started dying.
-} __pack__ tAIStaticInfo;
+} tAIStaticInfo;
+#pragma pack(pop)
 
 class CAIStaticInfo {
 	private:
@@ -148,6 +150,7 @@ class CAIStaticInfo {
 };
 
 // This is the stuff which doesn't need to be saved to disk.
+#pragma pack(push, 1)
 typedef struct tAILocalInfo {
 // These used to be bytes, changed to ints so I could set watchpoints on them.
 // targetAwarenessType..nRapidFireCount used to be bytes
@@ -174,18 +177,19 @@ typedef struct tAILocalInfo {
 	CAngleVector deltaAngles [MAX_SUBMODELS]; // angles for each subobject
 	int8_t   goalState [MAX_SUBMODELS];     // Goal state for this sub-CObject
 	int8_t   achievedState [MAX_SUBMODELS]; // Last achieved state
-} __pack__ tAILocalInfo;
+} tAILocalInfo;
 
 typedef struct {
 	int32_t         nSegment;
 	CFixVector	point;
 	uint8_t			nConnSide;
-} __pack__ tPointSeg;
+} tPointSeg;
 
 typedef struct {
 	int16_t       start, end;
 	uint8_t			nConnSide;
-} __pack__ segQueueEntry;
+} segQueueEntry;
+#pragma pack(pop)
 
 #define MAX_POINT_SEGS_D2  2500
 #define MAX_POINT_SEGS  	(MAX_SEGMENTS_D2X * 4)

@@ -11,10 +11,6 @@
 #	endif
 #endif
 
-extern long ffilelength(FILE *fh);
-#if 0
-extern long filelength(int fd);
-#endif
 unsigned long d_getdiskfree();
 // remove extension from filename, doesn't work with paths.
 void removeext(const char *filename, char *out);

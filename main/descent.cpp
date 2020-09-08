@@ -813,134 +813,133 @@ PrintLog (-1);
 
 int32_t Initialize (int32_t argc, char *argv[])
 {
-/*---*/PrintLog (1, "Initializing data\n");
-gameData.timeData.xGameTotal = 0;
-gameData.appData.argC = argc;
-gameData.appData.argV = reinterpret_cast<char**>(argv);
-signal (SIGABRT, D2SignalHandler);
-signal (SIGFPE, D2SignalHandler);
-signal (SIGILL, D2SignalHandler);
-signal (SIGINT, D2SignalHandler);
-signal (SIGSEGV, D2SignalHandler);
-signal (SIGTERM, D2SignalHandler);
+    /*---*/PrintLog (1, "Initializing data\n");
+    gameData.timeData.xGameTotal = 0;
+    gameData.appData.argC = argc;
+    gameData.appData.argV = reinterpret_cast<char**>(argv);
+    signal (SIGABRT, D2SignalHandler);
+    signal (SIGFPE, D2SignalHandler);
+    signal (SIGILL, D2SignalHandler);
+    signal (SIGINT, D2SignalHandler);
+    signal (SIGSEGV, D2SignalHandler);
+    signal (SIGTERM, D2SignalHandler);
 #if 0 //def _WIN32
-SDL_SetSpecialKeyHandling (0);
+    SDL_SetSpecialKeyHandling (0);
 #endif
-SDL_putenv (const_cast<char*>("SDL_DISABLE_LOCK_KEYS=1"));
-hogFileManager.Init ("", "");
-CObject::InitTables ();
-InitGameStates ();
-gameData.Init ();
-InitExtraGameInfo ();
-InitNetworkData ();
-gameOptions [0].Init ();
-InitArgs (argc, argv);
-EvalArgs ();
-GetAppFolders (true);
-CheckAndFixSetup ();
-gameStates.app.nLogLevel = appConfig.Int ("-printlog", 1);
-OpenLogFile ();
+    SDL_putenv (const_cast<char*>("SDL_DISABLE_LOCK_KEYS=1"));
+    hogFileManager.Init ("", "");
+    CObject::InitTables ();
+    InitGameStates ();
+    gameData.Init ();
+    InitExtraGameInfo ();
+    InitNetworkData ();
+    gameOptions [0].Init ();
+    InitArgs (argc, argv);
+    EvalArgs ();
+    GetAppFolders (true);
+    CheckAndFixSetup ();
+    gameStates.app.nLogLevel = appConfig.Int ("-printlog", 1);
+    OpenLogFile ();
 #ifdef DESCENT_EXECUTABLE_VERSION
-PrintLog (0, "%s (%s)\n", DESCENT_VERSION, DESCENT_EXECUTABLE_VERSION);
+    PrintLog (0, "%s (%s)\n", DESCENT_VERSION, DESCENT_EXECUTABLE_VERSION);
 #else
-PrintLog (0, "%s\n", DESCENT_VERSION);
+    PrintLog (0, "%s\n", DESCENT_VERSION);
 #endif
-InitArgs (argc, argv);
-GetAppFolders (false);
-#ifdef D2X_MEM_HANDLER
-MemInit ();
-#endif
-error_init (NULL, NULL);
-*szAutoHogFile =
-*szAutoMission = '\0';
-EvalArgs ();
-gameOptions [1].Init ();
-GetNumThreads ();
-DefaultAllSettings (true);
-gameOpts->render.nMathFormat = gameOpts->render.nDefMathFormat;
-/*---*/PrintLog (0, "Loading text resources\n");
-/*---*/PrintLog (0, "Loading main hog file\n");
-if (!(hogFileManager.Init ("descent2.hog", gameFolders.game.szData [0]) ||
-	  (gameStates.app.bDemoData = hogFileManager.Init ("d2demo.hog", gameFolders.game.szData [0])))) {
-	/*---*/PrintLog (1, "Descent 2 data not found\n");
-	Error (TXT_NO_HOG2);
-	}
-fontManager.SetScale (1.0f);
-LoadGameTexts ();
-/*---*/PrintLog (0, "Reading configuration file\n");
-ReadConfigFile ();
-if (!InitGraphics ())
-	return 1;
-backgroundManager.Rebuild ();
-console.Setup (SMALL_FONT, &gameData.renderData.screen, CON_NUM_LINES, 0, 0, gameData.renderData.screen.Width (), gameData.renderData.screen.Height () / 2);
-if (gameStates.app.bProgressBars && gameOpts->menus.nStyle)
-	InitializeGauge ();
-else {
-	CMenu m (1);
-	int32_t key = 0;
-	m.AddGauge ("", "", -1, 1000); // dummy for InitializePoll()
-	messageBox.Show (TXT_INITIALIZING);
-	for (loadOp = 0; loadOp < InitGaugeSize (); )
-		InitializePoll (m, key, 0, 0);
-	}
-messageBox.Clear ();
-PrintBanner ();
-if (!gameStates.app.bAutoRunMission) {
-	/*---*/PrintLog (0, "Showing title screens\n");
-	if (!ShowTitleScreens ())
-		ShowLoadingScreen ();
-	}
-if (FindArg ("-norun")) {
-	PrintLog (-1);
-	return 0;
-	}
-/*---*/PrintLog (0, "Loading hires models\n");
-LoadHiresModels (0);
-LoadModelData ();
-LoadIpToCountry ();
-ogl.InitShaders (); //required for some menus to show all possible choices
-return 0;
+    InitArgs (argc, argv);
+    GetAppFolders (false);
+    #ifdef D2X_MEM_HANDLER
+    MemInit ();
+    #endif
+    error_init (NULL, NULL);
+    *szAutoHogFile =
+    *szAutoMission = '\0';
+    EvalArgs ();
+    gameOptions [1].Init ();
+    GetNumThreads ();
+    DefaultAllSettings (true);
+    gameOpts->render.nMathFormat = gameOpts->render.nDefMathFormat;
+    /*---*/PrintLog (0, "Loading text resources\n");
+    /*---*/PrintLog (0, "Loading main hog file\n");
+    if (!(hogFileManager.Init ("descent2.hog", gameFolders.game.szData [0]) ||
+        (gameStates.app.bDemoData = hogFileManager.Init ("d2demo.hog", gameFolders.game.szData [0])))) {
+        /*---*/PrintLog (1, "Descent 2 data not found\n");
+        Error (TXT_NO_HOG2);
+    }
+    fontManager.SetScale (1.0f);
+    LoadGameTexts ();
+    /*---*/PrintLog (0, "Reading configuration file\n");
+    ReadConfigFile ();
+    if (!InitGraphics ())
+        return 1;
+    backgroundManager.Rebuild ();
+    console.Setup (SMALL_FONT, &gameData.renderData.screen, CON_NUM_LINES, 0, 0, gameData.renderData.screen.Width (), gameData.renderData.screen.Height () / 2);
+    if (gameStates.app.bProgressBars && gameOpts->menus.nStyle) {
+        InitializeGauge ();
+    }
+    else {
+        CMenu m (1);
+        int32_t key = 0;
+        m.AddGauge ("", "", -1, 1000); // dummy for InitializePoll()
+        messageBox.Show (TXT_INITIALIZING);
+        for (loadOp = 0; loadOp < InitGaugeSize (); ) {
+            InitializePoll (m, key, 0, 0);
+        }
+    }
+    messageBox.Clear ();
+    PrintBanner ();
+    if (!gameStates.app.bAutoRunMission) {
+        /*---*/PrintLog (0, "Showing title screens\n");
+        if (!ShowTitleScreens ()) {
+            ShowLoadingScreen ();
+        }
+    }
+    if (FindArg ("-norun")) {
+        PrintLog (-1);
+        return 0;
+    }
+    /*---*/PrintLog (0, "Loading hires models\n");
+    LoadHiresModels (0);
+    LoadModelData ();
+    LoadIpToCountry ();
+    ogl.InitShaders (); //required for some menus to show all possible choices
+    return 0;
 }
 
 // ----------------------------------------------------------------------------
 
 int32_t CleanUp (void)
 {
-if (gameStates.input.bHaveTrackIR) {
-	pfnTIRExit ();
-	TIRUnload ();
-	}
-songManager.StopAll ();
-audio.StopCurrentSong ();
-SaveModelData ();
-/*---*/PrintLog (0, "Saving configuration file\n");
-WriteConfigFile (true);
-/*---*/PrintLog (0, "Saving player profile\n");
-SavePlayerProfile ();
-/*---*/PrintLog (0, "Releasing tracker list\n");
-tracker.DestroyList ();
-profile.Destroy ();
-#if DBG
-if (!FindArg ("-notitles"))
-#endif
-	//ShowOrderForm ();
-ogl.DestroyDrawBuffers ();
-return 0;
+    if (gameStates.input.bHaveTrackIR) {
+        pfnTIRExit ();
+        TIRUnload ();
+    }
+    songManager.StopAll ();
+    audio.StopCurrentSong ();
+    SaveModelData ();
+    /*---*/PrintLog (0, "Saving configuration file\n");
+    WriteConfigFile (true);
+    /*---*/PrintLog (0, "Saving player profile\n");
+    SavePlayerProfile ();
+    /*---*/PrintLog (0, "Releasing tracker list\n");
+    tracker.DestroyList ();
+    profile.Destroy ();
+    ogl.DestroyDrawBuffers ();
+    return 0;
 }
 
 // ----------------------------------------------------------------------------
 
 int32_t GetDate (int32_t& day, int32_t& month, int32_t& year)
 {
-time_t h;
-time (&h);
-struct tm *t = localtime (&h);
-if (!t)
-	return -1;
-month = t->tm_mon + 1;
-day = t->tm_mday;
-year = t->tm_year + 1900;
-return (year << 16) + (month << 8) + day;
+    time_t h;
+    time (&h);
+    struct tm *t = localtime (&h);
+    if (!t)
+        return -1;
+    month = t->tm_mon + 1;
+    day = t->tm_mday;
+    year = t->tm_year + 1900;
+    return (year << 16) + (month << 8) + day;
 }
 
 // ----------------------------------------------------------------------------
@@ -949,45 +948,43 @@ return (year << 16) + (month << 8) + day;
 
 void DUKickstarterNotification (void)
 {
-int32_t day, month, year, t = GetDate (day, month, year);
-if ((t > 0) && (year == 2015) && (month == 4) && (day <= 10))
-//gameStates.app.SRand ();
-//if (!Rand (3)) 
-	{	// display randomly about every third program start
-	SetScreenMode (SCREEN_MENU);
-	int32_t nFade = gameOpts->menus.nFade;
-	gameOpts->menus.nFade = 250;
+    int32_t day, month, year, t = GetDate (day, month, year);
+    // display randomly about every third program start
+    if ((t > 0) && (year == 2015) && (month == 4) && (day <= 10)) {
+        SetScreenMode (SCREEN_MENU);
+        int32_t nFade = gameOpts->menus.nFade;
+        gameOpts->menus.nFade = 250;
 
 #if DU_BACKGROUND
-	char szFolder [FILENAME_LEN];
-	sprintf (szFolder, "%sd2x-xl/", gameFolders.game.szTextures [0]);
-	CBitmap	wallpaper;
-	CTGA		tga (&wallpaper);
-	CBitmap	*oldWallpaper = tga.Read ("du_torch.tga", szFolder) ? backgroundManager.SetWallpaper (&wallpaper, 0) : NULL;
+        char szFolder [FILENAME_LEN];
+        sprintf (szFolder, "%sd2x-xl/", gameFolders.game.szTextures [0]);
+        CBitmap	wallpaper;
+        CTGA		tga (&wallpaper);
+        CBitmap	*oldWallpaper = tga.Read ("du_torch.tga", szFolder) ? backgroundManager.SetWallpaper (&wallpaper, 0) : NULL;
 #endif
 
-	int32_t bShowVersionInfo = gameStates.app.bShowVersionInfo;
-	gameStates.app.bShowVersionInfo = 0;
-	messageBox.SetBoxColor (0, 96, 192);
-	messageBox.Show (TXT_KICKSTART_DU, "du_kickstarter_torch.tga", true, true);
-	CTimeout to (30000);
-	do {
-		messageBox.CMenu::Render (NULL, NULL);
-		int32_t nKey = KeyInKey ();
-		if (/*(to.Progress () > 3000) &&*/ (nKey == KEY_ESC) || (nKey == KEY_ENTER))
-			break;
-	} while (!to.Expired ());
-	gameOpts->menus.nFade = 500;
-	messageBox.Clear ();
-	gameOpts->menus.nFade = nFade;
+        int32_t bShowVersionInfo = gameStates.app.bShowVersionInfo;
+        gameStates.app.bShowVersionInfo = 0;
+        messageBox.SetBoxColor (0, 96, 192);
+        messageBox.Show (TXT_KICKSTART_DU, "du_kickstarter_torch.tga", true, true);
+        CTimeout to (30000);
+        do {
+            messageBox.CMenu::Render (NULL, NULL);
+            int32_t nKey = KeyInKey ();
+            if (/*(to.Progress () > 3000) &&*/ (nKey == KEY_ESC) || (nKey == KEY_ENTER))
+                break;
+        } while (!to.Expired ());
+        gameOpts->menus.nFade = 500;
+        messageBox.Clear ();
+        gameOpts->menus.nFade = nFade;
 #if DU_BACKGROUND
-	if (oldWallpaper)
-		backgroundManager.SetWallpaper (oldWallpaper, 0);
+        if (oldWallpaper)
+            backgroundManager.SetWallpaper (oldWallpaper, 0);
 #endif
-	gameStates.app.bShowVersionInfo = bShowVersionInfo;
-	messageBox.SetBoxColor (); // reset to default
-	backgroundManager.Draw (0);
-	}
+        gameStates.app.bShowVersionInfo = bShowVersionInfo;
+        messageBox.SetBoxColor (); // reset to default
+        backgroundManager.Draw (0);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -1089,42 +1086,45 @@ if (!ogl.m_features.bShaders && (gameConfig.nVersion != D2X_IVER)) {
 
 int32_t SDLCALL main (int32_t argc, char *argv[])
 {
-gameStates.app.bInitialized = 0;
-gameStates.app.SRand ();
-if (Initialize (argc, argv))
-	return -1;
-//	If built with editor, option to auto-load a level and quit game
-//	to write certain data.
-/*---*/PrintLog (1, "Loading player profile\n");
-DoSelectPlayer ();
-CreateSoundThread (); //needs to be repeated here due to dependency on data read in DoSelectPlayer()
-paletteManager.DisableEffect ();
-// handle automatic launch of a demo playback
-if (gameData.demoData.bAuto && !gameOpts->demo.bRevertFormat) {
-	NDStartPlayback (gameData.demoData.fnAuto);
-	if (gameData.demoData.nState == ND_STATE_PLAYBACK)
-		SetFunctionMode (FMODE_GAME);
-	}
-//do this here because the demo code can do a __asm int32_t 3; longjmp when trying to
-//autostart a demo from the main menu, never having gone into the game
-setjmp (gameExitPoint);
-backgroundManager.Rebuild ();
-gameStates.app.bInitialized = 1;
-// handle direct loading and starting of a mission specified via the command line
-if (*szAutoHogFile && *szAutoMission) {
-	hogFileManager.UseMission (szAutoHogFile);
-	gameStates.app.bAutoRunMission = hogFileManager.AltFiles ().bInitialized;
-	}
-#if !DBG
-DUKickstarterNotification ();
-#endif
-DonationNotification ();
-BadHardwareNotification ();
-PrintLog (-1);
-/*---*/PrintLog (0, "Invoking main menu\n");
-MainLoop ();
-CleanUp ();
-return 0;		//presumably successful exit
+    gameStates.app.bInitialized = 0;
+    gameStates.app.SRand ();
+    if (Initialize (argc, argv)) {
+        return -1;
+    }
+
+    //	If built with editor, option to auto-load a level and quit game
+    //	to write certain data.
+    /*---*/PrintLog (1, "Loading player profile\n");
+    DoSelectPlayer ();
+    CreateSoundThread (); //needs to be repeated here due to dependency on data read in DoSelectPlayer()
+    paletteManager.DisableEffect ();
+    // handle automatic launch of a demo playback
+    if (gameData.demoData.bAuto && !gameOpts->demo.bRevertFormat) {
+        NDStartPlayback (gameData.demoData.fnAuto);
+        if (gameData.demoData.nState == ND_STATE_PLAYBACK) {
+            SetFunctionMode (FMODE_GAME);
+        }
+    }
+    //do this here because the demo code can do a __asm int32_t 3; longjmp when trying to
+    //autostart a demo from the main menu, never having gone into the game
+    setjmp (gameExitPoint);
+    backgroundManager.Rebuild ();
+    gameStates.app.bInitialized = 1;
+    // handle direct loading and starting of a mission specified via the command line
+    if (*szAutoHogFile && *szAutoMission) {
+        hogFileManager.UseMission (szAutoHogFile);
+        gameStates.app.bAutoRunMission = hogFileManager.AltFiles ().bInitialized;
+        }
+    #if !DBG
+    DUKickstarterNotification ();
+    #endif
+    DonationNotification ();
+    BadHardwareNotification ();
+    PrintLog (-1);
+    /*---*/PrintLog (0, "Invoking main menu\n");
+    MainLoop ();
+    CleanUp ();
+    return 0;		//presumably successful exit
 }
 
 // ----------------------------------------------------------------------------

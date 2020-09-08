@@ -921,36 +921,6 @@ class CCockpitStates {
 
 //------------------------------------------------------------------------------
 
-#if 0
-class CVRBuffers {
-	public:
-		CCanvas		*offscreen;			// The offscreen data buffer
-		CCanvas		render [2];			//  Two offscreen buffers for left/right eyes.
-		CCanvas		subRender [2];		//  Two sub buffers for left/right eyes.
-		CCanvas		screenPages [2];	//  Two pages of VRAM if paging is available
-		CCanvas		editorCanvas;		//  The canvas that the editor writes to.
-	};
-
-class CVRStates {
-	public:
-		CScreenSize	m_screenSize;
-		uint8_t			nScreenFlags;	//see values in screens.h
-		uint8_t			nCurrentPage;
-		fix			xEyeWidth;
-		int32_t			nRenderMode;
-		int32_t			nLowRes;			// Default to low res
-		int32_t 			bShowHUD;
-		int32_t			nSensitivity;	// 0 - 2
-		int32_t			xStereoSeparation;
-		int32_t			nEyeSwitch;
-		int32_t			bEyeOffsetChanged;
-		int32_t			bUseRegCode;
-		CVRBuffers	buffers;
-	};
-#endif
-
-//------------------------------------------------------------------------------
-
 class CFontStates {
 	public:
 		int32_t bHires;
@@ -4150,39 +4120,41 @@ static inline uint16_t WallNumI (int16_t nSegment, int16_t nSide) { return WallN
 
 //-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tGameItemInfo {
-	public:
-		int32_t		offset;
-		int32_t		count;
-		int32_t		size;
+public:
+    int32_t offset;
+    int32_t count;
+    int32_t size;
 
-	public:
-		inline void Read (CFile& cf) {
-			offset = cf.ReadInt ();				// Player info
-			count = cf.ReadInt ();
-			size = cf.ReadInt ();
-			}
+public:
+    inline void Read (CFile& cf) {
+        offset = cf.ReadInt (); // Player info
+        count = cf.ReadInt ();
+        size = cf.ReadInt ();
+    }
 
-} __pack__ tGameItemInfo;
+} tGameItemInfo;
 
 typedef struct {
-	uint16_t			fileinfoSignature;
-	uint16_t			fileinfoVersion;
-	int32_t			fileinfo_sizeof;
-	char				mineFilename [15];
-	int32_t			level;
-	tGameItemInfo	player;
-	tGameItemInfo	objects;
-	tGameItemInfo	walls;
-	tGameItemInfo	doors;
-	tGameItemInfo	triggers;
-	tGameItemInfo	links;
-	tGameItemInfo	control;
-	tGameItemInfo	botGen;
-	tGameItemInfo	lightDeltaIndices;
-	tGameItemInfo	lightDeltas;
-	tGameItemInfo	equipGen;
-} __pack__ tGameFileInfo;
+    uint16_t fileinfoSignature;
+    uint16_t fileinfoVersion;
+    int32_t fileinfo_sizeof;
+    char mineFilename [15];
+    int32_t level;
+    tGameItemInfo player;
+    tGameItemInfo objects;
+    tGameItemInfo walls;
+    tGameItemInfo doors;
+    tGameItemInfo triggers;
+    tGameItemInfo links;
+    tGameItemInfo control;
+    tGameItemInfo botGen;
+    tGameItemInfo lightDeltaIndices;
+    tGameItemInfo lightDeltas;
+    tGameItemInfo equipGen;
+} tGameFileInfo;
+#pragma pack(pop)
 
 extern tGameFileInfo gameFileInfo;
 
@@ -4367,14 +4339,16 @@ void PrintVersionInfo (void);
 //	-----------------------------------------------------------------------------
 
 
+#pragma pack(push, 1)
 typedef struct fVector3D {
-	float	x, y, z;
-} __pack__ fVector3D;
+    float x, y, z;
+} fVector3D;
 
 typedef struct tTransRotInfo {
-	fVector3D	fvRot;
-	fVector3D	fvTrans;
-	} __pack__ tTransRotInfo;
+    fVector3D fvRot;
+    fVector3D fvTrans;
+} tTransRotInfo;
+#pragma pack(pop)
 
 #ifndef _WIN32
 #	define WINAPI

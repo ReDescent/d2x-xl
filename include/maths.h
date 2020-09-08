@@ -20,10 +20,12 @@
 typedef int32_t fix;		//16 bits int32_t, 16 bits frac
 typedef int16_t fixang;		//angles
 
+#pragma pack(push, 1)
 typedef struct tQuadInt {// integer 64 bit, previously called "quad"
-	uint32_t low;
-   int32_t high;
-} __pack__ tQuadInt;
+    uint32_t low;
+    int32_t high;
+} tQuadInt;
+#pragma pack(pop)
 
 #define WORLDSCALE	1000	// one world unit (65536 in fixed point arithmetic) corresponds to 1000 mm (1 m) of the real world
 

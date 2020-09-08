@@ -175,13 +175,14 @@ extern char szObjectTypeNames [MAX_OBJECT_TYPES][10];
  * STRUCTURES
  */
 
+#pragma pack(push, 1)
 typedef struct tLongPos {
 	CFixVector			pos;
 	CFixMatrix			orient;
 	CFixVector			vel;
 	CFixVector			rotVel;
 	int16_t				nSegment;
-} __pack__ tLongPos;
+} tLongPos;
 
 // A compressed form for sending crucial data about via slow devices,
 // such as modems and buggies.
@@ -190,7 +191,8 @@ typedef struct tShortPos {
 	int16_t		pos [3];
 	int16_t		nSegment;
 	int16_t		vel [3];
-} __pack__ tShortPos;
+} tShortPos;
+#pragma pack(pop)
 
 class CShortPos {
 	private:
@@ -233,6 +235,7 @@ class RenderLightningInfo : public RenderInfo { };
 
 //	-----------------------------------------------------------------------------
 // information for physics sim for an CObject
+#pragma pack(push, 1)
 typedef struct tPhysicsInfo {
 	CFixVector	velocity;   // velocity vector of this CObject
 	CFixVector	thrust;     // constant force applied to this CObject
@@ -243,7 +246,8 @@ typedef struct tPhysicsInfo {
 	CFixVector	rotThrust;  // rotational acceleration
 	fixang      turnRoll;   // rotation caused by turn banking
 	uint16_t      flags;      // misc physics flags
-} __pack__ tPhysicsInfo;
+} tPhysicsInfo;
+#pragma pack(pop)
 
 class CPhysicsInfo {
 	private:
@@ -273,11 +277,12 @@ class CPhysicsInfo {
 //	-----------------------------------------------------------------------------
 // stuctures for different kinds of simulation
 
+#pragma pack(push, 1)
 typedef struct nParentInfo {
 	int16_t		nType;
 	int16_t		nObject;
 	int32_t		nSignature;
-} __pack__ tParentInfo;
+} tParentInfo;
 
 typedef struct tLaserInfo  {
 	tParentInfo	parent;
@@ -285,7 +290,8 @@ typedef struct tLaserInfo  {
 	int16_t			nLastHitObj;      // For persistent weapons (survive CObject collision), CObject it most recently hit.
 	int16_t			nHomingTarget;		// Object this CObject is tracking.
 	fix			xScale;				// Power if this is a fusion bolt (or other super weapon to be added).
-} __pack__ tLaserInfo;
+} tLaserInfo;
+#pragma pack(pop)
 
 class CLaserInfo {
 	private:
@@ -310,11 +316,13 @@ class CLaserInfo {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tAttachedObjInfo {
 	int16_t	nParent;	// explosion is attached to this CObject
 	int16_t	nPrev;	// previous explosion in attach list
 	int16_t	nNext;	// next explosion in attach list
-} __pack__ tAttachedObjInfo;
+} tAttachedObjInfo;
+#pragma pack(pop)
 
 class CAttachedInfo {
 	private:
@@ -331,12 +339,14 @@ class CAttachedInfo {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tExplosionInfo {
     fix		nSpawnTime;       // when lifeleft is < this, spawn another
     fix		nDeleteTime;      // when to delete CObject
     int16_t	nDestroyedObj;			// and what CObject to delete
-	 tAttachedObjInfo	attached;
-} __pack__ tExplosionInfo;
+    tAttachedObjInfo	attached;
+} tExplosionInfo;
+#pragma pack(pop)
 
 class CExplosionInfo : public CAttachedInfo {
 	private:
@@ -353,12 +363,14 @@ class CExplosionInfo : public CAttachedInfo {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tObjLightInfo {
-    fix				intensity;  // how bright the light is
-	 int16_t			nSegment;
-	 int16_t			nObjects;
-	 CFloatVector	color;
-} __pack__ tObjLightInfo;
+    fix intensity;  // how bright the light is
+    int16_t nSegment;
+    int16_t nObjects;
+    CFloatVector color;
+} tObjLightInfo;
+#pragma pack(pop)
 
 class CObjLightInfo {
 	private:
@@ -377,11 +389,13 @@ class CObjLightInfo {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tPowerupInfo {
 	int32_t     nCount;          // how many/much we pick up (vulcan cannon only?)
 	fix     xCreationTime;  // Absolute time of creation.
 	int32_t     nFlags;          // spat by player?
-} __pack__ tPowerupInfo;
+} tPowerupInfo;
+#pragma pack(pop)
 
 class CPowerupInfo {
 	private:
@@ -398,13 +412,15 @@ class CPowerupInfo {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tAnimationState {
 public:
 	int32_t  nClipIndex;
 	fix		xTotalTime;
 	fix		xFrameTime;
 	int8_t   nCurFrame;
-} __pack__ tAnimationState;
+} tAnimationState;
+#pragma pack(pop)
 
 class CAnimationInfo {
 	private:
@@ -427,6 +443,7 @@ class CAnimationInfo {
 #define SMOKE_TYPE_RAIN			5
 #define SMOKE_TYPE_SNOW			6
 
+#pragma pack(push, 1)
 typedef struct tParticleInfo {
 public:
 	int32_t		nLife;
@@ -439,7 +456,8 @@ public:
 	char			nSide;
 	char			nType;
 	char			bEnabled;
-} __pack__ tParticleInfo;
+} tParticleInfo;
+#pragma pack(pop)
 
 class CSmokeInfo {
 	private:
@@ -458,6 +476,7 @@ class CSmokeInfo {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tLightningInfo {
 public:
 	int32_t		nLife;
@@ -485,7 +504,8 @@ public:
 	char			bEnabled;
 	char			bDirection;
 	CRGBAColor	color;
-} __pack__ tLightningInfo;
+} tLightningInfo;
+#pragma pack(pop)
 
 class CLightningInfo {
 	private:
@@ -555,6 +575,7 @@ class CWayPointInfo {
 //	-----------------------------------------------------------------------------
 // structures for different kinds of rendering
 
+#pragma pack(push, 1)
 typedef struct tPolyObjInfo {
 public:
 	int32_t     	nModel;          // which polygon model
@@ -562,7 +583,8 @@ public:
 	int32_t     	nSubObjFlags;       // specify which subobjs to draw
 	int32_t     	nTexOverride;      // if this is not -1, map all face to this
 	int32_t     	nAltTextures;       // if not -1, use these textures instead
-} __pack__ tPolyObjInfo;
+} tPolyObjInfo;
+#pragma pack(pop)
 
 class CPolyObjInfo {
 	private:
@@ -583,16 +605,18 @@ class CPolyObjInfo {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tObjTransformation {
-	public:
-		CFixVector	vPos;				// absolute x,y,z coordinate of center of object
-		CFixMatrix	mOrient;			// orientation of object in world
+public:
+    CFixVector	vPos;				// absolute x,y,z coordinate of center of object
+    CFixMatrix	mOrient;			// orientation of object in world
 
-	tObjTransformation& operator= (tObjTransformation& other) {
-		memcpy (this, &other, sizeof (*this));
-		return *this;
-		}
-	} __pack__ tObjTransformation;
+    tObjTransformation& operator= (tObjTransformation& other) {
+        memcpy (this, &other, sizeof (*this));
+        return *this;
+    }
+} tObjTransformation;
+#pragma pack(pop)
 
 class CObjTransformation {
 	private:
@@ -607,11 +631,13 @@ class CObjTransformation {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tObjContainerInfo {
 	int8_t		nType;
 	int8_t		nId;
 	int8_t		nCount;
-} __pack__ tObjContainerInfo;
+} tObjContainerInfo;
+#pragma pack(pop)
 
 class CObjContainerInfo {
 	private:
@@ -628,6 +654,7 @@ class CObjContainerInfo {
 
 //	-----------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tObjectInfo {
 	int32_t     			nSignature;    // Every CObject ever has a unique nSignature...
 	uint8_t   				nType;         // what nType of CObject this is... robot, weapon, hostage, powerup, fireball
@@ -650,12 +677,12 @@ typedef struct tObjectInfo {
 	tObjContainerInfo		contains;
 	int8_t   				nCreator;		// Materialization center that created this CObject, high bit set if producer-created
 	fix     					xLifeLeft;     // how long until goes away, or 7fff if immortal
-} __pack__ tObjectInfo;
+} tObjectInfo;
 
 typedef union tObjMovementInfo {
 	tPhysicsInfo			physInfo;		// a physics CObject
 	CFixVector   			spinRate;		// for spinning objects
-	} __pack__ tObjMovementInfo;
+} tObjMovementInfo;
 
 typedef union tObjControlInfo {
 	tLaserInfo				laserInfo;
@@ -664,7 +691,7 @@ typedef union tObjControlInfo {
 	tObjLightInfo			lightInfo;     // why put this here?  Didn't know what else to do with it.
 	tPowerupInfo			powerupInfo;
 	tWayPointInfo			wayPointInfo;
-	} __pack__ tObjControlInfo;
+} tObjControlInfo;
 
 typedef union tObjRenderInfo {
 	tPolyObjInfo			polyObjInfo;   // polygon model
@@ -672,7 +699,7 @@ typedef union tObjRenderInfo {
 	tParticleInfo			particleInfo;
 	tLightningInfo			lightningInfo;
 	tSoundInfo				soundInfo;
-	} __pack__ tObjRenderInfo;
+} tObjRenderInfo;
 
 // TODO get rid of the structs (former unions) and the union
 typedef struct tBaseObject {
@@ -683,7 +710,8 @@ typedef struct tBaseObject {
 #ifdef WORDS_NEED_ALIGNMENT
 	int16_t   				nPad;
 #endif
-} __pack__ tBaseObject;
+} tBaseObject;
+#pragma pack(pop)
 
 //	-----------------------------------------------------------------------------
 
@@ -740,15 +768,16 @@ class CObjectInfo : public CObjTransformation, public CObjContainerInfo, public 
 
 struct tObject;
 
+#pragma pack(push, 1)
 typedef struct tObjListLink {
 	tObject*			prev;
 	tObject*			next;
-} __pack__ tObjListLink;
+} tObjListLink;
 
 typedef struct tShotInfo {
 	int16_t			nObject;
 	int32_t			nSignature;
-} __pack__ tShotInfo;
+} tShotInfo;
 
 typedef struct tObject : public tBaseObject {
 #if OBJ_LIST_TYPE
@@ -761,7 +790,7 @@ typedef struct tObject : public tBaseObject {
 	tShotInfo		shots;
 	CFixVector		vStartVel;
 	CFixVector		vRenderPos;
-} __pack__ tObject;
+} tObject;
 
 class CObject;
 
@@ -770,8 +799,8 @@ typedef struct tObjListRef {
 	CObject*		head;
 	CObject*		tail;
 	int16_t		nObjects;
-} __pack__ tObjListRef;
-
+} tObjListRef;
+#pragma pack(pop)
 
 class CObjListLink {
 	public:
@@ -1005,10 +1034,10 @@ class CObject : public CObjectInfo {
 		inline int32_t& PrevWayPoint (void) { return cType.wayPointInfo.nSuccessor [1]; }
 		inline int32_t* WayPoint (void) { 
 			if (info.renderType == RT_LIGHTNING)
-				return &rType.lightningInfo.nWayPoint; 
+				return &rType.lightningInfo.nWayPoint;
 			return NULL;
 			}
-		inline int32_t NextWayPoint (CObject* pObj) { 
+		inline int32_t NextWayPoint (CObject* pObj) {
 			return ((info.controlType == CT_WAYPOINT) && (pObj->info.renderType == RT_LIGHTNING))
 					 ? cType.wayPointInfo.nSuccessor [(int32_t) pObj->rType.lightningInfo.bDirection]
 					 : -1;

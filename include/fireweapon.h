@@ -157,13 +157,23 @@ int32_t GetPlayerGun (int32_t nPlayer, int32_t *bFiring);
 
 void GetPlayerMslLock (void);
 CFixVector *GetGunPoints (CObject *pObj, int32_t nGun);
-CFixVector *TransformGunPoint (CObject *pObj, CFixVector *vGunPoints, int32_t nGun, 
-										fix xDelay, uint8_t nLaserType, CFixVector *vMuzzle, CFixMatrix *mP);
+CFixVector *TransformGunPoint (
+    CObject *pObj,
+    CFixVector *vGunPoints,
+    int32_t nGun,
+    fix xDelay,
+    uint8_t nLaserType,
+    CFixVector *vMuzzle,
+    CFixMatrix *mP
+);
+
+#pragma pack(push, 1)
 typedef struct tMuzzleInfo {
-	fix         createTime;
-	int16_t		nSegment;
-	CFixVector  pos;
-} __pack__ tMuzzleInfo;
+    fix createTime;
+    int16_t nSegment;
+    CFixVector pos;
+} tMuzzleInfo;
+#pragma pack(pop)
 
 // Omega cannon stuff.
 #define DEFAULT_MAX_OMEGA_CHARGE    (I2X (1))  //  Maximum charge level for omega cannonw

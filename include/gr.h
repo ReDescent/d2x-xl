@@ -186,9 +186,11 @@ void AutoScreenshot (void);
 
 void ResetTextures (int32_t bReload, int32_t bGame);
 
+#pragma pack(push, 1)
 typedef struct tScrSize {
-	int32_t	x, y, c;
-} __pack__ tScrSize;
+    int32_t x, y, c;
+} tScrSize;
+#pragma pack(pop)
 
 extern int32_t curDrawBuffer;
 

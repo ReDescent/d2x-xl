@@ -45,41 +45,45 @@ extern void ArchIpxSetDriver(int32_t ipx_driver);
 
 //------------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef union tPort {
 	uint8_t			b [2];
 	uint16_t			p;
-} __pack__ tPort;
+} tPort;
 
 typedef union tIPAddress {
 	uint32_t			a;
 	uint8_t			octets [4];
-} __pack__ tIPAddress;
+} tIPAddress;
 
 typedef struct tPortAddress {
 	tIPAddress		ip;
 	tPort				port;
-} __pack__ tPortAddress;
+} tPortAddress;
+#pragma pack(pop)
 
 typedef union tNetworkNode { // local address in a (sub) network
 	tPortAddress	portAddress;
 	uint8_t			b [6];
 } tNetworkNode;
 
+#pragma pack(push, 1)
 typedef struct tNetworkAddress { // global address with network and (intra-network) node address
 	tIPAddress		network;
 	tNetworkNode	node;
-} __pack__ tNetworkAddress;
+} tNetworkAddress;
 
 typedef struct tAppleTalkAddr {
 	uint16_t			net;
 	uint8_t			node;
 	uint8_t			socket;
-} __pack__ tAppleTalkAddr;
+} tAppleTalkAddr;
 
 typedef union {
 	tNetworkAddress	address;
 	tAppleTalkAddr		appletalk;
-} __pack__ tNetworkInfo;
+} tNetworkInfo;
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 

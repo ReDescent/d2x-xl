@@ -60,6 +60,7 @@ extern int32_t MouseButtonState(int32_t button);
 
 #define MOUSE_MAX_BUTTONS       8
 
+#pragma pack(push, 1)
 typedef struct tMouseButton {
 	uint8_t pressed;
 	uint8_t rotated;
@@ -68,14 +69,15 @@ typedef struct tMouseButton {
 	fix	xTimeHeldDown;
 	uint32_t	numDowns;
 	uint32_t	numUps;
-} __pack__ tMouseButton;
+} tMouseButton;
 
 typedef struct tMouseInfo {
 	tMouseButton	buttons [MOUSE_MAX_BUTTONS];
 	int32_t				dx, dy, dz;
 	int32_t				x, y, z;
 	int32_t				bDoubleClick;
-} __pack__ tMouseInfo;
+} tMouseInfo;
+#pragma pack(pop)
 
 extern tMouseInfo mouseData;
 

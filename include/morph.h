@@ -26,6 +26,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define MAX_VECS 10000
 
+#pragma pack(push, 1)
 typedef struct tMorphInfo {
 	CObject			*pObj;                                // CObject which is morphing
 	CFixVector		vecs [MAX_VECS];
@@ -39,7 +40,8 @@ typedef struct tMorphInfo {
 	uint8_t				saveMovementType;
 	tPhysicsInfo	savePhysInfo;
 	int32_t				nSignature;
-} __pack__ tMorphInfo;
+} tMorphInfo;
+#pragma pack(pop)
 
 #define MAX_MORPH_OBJECTS 250
 

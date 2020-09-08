@@ -33,6 +33,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define MAX_EDGES 65536 // Determined by loading all the levels by John & Mike, Feb 9, 1995
 
+#pragma pack(push, 1)
 typedef struct tEdgeInfo {
 	uint16_t		verts [2];     // 4 bytes
 	uint8_t		sides [4];     // 4 bytes
@@ -40,7 +41,8 @@ typedef struct tEdgeInfo {
 	uint32_t		color;			// 4 bytes
 	uint8_t		nFaces;			// 1 bytes  // 19 bytes...
 	uint8_t		flags;			// 1 bytes  // See the EF_??? defines above.
-} __pack__ tEdgeInfo;
+} EdgeInfo;
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 
@@ -53,6 +55,7 @@ typedef struct tAutomapWallColors {
 	uint32_t		nRevealed;
 } tAutomapWallColors;
 
+#pragma pack(push, 1)
 typedef struct tAutomapColors {
 	tAutomapWallColors	walls;
 	uint32_t					nHostage;
@@ -62,7 +65,7 @@ typedef struct tAutomapColors {
 	uint32_t					nLgtBlue;
 	uint32_t					nLgtRed;
 	uint32_t					nDkGray;
-} __pack__ tAutomapColors;
+} tAutomapColors;
 
 typedef struct tAutomapData {
 	int32_t					bCheat;
@@ -72,7 +75,8 @@ typedef struct tAutomapData {
 	fix						nZoom;
 	tObjTransformation	viewer;
 	CFixVector				viewTarget;
-} __pack__ tAutomapData;
+} tAutomapData;
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 

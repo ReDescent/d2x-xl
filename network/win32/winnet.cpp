@@ -117,11 +117,13 @@ CNetworkAddress	ipx_MyAddress;
 int32_t				nIpxPacket = 0;			/* Sequence number */
 
 /* User defined routing stuff */
+#pragma pack(push, 1)
 typedef struct user_address {
 	uint8_t network [4];
 	uint8_t node [6];
 	uint8_t address [6];
-} __pack__ user_address;
+} user_address;
+#pragma pack(pop)
 
 #define MAX_USERS 64
 int32_t nIpxUsers = 0;

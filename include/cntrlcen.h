@@ -26,18 +26,20 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define MAX_CONTROLCEN_LINKS    10
 
+#pragma pack(push, 1)
 typedef struct tReactorTriggers {
 	short   nLinks;
 	short   nSegment [MAX_CONTROLCEN_LINKS];
 	short   nSide [MAX_CONTROLCEN_LINKS];
-} __pack__ tReactorTriggers;
+} tReactorTriggers;
 
 typedef struct tReactorProps {
 	int nModel;
 	int nGuns;
 	vmsVector gunPoints[MAX_CONTROLCEN_GUNS];
 	vmsVector gun_dirs[MAX_CONTROLCEN_GUNS];
-} __pack__ tReactorProps;
+} tReactorProps;
+#pragma pack(pop)
 
 #define MAX_REACTORS 7
 

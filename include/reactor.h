@@ -23,12 +23,14 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define CONTROLCEN_WEAPON_NUM   6
 
+#pragma pack(push, 1)
 typedef struct tReactorProps {
 	int32_t nModel;
 	int32_t nGuns;
 	CFixVector gunPoints [MAX_CONTROLCEN_GUNS];
 	CFixVector gunDirs [MAX_CONTROLCEN_GUNS];
-} __pack__ tReactorProps;
+} tReactorProps;
+#pragma pack(pop)
 
 #define MAX_REACTORS 7
 

@@ -18,9 +18,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 
 //Palette entry structure
+#pragma pack(push, 1)
 typedef struct tPalEntry {
 	int8_t r, g, b;
-} __pack__ tPalEntry;
+} tPalEntry;
 
 //structure of the header in the file
 typedef struct tIFFBitmapHeader {
@@ -35,7 +36,8 @@ typedef struct tIFFBitmapHeader {
 	tPalEntry palette [256];		//the palette for this bitmap
 	uint8_t *raw_data;				//ptr to array of data
 	int16_t row_size;				//offset to next row
-} __pack__ tIFFBitmapHeader;
+} tIFFBitmapHeader;
+#pragma pack(pop)
 
 typedef struct tMemoryFile {
 	uint8_t *data;

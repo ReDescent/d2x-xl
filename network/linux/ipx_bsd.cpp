@@ -15,14 +15,7 @@
 #include <sys/socket.h>
 #include <string.h>
 
-#ifdef HAVE_NETIPX_IPX_H
 #include <netipx/ipx.h>
-#else
-# include "ipx.h"
-# ifndef IPX_TYPE
-#  define IPX_TYPE 1
-# endif
-#endif
 
 #include <netinet/in.h>
 #include <unistd.h>

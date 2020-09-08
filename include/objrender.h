@@ -13,6 +13,7 @@
 
 //------------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tCloakInfo {
 	int32_t	bFading;
 	int32_t	nFadeValue;
@@ -21,7 +22,8 @@ typedef struct tCloakInfo {
 	fix	xLightScale;
 	fix	xDeltaTime;
 	fix	xTotalTime;
-	} __pack__ tCloakInfo;
+} tCloakInfo;
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 

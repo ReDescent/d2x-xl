@@ -201,41 +201,41 @@ bool InitGame (int32_t nSegments, int32_t nVertices)
 ENTER (0, 0);
 if (!gameData.Create (nSegments, nVertices))
 	RETVAL (false)
-/*---*/PrintLog (1, "Initializing game data\n");
-PrintLog (1, "Objects ...\n");
-InitObjects ();
-PrintLog (-1);
-/*---*/PrintLog (1, "Special effects...\n");
-InitSpecialEffects ();
-PrintLog (-1);
-/*---*/PrintLog (1, "AI system...\n");
-InitAISystem ();
-PrintLog (-1);
-//*---*/PrintLog (1, "gauge canvases...\n");
-//	InitGaugeCanvases ();
-/*---*/PrintLog (1, "Exploding walls data...\n");
-InitExplodingWalls ();
-PrintLog (-1);
-ResetGenerators ();
-/*---*/PrintLog (1, "Background bitmap...\n");
-LoadGameBackground ();
-PrintLog (-1);
-/*---*/PrintLog (1, "Automap...\n");
-automap.Init ();
-PrintLog (-1);
-/*---*/PrintLog (1, "Default ship data...\n");
-InitDefaultShipProps ();
-PrintLog (-1);
-nClearWindow = 2;		//	do portal only window clear.
-PrintLog (-1);
-/*---*/PrintLog (1, "Detail levels (%d)...\n", gameStates.app.nDetailLevel);
-gameStates.app.nDetailLevel = InitDetailLevels (gameStates.app.nDetailLevel);
-importantMessages [0].Destroy ();
-importantMessages [1].Destroy ();
-PrintLog (-1);
-PrintLog (-1);
-fpDrawTexPolyMulti = G3DrawTexPolyMulti;
-RETVAL (true)
+    /*---*/PrintLog (1, "Initializing game data\n");
+    PrintLog (1, "Objects ...\n");
+    InitObjects ();
+    PrintLog (-1);
+    /*---*/PrintLog (1, "Special effects...\n");
+    InitSpecialEffects ();
+    PrintLog (-1);
+    /*---*/PrintLog (1, "AI system...\n");
+    InitAISystem ();
+    PrintLog (-1);
+    //*---*/PrintLog (1, "gauge canvases...\n");
+    //	InitGaugeCanvases ();
+    /*---*/PrintLog (1, "Exploding walls data...\n");
+    InitExplodingWalls ();
+    PrintLog (-1);
+    ResetGenerators ();
+    /*---*/PrintLog (1, "Background bitmap...\n");
+    LoadGameBackground ();
+    PrintLog (-1);
+    /*---*/PrintLog (1, "Automap...\n");
+    automap.Init ();
+    PrintLog (-1);
+    /*---*/PrintLog (1, "Default ship data...\n");
+    InitDefaultShipProps ();
+    PrintLog (-1);
+    nClearWindow = 2;		//	do portal only window clear.
+    PrintLog (-1);
+    /*---*/PrintLog (1, "Detail levels (%d)...\n", gameStates.app.nDetailLevel);
+    gameStates.app.nDetailLevel = InitDetailLevels (gameStates.app.nDetailLevel);
+    importantMessages [0].Destroy ();
+    importantMessages [1].Destroy ();
+    PrintLog (-1);
+    PrintLog (-1);
+    fpDrawTexPolyMulti = G3DrawTexPolyMulti;
+    RETVAL (true)
 }
 
 //------------------------------------------------------------------------------

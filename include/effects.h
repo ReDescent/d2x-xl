@@ -28,17 +28,18 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define EF_FROMPOG		32
 #define EF_INITIALIZED	64
 
+#pragma pack(push, 1)
 typedef struct tChangeEffect {
 	int16_t					nWallTexture;		//Which element of Textures array to replace.
 	int16_t					nObjectTexture;  //Which element of ObjBitmapPtrs array to replace.
-} __pack__ tChangeEffect;
+} tChangeEffect;
 
 typedef struct tDestructionEffect {
 	int32_t					nTexture;
 	int32_t					nAnimation;
 	int32_t					nEffect;
 	fix						xSize;
-} __pack__ tDestroyedEffect;
+} tDestroyedEffect;
 
 typedef struct tEffectInfo {
 	tAnimationInfo			animationInfo;				//embedded tAnimationInfo
@@ -50,7 +51,8 @@ typedef struct tEffectInfo {
 	tDestructionEffect	destroyed;
 	int32_t					nSound;						//what sound this makes
 	int32_t					nSegment, nSide;			//what seg & CSide, for one-shot clips
-} __pack__ tEffectInfo;
+} tEffectInfo;
+#pragma pack(pop)
 
 typedef tEffectInfo D1_eclip;
 

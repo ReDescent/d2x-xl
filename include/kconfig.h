@@ -21,6 +21,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define	D2X_KEYS		1
 
+#pragma pack(push, 1)
 typedef struct control_info {
 	fix pitchTime;
 	fix verticalThrustTime;
@@ -56,7 +57,8 @@ typedef struct control_info {
 	uint8_t useInvulDownCount;
 	uint8_t slowMotionCount;
 	uint8_t bulletTimeCount;
-} __pack__ tControlInfo;
+} tControlInfo;
+#pragma pack(pop)
 
 typedef struct ext_control_info {
 	fix pitchTime;
@@ -229,12 +231,14 @@ typedef struct kcItem {
 #define NUM_MOUSE_CONTROLS		KcMouseSize () //31
 #define MAX_CONTROLS				64		// there are actually 48, so this leaves room for more
 
+#pragma pack(push, 1)
 typedef struct tControlSettings {
 	uint8_t		custom [CONTROL_MAX_TYPES][MAX_CONTROLS];
 	uint8_t		defaults [CONTROL_MAX_TYPES][MAX_CONTROLS];
 	uint8_t		d2xCustom [MAX_HOTKEY_CONTROLS];
 	uint8_t		d2xDefaults [MAX_HOTKEY_CONTROLS];
-} __pack__ tControlSettings;
+} tControlSettings;
+#pragma pack(pop)
 
 extern tControlSettings controlSettings;
 

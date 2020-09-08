@@ -286,11 +286,13 @@ class CSyncPackShort : public CSyncPack {
 
 //------------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tMineSyncData {
-	int32_t	nLength;
-	int32_t	receiver;
-   uint8_t	buffer [UDP_PAYLOAD_SIZE];
-	} __pack__ tMineSyncData;
+    int32_t	nLength;
+    int32_t	receiver;
+    uint8_t	buffer [UDP_PAYLOAD_SIZE];
+} tMineSyncData;
+#pragma pack(pop)
 
 class CMineSyncData {
 	public:
@@ -325,13 +327,14 @@ extern CMineSyncData mineSyncData;
 
 //------------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tRefuseData {
 	char					bThisPlayer;
 	char					bWaitForAnswer;
 	char					bTeam;
 	char					szPlayer [12];
 	fix					xTimeLimit;
-	} __pack__ tRefuseData;
+} tRefuseData;
 
 typedef struct tSyncObjectsData {
 	int32_t				nMode;
@@ -339,7 +342,7 @@ typedef struct tSyncObjectsData {
 	int32_t				nSent;
 	uint16_t				nFrame;
 	uint16_t				nFramesToSkip;
-} __pack__ tSyncObjectsData;
+} tSyncObjectsData;
 
 typedef struct tNetworkSyncInfo {
 	time_t				timeout;
@@ -353,7 +356,8 @@ typedef struct tNetworkSyncInfo {
 	bool					bAllowedPowerups;
 	bool					bDeferredSync;
 	tSyncObjectsData	objs;
-} __pack__ tNetworkSyncInfo;
+} tNetworkSyncInfo;
+#pragma pack(pop)
 
 #include "ipx_drv.h"
 #include "ipx_udp.h"

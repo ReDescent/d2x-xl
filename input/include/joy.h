@@ -62,34 +62,36 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MAX_BUTTONS 20
 #endif
 
+#pragma pack(push, 1)
 typedef struct tJoyButton {
-	int32_t state;
-	int32_t lastState;
-	fix xTimeWentDown;
-	int32_t numDowns;
-	int32_t numUps;
-} __pack__ tJoyButton;
+    int32_t state;
+    int32_t lastState;
+    fix xTimeWentDown;
+    int32_t numDowns;
+    int32_t numUps;
+} tJoyButton;
 
 typedef struct tJoyAxisCal {
-	int32_t		nMin;
-	int32_t		nCenter;
-	int32_t		nMax;
-} __pack__ tJoyAxisCal;
+    int32_t nMin;
+    int32_t nCenter;
+    int32_t nMax;
+} tJoyAxisCal;
 
 typedef struct tJoyAxis {
-	int32_t			nValue;
-	tJoyAxisCal	cal;
-} __pack__ tJoyAxis;
+    int32_t nValue;
+    tJoyAxisCal cal;
+} tJoyAxis;
 
 typedef struct tSdlJoystick {
-	SDL_Joystick	*handle;
-	int32_t				nAxes;
-	int32_t				nButtons;
-	int32_t				nHats;
-	int32_t				hatMap [MAX_HATS_PER_JOYSTICK];  //Note: Descent expects hats to be buttons, so these are indices into Joystick.buttons
-	int32_t				axisMap [MAX_AXES_PER_JOYSTICK];
-	int32_t				buttonMap [MAX_BUTTONS_PER_JOYSTICK];
-} __pack__ tSdlJoystick;
+    SDL_Joystick *handle;
+    int32_t nAxes;
+    int32_t nButtons;
+    int32_t nHats;
+    int32_t hatMap [MAX_HATS_PER_JOYSTICK];  //Note: Descent expects hats to be buttons, so these are indices into Joystick.buttons
+    int32_t axisMap [MAX_AXES_PER_JOYSTICK];
+    int32_t buttonMap [MAX_BUTTONS_PER_JOYSTICK];
+} tSdlJoystick;
+#pragma pack(pop)
 
 extern struct tSdlJoystick /*SDL_Joystick*/ sdlJoysticks [MAX_JOYSTICKS];
 

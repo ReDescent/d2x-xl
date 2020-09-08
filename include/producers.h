@@ -23,6 +23,7 @@ CObject *CreateMorphRobot (CSegment *segp, CFixVector *object_pos, uint8_t objec
 int32_t GatherFlagGoals (void);
 
 // An array of pointers to segments with fuel centers.
+#pragma pack(push, 1)
 typedef struct tProducerInfo {
 	int32_t     nType;
 	int32_t     nSegment;
@@ -38,7 +39,7 @@ typedef struct tProducerInfo {
 	//int32_t     last_created_sig;
 	CFixVector	vCenter;
 	bool			bAssigned;
-} __pack__ tProducerInfo;
+} tProducerInfo;
 
 // The max number of robot centers per mine.
 
@@ -48,7 +49,7 @@ typedef struct  {
 	fix			xInterval;       	// Interval between materialogrifizations
 	int16_t		nSegment;         // Segment this is attached to.
 	int16_t		nProducer;    		// Index in producer array.
-} __pack__ old_tObjProducerInfo;
+} old_tObjProducerInfo;
 
 typedef struct tObjectProducerInfo {
 	int32_t		objFlags [3]; 		// Up to 92 different robots
@@ -57,7 +58,8 @@ typedef struct tObjectProducerInfo {
 	int16_t		nSegment;         // Segment this is attached to.
 	int16_t		nProducer;    		// Index in producer array.
 	bool			bAssigned;
-} __pack__ tObjectProducerInfo;
+} tObjectProducerInfo;
+#pragma pack(pop)
 
 //--repair-- extern CObject *RepairObj;  // which CObject getting repaired, or NULL
 

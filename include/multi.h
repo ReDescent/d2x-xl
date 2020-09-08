@@ -276,7 +276,13 @@ extern tBitmapIndex mpTextureIndex [MAX_PLAYERS][N_PLAYER_SHIP_TEXTURES];
 #define NETGAME_NAME_LEN                15
 #define NETGAME_AUX_SIZE                20  // Amount of extra data for the network protocol to store in the netgame packet
 
-enum compType {DOS,WIN_32,WIN_95,MAC} __pack__ ;
+#pragma pack(push, 1)
+enum compType {
+    DOS,
+    WIN_32,
+    WIN_95,
+    MAC
+};
 
 // sigh...the socket structure member was moved away from it's friends.
 // I'll have to create a union for appletalk network info with just
@@ -294,14 +300,15 @@ typedef struct tNetPlayerInfo {
 	uint8_t			rank;
 
 	int32_t IsConnected (void) { return *callsign ? connected : 0; }
-} __pack__ tNetPlayerInfo;
+} tNetPlayerInfo;
 
 
 typedef struct tAllNetPlayersInfo {
 	char		nType;
 	int32_t  nSecurity;
 	struct	tNetPlayerInfo players [MAX_PLAYERS_D2X + 4];
-} __pack__ tAllNetPlayersInfo;
+} tAllNetPlayersInfo;
+#pragma pack(pop)
 
 class CAllNetPlayersInfo {
 	public:
@@ -319,6 +326,7 @@ class CAllNetPlayersInfo {
 		}
 };
 
+#pragma pack(push, 1)
 typedef struct tNetGameInfoD2 {
 	public:
 		int32_t     locations [MAX_PLAYERS_D2];			// 32 bytes
@@ -339,7 +347,7 @@ typedef struct tNetGameInfoD2 {
 // 279 bytes
 // 355 bytes total
 		uint8_t		auxData[NETGAME_AUX_SIZE];  // Storage for protocol-specific data (e.g., multicast session and port)
-} __pack__ tNetGameInfoD2;
+} tNetGameInfoD2;
 
 typedef struct tNetGameInfoD2X {
 	public:
@@ -359,7 +367,7 @@ typedef struct tNetGameInfoD2X {
 		int16_t		nMinPPS;							// 2 bytes
 		uint8_t		bShortPackets;							// 1 bytes
 		uint8_t		auxData [NETGAME_AUX_SIZE];  // Storage for protocol-specific data (e.g., multicast session and port)
-} __pack__ tNetGameInfoD2X;
+} tNetGameInfoD2X;
 
 typedef struct tNetGameInfoLite {
 	public:
@@ -389,7 +397,8 @@ typedef struct tNetGameInfoLite {
 		void SetTeamVector (uint16_t n);
 		inline void AddTeamPlayer (int32_t n) { SetTeamVector (GetTeamVector () | (1 << n)); }
 		inline void RemoveTeamPlayer (int32_t n) { SetTeamVector (GetTeamVector () & ~(1 << n)); }
-} __pack__ tNetGameInfoLite;
+} tNetGameInfoLite;
+#pragma pack(pop)
 
 typedef struct tNetGameInfo : tNetGameInfoLite {
 // 72 bytes
@@ -466,11 +475,13 @@ typedef struct tNetGameInfo : tNetGameInfoLite {
 #endif
 
 	char    szTeamName [2][CALLSIGN_LEN+1];	// 18 bytes
+#pragma pack(push, 1)
 	union {
 		tNetGameInfoD2		d2;
 		tNetGameInfoD2X	d2x;
 		} versionSpecific;
-	} __pack__ tNetGameInfo;
+	} tNetGameInfo;
+#pragma pack(pop)
 
 class CNetGameInfo {
 	public:
@@ -525,6 +536,7 @@ class CNetGameInfo {
 
 #define MAX_ROBOTS_CONTROLLED 5
 
+#pragma pack(push, 1)
 typedef struct tMultiRobotData {
 	int32_t	controlled [MAX_ROBOTS_CONTROLLED];
 	int32_t	agitation [MAX_ROBOTS_CONTROLLED];
@@ -534,7 +546,8 @@ typedef struct tMultiRobotData {
 	int32_t	sendPending [MAX_ROBOTS_CONTROLLED];
 	int32_t	fired [MAX_ROBOTS_CONTROLLED];
 	int8_t	fireBuf [MAX_ROBOTS_CONTROLLED][18+3];
-} __pack__ tMultiRobotData;
+} tMultiRobotData;
+#pragma pack(pop)
 
 extern CNetGameInfo netGameInfo;
 extern CAllNetPlayersInfo netPlayers [2];

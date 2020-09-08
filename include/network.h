@@ -123,6 +123,7 @@ extern int32_t nNetworkGameType;
 extern int32_t nNetworkGameSubType;
 #endif
 
+#pragma pack(push, 1)
 typedef struct tPlayerSyncData {
 	uint8_t           nType;
 	int32_t           nSecurity;
@@ -130,9 +131,7 @@ typedef struct tPlayerSyncData {
 	uint8_t           pad1;
 	tNetPlayerInfo		player;
 	uint8_t           pad2 [3];
-} __pack__ tPlayerSyncData;
-
-
+} tPlayerSyncData;
 
 // frame info is aligned -- 01/18/96 -- MWA
 // if you change this structure -- be sure to keep
@@ -145,7 +144,7 @@ typedef struct tFrameInfoHeader {
 	uint8_t				nType;        
 	uint8_t				pad [3];       
 	int32_t				nPackets;
-} __pack__ tFrameInfoHeader;
+} tFrameInfoHeader;
 
 typedef struct tFrameInfoData {
 	uint16_t				dataSize;          // Size of data appended to the net packet
@@ -153,13 +152,13 @@ typedef struct tFrameInfoData {
 	uint8_t				nRenderType;
 	uint8_t				nLevel;
 	uint8_t				msgData [UDP_PAYLOAD_SIZE];   // extra data to be tacked on the end
-} __pack__ tFrameInfoData;
+} tFrameInfoData;
 
 typedef struct tFrameInfoLong {
 	tFrameInfoHeader	header;
 	tLongPos				objData;
 	tFrameInfoData		data;
-} __pack__ tFrameInfoLong;
+} tFrameInfoLong;
 
 // tFrameInfoShort is not aligned -- 01/18/96 -- MWA
 // won't align because of tShortPos. Shortpos needs to stay in current form.
@@ -168,7 +167,7 @@ typedef struct tFrameInfoShort {
 	tFrameInfoHeader	header;
 	tShortPos			objData;
 	tFrameInfoData		data;
-} __pack__ tFrameInfoShort;
+} tFrameInfoShort;
 
 typedef struct tEntropyGameInfo {
 	uint16_t				nEnergyFillRate;
@@ -187,38 +186,41 @@ typedef struct tEntropyGameInfo {
 	char					nOverrideTextures;
 	char					bBrightenRooms;
 	char					bPlayerHandicap;
-} __pack__ tEntropyGameInfo;
+} tEntropyGameInfo;
 
 #define MAX_MONSTERBALL_FORCES	25
 
 typedef struct tMonsterballForce {
 	uint8_t		nWeaponId;
 	int16_t		nForce;
-} __pack__ tMonsterballForce;
+} tMonsterballForce;
 
 typedef struct tMonsterballInfo {
 	char					nBonus;
 	char					nSizeMod;
 	tMonsterballForce forces [MAX_MONSTERBALL_FORCES];
-} __pack__ tMonsterballInfo;
+} tMonsterballInfo;
+
+#pragma pack(pop)
 
 typedef struct tHeadlightInfo {
 	char	bAvailable;
 	char	bDrainPower;
 }  tHeadlightInfo;
 
+#pragma pack(push, 1)
 typedef struct tLoadoutInfo {
 	uint32_t					nGuns;
 	uint32_t					nDevice;
 	uint8_t					nMissiles [10];
-} __pack__ tLoadoutInfo;
+} tLoadoutInfo;
 
 typedef struct tTimeoutInfo {
 	int32_t					nDisconnectPlayer;
 	int32_t					nKickPlayer;
 	uint16_t					nKeepMessage;
 	uint16_t					nResendMessage;
-} __pack__ tTimeoutInfo;
+} tTimeoutInfo;
 
 typedef struct tExtraGameInfo {
 	uint8_t   			nType;
@@ -318,7 +320,7 @@ typedef struct tExtraGameInfo {
 	int32_t				nSpeedScale;
 	int32_t				nSecurity;
 	int32_t				shipsAllowed [MAX_SHIP_TYPES];
-} __pack__ tExtraGameInfo;
+} tExtraGameInfo;
 
 typedef struct tMpParams {
 	char					szGameName [NETGAME_NAME_LEN + 1];
@@ -345,7 +347,7 @@ typedef struct tMpParams {
 	uint8_t				bShortPackets;
 	uint8_t				nMinPPS;
 	tMsnListEntry		mission;
-} __pack__ tMpParams;
+} tMpParams;
 
 extern tMpParams mpParams;
 
@@ -353,7 +355,8 @@ typedef struct tNetworkObjInfo {
 	int16_t				nObject;
 	uint8_t				nType;
 	uint8_t				nId;
-} __pack__ tNetworkObjInfo;
+} tNetworkObjInfo;
+#pragma pack(pop)
 
 extern tExtraGameInfo extraGameInfo [3];
 
@@ -467,6 +470,7 @@ void NetworkSendData (uint8_t * ptr, int32_t len, int32_t urgent);
 // returns 1 if hoard.ham available
 extern int32_t HoardEquipped (void);
 
+#pragma pack(push, 1)
 typedef struct tPingStats {
 	fix	launchTime;
 	int32_t	ping;
@@ -474,7 +478,8 @@ typedef struct tPingStats {
 	int32_t	averagePing;
 	int32_t	sent;
 	int32_t	received;
-} __pack__ tPingStats;
+} tPingStats;
+#pragma pack(pop)
 
 extern tPingStats pingStats [MAX_PLAYERS];
 extern fix xPingReturnTime;
@@ -510,29 +515,31 @@ int32_t InitAutoNetGame (void);
 // headaches by keeping alignment if these are changed!!!!  Contact
 // me for info.
 
+#pragma pack(push, 1)
 typedef struct tEndLevelInfoShort {
 	uint8_t                               nType;
 	uint8_t                               nPlayer;
 	int8_t                               connected;
 	uint8_t                               secondsLeft;
-} __pack__ tEndLevelInfoShort;
+} tEndLevelInfoShort;
 
 typedef struct tEndLevelInfoD2 : public tEndLevelInfoShort {
 	int16_t											scoreMatrix [MAX_PLAYERS_D2][MAX_PLAYERS_D2];
 	int16_t                               kills;
 	int16_t                               killed;
-} __pack__ tEndLevelInfoD2;
+} tEndLevelInfoD2;
 
 typedef struct tEndLevelInfoD2X : public tEndLevelInfoShort  {
 	int16_t											scoreMatrix [MAX_PLAYERS_D2X][MAX_PLAYERS_D2X];
 	int16_t                               kills;
 	int16_t                               killed;
-} __pack__ tEndLevelInfoD2X;
+} tEndLevelInfoD2X;
 
 typedef union tEndLevelInfo {
 	tEndLevelInfoD2							d2;
 	tEndLevelInfoD2X							d2x;
-} __pack__ tEndLevelInfo;
+} tEndLevelInfo;
+#pragma pack(pop)
 
 class CEndLevelInfo {
 	public:

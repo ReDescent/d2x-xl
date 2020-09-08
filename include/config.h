@@ -27,6 +27,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 extern int32_t ReadConfigFile(void);
 extern int32_t WriteConfigFile(bool bExitProgram = false);
 
+#pragma pack(push, 1)
 typedef struct tGameConfig {
 	char		szLastPlayer [CALLSIGN_LEN+1];
 	char		szLastMission [MISSION_NAME_LEN+1];
@@ -43,7 +44,8 @@ typedef struct tGameConfig {
 	int32_t		vrTracking;
 	uint32_t		nVersion;
 	int32_t		nTotalTime;
-} __pack__ tGameConfig;
+} tGameConfig;
+#pragma pack(pop)
 
 extern tGameConfig gameConfig;
 

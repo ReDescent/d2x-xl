@@ -95,10 +95,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //------------------------------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct tStuckObject {
 	int16_t   nObject, nWall;
 	int32_t   nSignature;
-} __pack__ tStuckObject;
+} tStuckObject;
+#pragma pack(pop)
 
 //------------------------------------------------------------------------------
 
@@ -145,6 +147,7 @@ class CCloakingWall {
 //------------------------------------------------------------------------------
 //Start old CWall structures
 
+#pragma pack(push, 1)
 typedef struct tWallV16 {
 	int8_t   nType;             // What kind of special CWall.
 	int8_t   flags;             // Flags for the CWall.
@@ -152,7 +155,7 @@ typedef struct tWallV16 {
 	int8_t   nTrigger;          // Which CTrigger is associated with the CWall.
 	int8_t   nClip;					// Which animation associated with the CWall.
 	int8_t   keys;
-} __pack__ tWallV16;
+} tWallV16;
 
 typedef struct tWallV19 {
 	int32_t     nSegment,nSide;     // Seg & CSide for this CWall
@@ -163,7 +166,7 @@ typedef struct tWallV19 {
 	int8_t   nClip;           // Which animation associated with the CWall.
 	int8_t   keys;
 	int32_t nLinkedWall;            // number of linked CWall
-} __pack__ tWallV19;
+} tWallV19;
 
 typedef struct tCompatibleWall {
 	int32_t		nSegment, nSide;
@@ -177,7 +180,7 @@ typedef struct tCompatibleWall {
 	uint8_t		keys;				
 	int8_t		controllingTrigger;
 	int8_t		cloakValue;			
-} __pack__ tCompatibleWall;
+} tCompatibleWall;
 
 typedef struct v19_door {
 	int32_t     nPartCount;            // for linked walls
@@ -185,7 +188,8 @@ typedef struct v19_door {
 	int16_t   nSide [2];            // Side number of door.
 	int16_t   nType [2];            // What kind of door animation.
 	fix     open;               // How long it has been open.
-} __pack__ v19_door;
+} v19_door;
+#pragma pack(pop)
 
 //End old CWall structures
 
@@ -250,6 +254,7 @@ inline int32_t operator- (CWall* o, CArray<CWall>& a) { return a.Index (o); }
 #define WCF_FROMPOG		32
 #define WCF_INITIALIZED	64
 
+#pragma pack(push, 1)
 typedef struct tWallEffect {
 	fix		xTotalTime;
 	int16_t  nFrameCount;
@@ -259,7 +264,7 @@ typedef struct tWallEffect {
 	int16_t  flags;
 	char		filename [13];
 	char		pad;
-} __pack__ tWallEffect;
+} tWallEffect;
 
 typedef struct tWallEffectD1 {
 	fix		 playTime;
@@ -270,7 +275,8 @@ typedef struct tWallEffectD1 {
 	int16_t   flags;
 	char		 filename [13];
 	char      pad;
-} __pack__  tWallEffectD1;
+}  tWallEffectD1;
+#pragma pack(pop)
 
 extern char pszWallNames[7][10];
 

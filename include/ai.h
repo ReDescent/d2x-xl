@@ -115,11 +115,13 @@ extern fix AI_procTime;
 #define MAX_AI_CLOAK_INFO       32   // Must be a power of 2!
 #define MAX_AI_CLOAK_INFO_D2    8   // Must be a power of 2!
 
+#pragma pack(push, 1)
 typedef struct {
 	fix         lastTime;
 	int32_t         nLastSeg;
 	CFixVector   vLastPos;
-} __pack__ tAICloakInfo;
+} tAICloakInfo;
+#pragma pack(pop)
 
 #define CHASE_TIME_LENGTH   (I2X (8))
 #define DEFAULT_ROBOT_SOUND_VOLUME I2X (1)
@@ -128,11 +130,13 @@ extern fix xDistToLastTargetPosFiredAt;
 extern CFixVector vLastTargetPosFiredAt;
 
 #define MAX_AWARENESS_EVENTS 256
+#pragma pack(push, 1)
 typedef struct tAwarenessEvent {
 	int16_t       nSegment; // CSegment the event occurred in
 	int16_t       nType;   // nType of event, defines behavior
 	CFixVector	pos;    // absolute 3 space location of event
-} __pack__ tAwarenessEvent;
+} tAwarenessEvent;
+#pragma pack(pop)
 
 #define AIS_MAX 8
 #define AIE_MAX 5
