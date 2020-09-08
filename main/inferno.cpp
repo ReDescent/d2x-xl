@@ -110,7 +110,6 @@ CGameData		gameData;
 
 void check_joystick_calibration (void);
 
-void ShowOrderForm (void);
 void quit_request ();
 
 tGameOptions *gameOpts = gameOptions;
@@ -801,26 +800,22 @@ return 0;
 
 int CleanUp (void)
 {
-if (gameStates.input.bHaveTrackIR) {
-	pfnTIRExit ();
-	TIRUnload ();
-	}
-songManager.StopAll ();
-audio.StopCurrentSong ();
-SaveModelData ();
-/*---*/PrintLog ("Saving configuration file\n");
-WriteConfigFile ();
-/*---*/PrintLog ("Saving player profile\n");
-WritePlayerFile ();
-/*---*/PrintLog ("Releasing tracker list\n");
-DestroyTrackerList ();
-FreeParams ();
-#if DBG
-if (!FindArg ("-notitles"))
-#endif
-	//ShowOrderForm ();
-OglDestroyDrawBuffer ();
-return 0;
+    if (gameStates.input.bHaveTrackIR) {
+        pfnTIRExit ();
+        TIRUnload ();
+    }
+    songManager.StopAll ();
+    audio.StopCurrentSong ();
+    SaveModelData ();
+    /*---*/PrintLog ("Saving configuration file\n");
+    WriteConfigFile ();
+    /*---*/PrintLog ("Saving player profile\n");
+    WritePlayerFile ();
+    /*---*/PrintLog ("Releasing tracker list\n");
+    DestroyTrackerList ();
+    FreeParams ();
+    OglDestroyDrawBuffer ();
+    return 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -891,44 +886,9 @@ void check_joystick_calibration ()
 
 // ----------------------------------------------------------------------------
 
-void ShowOrderForm ()
-{
-	int 	pcx_error;
-	char	exit_screen[16];
-
-	CCanvas::SetCurrent (NULL);
-	paletteManager.ClearEffect ();
-
-	KeyFlush ();
-
-	strcpy (exit_screen, gameStates.menus.bHires?"ordrd2ob.pcx":"ordrd2o.pcx"); // OEM
-	if (! CFile::Exist (exit_screen, gameFolders.szDataDir, 0))
-		strcpy (exit_screen, gameStates.menus.bHires?"orderd2b.pcx":"orderd2.pcx"); // SHAREWARE, prefer mac if hires
-	if (! CFile::Exist (exit_screen, gameFolders.szDataDir, 0))
-		strcpy (exit_screen, gameStates.menus.bHires?"orderd2.pcx":"orderd2b.pcx"); // SHAREWARE, have to rescale
-	if (! CFile::Exist (exit_screen, gameFolders.szDataDir, 0))
-		strcpy (exit_screen, gameStates.menus.bHires?"warningb.pcx":"warning.pcx"); // D1
-	if (! CFile::Exist (exit_screen, gameFolders.szDataDir, 0))
-		return; // D2 registered
-
-	if ((pcx_error=PcxReadFullScrImage (exit_screen, 0))==PCX_ERROR_NONE) {
-		paletteManager.EnableEffect ();
-		GrUpdate (0);
-		while (!(KeyInKey () || MouseButtonState (0)))
-			;
-		paletteManager.DisableEffect ();
-	}
-	else
-		Int3 ();		//can't load order screen
-
-	KeyFlush ();
-}
-
-// ----------------------------------------------------------------------------
-
 void quit_request ()
 {
-exit (0);
+    exit (0);
 }
 
 // ----------------------------------------------------------------------------

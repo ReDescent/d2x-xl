@@ -595,111 +595,99 @@ extern bool bRegisterBitmaps;
 
 void _CDECL_ CloseGame (void)
 {
-ENTER (0, 0);
-	static	int32_t bGameClosed = 0;
-#if MULTI_THREADED
-	int32_t		i;
-#endif
-if (bGameClosed)
-	return;
-bGameClosed = 1;
-if (gameStates.app.bMultiThreaded) {
-	DestroyRenderThreads ();
-	}
-GrClose ();
-PrintLog (1, "unloading addon sounds\n");
-FreeAddonSounds ();
-if (!StartSoundThread (stCloseAudio))
-	audio.Shutdown ();
-DestroySoundThread ();
-PrintLog (-1);
-RLECacheClose ();
-FreeObjExtensionBitmaps ();
-FreeModelExtensions ();
-PrintLog (1, "unloading render buffers\n");
-transparencyRenderer.FreeBuffers ();
-PrintLog (-1);	
-PrintLog (1, "unloading string pool\n");
-FreeStringPool ();
-PrintLog (-1);
-PrintLog (1, "unloading level messages\n");
-FreeTextData (gameData.messages);
-FreeTextData (&gameData.soundData);
-PrintLog (-1);
-PrintLog (1, "unloading hires animations\n");
-UnloadHiresAnimations ();
-UnloadTextures ();
-PrintLog (-1);
-PrintLog (1, "freeing sound buffers\n");
-FreeSoundReplacements ();
-PrintLog (-1);
-PrintLog (1, "unloading auxiliary poly model data\n");
-gameData.modelData.Destroy ();
-PrintLog (-1);
-PrintLog (1, "unloading hires models\n");
-FreeHiresModels (0);
-PrintLog (-1);
-PrintLog (1, "unloading tracker list\n");
-tracker.DestroyList ();
-PrintLog (-1);
-PrintLog (1, "unloading lightmap data\n");
-lightmapManager.Destroy ();
-PrintLog (-1);
-PrintLog (1, "unloading particle data\n");
-particleManager.Shutdown ();
-PrintLog (-1);
-PrintLog (1, "unloading shield sphere data\n");
-if (gameData.renderData.shield) {
-	gameData.renderData.shield->Destroy ();
-	delete gameData.renderData.shield;
-	gameData.renderData.shield = NULL;
-	}
-if (gameData.renderData.monsterball) {
-	gameData.renderData.monsterball->Destroy ();
-	delete gameData.renderData.monsterball;
-	gameData.renderData.monsterball = NULL;
-	}	
-PrintLog (-1);
-PrintLog (1, "unloading HUD icons\n");
-hudIcons.Destroy ();
-PrintLog (-1);
-PrintLog (1, "unloading extra texture data\n");
-UnloadAddonImages ();
-PrintLog (-1);
-PrintLog (1, "unloading palettes\n");
-gameData.segData.skybox.Destroy ();
-PrintLog (-1);
-#if GPGPU_VERTEX_LIGHTING
-gpgpuLighting.End ();
-#endif
-PrintLog (1, "restoring effect bitmaps\n");
-RestoreEffectBitmapIcons ();
-PrintLog (-1);
-if (bmBackground.Buffer ()) {
-	PrintLog (1, "unloading background bitmap\n");
-	bmBackground.DestroyBuffer ();
-	PrintLog (-1);
-	}
-ClearWarnFunc (ShowInGameWarning);     //don't use this func anymore
-PrintLog (1, "unloading ban list\n");
-banList.Save ();
-banList.Destroy ();
-PrintLog (-1);
-#if 1 //defined(__unix__)
-if (ogl.m_states.bFullScreen)
-	ogl.ToggleFullScreen ();
-#endif
-//PrintLog (1, "peak memory consumption: %ld bytes\n", nMaxAllocd);
-#if 0 //!defined(__unix__)
-SDL_Quit (); // hangs on Linux
-#endif
-#if 0
-if (fLog) {
-	fclose (fLog);
-	fLog = NULL;
-	}
-#endif
-RETURN
+    ENTER (0, 0);
+    static int32_t bGameClosed = 0;
+    if (bGameClosed)
+        return;
+    bGameClosed = 1;
+
+    if (gameStates.app.bMultiThreaded) {
+        DestroyRenderThreads ();
+        }
+    GrClose ();
+    PrintLog (1, "unloading addon sounds\n");
+    FreeAddonSounds ();
+    if (!StartSoundThread (stCloseAudio))
+        audio.Shutdown ();
+    DestroySoundThread ();
+    PrintLog (-1);
+    RLECacheClose ();
+    FreeObjExtensionBitmaps ();
+    FreeModelExtensions ();
+    PrintLog (1, "unloading render buffers\n");
+    transparencyRenderer.FreeBuffers ();
+    PrintLog (-1);
+    PrintLog (1, "unloading string pool\n");
+    FreeStringPool ();
+    PrintLog (-1);
+    PrintLog (1, "unloading level messages\n");
+    FreeTextData (gameData.messages);
+    FreeTextData (&gameData.soundData);
+    PrintLog (-1);
+    PrintLog (1, "unloading hires animations\n");
+    UnloadHiresAnimations ();
+    UnloadTextures ();
+    PrintLog (-1);
+    PrintLog (1, "freeing sound buffers\n");
+    FreeSoundReplacements ();
+    PrintLog (-1);
+    PrintLog (1, "unloading auxiliary poly model data\n");
+    gameData.modelData.Destroy ();
+    PrintLog (-1);
+    PrintLog (1, "unloading hires models\n");
+    FreeHiresModels (0);
+    PrintLog (-1);
+    PrintLog (1, "unloading tracker list\n");
+    tracker.DestroyList ();
+    PrintLog (-1);
+    PrintLog (1, "unloading lightmap data\n");
+    lightmapManager.Destroy ();
+    PrintLog (-1);
+    PrintLog (1, "unloading particle data\n");
+    particleManager.Shutdown ();
+    PrintLog (-1);
+    PrintLog (1, "unloading shield sphere data\n");
+    if (gameData.renderData.shield) {
+        gameData.renderData.shield->Destroy ();
+        delete gameData.renderData.shield;
+        gameData.renderData.shield = NULL;
+    }
+    if (gameData.renderData.monsterball) {
+        gameData.renderData.monsterball->Destroy ();
+        delete gameData.renderData.monsterball;
+        gameData.renderData.monsterball = NULL;
+    }
+    PrintLog (-1);
+    PrintLog (1, "unloading HUD icons\n");
+    hudIcons.Destroy ();
+    PrintLog (-1);
+    PrintLog (1, "unloading extra texture data\n");
+    UnloadAddonImages ();
+    PrintLog (-1);
+    PrintLog (1, "unloading palettes\n");
+    gameData.segData.skybox.Destroy ();
+    PrintLog (-1);
+    #if GPGPU_VERTEX_LIGHTING
+    gpgpuLighting.End ();
+    #endif
+    PrintLog (1, "restoring effect bitmaps\n");
+    RestoreEffectBitmapIcons ();
+    PrintLog (-1);
+    if (bmBackground.Buffer ()) {
+        PrintLog (1, "unloading background bitmap\n");
+        bmBackground.DestroyBuffer ();
+        PrintLog (-1);
+    }
+    ClearWarnFunc (ShowInGameWarning);     //don't use this func anymore
+    PrintLog (1, "unloading ban list\n");
+    banList.Save ();
+    banList.Destroy ();
+    PrintLog (-1);
+    if (ogl.m_states.bFullScreen) {
+        ogl.ToggleFullScreen ();
+    }
+    SDL_Quit (); // hangs on Linux
+    return;
 }
 
 //-----------------------------------------------------------------------------

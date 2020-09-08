@@ -35,8 +35,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define MAX_MSG_LEN 1024
 
-FILE *fLog = NULL;
-
 //edited 05/17/99 Matt Mueller added err_ prefix to prevent conflicts with statically linking SDL
 int32_t err_initialized=0;
 //end edit -MM
@@ -457,11 +455,11 @@ if (nIndent) {
 	}
 nLogIndent += nIndent;
 if (nLogIndent < 0) {
-	fprintf (fLog, "Log indentation error!\n");
+	fprintf (stderr, "Log indentation error!\n");
 	nLogIndent = 0;
 	}
 else if (nLogIndent > 30) {
-	fprintf (fLog, "Log indentation error!\n");
+	fprintf (stderr, "Log indentation error!\n");
 	nLogIndent = 30;
 	}
 }
@@ -481,26 +479,9 @@ return nOldIndent;
 #	include "share.h"
 #endif
 
-void OpenLogFile (void)
-{
-if (*gameFolders.user.szCache && (gameStates.app.nLogLevel > 0)) {
-	if (CFile::Exist ("d2x.log.bak", gameFolders.user.szCache, 0))
-		CFile::Delete ("d2x.log.bak", gameFolders.user.szCache);
-	if (CFile::Exist ("d2x.log", gameFolders.user.szCache, 0))
-		CFile::Rename ("d2x.log", "d2x.log.bak", gameFolders.user.szCache);
-
-	char fnErr [FILENAME_LEN];
-	sprintf (fnErr, "%sd2x.log", gameFolders.user.szCache);
-#ifdef _WIN32
-	fLog = _fsopen (fnErr, "wt", _SH_DENYWR);
-#else
-	fLog = fopen (fnErr, "wt");
-#endif
-	}
-}
-
 //------------------------------------------------------------------------------
 
+// NOTE: this is a FUCKING GLOBAL
 bool bPrintingLog = false;
 
 void _CDECL_ PrintLog (const int32_t nIndent, const char *fmt, ...)
@@ -509,7 +490,6 @@ void _CDECL_ PrintLog (const int32_t nIndent, const char *fmt, ...)
 #pragma omp critical (PrintLog)
 	{
 #endif
-if (fLog /*&& !gameStates.app.nTraceLevel*/) {
 	bPrintingLog = true;
 	if (fmt && *fmt) {
 		va_list arglist;
@@ -524,19 +504,15 @@ if (fLog /*&& !gameStates.app.nTraceLevel*/) {
 		va_start (arglist, fmt);
 		vsprintf (szLogLine [nLogLine] + nLogIndent, fmt, arglist);
 		va_end (arglist);
-#if 0
-		if (strstr (szLogLine [nLogLine], "transformation"))
-#endif
 		if (strcmp (szLogLine [nLogLine], szLogLine [!nLogLine])) {
-			fprintf (fLog, szLogLine [nLogLine]);
-			fflush (fLog);
+			fprintf (stderr, szLogLine [nLogLine]);
+			fflush (stderr);
 			nLogLine = !nLogLine;
 			}
 		}
 	if (nIndent)
 		IndentLog (nIndent);
 	bPrintingLog = false;
-	}
 #if USE_OPENMP
 }
 #endif

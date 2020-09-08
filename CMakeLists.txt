@@ -36,12 +36,6 @@ if(ZLIB_FOUND)
 	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${ZLIB_LIBRARY})
 endif(ZLIB_FOUND)
 
-find_package(CURL REQUIRED)
-if(CURL_FOUND)
-	include_directories(${CURL_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${CURL_LIBRARIES})
-endif(CURL_FOUND)
-
 find_package(SDL REQUIRED)
 if(SDL_FOUND)
 	add_definitions(-DSDL_INPUT)
@@ -305,7 +299,6 @@ set(main_sources
     main/textdata.cpp
     main/trackobject.cpp
     main/vclip.cpp
-    main/update.cpp
     main/wall.cpp
 )
 

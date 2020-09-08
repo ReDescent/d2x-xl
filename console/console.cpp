@@ -1039,43 +1039,42 @@ if (m_CommandScrollBack > -1) {
 
 void _CDECL_ CConsole::printf (int32_t priority, const char *fmt, ...)
 {
-	va_list arglist;
+    va_list arglist;
 
-	static char buffer[65536];
+    static char buffer[65536];
 
-if (!(fmt && *fmt))
-	return;
-if (priority <= ((int32_t) m_threshold->Value ())) {
-	va_start (arglist, fmt);
-	vsprintf (buffer,  fmt, arglist);
-	va_end (arglist);
-	if (fLog) {
-	   fprintf(fLog, buffer);
-	   fflush(fLog);
-		}
+    if (!(fmt && *fmt))
+        return;
 
-	Out (buffer);
+    if (priority <= ((int32_t) m_threshold->Value ())) {
+        va_start (arglist, fmt);
+        vsprintf (buffer,  fmt, arglist);
+        va_end (arglist);
+        fprintf(stderr, buffer);
+        fflush(stderr);
 
-	/* Produce a sanitised version and send it to the console */
-		char *p1, *p2;
+        Out (buffer);
 
-	p1 = p2 = buffer;
-	do {
-		switch (*p1) {
-			case CC_COLOR:
-			case CC_LSPACING:
-				p1++;
-			case CC_UNDERLINE:
-				p1++;
-			break;
-			default:
-				*p2++ = *p1++;
-			}
-		} while (*p1);
-	*p2 = 0;
-	if (priority == CON_NORMAL)
-		::printf (buffer);
-	}
+        /* Produce a sanitised version and send it to the console */
+            char *p1, *p2;
+
+        p1 = p2 = buffer;
+        do {
+            switch (*p1) {
+                case CC_COLOR:
+                case CC_LSPACING:
+                    p1++;
+                case CC_UNDERLINE:
+                    p1++;
+                break;
+                default:
+                    *p2++ = *p1++;
+                }
+            } while (*p1);
+        *p2 = 0;
+        if (priority == CON_NORMAL)
+            ::printf (buffer);
+        }
 }
 
 //------------------------------------------------------------------------------

@@ -80,32 +80,32 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 int32_t _CDECL_ InfoBox (const char* pszTitle, pMenuCallback callback, int32_t nWallpaper, int32_t nChoices, ...)
 {
-	int32_t			i;
-	char*				format, * s;
-	va_list			args;
-	char				szSubTitle [MSGBOX_TEXT_SIZE];
-	int32_t			bTiny;
-	CMenu				m;
+    int32_t			i;
+    char*				format, * s;
+    va_list			args;
+    char				szSubTitle [MSGBOX_TEXT_SIZE];
+    int32_t			bTiny;
+    CMenu				m;
 
-if (!m.Create (5, "InfoBox"))
-	return - 1;
+    if (!m.Create (5, "InfoBox"))
+        return - 1;
 
-if ((bTiny = nChoices < 0))
-	nChoices = -nChoices;
-va_start (args, nChoices);
-for (i = 0; i < nChoices; i++) {
-	s = va_arg (args, char *);
-	int32_t nItem = m.AddText ("msgbox", s, - 1);
-	m [nItem].m_bCentered = 1;
-	}
-format = va_arg (args, char*);
-if (*format)
-	vsprintf (szSubTitle, format, args);
-else
-	*szSubTitle = '\0';
-va_end (args);
-Assert (strlen (szSubTitle) < MSGBOX_TEXT_SIZE);
-return m.Menu (pszTitle, szSubTitle, callback, NULL, BG_SUBMENU, nWallpaper, -1, -1, bTiny);
+    if ((bTiny = nChoices < 0))
+        nChoices = -nChoices;
+    va_start (args, nChoices);
+    for (i = 0; i < nChoices; i++) {
+        s = va_arg (args, char *);
+        int32_t nItem = m.AddText ("msgbox", s, - 1);
+        m [nItem].m_bCentered = 1;
+        }
+    format = va_arg (args, char*);
+    if (*format)
+        vsprintf (szSubTitle, format, args);
+    else
+        *szSubTitle = '\0';
+    va_end (args);
+    Assert (strlen (szSubTitle) < MSGBOX_TEXT_SIZE);
+    return m.Menu (pszTitle, szSubTitle, callback, NULL, BG_SUBMENU, nWallpaper, -1, -1, bTiny);
 }
 
 //------------------------------------------------------------------------------ 
@@ -116,71 +116,73 @@ return m.Menu (pszTitle, szSubTitle, callback, NULL, BG_SUBMENU, nWallpaper, -1,
 
 int32_t _CDECL_ TextBox (const char* pszTitle, int32_t nWallpaper, int32_t nChoices, ...)
 {
-	int32_t			h, i, l, bTiny, nInMenu;
-	char				*format, *s;
-	va_list			args;
-	char				nm_text [MSGBOX_TEXT_SIZE];
-	CMenu	mm;
+    int32_t			h, i, l, bTiny, nInMenu;
+    char				*format, *s;
+    va_list			args;
+    char				nm_text [MSGBOX_TEXT_SIZE];
+    CMenu	mm;
 
 
-if (!(nChoices && mm.Create (10)))
-	return -1;
-if ((bTiny = (nChoices < 0)))
-	nChoices = -nChoices;
-va_start (args, nChoices);
-for (i = l = 0; i < nChoices; i++) {
-	s = va_arg (args, char* );
-	h = (int32_t) strlen (s);
-	if (l + h > MSGBOX_TEXT_SIZE)
-		break;
-	l += h;
-	if (!(bTiny || i))
-		mm.AddMenu ("msgbox", s, - 1);
-	else {
-		mm.AddText ("", s);
-		mm.Item (i).m_bUnavailable = 1;
-		}
-	if (bTiny)
-		mm.Item (i).m_bCentered = (i != 0);
-	}
-if (!bTiny) {
-	format = va_arg (args, char* );
-	vsprintf (nm_text, format, args);
-	va_end (args);
-	}
-nInMenu = gameStates.menus.nInMenu;
-gameStates.menus.nInMenu = 0;
-i = bTiny 
-	 ? mm.Menu (NULL, pszTitle, NULL, NULL, BG_SUBMENU, nWallpaper, LHX (340), -1, 1)
-	 : mm.Menu (pszTitle, nm_text, NULL, NULL);
-gameStates.menus.nInMenu = nInMenu;
-return i;
+    if (!(nChoices && mm.Create (10)))
+        return -1;
+    if ((bTiny = (nChoices < 0)))
+        nChoices = -nChoices;
+    va_start (args, nChoices);
+    for (i = l = 0; i < nChoices; i++) {
+        s = va_arg (args, char* );
+        h = (int32_t) strlen (s);
+        if (l + h > MSGBOX_TEXT_SIZE) {
+            break;
+        }
+        l += h;
+        if (!(bTiny || i)) {
+            mm.AddMenu ("msgbox", s, - 1);
+        }
+        else {
+            mm.AddText ("", s);
+            mm.Item (i).m_bUnavailable = 1;
+        }
+        if (bTiny)
+            mm.Item (i).m_bCentered = (i != 0);
+    }
+    if (!bTiny) {
+        format = va_arg (args, char* );
+        vsprintf (nm_text, format, args);
+        va_end (args);
+    }
+    nInMenu = gameStates.menus.nInMenu;
+    gameStates.menus.nInMenu = 0;
+    i = bTiny
+        ? mm.Menu (NULL, pszTitle, NULL, NULL, BG_SUBMENU, nWallpaper, LHX (340), -1, 1)
+        : mm.Menu (pszTitle, nm_text, NULL, NULL);
+    gameStates.menus.nInMenu = nInMenu;
+    return i;
 }
 
 //------------------------------------------------------------------------------ 
 //added on 10/14/98 by Victor Rachels to attempt a fixedwidth font messagebox
 int32_t _CDECL_ FixedFontMsgBox (char* pszTitle, int32_t nChoices, ...)
 {
-	int32_t				i;
-	char*				format;
-	va_list			args;
-	char*				s;
-	char				szSubTitle [MSGBOX_TEXT_SIZE];
-	CMenu	mm;
+    int32_t				i;
+    char*				format;
+    va_list			args;
+    char*				s;
+    char				szSubTitle [MSGBOX_TEXT_SIZE];
+    CMenu	mm;
 
-if (!mm.Create (5))
-	return -1;
+    if (!mm.Create (5))
+        return -1;
 
-va_start (args, nChoices);
-for (i = 0; i < nChoices; i++) {
-	s = va_arg (args, char*);
-	mm.AddMenu ("msgbox", s);
-	}
-format = va_arg (args, char* );
-vsprintf (szSubTitle, format, args);
-va_end (args);
-Assert (strlen (szSubTitle) < MSGBOX_TEXT_SIZE);
-return mm.FixedFontMenu (pszTitle, szSubTitle, NULL, NULL);
+    va_start (args, nChoices);
+    for (i = 0; i < nChoices; i++) {
+        s = va_arg (args, char*);
+        mm.AddMenu ("msgbox", s);
+        }
+    format = va_arg (args, char* );
+    vsprintf (szSubTitle, format, args);
+    va_end (args);
+    Assert (strlen (szSubTitle) < MSGBOX_TEXT_SIZE);
+    return mm.FixedFontMenu (pszTitle, szSubTitle, NULL, NULL);
 }
 //end this section addition - Victor Rachels
 

@@ -39,20 +39,19 @@ using namespace OOF;
 
 static int32_t nIndent = 0;
 static int32_t bLogOOF = 0;
-extern  FILE *fLog;
 
 static void _CDECL_ OOF_PrintLog (const char *fmt, ...)
 {
-if (bLogOOF) {
-	va_list arglist;
-	static char szLog [1024];
+    if (bLogOOF) {
+        va_list arglist;
+        static char szLog [1024];
 
-	memset (szLog, ' ', nIndent);
-	va_start (arglist, fmt);
-	vsprintf (szLog + nIndent, fmt, arglist);
-	va_end (arglist);
-	fprintf (fLog, szLog);
-	}
+        memset (szLog, ' ', nIndent);
+        va_start (arglist, fmt);
+        vsprintf (szLog + nIndent, fmt, arglist);
+        va_end (arglist);
+        fprintf (stderr, szLog);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1573,7 +1572,7 @@ if (m_nModel >= 0)
 	char			fileId [4];
 	int32_t		i, nLength, nFrames, nSubModels, bTimed = 0;
 
-bLogOOF = (fLog != NULL) && FindArg ("-printoof");
+bLogOOF = FindArg ("-printoof");
 nIndent = 0;
 OOF_PrintLog ("\nreading %s%s\n", gameFolders.game.szModels, filename);
 if (bCustom 

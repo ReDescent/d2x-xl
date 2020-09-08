@@ -38,7 +38,6 @@ void _CDECL_ Error(const char *fmt,...);				//exit with error code=1, print mess
 void _CDECL_ Error(const char *fmt,...) __noreturn __format;				//exit with error code=1, print message
 #endif
 void Assert(int32_t expr);
-void OpenLogFile (void);
 void _CDECL_ PrintLog (const int32_t nIndent, const char *fmt = NULL, ...);
 void TraceCallStack (const int32_t nDirection, const int32_t nLevel, const char *pszFunction, const int32_t nThread, const char *pszFile, const int32_t nLine);
 void PrintCallStack (void);
@@ -71,8 +70,6 @@ extern int32_t nDbgVertex, nDbgBaseTex, nDbgOvlTex, nDbgTexture, nDbgLight;
 
 #endif
 
-extern FILE *fLog;
-
 void Breakpoint (void);
 
 #if DBG
@@ -83,25 +80,9 @@ void Breakpoint (void);
 
 //	-----------------------------------------------------------------------------------------------------------
 
-#if !DBG
-
-#ifdef _WIN32
-#	define	__FUNC__	__FUNCSIG__
-#else
-#	define	__FUNC__	__PRETTY_FUNCTION__
-#endif
-
-#	define ENTER(_nLevel,_thread)		const int32_t __THREAD__ = (_thread); const int32_t __LEVEL__ = (_nLevel); if (__LEVEL__ < gameStates.app.nTraceLevel) TraceCallStack (1, __LEVEL__, __FUNC__, __THREAD__, __FILE__, __LINE__)
-#	define RETURN							{ if (__LEVEL__ < gameStates.app.nTraceLevel) TraceCallStack (-1, __LEVEL__, __FUNC__, __THREAD__, __FILE__, __LINE__); return; }
-#	define RETVAL(_retVal)				{ if (__LEVEL__ < gameStates.app.nTraceLevel) TraceCallStack (-1, __LEVEL__, __FUNC__, __THREAD__, __FILE__, __LINE__); return (_retVal); }
-
-#else
-
-#	define ENTER(_nLevel,_thread)				
-#	define RETURN							return;	
+#	define ENTER(_nLevel,_thread)
+#	define RETURN							return;
 #	define RETVAL(_retVal)				return (_retVal);
-
-#endif
 
 //	-----------------------------------------------------------------------------------------------------------
 
