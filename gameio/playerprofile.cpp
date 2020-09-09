@@ -21,9 +21,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _WIN32
 #	include <unistd.h>
 #endif
-#ifndef _WIN32_WCE
-#	include <errno.h>
-#endif
+
+#include <errno.h>
 #include <limits.h>
 
 #include "descent.h"
@@ -78,12 +77,6 @@ int32_t FindDisplayMode (int16_t w, int16_t h);
 //------------------------------------------------------------------------------
 
 #define SAVE_FILE_ID			MAKE_SIG('D','P','L','R')
-
-#if defined(_WIN32_WCE)
-# define errno -1
-# define ENOENT -1
-# define strerror(x) "Unknown Error"
-#endif
 
 int32_t GetLifetimeChecksum (int32_t a,int32_t b);
 

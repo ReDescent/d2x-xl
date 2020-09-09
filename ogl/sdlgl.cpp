@@ -37,10 +37,6 @@
 
 //------------------------------------------------------------------------------
 
-#define SDL_VIDEO_FLAGS (SDL_WINDOW_OPENGL | (ogl.m_states.bFullScreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0))
-
-//------------------------------------------------------------------------------
-
 static uint16_t gammaRamp [512];
 
 //------------------------------------------------------------------------------
@@ -151,7 +147,7 @@ int32_t SdlGlInitWindow (int32_t w_init, int32_t h_init, int32_t bForce)
     int32_t			bRebuild = 0;
     GLint			i;
 
-    auto context = SDL_GL_CreateContext( ogl.m_window );
+    ogl.m_context = SDL_GL_CreateContext( ogl.m_window );
 
     if (ogl.m_states.bInitialized) {
         if (!bForce && (w == ogl.m_states.nCurWidth) && (h == ogl.m_states.nCurHeight) && (ogl.m_states.bCurFullScreen == ogl.m_states.bFullScreen))

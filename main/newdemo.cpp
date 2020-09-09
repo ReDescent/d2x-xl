@@ -19,9 +19,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h> // for memset
-#ifndef _WIN32_WCE
 #include <errno.h>
-#endif
 #include <ctype.h>      /* for isdigit */
 #if defined (__unix__) || defined (__macosx__)
 #include <sys/stat.h>

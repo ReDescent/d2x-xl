@@ -106,35 +106,3 @@ int32_t FileFindClose(void)
 return FindClose (_FindFileHandle) ? 0 : 1;
 }
 
-// ----------------------------------------------------------------------------
-
-#if 0
-int32_t GetFileDateTime(int32_t filehandle, FILETIMESTRUCT *ftstruct)
-{
-	FILETIME filetime;
-	int32_t retval;
-
-	retval = GetFileTime((HANDLE)filehandle, NULL, NULL, &filetime);
-	if (retval) {
-		FileTimeToDosDateTime(&filetime, &ftstruct->date, &ftstruct->time);
-		return 0;
-	}
-	else return 1;
-}
-
-// ----------------------------------------------------------------------------
-//returns 0 if no error
-int32_t SetFileDateTime(int32_t filehandle, FILETIMESTRUCT *ftstruct)
-{
-	FILETIME ft;
-	int32_t retval;
-
-	DosDateTimeToFileTime(ftstruct->date, ftstruct->time, &ft);
-	retval = SetFileTime((HANDLE)filehandle, NULL, NULL, &ft);
-	if (retval) return 0;
-	else return 1;
-}
-
-#endif
-// ----------------------------------------------------------------------------
-

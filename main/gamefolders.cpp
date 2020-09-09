@@ -169,34 +169,35 @@ return pszAppFolder;
 
 static int32_t CheckDataFolder (char* pszRootDir)
 {
-AppendSlash (FlipBackslash (pszRootDir));
-return GetAppFolder (pszRootDir, gameFolders.game.szData [0], DATA_FOLDER, "descent2.hog") &&
-		 GetAppFolder (pszRootDir, gameFolders.game.szData [0], DATA_FOLDER, "d2demo.hog") &&
-		 GetAppFolder (pszRootDir, gameFolders.game.szData [0], "", "descent2.hog") &&
-		 GetAppFolder (pszRootDir, gameFolders.game.szData [0], "", "d2demo.hog");
+    AppendSlash (FlipBackslash (pszRootDir));
+    return
+        GetAppFolder (pszRootDir, gameFolders.game.szData [0], DATA_FOLDER, "descent2.hog") &&
+        GetAppFolder (pszRootDir, gameFolders.game.szData [0], DATA_FOLDER, "d2demo.hog") &&
+        GetAppFolder (pszRootDir, gameFolders.game.szData [0], "", "descent2.hog") &&
+        GetAppFolder (pszRootDir, gameFolders.game.szData [0], "", "d2demo.hog");
 }
 
 // ----------------------------------------------------------------------------
 
 static int32_t FindDataFolder (const char* pszRootDir, bool bSplitPath = false)
 {
-if (!(pszRootDir && *pszRootDir))
-	return 0;
-if (pszRootDir != gameFolders.game.szRoot) {
-	if (bSplitPath)
-		CFile::SplitPath (pszRootDir, gameFolders.game.szRoot, NULL, NULL);
-	else
-		strcpy (gameFolders.game.szRoot, pszRootDir);
+    if (!(pszRootDir && *pszRootDir))
+        return 0;
+    if (pszRootDir != gameFolders.game.szRoot) {
+        if (bSplitPath)
+            CFile::SplitPath (pszRootDir, gameFolders.game.szRoot, NULL, NULL);
+        else
+            strcpy (gameFolders.game.szRoot, pszRootDir);
 #ifdef _M_X64
-	char* s = strstr (gameFolders.game.szRoot, "\\x64");
-	if (s && *s)
-		*s = '\0';
+        char* s = strstr (gameFolders.game.szRoot, "\\x64");
+        if (s && *s)
+            *s = '\0';
 #endif
-	}
-if (!CheckDataFolder (gameFolders.game.szRoot))
-	return 1;
-*gameFolders.game.szRoot = '\0';
-return 0;
+    }
+    if (!CheckDataFolder (gameFolders.game.szRoot))
+        return 1;
+    *gameFolders.game.szRoot = '\0';
+    return 0;
 }
 
 // ----------------------------------------------------------------------------

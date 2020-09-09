@@ -92,9 +92,6 @@
 /* Name of package */
 #define PACKAGE "d2x-xl"
 
-/* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "karx11erx@hotmail.com"
-
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "d2x-xl"
 
@@ -148,7 +145,6 @@ MIXER 1
 #endif
 #define VERSION_NAME PACKAGE_STRING
 #define NMONO 1
-#define PIGGY_USE_PAGING 1
 #define NEWDEMO 1
 
 #if defined(__APPLE__) && defined(__MACH__)

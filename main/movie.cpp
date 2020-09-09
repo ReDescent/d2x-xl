@@ -18,12 +18,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define DEBUG_LEVEL CON_NORMAL
 
 #include <string.h>
-#ifndef _WIN32_WCE
-#	include <sys/types.h>
-#endif
+#include <sys/types.h>
+
 #ifndef _WIN32
 #	include <unistd.h>
 #endif
+
 #include <ctype.h>
 
 #include "descent.h"

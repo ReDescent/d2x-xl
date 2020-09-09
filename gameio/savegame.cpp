@@ -24,9 +24,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _WIN32
 #include <unistd.h>
 #endif
-#ifndef _WIN32_WCE
 #include <errno.h>
-#endif
 
 #ifndef _WIN32
 #	include <arpa/inet.h>
@@ -131,11 +129,6 @@ char dgss_id [4] = {'D', 'G', 'S', 'S'};
 void GameRenderFrame (void);
 
 #define	DESC_OFFSET	8
-
-#ifdef _WIN32_WCE
-# define errno -1
-# define strerror (x) "Unknown Error"
-#endif
 
 #define SECRETB_FILENAME	"secret.sgb"
 #define SECRETC_FILENAME	"secret.sgc"

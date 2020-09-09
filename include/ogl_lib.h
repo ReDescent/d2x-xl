@@ -279,7 +279,8 @@ class COglBuffers {
 
 class COGL {
 	public:
-        SDL_Window * m_window;
+        SDL_Window * m_window = NULL;
+        SDL_GLContext m_context = NULL;
 		COglData m_data;
 		COglStates m_states;
 		COglBuffers m_buffers;

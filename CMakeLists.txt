@@ -6,6 +6,7 @@ project(D2X-XL)
 add_definitions(-DHAVE_STRUCT_TIMESPEC)
 add_definitions(-DNATIVE_IPX)
 add_definitions(-DKALINIX)
+
 if (${CMAKE_BUILD_TYPE} MATCHES "Release")
 	add_definitions(-DRELEASE)
 elseif (${CMAKE_BUILD_TYPE} MATCHES "Debug")
@@ -166,7 +167,6 @@ set(io_sources
     io/linux/findfile.cpp
     io/args.cpp
     io/cfile.cpp
-    io/d_io.cpp
     io/hogfile.cpp
 )
 
