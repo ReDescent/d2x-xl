@@ -1126,16 +1126,12 @@ if (m_bRunning) { // game states are updated in separate thread
 	if (fps) {
 		t += 1000 / fps - SDL_GetTicks ();
 		if (t > 0) {
-			playerSynchronizer.Start ();
 			G3_SLEEP (t);
-			playerSynchronizer.Stop ();
 			}
 		}	
 	}
 else {
-	playerSynchronizer.Start ();
 	CalcFrameTime (fps);
-	playerSynchronizer.Stop ();
 	HandleControls (bControls);
 	gameStates.render.EnableCartoonStyle (1, 1, 1);
 	m_nResult = Preprocess ();
@@ -1291,7 +1287,6 @@ for (;;) {
 			gameStates.app.bSingleStep = 0;
 		}
 
-	redbook.CheckRepeat ();	// Handle RedBook Audio Repeating.
 	HandleAutomap ();
 	HandleQuit ();
 	gameStates.multi.bIWasKicked = 0;

@@ -279,10 +279,11 @@ class COglBuffers {
 
 class COGL {
 	public:
-		COglData			m_data;
-		COglStates		m_states;
-		COglBuffers		m_buffers;
-		COglFeatures	m_features;
+        SDL_Window * m_window;
+		COglData m_data;
+		COglStates m_states;
+		COglBuffers m_buffers;
+		COglFeatures m_features;
 
 	public:
 		COGL () { Initialize (); }

@@ -469,213 +469,205 @@ bWalls = 0;
 
 void CSoundOptions::Init (int32_t i)
 {
-bUseRedbook = 1;
-audioSampleRate = SAMPLE_RATE_22K;
-#if 0
-#	if USE_SDL_MIXER
-	gameOptions [1].sound.bUseSDLMixer = 1;
-#	else
-	gameOptions [1].sound.bUseSDLMixer = 0;
-#	endif
-#endif
-bHires [0] = gameStates.app.bStandalone;
-bHires [1] = 0;
-bLinkVolumes = 1;
-bShip = 0;
-bMissiles = 0;
-bFadeMusic = 1;
-bShuffleMusic = 0;
-bUseD1Sounds = 1;
+    audioSampleRate = SAMPLE_RATE_22K;
+    bHires [0] = gameStates.app.bStandalone;
+    bHires [1] = 0;
+    bLinkVolumes = 1;
+    bShip = 0;
+    bMissiles = 0;
+    bFadeMusic = 1;
+    bShuffleMusic = 0;
+    bUseD1Sounds = 1;
 }
 
 //------------------------------------------------------------------------------
 
 void CInputOptions::Init (int32_t i)
 {
-if (i) {
-	extraGameInfo [0].bMouseLook = 0;
+    if (i) {
+        extraGameInfo [0].bMouseLook = 0;
 
-	bLimitTurnRate = 1;
-	nMinTurnRate = 20;	//turn time for a 360 deg rotation around a single ship axis in 1/10 sec units
-	if (joystick.bUse)
-		mouse.bUse = 0;
-	mouse.bSyncAxis = 1;
-	mouse.bJoystick = 0;
-	mouse.nDeadzone = 0;
-	joystick.bSyncAxis = 1;
-	keyboard.bUse = 1;
-	bUseHotKeys = 1;
-	keyboard.nRamp = 100;
-	keyboard.bRamp [0] =
-	keyboard.bRamp [1] =
-	keyboard.bRamp [2] = 0;
-	joystick.bLinearSens = 1;
-	mouse.sensitivity [0] =
-	mouse.sensitivity [1] =
-	mouse.sensitivity [2] = 8;
-	joystick.sensitivity [0] =
-	joystick.sensitivity [1] =
-	joystick.sensitivity [2] =
-	joystick.sensitivity [3] = 8;
-	joystick.deadzones [0] =
-	joystick.deadzones [1] =
-	joystick.deadzones [2] =
-	joystick.deadzones [3] = 1;
-	}
-else {
-	bLimitTurnRate = 1;
-	nMinTurnRate = 20;	//turn time for a 360 deg rotation around a single ship axis in 1/10 sec units
-	joystick.bLinearSens = 0;
-	keyboard.nRamp = 100;
-	keyboard.bRamp [0] =
-	keyboard.bRamp [1] =
-	keyboard.bRamp [2] = 0;
-	mouse.bUse = 1;
-	joystick.bUse = 0;
-	mouse.bSyncAxis = 1;
-	mouse.nDeadzone = 0;
-	mouse.bJoystick = 0;
-	joystick.bSyncAxis = 1;
-	keyboard.bUse = 1;
-	bUseHotKeys = 1;
-	mouse.nDeadzone = 2;
-	mouse.sensitivity [0] =
-	mouse.sensitivity [1] =
-	mouse.sensitivity [2] = 8;
-	oculusRift.nDeadzone = 2;
-	trackIR.nDeadzone = 0;
-	trackIR.bMove [0] =
-	trackIR.bMove [1] = 1;
-	trackIR.bMove [2] = 0;
-	trackIR.sensitivity [0] =
-	trackIR.sensitivity [1] =
-	trackIR.sensitivity [2] = 8;
-	joystick.sensitivity [0] =
-	joystick.sensitivity [1] =
-	joystick.sensitivity [2] =
-	joystick.sensitivity [3] = 8;
-	joystick.deadzones [0] =
-	joystick.deadzones [1] =
-	joystick.deadzones [2] =
-	joystick.deadzones [3] = 1;
-	}
+        bLimitTurnRate = 1;
+        nMinTurnRate = 20;	//turn time for a 360 deg rotation around a single ship axis in 1/10 sec units
+        if (joystick.bUse)
+            mouse.bUse = 0;
+        mouse.bSyncAxis = 1;
+        mouse.bJoystick = 0;
+        mouse.nDeadzone = 0;
+        joystick.bSyncAxis = 1;
+        keyboard.bUse = 1;
+        bUseHotKeys = 1;
+        keyboard.nRamp = 100;
+        keyboard.bRamp [0] =
+        keyboard.bRamp [1] =
+        keyboard.bRamp [2] = 0;
+        joystick.bLinearSens = 1;
+        mouse.sensitivity [0] =
+        mouse.sensitivity [1] =
+        mouse.sensitivity [2] = 8;
+        joystick.sensitivity [0] =
+        joystick.sensitivity [1] =
+        joystick.sensitivity [2] =
+        joystick.sensitivity [3] = 8;
+        joystick.deadzones [0] =
+        joystick.deadzones [1] =
+        joystick.deadzones [2] =
+        joystick.deadzones [3] = 1;
+    }
+    else {
+        bLimitTurnRate = 1;
+        nMinTurnRate = 20;	//turn time for a 360 deg rotation around a single ship axis in 1/10 sec units
+        joystick.bLinearSens = 0;
+        keyboard.nRamp = 100;
+        keyboard.bRamp [0] =
+        keyboard.bRamp [1] =
+        keyboard.bRamp [2] = 0;
+        mouse.bUse = 1;
+        joystick.bUse = 0;
+        mouse.bSyncAxis = 1;
+        mouse.nDeadzone = 0;
+        mouse.bJoystick = 0;
+        joystick.bSyncAxis = 1;
+        keyboard.bUse = 1;
+        bUseHotKeys = 1;
+        mouse.nDeadzone = 2;
+        mouse.sensitivity [0] =
+        mouse.sensitivity [1] =
+        mouse.sensitivity [2] = 8;
+        oculusRift.nDeadzone = 2;
+        trackIR.nDeadzone = 0;
+        trackIR.bMove [0] =
+        trackIR.bMove [1] = 1;
+        trackIR.bMove [2] = 0;
+        trackIR.sensitivity [0] =
+        trackIR.sensitivity [1] =
+        trackIR.sensitivity [2] = 8;
+        joystick.sensitivity [0] =
+        joystick.sensitivity [1] =
+        joystick.sensitivity [2] =
+        joystick.sensitivity [3] = 8;
+        joystick.deadzones [0] =
+        joystick.deadzones [1] =
+        joystick.deadzones [2] =
+        joystick.deadzones [3] = 1;
+    }
 }
 
 // ----------------------------------------------------------------------------
 
 void CMultiplayerOptions::Init (int32_t i)
 {
-if (i) {
-	extraGameInfo [0].bFriendlyFire = 1;
-	extraGameInfo [0].bInhibitSuicide = 0;
-	extraGameInfo [1].bMouseLook = 0;
-	extraGameInfo [1].bDualMissileLaunch = 0;
-	extraGameInfo [0].bAutoBalanceTeams = 0;
-	extraGameInfo [1].bRotateLevels = 0;
-	extraGameInfo [1].bDisableReactor = 0;
-	}
-bNoRankings = 0;
-bTimeoutPlayers = 1;
-bUseMacros = 0;
-bNoRedundancy = 1;
+    if (i) {
+        extraGameInfo [0].bFriendlyFire = 1;
+        extraGameInfo [0].bInhibitSuicide = 0;
+        extraGameInfo [1].bMouseLook = 0;
+        extraGameInfo [1].bDualMissileLaunch = 0;
+        extraGameInfo [0].bAutoBalanceTeams = 0;
+        extraGameInfo [1].bRotateLevels = 0;
+        extraGameInfo [1].bDisableReactor = 0;
+    }
+    bNoRankings = 0;
+    bTimeoutPlayers = 1;
+    bUseMacros = 0;
+    bNoRedundancy = 1;
 }
 
 // ----------------------------------------------------------------------------
 
 void CDemoOptions::Init (int32_t i)
 {
-bOldFormat = !i;
-bRevertFormat = 0;
+    bOldFormat = !i;
+    bRevertFormat = 0;
 }
 
 // ----------------------------------------------------------------------------
 
 void CMenuOptions::Init (int32_t i)
 {
-if (i) {
-	nStyle = 0;
-	nFade = 0;
-	bFastMenus = 1;
-	bSmartFileSearch = 0;
-	bShowLevelVersion = 0;
-	altBg.alpha = 0;
-	altBg.brightness = 0;
-	altBg.grayscale = 0;
-	nHotKeys = 0;
-	*altBg.szName [0] = '\0';
-	}
-else {
-	nStyle = 0;
-	nFade = 150;
-	bFastMenus = 1;
-	bSmartFileSearch = 1;
-	bShowLevelVersion = 1;
-	altBg.alpha = 0.75;
-	altBg.brightness = 0.5;
-	altBg.grayscale = 0;
-	nHotKeys = gameStates.app.bEnglish ? 1 : -1;
-	strcpy (altBg.szName [0], "menubg.tga");
-	}
-*altBg.szName [1] = '\0';
+    if (i) {
+        nStyle = 0;
+        nFade = 0;
+        bFastMenus = 1;
+        bSmartFileSearch = 0;
+        bShowLevelVersion = 0;
+        altBg.alpha = 0;
+        altBg.brightness = 0;
+        altBg.grayscale = 0;
+        nHotKeys = 0;
+        *altBg.szName [0] = '\0';
+    }
+    else {
+        nStyle = 0;
+        nFade = 150;
+        bFastMenus = 1;
+        bSmartFileSearch = 1;
+        bShowLevelVersion = 1;
+        altBg.alpha = 0.75;
+        altBg.brightness = 0.5;
+        altBg.grayscale = 0;
+        nHotKeys = gameStates.app.bEnglish ? 1 : -1;
+        strcpy (altBg.szName [0], "menubg.tga");
+    }
+    *altBg.szName [1] = '\0';
 }
 
 // ----------------------------------------------------------------------------
 
 void COglOptions::Init (int32_t i)
 {
-bLightObjects = 0;
-bHeadlight = 0;
-bLightPowerups = 0;
-bObjLighting = 0;
-bGlTexMerge = 1;
+    bLightObjects = 0;
+    bHeadlight = 0;
+    bLightPowerups = 0;
+    bObjLighting = 0;
+    bGlTexMerge = 1;
 }
 
 // ----------------------------------------------------------------------------
 
 void CApplicationOptions::Init (int32_t i)
 {
-bEnableMods = 0;
-nVersionFilter = 2;
-bSinglePlayer = 0;
-bExpertMode = i;
-nScreenShotInterval = 0;
+    bEnableMods = 0;
+    nVersionFilter = 2;
+    bSinglePlayer = 0;
+    bExpertMode = i;
+    nScreenShotInterval = 0;
 }
 
 // ----------------------------------------------------------------------------
 
 void CGameOptions::Init (int32_t i)
 {
-if (i) {
-	if (gameStates.app.bNostalgia)
-		*this = gameOptions [0];
-	else
-		return;
-	}
-else
-	memset (this, 0, sizeof (*this));
-input.Init (i);
-gameplay.Init (i);
-render.Init (i);
-multi.Init (i);
-menus.Init (i);
-demo.Init (i);
-sound.Init (i);
-movies.Init (i);
-ogl.Init (i);
-legacy.Init (i);
-gameplay.Init (i);
+    if (i) {
+        if (gameStates.app.bNostalgia)
+            *this = gameOptions [0];
+        else
+            return;
+    }
+    else
+        memset (this, 0, sizeof (*this));
+    input.Init (i);
+    gameplay.Init (i);
+    render.Init (i);
+    multi.Init (i);
+    menus.Init (i);
+    demo.Init (i);
+    sound.Init (i);
+    movies.Init (i);
+    ogl.Init (i);
+    legacy.Init (i);
+    gameplay.Init (i);
 }
 
 // ----------------------------------------------------------------------------
 
 bool CGameOptions::Use3DPowerups (void)
 {
-return !gameStates.app.bNostalgia && missionConfig.m_b3DPowerups && (gameStates.app.bStandalone || gameOpts->render.powerups.b3D);
+    return !gameStates.app.bNostalgia && missionConfig.m_b3DPowerups && (gameStates.app.bStandalone || gameOpts->render.powerups.b3D);
 }
 
 int32_t CGameOptions::UseHiresSound (void)
 {
-return gameStates.app.bNostalgia ? 0 : gameStates.app.bStandalone ? 2 : gameOpts->sound.bHires [0];
+    return gameStates.app.bNostalgia ? 0 : gameStates.app.bStandalone ? 2 : gameOpts->sound.bHires [0];
 }
 
 // ----------------------------------------------------------------------------
@@ -686,112 +678,110 @@ CMissionConfig missionConfig;
 
 void CMissionConfig::Init (void)
 {
-for (int32_t i = 0; i < MAX_SHIP_TYPES; i++)
-	m_shipsAllowed [i] = 1;
-m_playerShip = -1;
-m_bTeleport = 1;
-m_bColoredSegments = 1;
-m_b3DPowerups = 1;
-m_bSecretSave = 1;
+    for (int32_t i = 0; i < MAX_SHIP_TYPES; i++)
+        m_shipsAllowed [i] = 1;
+    m_playerShip = -1;
+    m_bTeleport = 1;
+    m_bColoredSegments = 1;
+    m_b3DPowerups = 1;
+    m_bSecretSave = 1;
 }
 
 // ----------------------------------------------------------------------------
 
 int32_t CMissionConfig::Load (char* szFilename)
 {
-	CConfigManager args;
-	CFile				cf;
-	char				szConfig [FILENAME_LEN];
-	bool				bLocal;
+    CConfigManager args;
+    CFile				cf;
+    char				szConfig [FILENAME_LEN];
+    bool				bLocal;
 
-	static const char* szShipArgs [MAX_SHIP_TYPES] = {"-medium_ship", "-light_ship", "-heavy_ship"};
+    static const char* szShipArgs [MAX_SHIP_TYPES] = {"-medium_ship", "-light_ship", "-heavy_ship"};
 
-if ((bLocal = (szFilename && *szFilename)))
-	CFile::ChangeFilenameExtension (szConfig + 1, szFilename, ".ini");
-else
-	strcpy (szConfig + 1, "global.ini");
-szConfig [0] = '\x01'; // only read from mission file
-if (!cf.Open (szConfig, gameFolders.game.szData [0], "rb", 0))
-	return 0;
-if (args.Parse (&cf)) {
-	int32_t h = 0;
-	for (int32_t i = 0; i < MAX_SHIP_TYPES; i++) {
-		if ((m_shipsAllowed [i] = args.Int (szShipArgs [i], bLocal ? m_shipsAllowed [i] : 1))) // use the global setting as default when parsing a level config
-			h++;
-		}
-	if (!h)
-		m_shipsAllowed [0] = 1; // medium ship, the standard ship
-	m_playerShip = args.Int ("-player_ship", bLocal ? m_playerShip : -1);
-	m_bTeleport = args.Int ("-teleport", bLocal ? m_bTeleport : 1);
-	m_bSecretSave = args.Int ("-secret_save", bLocal ? m_bSecretSave : 1);
-	m_bColoredSegments = args.Int ("-colored_segments", bLocal ? m_b3DPowerups : 1);
-	m_b3DPowerups = args.Int ("-3d_powerups", bLocal ? m_bColoredSegments : 1);
-	m_nCollisionModel = args.Int ("-collision_model", bLocal ? m_nCollisionModel : 1);
-	}
-cf.Close ();
-return 1;
+    if ((bLocal = (szFilename && *szFilename)))
+        CFile::ChangeFilenameExtension (szConfig + 1, szFilename, ".ini");
+    else
+        strcpy (szConfig + 1, "global.ini");
+    szConfig [0] = '\x01'; // only read from mission file
+    if (!cf.Open (szConfig, gameFolders.game.szData [0], "rb", 0))
+        return 0;
+    if (args.Parse (&cf)) {
+        int32_t h = 0;
+        for (int32_t i = 0; i < MAX_SHIP_TYPES; i++) {
+            if ((m_shipsAllowed [i] = args.Int (szShipArgs [i], bLocal ? m_shipsAllowed [i] : 1))) // use the global setting as default when parsing a level config
+                h++;
+            }
+        if (!h)
+            m_shipsAllowed [0] = 1; // medium ship, the standard ship
+        m_playerShip = args.Int ("-player_ship", bLocal ? m_playerShip : -1);
+        m_bTeleport = args.Int ("-teleport", bLocal ? m_bTeleport : 1);
+        m_bSecretSave = args.Int ("-secret_save", bLocal ? m_bSecretSave : 1);
+        m_bColoredSegments = args.Int ("-colored_segments", bLocal ? m_b3DPowerups : 1);
+        m_b3DPowerups = args.Int ("-3d_powerups", bLocal ? m_bColoredSegments : 1);
+        m_nCollisionModel = args.Int ("-collision_model", bLocal ? m_nCollisionModel : 1);
+        }
+    cf.Close ();
+    return 1;
 }
 
 // ----------------------------------------------------------------------------
 
 void CMissionConfig::Apply (void)
 {
-if (gameOpts->gameplay.nShip [gameOpts->gameplay.nShip [1] >= 0] == m_playerShip)
-	return;
+    if (gameOpts->gameplay.nShip [gameOpts->gameplay.nShip [1] >= 0] == m_playerShip)
+        return;
 
-if (m_playerShip > 2)
-	m_playerShip = 1;
-else if (m_playerShip < -1)
-	m_playerShip = -1;
-if (m_playerShip == -1) {
-	m_playerShip = gameOpts->gameplay.nShip [1];
-	if (m_playerShip == -1)
-		m_playerShip = gameOpts->gameplay.nShip [0];
-	}
-for (int32_t i = 0; i < MAX_SHIP_TYPES; i++) {
-	if (m_shipsAllowed [m_playerShip])
-		break;
-	m_playerShip = (m_playerShip + 1) % MAX_SHIP_TYPES;
-	}
+    if (m_playerShip > 2)
+        m_playerShip = 1;
+    else if (m_playerShip < -1)
+        m_playerShip = -1;
 
-if (gameOpts->gameplay.nShip [gameOpts->gameplay.nShip [1] >= 0] == m_playerShip)
-	return;
+    if (m_playerShip == -1) {
+        m_playerShip = gameOpts->gameplay.nShip [1];
+        if (m_playerShip == -1)
+            m_playerShip = gameOpts->gameplay.nShip [0];
+    }
 
-float fShield = (float) LOCALPLAYER.Shield (false) / (float) LOCALPLAYER.MaxShield ();
-float fEnergy = (float) LOCALPLAYER.Energy (false) / (float) LOCALPLAYER.MaxEnergy ();
-gameOpts->gameplay.nShip [0] =
-gameOpts->gameplay.nShip [1] = m_playerShip;
-LOCALPLAYER.SetEnergy (fix (fEnergy * LOCALPLAYER.MaxShield ()));
-LOCALPLAYER.SetShield (fix (fShield * LOCALPLAYER.MaxEnergy ()));
-if (m_playerShip == 0) {
-	gameData.multiplayer.weaponStates [N_LOCALPLAYER].bTripleFusion = 0;
-	}
-else if (m_playerShip == 1) {
-	LOCALPLAYER.primaryWeaponFlags &= ~(HAS_FLAG (FUSION_INDEX));
-	gameData.multiplayer.weaponStates [N_LOCALPLAYER].bTripleFusion = 0;
-	LOCALPLAYER.flags &= ~(PLAYER_FLAGS_AMMO_RACK);
-	}
-else if (m_playerShip == 2) {
-	LOCALPLAYER.flags &= ~(PLAYER_FLAGS_AFTERBURNER);
-	}
+    for (int32_t i = 0; i < MAX_SHIP_TYPES; i++) {
+        if (m_shipsAllowed [m_playerShip])
+            break;
+        m_playerShip = (m_playerShip + 1) % MAX_SHIP_TYPES;
+    }
+
+    if (gameOpts->gameplay.nShip [gameOpts->gameplay.nShip [1] >= 0] == m_playerShip)
+        return;
+
+    float fShield = (float) LOCALPLAYER.Shield (false) / (float) LOCALPLAYER.MaxShield ();
+    float fEnergy = (float) LOCALPLAYER.Energy (false) / (float) LOCALPLAYER.MaxEnergy ();
+    gameOpts->gameplay.nShip [0] =
+    gameOpts->gameplay.nShip [1] = m_playerShip;
+    LOCALPLAYER.SetEnergy (fix (fEnergy * LOCALPLAYER.MaxShield ()));
+    LOCALPLAYER.SetShield (fix (fShield * LOCALPLAYER.MaxEnergy ()));
+    if (m_playerShip == 0) {
+        gameData.multiplayer.weaponStates [N_LOCALPLAYER].bTripleFusion = 0;
+    }
+    else if (m_playerShip == 1) {
+        LOCALPLAYER.primaryWeaponFlags &= ~(HAS_FLAG (FUSION_INDEX));
+        gameData.multiplayer.weaponStates [N_LOCALPLAYER].bTripleFusion = 0;
+        LOCALPLAYER.flags &= ~(PLAYER_FLAGS_AMMO_RACK);
+    }
+    else if (m_playerShip == 2) {
+        LOCALPLAYER.flags &= ~(PLAYER_FLAGS_AFTERBURNER);
+    }
 }
 
 // ----------------------------------------------------------------------------
 
 int32_t CMissionConfig::SelectShip (int32_t nShip)
 {
-if (COMPETITION)
-	return m_playerShip = 0;
-if ((nShip < 0) || (nShip >= MAX_SHIP_TYPES))
-	nShip = 0;
-if (m_shipsAllowed [nShip])
-	return m_playerShip = nShip;
-for (nShip = 0; nShip < MAX_SHIP_TYPES; nShip++)
-if (m_shipsAllowed [nShip])
-	return m_playerShip = nShip;
-return m_playerShip = 0;
+    if (COMPETITION)
+        return m_playerShip = 0;
+    if ((nShip < 0) || (nShip >= MAX_SHIP_TYPES))
+        nShip = 0;
+    if (m_shipsAllowed [nShip])
+        return m_playerShip = nShip;
+    for (nShip = 0; nShip < MAX_SHIP_TYPES; nShip++)
+    if (m_shipsAllowed [nShip])
+        return m_playerShip = nShip;
+    return m_playerShip = 0;
 }
-
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------

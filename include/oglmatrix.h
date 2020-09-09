@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <string.h>
-#include "glew.h"
+#include <GL/glew.h>
 
 class COGLMatrix {
 	private:

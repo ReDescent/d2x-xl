@@ -130,7 +130,7 @@ console.printf(CON_VERBOSE, "sdl-joystick: found %d joysticks\n", n);
 #endif
 for (i = 0; (i < n) && (gameStates.input.nJoysticks < MAX_JOYSTICKS); i++) {
 #if TRACE
-	console.printf(CON_VERBOSE, "sdl-joystick %d: %s\n", i, SDL_JoystickName (i));
+	console.printf(CON_VERBOSE, "sdl-joystick %d: %s\n", i, SDL_JoystickNameForIndex (i));
 #endif
 	pJoystick->handle = SDL_JoystickOpen (i);
 	if (pJoystick->handle) {

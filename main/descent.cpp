@@ -103,21 +103,13 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
 #		define	DESCENT_EXECUTABLE_VERSION "Linux"
 #	endif
 #endif
-//extern int32_t SDL_HandleSpecialKeys;
+
 extern const char *pszOglExtensions;
 extern int32_t glHWHash;
 
-#ifdef __macosx__
-#	include <SDL/SDL.h>
-#	if USE_SDL_MIXER
-#		include <SDL_mixer/SDL_mixer.h>
-#	endif
-#else
-#	include <SDL.h>
-#	if USE_SDL_MIXER
-#		include <SDL_mixer.h>
-#	endif
-#endif
+#include <SDL.h>
+#include <SDL_mixer.h>
+
 #include "vers_id.h"
 
 CGameOptions	gameOptions [2];
@@ -149,87 +141,6 @@ uint32_t descent_critical_errcode = 0;
 // ----------------------------------------------------------------------------
 
 extern bool bPrintingLog;
-
-#if defined (__unix__) || defined (__macosx__)
-void D2SignalHandler (int32_t nSignal)
-#else
-void __cdecl D2SignalHandler (int32_t nSignal)
-#endif
-{
-	static int32_t nErrors = 0;
-
-if (!bPrintingLog) {
-	PrintCallStack ();
-	if (nSignal == SIGABRT)
-		PrintLog (0, "\n+++ Abnormal program termination\n");
-	else if (nSignal == SIGFPE)
-		PrintLog (0, "\n+++ Floating point error\n");
-	else if (nSignal == SIGILL)
-		PrintLog (0, "\n+++ Illegal instruction\n");
-	else if (nSignal == SIGINT)
-		PrintLog (0, "\n+++ Ctrl+C signal\n");
-	else if (nSignal == SIGSEGV)
-		PrintLog (0, "\n+++ Memory access violation\n");
-	else if (nSignal == SIGTERM)
-		PrintLog (0, "\n+++ Termination request\n");
-	else
-		PrintLog (0, "\n+++ Unknown signal\n");
-	}
-if (++nErrors > 4)
-	exit (1);
-}
-
-// ----------------------------------------------------------------------------
-
-void D2SetCaption (void)
-{
-#if defined(__linux__)
-
-SDL_WM_SetCaption ("", "D2X-XL");
-
-#else
-
-#	if USE_IRRLICHT
-
-	char		szCaption [200];
-	wchar_t	wszCaption [200];
-	int32_t		i;
-
-strcpy (szCaption, DESCENT_VERSION);
-if (*LOCALPLAYER.callsign) {
-	strcat (szCaption, " [");
-	strcat (szCaption, LOCALPLAYER.callsign);
-	strcat (szCaption, "]");
-	strupr (szCaption);
-	}
-if (*missionManager.szCurrentLevel) {
-	strcat (szCaption, " - ");
-	strcat (szCaption, missionManager.szCurrentLevel);
-	}
-for (i = 0; szCaption [i]; i++)
-	wszCaption [i] = (wchar_t) szCaption [i];
-wszCaption [i] = (wchar_t) 0;
-IRRDEVICE->setWindowCaption (wszCaption);
-
-#	else
-	char	szCaption [200];
-	strcpy (szCaption, DESCENT_VERSION);
-
-if (*LOCALPLAYER.callsign) {
-	strcat (szCaption, " [");
-	strcat (szCaption, LOCALPLAYER.callsign);
-	strcat (szCaption, "]");
-	strupr (szCaption);
-	}
-if (*missionManager.szCurrentLevel) {
-	strcat (szCaption, " - ");
-	strcat (szCaption, missionManager.szCurrentLevel);
-	}
-
-#	endif
-SDL_WM_SetCaption (szCaption, "D2X-XL");
-#endif
-}
 
 // ----------------------------------------------------------------------------
 
@@ -265,8 +176,8 @@ void PrintVersionInfo (void)
             y = 88 * CCanvas::Current ()->Height () / 480;
             if (y < 88)
                 y = 88;
-            }
         }
+    }
     else
         y = 37;
 
@@ -297,18 +208,18 @@ void PrintVersionInfo (void)
             fontManager.Current ()->StringSize (TXT_VERTIGO, w, h, aw);
             GrPrintF (NULL, CCanvas::Current ()->Width () - w - SUBVER_XOFFS,
                         y + (gameOpts->menus.altBg.bHave ? h + 2 : 0), TXT_VERTIGO);
-            }
+        }
         fontManager.SetCurrent (SMALL_FONT);
         fontManager.Current ()->StringSize (VERSION, ws, hs, aw);
         fontManager.SetColorRGBi (D2BLUE_RGBA, 1, 0, 0);
         GrPrintF (NULL, CCanvas::Current ()->Width () - ws - 1, y + ((bVertigo && !gameOpts->menus.altBg.bHave) ? h + 2 : 0) + (h - hs) / 2, VERSION);
-        }
+    }
 
     if (!nInfoType) {
         fontManager.SetCurrent (MEDIUM2_FONT);
         fontManager.Current ()->StringSize (D2X_NAME, w, h, aw);
         GrPrintF (NULL, CCanvas::Current ()->Width () - w - SUBVER_XOFFS, y + ((bVertigo && !gameOpts->menus.altBg.bHave) ? h + 2 : 0), D2X_NAME);
-        }
+    }
     else {
         //gameStates.render.grAlpha = 0.75f;
         int32_t w2, h2;
@@ -324,7 +235,7 @@ void PrintVersionInfo (void)
         fontManager.SetColorRGBi (RGB_PAL (63, 47, 0), 1, 0, 0);
 
         GrPrintF (NULL, l - (w2 - w + 1) / 2, t + h + 2, "www.descent2.de");
-        }
+    }
     fontManager.SetCurrent (NORMAL_FONT);
     fontManager.SetColorRGBi (RGB_PAL (6, 6, 6), 1, 0, 0);
     gameStates.render.grAlpha = grAlpha;
@@ -335,46 +246,45 @@ void PrintVersionInfo (void)
 
 void CheckEndian (void)
 {
-	union {
-		int16_t	s;
-		uint8_t	b [2];
-	} h;
+    union {
+        int16_t	s;
+        uint8_t	b [2];
+    } h;
 
-h.b [0] = 0;
-h.b [1] = 1;
-gameStates.app.bLittleEndian = (h.s == 256);
+    h.b [0] = 0;
+    h.b [1] = 1;
+    gameStates.app.bLittleEndian = (h.s == 256);
 }
 
 // ----------------------------------------------------------------------------
 
 void DoJoystickInit ()
 {
-
-if (!FindArg ("-nojoystick")) {
-	JoyInit ();
-	if (FindArg ("-joyslow"))
-		JoySetSlowReading (JOY_SLOW_READINGS);
-	if (FindArg ("-joypolled"))
-		JoySetSlowReading (JOY_POLLED_READINGS);
-	if (FindArg ("-joybios"))
-		JoySetSlowReading (JOY_BIOS_READINGS);
-	}
+    if (!FindArg ("-nojoystick")) {
+        JoyInit ();
+        if (FindArg ("-joyslow"))
+            JoySetSlowReading (JOY_SLOW_READINGS);
+        if (FindArg ("-joypolled"))
+            JoySetSlowReading (JOY_POLLED_READINGS);
+        if (FindArg ("-joybios"))
+            JoySetSlowReading (JOY_BIOS_READINGS);
+    }
 }
 
 // ----------------------------------------------------------------------------
 //set this to force game to run in low res
 void DoSelectPlayer (void)
 {
-LOCALPLAYER.callsign[0] = '\0';
-if (!gameData.demoData.bAuto)  {
-	KeyFlush ();
-	//now, before we bring up the register player menu, we need to
-	//do some stuff to make sure the palette is ok.  First, we need to
-	//get our current palette into the 2d's array, so the remapping will
-	//work.  Second, we need to remap the fonts.  Third, we need to fill
-	//in part of the fade tables so the darkening of the menu edges works
-	SelectPlayer ();		//get player's name
-	}
+    LOCALPLAYER.callsign[0] = '\0';
+    if (!gameData.demoData.bAuto) {
+        KeyFlush ();
+        //now, before we bring up the register player menu, we need to
+        //do some stuff to make sure the palette is ok.  First, we need to
+        //get our current palette into the 2d's array, so the remapping will
+        //work.  Second, we need to remap the fonts.  Third, we need to fill
+        //in part of the fade tables so the darkening of the menu edges works
+        SelectPlayer ();		//get player's name
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -470,8 +380,9 @@ void LoadHoardData (void)
 
 void GrabMouse (int32_t bGrab, int32_t bForce)
 {
-//if (gameStates.input.bGrabMouse && (bForce || gameStates.app.bGameRunning))
-SDL_WM_GrabInput (((bGrab && gameStates.input.bGrabMouse) || ogl.m_states.bFullScreen) ? SDL_GRAB_ON : SDL_GRAB_OFF);
+    //if (gameStates.input.bGrabMouse && (bForce || gameStates.app.bGameRunning))
+    auto relativeMode = ((bGrab && gameStates.input.bGrabMouse) || ogl.m_states.bFullScreen) ? SDL_TRUE : SDL_FALSE;
+    SDL_SetRelativeMouseMode(relativeMode);
 }
 
 // ----------------------------------------------------------------------------
@@ -798,16 +709,8 @@ int32_t Initialize (int32_t argc, char *argv[])
     gameData.timeData.xGameTotal = 0;
     gameData.appData.argC = argc;
     gameData.appData.argV = reinterpret_cast<char**>(argv);
-    signal (SIGABRT, D2SignalHandler);
-    signal (SIGFPE, D2SignalHandler);
-    signal (SIGILL, D2SignalHandler);
-    signal (SIGINT, D2SignalHandler);
-    signal (SIGSEGV, D2SignalHandler);
-    signal (SIGTERM, D2SignalHandler);
-#if 0 //def _WIN32
-    SDL_SetSpecialKeyHandling (0);
-#endif
-    SDL_putenv (const_cast<char*>("SDL_DISABLE_LOCK_KEYS=1"));
+
+    SDL_setenv ("SDL_DISABLE_LOCK_KEYS", "1", 1);
     hogFileManager.Init ("", "");
     CObject::InitTables ();
     InitGameStates ();

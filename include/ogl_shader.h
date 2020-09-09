@@ -6,7 +6,7 @@
 #include <stddef.h>
 #endif
 
-#include "glew.h"
+#include <GL/glew.h>
 #include "vecmat.h"
 #include "ogl_lib.h"
 #include "oglmatrix.h"

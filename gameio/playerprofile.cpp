@@ -1693,165 +1693,165 @@ uint8_t dosControlType,winControlType;
 //read in the player's saved games.  returns errno (0 == no error)
 int32_t LoadPlayerProfile (int32_t nStage)
 {
-if (profile.Busy ())
-	return 1;
+    if (profile.Busy ())
+        return 1;
 
-	CFile		cf;
-	int32_t		funcRes = EZERO;
-	int32_t		bRewriteIt = 0;
-	uint32_t		i;
+    CFile		cf;
+    int32_t		funcRes = EZERO;
+    int32_t		bRewriteIt = 0;
+    uint32_t		i;
 
-	int16_t gameWindowW = gameData.renderData.screen.Width ();
-	int16_t	gameWindowH = gameData.renderData.screen.Height ();
-	uint8_t nDisplayMode = gameStates.video.nDefaultDisplayMode;
+    int16_t gameWindowW = gameData.renderData.screen.Width ();
+    int16_t	gameWindowH = gameData.renderData.screen.Height ();
+    uint8_t nDisplayMode = gameStates.video.nDefaultDisplayMode;
 
-	char		filename [FILENAME_LEN];
-	int32_t		id;
+    char		filename [FILENAME_LEN];
+    int32_t		id;
 
-memset (highestLevels, 0, sizeof (highestLevels));
-nHighestLevels = 0;
-sprintf (filename, "%.8s.plr", LOCALPLAYER.callsign);
-if (!cf.Open (filename, gameFolders.user.szProfiles, "rb", 0)) {
-	PrintLog (0, "couldn't read player file '%s'\n", filename);
-	}
-else {
-	id = cf.ReadInt ();
-	if (nCFileError || ((id != SAVE_FILE_ID) && (id != SWAPINT (SAVE_FILE_ID)))) {
-		PrintLog (0, "Player profile '%s' is invalid\r\n", filename);
-		}
-	else {
-		gameStates.input.nPlrFileVersion = cf.ReadShort ();
-		if ((gameStates.input.nPlrFileVersion < COMPATIBLE_PLAYER_FILE_VERSION) ||
-			 ((gameStates.input.nPlrFileVersion > D2W95_PLAYER_FILE_VERSION) &&
-			  (gameStates.input.nPlrFileVersion < D2XW32_PLAYER_FILE_VERSION))) {
-			PrintLog (0, "Player profile '%s' is invalid\r\n", filename);
-			}
-		else {
-			if (gameStates.input.nPlrFileVersion < 161)
-				cf.Seek (12 + (gameStates.input.nPlrFileVersion >= 19), SEEK_CUR);
-			nHighestLevels = cf.ReadShort ();
-			if (nHighestLevels > MAX_MISSIONS)
-				nHighestLevels = MAX_MISSIONS;
-			if (cf.Read (highestLevels, sizeof (hli), nHighestLevels) != (size_t) nHighestLevels) {
-				PrintLog (0, "Player profile '%s' is damaged\r\n", filename);
-				nHighestLevels = 0;
-				}
-			}
-		}
-	cf.Close ();
-	}
+    memset (highestLevels, 0, sizeof (highestLevels));
+    nHighestLevels = 0;
+    sprintf (filename, "%.8s.plr", LOCALPLAYER.callsign);
+    if (!cf.Open (filename, gameFolders.user.szProfiles, "rb", 0)) {
+        PrintLog (0, "couldn't read player file '%s'\n", filename);
+    }
+    else {
+        id = cf.ReadInt ();
+        if (nCFileError || ((id != SAVE_FILE_ID) && (id != SWAPINT (SAVE_FILE_ID)))) {
+            PrintLog (0, "Player profile '%s' is invalid\r\n", filename);
+        }
+        else {
+            gameStates.input.nPlrFileVersion = cf.ReadShort ();
+            if ((gameStates.input.nPlrFileVersion < COMPATIBLE_PLAYER_FILE_VERSION) ||
+                ((gameStates.input.nPlrFileVersion > D2W95_PLAYER_FILE_VERSION) &&
+                (gameStates.input.nPlrFileVersion < D2XW32_PLAYER_FILE_VERSION))) {
+                PrintLog (0, "Player profile '%s' is invalid\r\n", filename);
+            }
+            else {
+                if (gameStates.input.nPlrFileVersion < 161)
+                    cf.Seek (12 + (gameStates.input.nPlrFileVersion >= 19), SEEK_CUR);
+                nHighestLevels = cf.ReadShort ();
+                if (nHighestLevels > MAX_MISSIONS)
+                    nHighestLevels = MAX_MISSIONS;
+                if (cf.Read (highestLevels, sizeof (hli), nHighestLevels) != (size_t) nHighestLevels) {
+                    PrintLog (0, "Player profile '%s' is damaged\r\n", filename);
+                    nHighestLevels = 0;
+                }
+            }
+        }
+        cf.Close ();
+    }
 
-if (!nHighestLevels)
-	memset (highestLevels, 0, sizeof (highestLevels));
+    if (!nHighestLevels)
+        memset (highestLevels, 0, sizeof (highestLevels));
 
-if (nStage < 1)
-	return funcRes;
+    if (nStage < 1)
+        return funcRes;
 
-DefaultAllSettings (true);
+    DefaultAllSettings (true);
 
-if (!profile.Load (nStage < 2))
-	funcRes = errno;
+    if (!profile.Load (nStage < 2))
+        funcRes = errno;
 
-if (gameStates.gfx.bOverride) {
-	gameStates.video.nDefaultDisplayMode = nDisplayMode;
-	gameData.renderData.screen.SetWidth (gameWindowW);
-	gameData.renderData.screen.SetHeight (gameWindowH);
-	}
-else if (gameStates.video.nDefaultDisplayMode < 0) {
-	gameStates.video.nDefaultDisplayMode = CUSTOM_DISPLAY_MODE;
-	}
-else 
-	gameStates.video.nDefaultDisplayMode = FindDisplayMode (gameData.renderData.screen.Width (), gameData.renderData.screen.Height ());
-SetCustomDisplayMode (customDisplayMode.w, customDisplayMode.h, 1);
-SetSideBySideDisplayMode ();
+    if (gameStates.gfx.bOverride) {
+        gameStates.video.nDefaultDisplayMode = nDisplayMode;
+        gameData.renderData.screen.SetWidth (gameWindowW);
+        gameData.renderData.screen.SetHeight (gameWindowH);
+    }
+    else if (gameStates.video.nDefaultDisplayMode < 0) {
+        gameStates.video.nDefaultDisplayMode = CUSTOM_DISPLAY_MODE;
+    }
+    else
+        gameStates.video.nDefaultDisplayMode = FindDisplayMode (gameData.renderData.screen.Width (), gameData.renderData.screen.Height ());
+    SetCustomDisplayMode (customDisplayMode.w, customDisplayMode.h, 1);
+    SetSideBySideDisplayMode ();
 
-if (nStage < 2)
-	return funcRes;
+    if (nStage < 2)
+        return funcRes;
 
-if (funcRes != EZERO) {
-	InfoBox (TXT_ERROR, (pMenuCallback) NULL, BG_STANDARD, 1, TXT_OK, "%s\n\n%s", TXT_ERROR_READING_PLR, strerror (funcRes));
-	return funcRes;
-	}
+    if (funcRes != EZERO) {
+        InfoBox (TXT_ERROR, (pMenuCallback) NULL, BG_STANDARD, 1, TXT_OK, "%s\n\n%s", TXT_ERROR_READING_PLR, strerror (funcRes));
+        return funcRes;
+    }
 
-KCSetControls (1);
-//post processing of parameters
-if (gameStates.input.nPlrFileVersion >= 23) {
-	if (gameData.appData.nLifetimeChecksum != GetLifetimeChecksum (networkData.nNetLifeKills, networkData.nNetLifeKilled)) {
- 		TextBox (NULL, BG_STANDARD, 1, TXT_PROFILE_DAMAGED, TXT_WARNING);
+    KCSetControls (1);
+    //post processing of parameters
+    if (gameStates.input.nPlrFileVersion >= 23) {
+        if (gameData.appData.nLifetimeChecksum != GetLifetimeChecksum (networkData.nNetLifeKills, networkData.nNetLifeKilled)) {
+            TextBox (NULL, BG_STANDARD, 1, TXT_PROFILE_DAMAGED, TXT_WARNING);
 #if DBG
-		GetLifetimeChecksum (networkData.nNetLifeKills, networkData.nNetLifeKilled);
+            GetLifetimeChecksum (networkData.nNetLifeKills, networkData.nNetLifeKilled);
 #else
-		networkData.nNetLifeKills =
-		networkData.nNetLifeKilled = 0;
-		gameData.appData.nLifetimeChecksum = 0;
-		bRewriteIt = 1;
+            networkData.nNetLifeKills =
+            networkData.nNetLifeKilled = 0;
+            gameData.appData.nLifetimeChecksum = 0;
+            bRewriteIt = 1;
 #endif
-		}
-	}
-for (i = 0; i < sizeof (gameData.escortData.szName); i++) {
-	if (!gameData.escortData.szName [i])
-		break;
-	if (!isprint (gameData.escortData.szName [i])) {
-		strcpy (gameData.escortData.szName, "GUIDE-BOT");
-		break;
-		}
-	}
-strcpy (gameData.escortData.szRealName, gameData.escortData.szName);
-mpParams.bDarkness = extraGameInfo [1].bDarkness;
-mpParams.bTeamDoors = extraGameInfo [1].bTeamDoors;
-mpParams.bEnableCheats = extraGameInfo [1].bEnableCheats;
-extraGameInfo [0].nSpawnDelay *= 1000;
-extraGameInfo [1].bDisableReactor = 0;
-ValidatePrios (primaryOrder, defaultPrimaryOrder, MAX_PRIMARY_WEAPONS);
-ValidatePrios (secondaryOrder, defaultSecondaryOrder, MAX_SECONDARY_WEAPONS);
-SetDebrisCollisions ();
-SetMaxOmegaCharge ();
+        }
+    }
+    for (i = 0; i < sizeof (gameData.escortData.szName); i++) {
+        if (!gameData.escortData.szName [i])
+            break;
+        if (!isprint (gameData.escortData.szName [i])) {
+            strcpy (gameData.escortData.szName, "GUIDE-BOT");
+            break;
+        }
+    }
+    strcpy (gameData.escortData.szRealName, gameData.escortData.szName);
+    mpParams.bDarkness = extraGameInfo [1].bDarkness;
+    mpParams.bTeamDoors = extraGameInfo [1].bTeamDoors;
+    mpParams.bEnableCheats = extraGameInfo [1].bEnableCheats;
+    extraGameInfo [0].nSpawnDelay *= 1000;
+    extraGameInfo [1].bDisableReactor = 0;
+    ValidatePrios (primaryOrder, defaultPrimaryOrder, MAX_PRIMARY_WEAPONS);
+    ValidatePrios (secondaryOrder, defaultSecondaryOrder, MAX_SECONDARY_WEAPONS);
+    SetDebrisCollisions ();
+    SetMaxOmegaCharge ();
 
-if (bRewriteIt)
-	SavePlayerProfile ();
+    if (bRewriteIt)
+        SavePlayerProfile ();
 
-gameStates.render.SetCartoonStyle (gameOpts->render.bCartoonize);
-gameStates.render.nLightingMethod = gameStates.app.bNostalgia ? 0 : gameOpts->render.nLightingMethod;
-if ((gameOpts->render.nLightingMethod > 1) && !ogl.m_features.bShaders)
-	gameOpts->render.nLightingMethod = 1;
-if (gameStates.render.nLightingMethod == 2)
-	gameStates.render.bPerPixelLighting = 2;
-else if ((gameStates.render.nLightingMethod == 1) && gameOpts->render.bUseLightmaps && ogl.m_features.bShaders)
-	gameStates.render.bPerPixelLighting = 1;
-else
-	gameStates.render.bPerPixelLighting = 0;
-gameStates.render.nMaxLightsPerPass = gameOpts->ogl.nMaxLightsPerPass;
-gameStates.render.nMaxLightsPerFace = gameOpts->ogl.nMaxLightsPerFace;
-gameStates.render.nMaxLightsPerObject = gameOpts->ogl.nMaxLightsPerObject;
-gameStates.render.bAmbientColor = /*gameStates.render.bPerPixelLighting ||*/ (gameOpts->render.color.nLevel == 2);
-gameOpts->render.effects.bGlow = ::Clamp (gameOpts->render.effects.bGlow, 0, 2);
-gameOpts->sound.xCustomSoundVolume = (I2X (1) / 8) * gameConfig.nAudioVolume [0];
+    gameStates.render.SetCartoonStyle (gameOpts->render.bCartoonize);
+    gameStates.render.nLightingMethod = gameStates.app.bNostalgia ? 0 : gameOpts->render.nLightingMethod;
+    if ((gameOpts->render.nLightingMethod > 1) && !ogl.m_features.bShaders)
+        gameOpts->render.nLightingMethod = 1;
+    if (gameStates.render.nLightingMethod == 2)
+        gameStates.render.bPerPixelLighting = 2;
+    else if ((gameStates.render.nLightingMethod == 1) && gameOpts->render.bUseLightmaps && ogl.m_features.bShaders)
+        gameStates.render.bPerPixelLighting = 1;
+    else
+        gameStates.render.bPerPixelLighting = 0;
+    gameStates.render.nMaxLightsPerPass = gameOpts->ogl.nMaxLightsPerPass;
+    gameStates.render.nMaxLightsPerFace = gameOpts->ogl.nMaxLightsPerFace;
+    gameStates.render.nMaxLightsPerObject = gameOpts->ogl.nMaxLightsPerObject;
+    gameStates.render.bAmbientColor = /*gameStates.render.bPerPixelLighting ||*/ (gameOpts->render.color.nLevel == 2);
+    gameOpts->render.effects.bGlow = ::Clamp (gameOpts->render.effects.bGlow, 0, 2);
+    gameOpts->sound.xCustomSoundVolume = (I2X (1) / 8) * gameConfig.nAudioVolume [0];
 #if DBG
-if ((gameOpts->render.stereo.nRiftFOV < RIFT_MIN_FOV) || (gameOpts->render.stereo.nRiftFOV > RIFT_MAX_FOV))
-	gameOpts->render.stereo.nRiftFOV = RIFT_DEFAULT_FOV;
+    if ((gameOpts->render.stereo.nRiftFOV < RIFT_MIN_FOV) || (gameOpts->render.stereo.nRiftFOV > RIFT_MAX_FOV))
+        gameOpts->render.stereo.nRiftFOV = RIFT_DEFAULT_FOV;
 #endif
-gameOptions [0].render.textures.nQuality = gameOptions [0].render.nQuality;
-if ((gameOpts->render.stereo.xSeparation [1] < MM2X (RIFT_MIN_IPD)) || (gameOpts->render.stereo.xSeparation [1] > MM2X (RIFT_MAX_IPD)))
-	gameOpts->render.stereo.xSeparation [1] = MM2X (RIFT_DEFAULT_IPD);
-extraGameInfo [0].bFlickerLights = gameOpts->app.bEpilepticFriendly;
-if ((extraGameInfo [0].bFastPitch < 1) || (extraGameInfo [0].bFastPitch > 2))
-	extraGameInfo [0].bFastPitch = 2;
-extraGameInfo [1].bFastPitch = 2;
-for (i = 0; i < UNIQUE_JOY_AXES; i++)
-	JoySetDeadzone (gameOpts->input.joystick.deadzones [i], i);
-DefaultAllSettings (false);
+    gameOptions [0].render.textures.nQuality = gameOptions [0].render.nQuality;
+    if ((gameOpts->render.stereo.xSeparation [1] < MM2X (RIFT_MIN_IPD)) || (gameOpts->render.stereo.xSeparation [1] > MM2X (RIFT_MAX_IPD)))
+        gameOpts->render.stereo.xSeparation [1] = MM2X (RIFT_DEFAULT_IPD);
+    extraGameInfo [0].bFlickerLights = gameOpts->app.bEpilepticFriendly;
+    if ((extraGameInfo [0].bFastPitch < 1) || (extraGameInfo [0].bFastPitch > 2))
+        extraGameInfo [0].bFastPitch = 2;
+    extraGameInfo [1].bFastPitch = 2;
+    for (i = 0; i < UNIQUE_JOY_AXES; i++)
+        JoySetDeadzone (gameOpts->input.joystick.deadzones [i], i);
+    DefaultAllSettings (false);
 #if _WIN32
-if (gameStates.render.bVSyncOk)
-	wglSwapIntervalEXT (gameOpts->render.nMaxFPS < 0);
+    if (gameStates.render.bVSyncOk)
+        wglSwapIntervalEXT (gameOpts->render.nMaxFPS < 0);
 #endif
 #if CONFIGURE_LIGHT_COMPONENTS
 #	if !USE_SPECULAR_LIGHT
-gameOpts->render.color.nSpecularLight = 0;
+    gameOpts->render.color.nSpecularLight = 0;
 #	endif
-gameData.SetAmbientLight (gameOpts->render.color.nAmbientLight);
-gameData.SetSpecularLight (gameOpts->render.color.nSpecularLight);
+    gameData.SetAmbientLight (gameOpts->render.color.nAmbientLight);
+    gameData.SetSpecularLight (gameOpts->render.color.nSpecularLight);
 #endif
-return funcRes;
+    return funcRes;
 }
 
 //------------------------------------------------------------------------------
@@ -2098,7 +2098,6 @@ if (LoadPlayerProfile (2) != EZERO)
 KCSetControls (0);
 SetDisplayMode (gameStates.video.nDefaultDisplayMode, 1);
 WriteConfigFile ();		// Update lastplr
-D2SetCaption ();
 return 1;
 }
 

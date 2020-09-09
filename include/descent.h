@@ -606,7 +606,6 @@ class CInputOptions {
 class CSoundOptions {
 	public:
 		int32_t bUseD1Sounds;
-		int32_t bUseRedbook;
 		int32_t bHires [2];
 		int32_t bUseSDLMixer;
 		int32_t bUseOpenAL;
@@ -2725,15 +2724,6 @@ class CRobotData {
 
 //------------------------------------------------------------------------------
 
-#if USE_OPENAL
-
-typedef struct tOpenALData {
-	ALCdevice			*device;
-	ALCcontext			*context;
-} tOpenALData;
-
-#endif
-
 class CSoundData {
 	public:
 		int32_t					nType;	// 0: D2, 1: D1
@@ -2741,9 +2731,6 @@ class CSoundData {
 		CArray<CSoundSample>	sounds [2]; //[MAX_SOUND_FILES];
 		int32_t					nSoundFiles [2];
 		CArray<CSoundSample>	pSound;
-#if USE_OPENAL
-		tOpenALData				openAL;
-#endif
 			
 	public:
 		CSoundData ();
@@ -4333,7 +4320,6 @@ if (nObject >= 0)
 #	define FAST_SHADOWS	gameOpts->render.shadows.bFast
 #endif
 
-void D2SetCaption (void);
 void PrintVersionInfo (void);
 
 //	-----------------------------------------------------------------------------

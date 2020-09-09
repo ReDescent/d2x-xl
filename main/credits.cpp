@@ -369,7 +369,6 @@ for (;;) {
 		G3_SLEEP (tRenderTimeout - t);
 	tRenderTimeout = SDL_GetTicks () + 40; // throttle renderer at 25 fps
 
-	redbook.CheckRepeat();
 	if (!HandleInput ())
 		break;
 

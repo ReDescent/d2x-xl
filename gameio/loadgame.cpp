@@ -1132,7 +1132,6 @@ if (!gameStates.app.bPrecomputeLightmaps) {
 	PrintLog (-1);
 	if (!ogl.m_features.bStencilBuffer)
 		extraGameInfo [0].bShadows = 0;
-	D2SetCaption ();
 	if (!bRestore) {
 		gameData.renderData.lights.bInitDynColoring = 1;
 		gameData.omegaData.xCharge [IsMultiGame] = MAX_OMEGA_CHARGE;

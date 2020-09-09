@@ -14,36 +14,8 @@
 #include "descent.h"
 #include "findpath.h"
 
-#ifdef _MSC_VER
-#	if DBG
-#		define USE_SDL_MIXER	1
-#	else
-#		define USE_SDL_MIXER	1
-#	endif
-#else
-#	if HAVE_CONFIG_H
-#		include "conf.h"
-#	endif
-#	if !defined (USE_SDL_MIXER)
-#		define USE_SDL_MIXER	0
-#	endif
-#endif
-
-#ifdef __macosx__
-# include <SDL/SDL.h>
-# include <SDL_mixer/SDL_mixer.h>
-#else
-#	include <SDL.h>
-#  include <SDL_mixer.h>
-#endif
-
-#define USE_OPENAL	0
-
-#if USE_OPENAL
-#	include "al.h"
-#	include "alc.h"
-#	include "efx.h"
-#endif
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 #ifdef ALLEGRO
 
@@ -54,23 +26,19 @@ typedef SAMPLE
 #else //!defined ALLEGRO
 
 class CSoundSample {
-	public:
-		char			szName [9];
-		uint8_t		bHires;
-		uint8_t		bCustom;
-		int32_t		nLength [2];
-		int32_t		nOffset [2];
-		CByteArray	data [2];
-#if USE_OPENAL
-		ALuint		buffer;
-#endif
-
-	public:
-		CSoundSample () {
-			bHires = bCustom = 0;
-			nLength [0] = nLength [1] = 0;
-		}
-	};
+public:
+    char			szName [9];
+    uint8_t		bHires;
+    uint8_t		bCustom;
+    int32_t		nLength [2];
+    int32_t		nOffset [2];
+    CByteArray	data [2];
+public:
+    CSoundSample () {
+        bHires = bCustom = 0;
+        nLength [0] = nLength [1] = 0;
+    }
+};
 
 #endif //!defined ALLEGRO
 
@@ -162,14 +130,8 @@ class CAudioChannel {
 				uint8_t			bResampled;
 				uint8_t			bBuiltIn;
 				uint8_t			bAmbient;
-#if USE_SDL_MIXER
 				Mix_Chunk*		pMixChunk;
 				int32_t			nChannel;
-#endif
-#if USE_OPENAL
-				ALuint			source;
-				int32_t				loops;
-#endif
 			} tChannelInfo;
 
 		tChannelInfo	m_info;

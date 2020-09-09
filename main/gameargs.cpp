@@ -173,82 +173,64 @@ EvalAutoNetGameArgs ();
 
 void EvalMovieArgs (void)
 {
-	int32_t	t;
+    int32_t	t;
 
-if ((t = FindArg ("-nomovies")))
-	gameOptions [0].movies.nLevel = 2 - NumArg (t, 2);
-if ((t = FindArg ("-movies")))
-	gameOptions [0].movies.nLevel = NumArg (t, 2);
-if (gameOptions [0].movies.nLevel < 0)
-	gameOptions [0].movies.nLevel = 0;
-else if (gameOptions [0].movies.nLevel > 2)
-	gameOptions [0].movies.nLevel = 2;
-if (FindArg ("-subtitles"))
-	gameOptions [0].movies.bSubTitles = NumArg (t, 1);
-if ((t = FindArg ("-movie_quality")))
-	gameOptions [0].movies.nQuality = NumArg (t, 0);
-if (gameData.multiplayer.autoNG.bValid > 0)
-	gameOptions [0].movies.nLevel = 0;
+    if ((t = FindArg ("-nomovies")))
+        gameOptions [0].movies.nLevel = 2 - NumArg (t, 2);
+    if ((t = FindArg ("-movies")))
+        gameOptions [0].movies.nLevel = NumArg (t, 2);
+    if (gameOptions [0].movies.nLevel < 0)
+        gameOptions [0].movies.nLevel = 0;
+    else if (gameOptions [0].movies.nLevel > 2)
+        gameOptions [0].movies.nLevel = 2;
+    if (FindArg ("-subtitles"))
+        gameOptions [0].movies.bSubTitles = NumArg (t, 1);
+    if ((t = FindArg ("-movie_quality")))
+        gameOptions [0].movies.nQuality = NumArg (t, 0);
+    if (gameData.multiplayer.autoNG.bValid > 0)
+        gameOptions [0].movies.nLevel = 0;
 }
 
 // ----------------------------------------------------------------------------
 
 void EvalSoundArgs (void)
 {
-	int32_t	t;
+    int32_t	t;
 
-#if USE_SDL_MIXER
-#	ifdef __macosx__
-void * volatile function_p = (void *)&(Mix_OpenAudio);
-if (function_p == NULL) {
+    if ((t = FindArg ("-sdl_mixer")))
+        gameOptions [0].sound.bUseSDLMixer = NumArg (t, 1);
+    if ((t = FindArg ("-midifix")))
+        gameStates.sound.bMidiFix = NumArg (t, 1);
+    if ((t = FindArg ("-dynamic_sound")))
+        gameStates.sound.bDynamic = NumArg (t, 1);
+    else
+        gameStates.sound.bDynamic = 1;
 
-	// the SDL_mixer framework is not present,
-	// so regardless of what conf.h or d2x.ini says,
-	// we don't want to use SDL_mixer
-
-	gameOptions [0].sound.bUseSDLMixer = 0;
-	}
-else
-#	endif //__macosx__
-if ((t = FindArg ("-sdl_mixer")))
-	gameOptions [0].sound.bUseSDLMixer = NumArg (t, 1);
-#endif //USE_SDL_MIXER
-if ((t = FindArg ("-midifix")))
-	gameStates.sound.bMidiFix = NumArg (t, 1);
-if ((t = FindArg ("-dynamic_sound")))
-	gameStates.sound.bDynamic = NumArg (t, 1);
-else
-	gameStates.sound.bDynamic = 1;
-if ((t = FindArg ("-noredbook")))
-	gameOptions [0].sound.bUseRedbook = 0;
-#if USE_SDL_MIXER
-if (gameOptions [0].sound.bUseSDLMixer) {
-	if ((t = FindArg ("-hires_sound")))
-		gameOptions [0].sound.bHires [0] =
-		gameOptions [0].sound.bHires [1] = NumArg (t, 2);
-	}
-#endif
+    if (gameOptions [0].sound.bUseSDLMixer) {
+        if ((t = FindArg ("-hires_sound")))
+            gameOptions [0].sound.bHires [0] = gameOptions [0].sound.bHires [1] = NumArg (t, 2);
+    }
 }
 
 // ----------------------------------------------------------------------------
 
 void EvalMusicArgs (void)
 {
-	int32_t	t;
-	char	*p;
+    int32_t	t;
+    char	*p;
 
-if ((t = FindArg ("-nomusic")))
-	gameStates.sound.audio.bNoMusic = NumArg (t, 0) == 0;
-if ((t = FindArg ("-playlist")) && (p = appConfig [t+1]))
-	songManager.LoadUserPlaylist (p);
-if ((t = FindArg ("-introsong")) && (p = appConfig [t+1]))
-	strncpy (songManager.IntroSong (), p, FILENAME_LEN);
-if ((t = FindArg ("-briefingsong")) && (p = appConfig [t+1]))
-	strncpy (songManager.BriefingSong (), p, FILENAME_LEN);
-if ((t = FindArg ("-creditssong")) && (p = appConfig [t+1]))
-	strncpy (songManager.CreditsSong (), p, FILENAME_LEN);
-if ((t = FindArg ("-menusong")) && (p = appConfig [t+1]))
-	strncpy (songManager.MenuSong (), p, FILENAME_LEN);
+    if ((t = FindArg ("-nomusic")))
+        gameStates.sound.audio.bNoMusic = NumArg (t, 0) == 0;
+    if ((t = FindArg ("-playlist")) && (p = appConfig [t+1]))
+        songManager.LoadUserPlaylist (p);
+    if ((t = FindArg ("-introsong")) && (p = appConfig [t+1]))
+        strncpy (songManager.IntroSong (), p, FILENAME_LEN);
+    if ((t = FindArg ("-briefingsong")) && (p = appConfig [t+1]))
+        strncpy (songManager.BriefingSong (), p, FILENAME_LEN);
+    if ((t = FindArg ("-creditssong")) && (p = appConfig [t+1]))
+        strncpy (songManager.CreditsSong (), p, FILENAME_LEN);
+    if ((t = FindArg ("-menusong")) && (p = appConfig [t+1]))
+        strncpy (songManager.MenuSong (), p, FILENAME_LEN);
 }
 
 // ----------------------------------------------------------------------------

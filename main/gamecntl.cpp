@@ -54,7 +54,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "playerprofile.h"
 #include "piggy.h"
 #include "ai.h"
-#include "rbaudio.h"
 #include "trigger.h"
 #include "ogl_defs.h"
 #include "object.h"
@@ -124,45 +123,42 @@ if (gameData.timeData.xGame > last_playTime + CONVERTER_SOUND_DELAY) {
 
 void formatTime(char *str, int32_t secs_int)
 {
-	int32_t h, m, s;
+    int32_t h, m, s;
 
-h = secs_int/3600;
-s = secs_int%3600;
-m = s / 60;
-s = s % 60;
-sprintf(str, "%1d:%02d:%02d", h, m, s );
+    h = secs_int/3600;
+    s = secs_int%3600;
+    m = s / 60;
+    s = s % 60;
+    sprintf(str, "%1d:%02d:%02d", h, m, s );
 }
 
 //------------------------------------------------------------------------------
 
 void PauseGame (void)
 {
-if (!gameData.appData.bGamePaused) {
-	gameData.appData.bGamePaused = 1;
-	audio.PauseAll ();
-	rba.Pause ();
-	StopTime ();
-	paletteManager.DisableEffect ();
-	GameFlushInputs ();
+    if (!gameData.appData.bGamePaused) {
+        gameData.appData.bGamePaused = 1;
+        audio.PauseAll ();
+        StopTime ();
+        paletteManager.DisableEffect ();
+        GameFlushInputs ();
 #if defined (FORCE_FEEDBACK)
-	if (TactileStick)
-		DisableForces();
+        if (TactileStick)
+            DisableForces();
 #endif
-	}
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void ResumeGame (void)
 {
-GameFlushInputs ();
-paletteManager.EnableEffect ();
-StartTime (0);
-if (redbook.Playing ())
-	rba.Resume ();
-audio.ResumeAll ();
-gameStates.render.cockpit.nShieldFlash = 0;
-gameData.appData.bGamePaused = 0;
+    GameFlushInputs ();
+    paletteManager.EnableEffect ();
+    StartTime (0);
+    audio.ResumeAll ();
+    gameStates.render.cockpit.nShieldFlash = 0;
+    gameData.appData.bGamePaused = 0;
 }
 
 //------------------------------------------------------------------------------

@@ -32,36 +32,6 @@ extern int32_t Num_songs, nD1SongNum, nD2SongNum;   //how many MIDI songs
 
 //------------------------------------------------------------------------------
 
-class CRedbook {
-	private:
-		int32_t	m_bForceRegister;
-		int32_t	m_bEnabled;
-		int32_t	m_bPlaying;
-		fix	m_xLastCheck;
-
-	public:
-		CRedbook () { Init (); }
-		~CRedbook () { Destroy (); }
-		void Init (void);
-		void Destroy (void);
-		void Register (void);
-		void SetVolume (int32_t volume);
-		int32_t PlayTrack (int32_t nTrack, int32_t bKeepPlaying);
-		void CheckRepeat (void);
-		void ReInit (void);
-		void Stop (void);
-		int32_t HaveD2CD (void);
-		inline void ForceRegister (void) { m_bForceRegister = 1; }
-		inline int32_t Enabled (void) { return m_bEnabled; }
-		inline void Enable (int32_t bEnabled) { m_bEnabled = bEnabled; }
-		inline int32_t Playing (void) { return m_bPlaying; }
-		inline void SetPlaying (int32_t bPlaying) { m_bPlaying = bPlaying; }
-};
-
-extern CRedbook redbook;
-
-//------------------------------------------------------------------------------
-
 class CPlaylist {
 	public:
 		CArray<char*>		m_levelSongs;
@@ -135,8 +105,6 @@ class CSongManager {
 		int32_t PlayCustomLevelSong (char* pszFolder, int32_t nLevel);
 		void PlayLevelSong (int32_t nLevel, int32_t bFromHog, bool bWaitForThread = true);
 		void PlayCurrent (int32_t repeat = 0);
-		void Prev (void);
-		void Next (void);
 		void Shuffle (void);
 		void Sort (void);
 		void Align (void);

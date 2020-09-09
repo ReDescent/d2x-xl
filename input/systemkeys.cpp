@@ -498,14 +498,6 @@ if (!gameStates.app.bPlayerIsDead || (LOCALPLAYER.lives > 1)) {
 				ChangeGuidebotName ();
 			break;
 
-		case KEY_MINUS + KEY_ALTED:
-			songManager.Prev ();
-			break;
-
-		case KEY_EQUALS + KEY_ALTED:
-			songManager.Next ();
-			break;
-
 	//added 8/23/99 by Matt Mueller for hot key res/fullscreen changing, and menu access
 		case KEY_CTRLED + KEY_SHIFTED + KEY_PADDIVIDE:
 		case KEY_ALTED + KEY_CTRLED + KEY_PADDIVIDE:

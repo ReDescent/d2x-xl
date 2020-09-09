@@ -24,27 +24,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vecmat.h"
 #include "carray.h"
 
-#define USE_OPENAL	0
-
-#if USE_OPENAL
-#	include "al.h"
-#	include "alc.h"
-#	include "efx.h"
-#endif
-
-#ifdef _MSC_VER
-#	if DBG
-#		define USE_SDL_MIXER	1
-#	else
-#		define USE_SDL_MIXER	1
-#	endif
-#else
-#	include "conf.h"
-#	if !defined (USE_SDL_MIXER)
-#		define USE_SDL_MIXER	0
-#	endif
-#endif
-
 #ifdef ALLEGRO
 #include "allg_snd.h"
 typedef SAMPLE 
@@ -56,9 +35,6 @@ class CDigiSound {
 		ubyte			bDTX;
 		int			nLength [2];
 		CByteArray	data [2];
-#if USE_OPENAL
-		ALuint		buffer;
-#endif
 
 	public:
 		CDigiSound () { 

@@ -14,31 +14,18 @@
 #include <sys/types.h>
 #endif
 
-#ifdef __macosx__
-#	include "SDL/SDL_main.h"
-#	include "SDL/SDL_keyboard.h"
-#	include "FolderDetector.h"
-#else
-#	include "SDL_main.h"
-#	include "SDL_keyboard.h"
-#endif
+#include "SDL_main.h"
+#include "SDL_keyboard.h"
+
 #include "descent.h"
 #include "findfile.h"
 #include "args.h"
 #include "config.h"
 #include "text.h"
 
-#ifdef __macosx__
-#	include <SDL/SDL.h>
-#	if USE_SDL_MIXER
-#		include <SDL_mixer/SDL_mixer.h>
-#	endif
-#else
-#	include <SDL.h>
-#	if USE_SDL_MIXER
-#		include <SDL_mixer.h>
-#	endif
-#endif
+#include <SDL.h>
+#include <SDL_mixer.h>
+
 #include "vers_id.h"
 #include "cfile.h"
 
@@ -200,7 +187,7 @@ static inline int32_t User (tFileDesc& fd)
 #ifdef _WIN32
 return 0;
 #else
-return fd.bUser; 
+return fd.bUser;
 #endif
 }
 

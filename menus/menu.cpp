@@ -1385,258 +1385,273 @@ return 0;
 
 int32_t CMenu::Setup (int32_t nType, int32_t width, int32_t height, int32_t bTinyMode, pMenuCallback callback, int32_t& nItem)
 {
-if (gameStates.menus.nInMenu > 0)
-	return 0;
+    if (gameStates.menus.nInMenu > 0)
+        return 0;
 
-m_bPause = gameData.appData.bGamePaused;
-m_tEnter = -1;
-m_bRedraw = 0;
-m_nChoice = 0;
-m_nLastScrollCheck = -1;
-m_bStart = 1;
-m_bCloseBox = 0;
-m_bDontRestore = 0;
-m_bDblClick = 0;
-m_bAllText = 0;
-m_callback = callback;
+    m_bPause = gameData.appData.bGamePaused;
+    m_tEnter = -1;
+    m_bRedraw = 0;
+    m_nChoice = 0;
+    m_nLastScrollCheck = -1;
+    m_bStart = 1;
+    m_bCloseBox = 0;
+    m_bDontRestore = 0;
+    m_bDblClick = 0;
+    m_bAllText = 0;
+    m_callback = callback;
 
-messageBox.Clear ();
-memset (&m_props, 0, sizeof (m_props));
-m_props.userWidth = Scaled (width);
-m_props.userHeight = Scaled (height);
-m_props.bTinyMode = bTinyMode;
-controls.FlushInput ();
+    messageBox.Clear ();
+    memset (&m_props, 0, sizeof (m_props));
+    m_props.userWidth = Scaled (width);
+    m_props.userHeight = Scaled (height);
+    m_props.bTinyMode = bTinyMode;
+    controls.FlushInput ();
 
-if (int32_t (ToS ()) < 1)
-	return 0;
-//if (gameStates.app.bGameRunning && !gameOpts->menus.nStyle)
-//	backgroundManager.LoadStars (true);
-SDL_ShowCursor (0);
-SDL_EnableKeyRepeat (60, 30);
-if (gameStates.menus.nInMenu >= 0)
-	gameStates.menus.nInMenu++;
-if (gameStates.app.bGameRunning && IsMultiGame)
-	gameData.multigame.nTypingTimeout = 0;
+    if (int32_t (ToS ()) < 1)
+        return 0;
 
-SetPopupScreenMode ();
-SetupCanvasses (-1.0f);
+    SDL_ShowCursor (0);
+    // FIXME: SDL2 PORT
+    // SDL_EnableKeyRepeat (60, 30);
+    if (gameStates.menus.nInMenu >= 0)
+        gameStates.menus.nInMenu++;
+    if (gameStates.app.bGameRunning && IsMultiGame)
+        gameData.multigame.nTypingTimeout = 0;
 
-if (nItem == -1)
-	m_nChoice = -1;
-else {
-	if (nItem < 0) 
-		nItem = 0;
-	else 
-		nItem %= int32_t (ToS ());
-	m_nChoice = nItem;
-	m_bDblClick = 1;
-	while (Item (m_nChoice).m_nType == NM_TYPE_TEXT) {
-		m_nChoice++;
-		if (m_nChoice >= int32_t (ToS ()))
-			m_nChoice = 0; 
-		if (m_nChoice == nItem) {
-			m_nChoice = 0; 
-			m_bAllText = 1;
-			break; 
-			}
-		}
-	} 
+    SetPopupScreenMode ();
+    SetupCanvasses (-1.0f);
+
+    if (nItem == -1)
+        m_nChoice = -1;
+    else {
+        if (nItem < 0)
+            nItem = 0;
+        else
+            nItem %= int32_t (ToS ());
+
+        m_nChoice = nItem;
+        m_bDblClick = 1;
+        while (Item (m_nChoice).m_nType == NM_TYPE_TEXT) {
+            m_nChoice++;
+            if (m_nChoice >= int32_t (ToS ()))
+                m_nChoice = 0;
+
+            if (m_nChoice == nItem) {
+                m_nChoice = 0;
+                m_bAllText = 1;
+                break;
+            }
+        }
+    }
 
 
-paletteManager.DisableEffect ();
-m_bDone = 0;
-m_nTopChoice = 0;
+    paletteManager.DisableEffect ();
+    m_bDone = 0;
+    m_nTopChoice = 0;
 
-Register ();
+    Register ();
 
-while (Item (m_nTopChoice).m_nType == NM_TYPE_TEXT) {
-	m_nTopChoice++;
-	if (m_nTopChoice >= int32_t (ToS ()))
-		m_nTopChoice = 0; 
-	if (m_nTopChoice == nItem) {
-		m_nTopChoice = 0; 
-		break; 
-		}
-	}
+    while (Item (m_nTopChoice).m_nType == NM_TYPE_TEXT) {
+        m_nTopChoice++;
+        if (m_nTopChoice >= int32_t (ToS ()))
+            m_nTopChoice = 0;
+        if (m_nTopChoice == nItem) {
+            m_nTopChoice = 0;
+            break;
+        }
+    }
 
-//ogl.Update (0);
-// Clear mouse, joystick to clear button presses.
-GameFlushInputs ();
-m_nMouseState = m_nOldMouseState = 0;
-m_bCloseBox = (nType != BG_TOPMENU) && !gameStates.menus.bReordering;
+    //ogl.Update (0);
+    // Clear mouse, joystick to clear button presses.
+    GameFlushInputs ();
+    m_nMouseState = m_nOldMouseState = 0;
+    m_bCloseBox = (nType != BG_TOPMENU) && !gameStates.menus.bReordering;
 
-if (!gameStates.menus.bReordering && !JOYDEFS_CALIBRATING) {
-	SDL_ShowCursor (1);
-	}
-GrabMouse (0, 0);
-return 1;
+    if (!gameStates.menus.bReordering && !JOYDEFS_CALIBRATING) {
+        SDL_ShowCursor (1);
+    }
+    GrabMouse (0, 0);
+    return 1;
 }
 
 //------------------------------------------------------------------------------ 
 
-void CMenu::Update (const char* pszTitle, const char* pszSubTitle, int32_t nType, int32_t nWallpaper, int32_t width, int32_t height, int32_t bTinyMode, int32_t* pnCurItem)
-{
-if (m_bThrottle)
-	m_to.Throttle ();	// give the CPU some time to breathe
+void CMenu::Update (
+    const char* pszTitle,
+    const char* pszSubTitle,
+    int32_t nType,
+    int32_t nWallpaper,
+    int32_t width,
+    int32_t height,
+    int32_t bTinyMode,
+    int32_t* pnCurItem
+) {
+    if (m_bThrottle)
+        m_to.Throttle ();	// give the CPU some time to breathe
 
-if (pnCurItem)
-	*pnCurItem = m_nChoice;
-if (gameStates.app.bGameRunning && IsMultiGame) {
-	gameStates.multi.bPlayerIsTyping [N_LOCALPLAYER] = 1;
-	MultiSendTyping ();
-	}
-if (!JOYDEFS_CALIBRATING)
-	SDL_ShowCursor (1); // possibly hidden
+    if (pnCurItem)
+        *pnCurItem = m_nChoice;
+    if (gameStates.app.bGameRunning && IsMultiGame) {
+        gameStates.multi.bPlayerIsTyping [N_LOCALPLAYER] = 1;
+        MultiSendTyping ();
+    }
+    if (!JOYDEFS_CALIBRATING)
+        SDL_ShowCursor (1); // possibly hidden
 
-#if 1
-m_nOldMouseState = m_nMouseState;
-if (!gameStates.menus.bReordering) {
-	int32_t b = gameOpts->legacy.bInput;
-	gameOpts->legacy.bInput = 1;
-	m_nMouseState = MouseButtonState (0);
-	gameOpts->legacy.bInput = b;
-	}
-m_bWheelUp = MouseButtonState (3);
-m_bWheelDown = MouseButtonState (4);
-//see if redbook song needs to be restarted
-redbook.CheckRepeat ();
-if (m_bWheelUp)
-	m_nKey = KEY_UP;
-else if (m_bWheelDown)
-	m_nKey = KEY_DOWN;
-else
-	m_nKey = KeyInKey ();
-#endif
+    m_nOldMouseState = m_nMouseState;
+    if (!gameStates.menus.bReordering) {
+        int32_t b = gameOpts->legacy.bInput;
+        gameOpts->legacy.bInput = 1;
+        m_nMouseState = MouseButtonState (0);
+        gameOpts->legacy.bInput = b;
+    }
+    m_bWheelUp = MouseButtonState (3);
+    m_bWheelDown = MouseButtonState (4);
 
-#if DBG
-if (m_nKey)
-	BRP;
-#endif
-if (mouseData.bDoubleClick)
-	m_nKey = KEY_ENTER;
-if ((m_props.screenWidth != gameData.renderData.frame.Width ()) || (m_props.screenHeight != gameData.renderData.frame.Height ())) {
-	memset (&m_props, 0, sizeof (m_props));
-	m_props.userWidth = width;
-	m_props.userHeight = height;
-	m_props.bTinyMode = bTinyMode;
-	}
+    if (m_bWheelUp)
+        m_nKey = KEY_UP;
+    else if (m_bWheelDown)
+        m_nKey = KEY_DOWN;
+    else
+        m_nKey = KeyInKey ();
 
-if (m_props.bValid && (m_props.nDisplayMode != gameStates.video.nDisplayMode)) {
-	FreeTextBms ();
-	SetScreenMode (SCREEN_MENU);
-	memset (&m_props, 0, sizeof (m_props));
-	m_props.userWidth = width;
-	m_props.userHeight = height;
-	m_props.bTinyMode = bTinyMode;
-	}
+    #if DBG
+    if (m_nKey)
+        BRP;
+    #endif
+    if (mouseData.bDoubleClick)
+        m_nKey = KEY_ENTER;
+    if ((m_props.screenWidth != gameData.renderData.frame.Width ()) || (m_props.screenHeight != gameData.renderData.frame.Height ())) {
+        memset (&m_props, 0, sizeof (m_props));
+        m_props.userWidth = width;
+        m_props.userHeight = height;
+        m_props.bTinyMode = bTinyMode;
+    }
 
-if (InitProps (pszTitle, pszSubTitle)) {
-	backgroundManager.Setup (m_background, m_props.width, m_props.height, nType, nWallpaper);
-	m_bRedraw = 0;
-	m_props.ty = m_props.yOffs;
-	if (m_nChoice > m_props.nScrollOffset + m_props.nMaxOnMenu -1)
-		m_props.nScrollOffset = m_nChoice - m_props.nMaxOnMenu + 1;
-	}
+    if (m_props.bValid && (m_props.nDisplayMode != gameStates.video.nDisplayMode)) {
+        FreeTextBms ();
+        SetScreenMode (SCREEN_MENU);
+        memset (&m_props, 0, sizeof (m_props));
+        m_props.userWidth = width;
+        m_props.userHeight = height;
+        m_props.bTinyMode = bTinyMode;
+    }
+
+    if (InitProps (pszTitle, pszSubTitle)) {
+        backgroundManager.Setup (m_background, m_props.width, m_props.height, nType, nWallpaper);
+        m_bRedraw = 0;
+        m_props.ty = m_props.yOffs;
+        if (m_nChoice > m_props.nScrollOffset + m_props.nMaxOnMenu -1)
+            m_props.nScrollOffset = m_nChoice - m_props.nMaxOnMenu + 1;
+    }
 }
 
 //------------------------------------------------------------------------------ 
 
-int32_t CMenu::Menu (const char* pszTitle, const char* pszSubTitle, pMenuCallback callback, int32_t* pnCurItem, 
-							int32_t nType, int32_t nWallpaper, int32_t width, int32_t height, int32_t bTinyMode)
-{
-	int32_t			nItem = pnCurItem ? *pnCurItem : 0;
-	int32_t			bSoundStopped = 0, bTimeStopped = 0;
-	int32_t			exception = 0;
-	int32_t			i;
-	
-if (!Setup (nType, width, height, bTinyMode, callback, nItem))
-	return -1;
+int32_t CMenu::Menu (
+    const char* pszTitle,
+    const char* pszSubTitle,
+    pMenuCallback callback,
+    int32_t* pnCurItem,
+    int32_t nType,
+    int32_t nWallpaper,
+    int32_t width,
+    int32_t height,
+    int32_t bTinyMode
+) {
+    int32_t			nItem = pnCurItem ? *pnCurItem : 0;
+    int32_t			bSoundStopped = 0, bTimeStopped = 0;
+    int32_t			exception = 0;
+    int32_t			i;
 
-int32_t bKeyRepeat = gameStates.input.keys.bRepeat;
-gameStates.input.keys.bRepeat = 1;
+    if (!Setup (nType, width, height, bTinyMode, callback, nItem))
+        return -1;
 
-while (!m_bDone) {
-	Update (pszTitle, pszSubTitle, nType, nWallpaper, width, height, bTinyMode, pnCurItem);
-	// Redraw everything...
-	Render (pszTitle, pszSubTitle, NULL);
-	if (callback && (SDL_GetTicks () - m_tEnter > gameOpts->menus.nFade))
-		try {
-			m_nChoice = (*callback) (*this, m_nKey, m_nChoice, 0);
-			}
-		catch (int32_t e) {
-			exception = e;
-			m_bDone = 1;
-			break;
-			}
+    int32_t bKeyRepeat = gameStates.input.keys.bRepeat;
+    gameStates.input.keys.bRepeat = 1;
 
-#if 1
-	if (!bTimeStopped) {
-		// Save current menu box
-		if (MultiMenuPoll () == -1)
-			m_nKey = -2;
-		}
+    while (!m_bDone) {
+        Update (pszTitle, pszSubTitle, nType, nWallpaper, width, height, bTinyMode, pnCurItem);
+        // Redraw everything...
+        Render (pszTitle, pszSubTitle, NULL);
+        if (callback && (SDL_GetTicks () - m_tEnter > gameOpts->menus.nFade))
+            try {
+                m_nChoice = (*callback) (*this, m_nKey, m_nChoice, 0);
+                }
+            catch (int32_t e) {
+                exception = e;
+                m_bDone = 1;
+                break;
+                }
 
-	if (m_nKey < -1) {
-		m_bDontRestore = (m_nKey == -3);		// - 3 means don't restore
-		if (m_nChoice < 0) {
-			m_nChoice = -m_nChoice - 1;
-			if (pnCurItem)
-				*pnCurItem = m_nChoice;
-			}
-		m_nChoice = m_nKey;
-		m_nKey = -1;
-		m_bDone = 1;
-		}
+        if (!bTimeStopped) {
+            // Save current menu box
+            if (MultiMenuPoll () == -1)
+                m_nKey = -2;
+            }
 
-	m_nOldChoice = m_nChoice;
-	if (m_nKey && (console.Events (m_nKey) || m_bWheelUp || m_bWheelDown))
-		if (HandleKey (width, height, bTinyMode, pnCurItem))
-			continue;
+        if (m_nKey < -1) {
+            m_bDontRestore = (m_nKey == -3);		// - 3 means don't restore
+            if (m_nChoice < 0) {
+                m_nChoice = -m_nChoice - 1;
+                if (pnCurItem)
+                    *pnCurItem = m_nChoice;
+                }
+            m_nChoice = m_nKey;
+            m_nKey = -1;
+            m_bDone = 1;
+            }
 
-	if (HandleMouse (pnCurItem))
-		continue;
+        m_nOldChoice = m_nChoice;
+        if (m_nKey && (console.Events (m_nKey) || m_bWheelUp || m_bWheelDown))
+            if (HandleKey (width, height, bTinyMode, pnCurItem))
+                continue;
 
-	//	 HACK! Don't redraw loadgame preview
-	if (bRestoringMenu) 
-		Item (0).m_bRedraw = 0;
+        if (HandleMouse (pnCurItem))
+            continue;
 
-	if (m_nChoice > -1) {
-		if (!QuickSelect (pnCurItem) && !EditValue ())
-			KeyScrollValue ();
-		}
-#endif
-	}
-FadeOut (pszTitle, pszSubTitle, NULL);
-SDL_ShowCursor (0);
-// Restore everything...
-RestoreScreen ();
-FreeTextBms ();
-gameStates.input.keys.bRepeat = bKeyRepeat;
-GameFlushInputs ();
-if (bTimeStopped) {
-	StartTime (0);
-#ifdef FORCE_FEEDBACK
-		if (TactileStick)
-			EnableForces ();
-#endif
- }
-if (bSoundStopped)
-	audio.ResumeSounds ();
-if (gameStates.menus.nInMenu > 0)
-	gameStates.menus.nInMenu--;
-paletteManager.EnableEffect ();
-//paletteManager.StopEffect ();
-SDL_EnableKeyRepeat (0, 0);
-if (gameStates.app.bGameRunning && IsMultiGame)
-	MultiSendMsgQuit();
+        //	 HACK! Don't redraw loadgame preview
+        if (bRestoringMenu)
+            Item (0).m_bRedraw = 0;
 
-for (i = 0; i < int32_t (ToS ()); i++)
-	Item (i).GetInput ();
+        if (m_nChoice > -1) {
+            if (!QuickSelect (pnCurItem) && !EditValue ())
+                KeyScrollValue ();
+            }
+    }
 
-if (exception)
-	throw (exception);
-Unregister ();
-return m_nChoice;
+    FadeOut (pszTitle, pszSubTitle, NULL);
+    SDL_ShowCursor (0);
+    // Restore everything...
+    RestoreScreen ();
+    FreeTextBms ();
+    gameStates.input.keys.bRepeat = bKeyRepeat;
+    GameFlushInputs ();
+    if (bTimeStopped) {
+        StartTime (0);
+    #ifdef FORCE_FEEDBACK
+            if (TactileStick)
+                EnableForces ();
+    #endif
+    }
+    if (bSoundStopped)
+        audio.ResumeSounds ();
+    if (gameStates.menus.nInMenu > 0)
+        gameStates.menus.nInMenu--;
+    paletteManager.EnableEffect ();
+    //paletteManager.StopEffect ();
+    // FIXME: SDL2 PORT
+    // SDL_EnableKeyRepeat (0, 0);
+    if (gameStates.app.bGameRunning && IsMultiGame)
+        MultiSendMsgQuit();
+
+    for (i = 0; i < int32_t (ToS ()); i++)
+        Item (i).GetInput ();
+
+    if (exception)
+        throw (exception);
+    Unregister ();
+    return m_nChoice;
 }
 
 //------------------------------------------------------------------------------ 

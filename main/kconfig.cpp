@@ -1463,7 +1463,6 @@ if (i >= 0)
 Register ();
 for (;;) {
 	m_nChangeMode = HandleControl ();
-	redbook.CheckRepeat ();
 	MultiDoFrame ();
 	m_nPrevItem = m_nCurItem;
 	if (0 > (m_nCurItem = HandleInput ())) {

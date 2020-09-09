@@ -12,7 +12,11 @@
 #include <conf.h>
 #endif
 
-#if !(defined (USE_SDL_MIXER) && USE_SDL_MIXER)
+#if 1
+//void DigiSetMidiVolume( int mvolume ) { }
+int DigiPlayMidiSong( char * filename, char * melodic_bank, char * drum_bank, int loop ) {return 0;}
+
+#else
 
 #include <errno.h>
 #include <stdio.h>
@@ -773,17 +777,17 @@ void play_hmi (void * arg)
 }
 
 int32_t DigiPlayMidiSong( char * filename, char * melodic_bank, char * drum_bank, int32_t loop ) {
-        char buf[128];
-    
-        sprintf(buf,"p%s",filename);
-        send_ipc(buf);
-        return 0;
+    char buf[128];
+
+    sprintf(buf,"p%s",filename);
+    send_ipc(buf);
+    return 0;
 }
 void DigiSetMidiVolume( int32_t mvolume ) { 
-        char buf[128];
-    
-        sprintf(buf,"v%i",mvolume);
-        send_ipc(buf);
+    char buf[128];
+
+    sprintf(buf,"v%i",mvolume);
+    send_ipc(buf);
 }
 
 #endif //!USE_SDL_MIXER

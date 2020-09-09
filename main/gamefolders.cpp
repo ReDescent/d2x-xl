@@ -27,17 +27,9 @@
 #include "args.h"
 #include "text.h"
 
-#ifdef __macosx__
-#	include <SDL/SDL.h>
-#	if USE_SDL_MIXER
-#		include <SDL_mixer/SDL_mixer.h>
-#	endif
-#else
-#	include <SDL.h>
-#	if USE_SDL_MIXER
-#		include <SDL_mixer.h>
-#	endif
-#endif
+#include <SDL.h>
+#include <SDL_mixer.h>
+
 #include "hogfile.h"
 #include "menubackground.h"
 #include "vers_id.h"

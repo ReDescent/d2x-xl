@@ -283,23 +283,12 @@ extern const char *szAddonTextures [MAX_ADDON_BITMAP_FILES];
 extern CHashTable soundNames [2];
 //extern int32_t soundOffset [2][MAX_SOUND_FILES];
 
-#if USE_SDL_MIXER
-
-#	ifdef __macosx__
-#		include <SDL_mixer/SDL_mixer.h>
-#	else
-#		include <SDL_mixer.h>
-#	endif
+#include <SDL_mixer.h>
 
 const char *AddonSoundName (int32_t nSound);
 Mix_Chunk *LoadAddonSound (const char *pszSoundFile, uint8_t* bBuiltIn = NULL);
 void LoadAddonSounds (void);
 void FreeAddonSounds (void);
-#else
-#	define AddonSoundName(_nSound)	NULL
-#	define LoadAddonSounds()
-#	define FreeAddonSounds()
-#endif
 
 #define BM_ADDON(_i)					(&gameData.pigData.tex.addonBitmaps [_i])
 #define BM_ADDON_RETICLE_GREEN	2

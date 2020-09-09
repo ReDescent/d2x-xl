@@ -15,11 +15,7 @@
 #include "hmpfile.h"
 
 #if USE_SDL_MIXER
-#	ifdef __macosx__
-#		include <SDL/SDL_mixer.h>
-#	else
-#		include <SDL_mixer.h>
-#	endif
+#include <SDL_mixer.h>
 
 Mix_Music *mixMusic = NULL;
 #endif
@@ -168,10 +164,6 @@ sound_paused++;
 
 void DigiResumeMidi()
 {
-#if 0
-	if (!gameStates.sound.digi.bInitialized)
-		return;
-#endif
 	Assert(sound_paused > 0);
 if (sound_paused == 1) {
 #if USE_SDL_MIXER

@@ -175,10 +175,6 @@ m_info.bBuiltIn = 0;
 m_info.pMixChunk = NULL;
 m_info.nChannel = 0;
 #endif
-#if USE_OPENAL
-m_info.source = 0;
-m_info.loops = 0;
-#endif
 RETURN
 }
 
@@ -245,12 +241,6 @@ m_info.nIndex = -1;
 m_info.bPlaying = 0;
 m_info.nSoundObj = -1;
 m_info.bPersistent = 0;
-#if USE_OPENAL
-if (gameOpts->sound.bUseOpenAL) {
-	if (m_info.source != 0xFFFFFFFF)
-		alSourceStop (m_info.source);
-	}
-#endif
 #if USE_SDL_MIXER
 if (audio.Available () && gameOpts->sound.bUseSDLMixer) {
 	if (m_info.pMixChunk) {
@@ -475,17 +465,6 @@ RETVAL (m_info.nLength = j)
 
 //------------------------------------------------------------------------------
 
-#if USE_OPENAL
-
-inline int32_t CAudio::ALError (void)
-{
-return alcGetError (gameData.pigData.sound.openAL.device) != AL_NO_ERROR;
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 // Volume 0-I2X (1)
 void CAudioChannel::SetPlaying (int32_t bPlaying)
 { 
@@ -538,30 +517,6 @@ if (m_info.bPlaying) {
 	if (soundQueue.Channel () == audio.FreeChannel ())
 		soundQueue.End ();
 	}
-#if USE_OPENAL
-if (m_info.source == 0xFFFFFFFF) {
-	CFloatVector	fPos;
-
-	DigiALError ();
-	alGenSources (1, &m_info.source);
-	if (DigiALError ())
-		RETVAL (-1)
-	alSourcei (m_info.source, AL_BUFFER, pSound->buffer);
-	if (DigiALError ())
-		RETVAL (-1)
-	alSourcef (m_info.source, AL_GAIN, ((nVolume < I2X (1)) ? X2F (nVolume) : 1) * 2 * X2F (m_info.nVolume));
-	alSourcei (m_info.source, AL_LOOPING, (ALuint) ((nSoundObj > -1) || bLooping || (nVolume > I2X (1))));
-	fPos.Assign (vPos ? *vPos : LOCALOBJECT->nPosition.vPos);
-	alSourcefv (m_info.source, AL_POSITION, reinterpret_cast<ALfloat*> (fPos));
-	alSource3f (m_info.source, AL_VELOCITY, 0, 0, 0);
-	alSource3f (m_info.source, AL_DIRECTION, 0, 0, 0);
-	if (DigiALError ())
-		RETVAL (-1)
-	alSourcePlay (m_info.source);
-	if (DigiALError ())
-		RETVAL (-1)
-	}
-#endif
 #if USE_SDL_MIXER
 if (gameOpts->sound.bUseSDLMixer) {
 	if (m_info.pMixChunk) {
@@ -585,9 +540,6 @@ m_info.nPosition = 0;
 m_info.nSoundObj = nSoundObj;
 m_info.nSoundClass = nSoundClass;
 m_info.bLooped = bLooping;
-#if USE_OPENAL
-m_info.loops = bLooping ? -1 : nLoopEnd - nLoopStart + 1;
-#endif
 
 #if USE_SDL_MIXER
 if (gameOpts->sound.bUseSDLMixer) {
@@ -788,9 +740,8 @@ if (!gameStates.sound.bDynamic && m_info.bAvailable)
 if (!m_bSDLInitialized) {
 	if (driver && *driver) {
 		char szEnvVar [100];
-		sprintf (szEnvVar, "SDL_AUDIODRIVER=%s", driver);
-		SDL_putenv (szEnvVar);
-		}
+        SDL_setenv("SDL_AUDIODRIVER", driver, 1);
+    }
 	if (SDL_InitSubSystem (SDL_INIT_AUDIO) < 0)
 		RETVAL (AudioError ())
 	m_bSDLInitialized = true;
@@ -803,19 +754,7 @@ if (gameStates.app.bNostalgia)
 	gameOpts->sound.bHires [0] = 0;
 if (gameStates.app.bDemoData)
 	gameOpts->sound.audioSampleRate = SAMPLE_RATE_11K;
-#if USE_OPENAL
-if (gameOpts->sound.bUseOpenAL) {
-	gameData.pigData.sound.openAL.device = alcOpenDevice (NULL);
-	if (!gameData.pigData.sound.openAL.device)
-		gameOpts->sound.bUseOpenAL = 0;
-	else {
-		gameData.pigData.sound.openAL.context = alcCreateContext (gameData.pigData.sound.openAL.device, NULL);
-		alcMakeContextCurrent (gameData.pigData.sound.openAL.context);
-		}
-	alcGetError (gameData.pigData.sound.openAL.device);
-	}
-if (!gameOpts->sound.bUseOpenAL)
-#endif
+
 #if USE_SDL_MIXER
 if (gameOpts->sound.bUseSDLMixer) {
 	int32_t h;
@@ -854,227 +793,223 @@ else
 		}
 	SDL_PauseAudio (0);
 	}
-SetFxVolume (Volume (1), 1);
-SetFxVolume (Volume ());
-m_info.bInitialized =
-m_info.bAvailable = 1;
-RETVAL (0)
+    SetFxVolume (Volume (1), 1);
+    SetFxVolume (Volume ());
+    m_info.bInitialized =
+    m_info.bAvailable = 1;
+    RETVAL (0)
 }
 
 //------------------------------------------------------------------------------
 
 int32_t CAudio::Setup (float fSlowDown, int32_t nFormat)
 {
-ENTER (0, 0);
-if (!InternalSetup (fSlowDown, nFormat, NULL))
-	RETVAL (0)
-SDL_QuitSubSystem (SDL_INIT_AUDIO);
-if (!InternalSetup (fSlowDown, nFormat, "alsa"))
-	RETVAL (0)
-SDL_QuitSubSystem (SDL_INIT_AUDIO);
-PrintLog (0, TXT_SDL_OPEN_AUDIO, SDL_GetError ()); 
-PrintLog (0, "\n");
-Warning (TXT_SDL_OPEN_AUDIO, SDL_GetError ());
-RETVAL (1)
+    ENTER (0, 0);
+    if (!InternalSetup (fSlowDown, nFormat, NULL))
+        RETVAL (0)
+    SDL_QuitSubSystem (SDL_INIT_AUDIO);
+    if (!InternalSetup (fSlowDown, nFormat, "alsa"))
+        RETVAL (0)
+    SDL_QuitSubSystem (SDL_INIT_AUDIO);
+    PrintLog (0, TXT_SDL_OPEN_AUDIO, SDL_GetError ());
+    PrintLog (0, "\n");
+    Warning (TXT_SDL_OPEN_AUDIO, SDL_GetError ());
+    RETVAL (1)
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::SetupRouter (void)
 {
-ENTER (0, 0);
-m_nListenerSeg = -1;
-for (int32_t i = 0; i < MAX_THREADS; i++)
-	m_router [i].Create (gameData.segData.nSegments) /*&& m_segDists.Create (gameData.segData.nSegments)*/;
-RETURN
+    ENTER (0, 0);
+    m_nListenerSeg = -1;
+    for (int32_t i = 0; i < MAX_THREADS; i++)
+        m_router [i].Create (gameData.segData.nSegments) /*&& m_segDists.Create (gameData.segData.nSegments)*/;
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 /* Shut down audio */
 void CAudio::Close (void)
 {
-ENTER (0, 0);
-if (!(gameStates.sound.bDynamic && m_info.bAvailable))
-	RETURN;
-m_info.bInitialized =
-m_info.bAvailable = 0;
-#if defined (__MINGW32__) || defined (__macosx__)
-SDL_Delay (500); // CloseAudio hangs if it's called too soon after opening?
-#endif
-#if USE_OPENAL
-if (gameOpts->sound.bUseOpenAL) {
-	alcMakeContextCurrent (NULL);
-	alcDestroyContext (gameData.pigData.sound.openAL.context);
-	alcCloseDevice (gameData.pigData.sound.openAL.device);
-	gameData.pigData.sound.openAL.device = NULL;
-	}
-else
-#endif
-StopAll ();
-songManager.StopAll ();
-#if USE_SDL_MIXER
-if (gameOpts->sound.bUseSDLMixer) {
-	Mix_CloseAudio ();
-	}
-else
-#endif
-	SDL_CloseAudio ();
-RETURN
+    ENTER (0, 0);
+    if (!(gameStates.sound.bDynamic && m_info.bAvailable))
+        RETURN;
+    m_info.bInitialized =
+    m_info.bAvailable = 0;
+    #if defined (__MINGW32__) || defined (__macosx__)
+    SDL_Delay (500); // CloseAudio hangs if it's called too soon after opening?
+    #endif
+    StopAll ();
+    songManager.StopAll ();
+    if (gameOpts->sound.bUseSDLMixer) {
+        Mix_CloseAudio ();
+        }
+    else
+        SDL_CloseAudio ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::Shutdown (void)
 {
-ENTER (0, 0);
-if (gameStates.sound.bDynamic && m_info.bAvailable) {
-	int32_t nVolume = m_info.nVolume [0];
-	SetFxVolume (0);
-	m_info.nVolume [0] = nVolume;
-	//m_info.bAvailable = 0;
-	Close ();
-	}
-RETURN
+    ENTER (0, 0);
+    if (gameStates.sound.bDynamic && m_info.bAvailable) {
+        int32_t nVolume = m_info.nVolume [0];
+        SetFxVolume (0);
+        m_info.nVolume [0] = nVolume;
+        //m_info.bAvailable = 0;
+        Close ();
+    }
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 /* Toggle audio */
 void CAudio::Reset (void) 
 {
-#if !USE_OPENAL
-ENTER (0, 0);
-if (gameStates.sound.bDynamic && m_info.bAvailable) {
-	audio.Shutdown ();
-	audio.Setup (1);
-	}
-RETURN
-#endif
+    ENTER (0, 0);
+    if (gameStates.sound.bDynamic && m_info.bAvailable) {
+        audio.Shutdown ();
+        audio.Setup (1);
+    }
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 int32_t CAudio::RegisterChannel (CAudioChannel* pChannel)
 {
-ENTER (1, 0);
-	int32_t nChannel = int32_t (pChannel - m_channels.Buffer ());
-	int32_t nIndex = pChannel->GetIndex ();
-	int32_t nToS = int32_t (m_usedChannels.ToS ());
+    ENTER (1, 0);
+    int32_t nChannel = int32_t (pChannel - m_channels.Buffer ());
+    int32_t nIndex = pChannel->GetIndex ();
+    int32_t nToS = int32_t (m_usedChannels.ToS ());
 
-if ((nIndex >= 0) && (nIndex < nToS) && (m_usedChannels [nIndex] == nChannel))
-	RETVAL (nIndex)
-if (m_usedChannels.Push (int32_t (nChannel)))
-	RETVAL (m_usedChannels.ToS () - 1)
-for (int32_t i = int32_t (m_usedChannels.ToS ()); i; )
-	if (!m_channels [m_usedChannels [--i]].Playing ())
-		UnregisterChannel (i);
-if (m_usedChannels.Push (nChannel))
-	RETVAL (m_usedChannels.ToS () - 1)
-RETVAL (-1)
+    if ((nIndex >= 0) && (nIndex < nToS) && (m_usedChannels [nIndex] == nChannel))
+        RETVAL (nIndex)
+    if (m_usedChannels.Push (int32_t (nChannel)))
+        RETVAL (m_usedChannels.ToS () - 1)
+    for (int32_t i = int32_t (m_usedChannels.ToS ()); i; )
+        if (!m_channels [m_usedChannels [--i]].Playing ())
+            UnregisterChannel (i);
+    if (m_usedChannels.Push (nChannel))
+        RETVAL (m_usedChannels.ToS () - 1)
+    RETVAL (-1)
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::UnregisterChannel (int32_t nIndex)
 {
-ENTER (1, 0);
-if (nIndex < 0)
-	RETURN;
+    ENTER (1, 0);
+    if (nIndex < 0)
+        RETURN;
 
-int32_t nToS = int32_t (m_usedChannels.ToS ());
+    int32_t nToS = int32_t (m_usedChannels.ToS ());
 
-if (nIndex >= nToS)
-	RETURN;
+    if (nIndex >= nToS)
+        RETURN;
 
-if (nIndex < --nToS) { // move the top most entry in m_usedChannels to the position used for the unregistered channel
-	m_channels [m_usedChannels [nIndex]].SetIndex (-1);
-	m_usedChannels [nIndex] = m_usedChannels [nToS]; // remap the moved channel's index in m_usedChannels
-	m_channels [m_usedChannels [nIndex]].SetIndex (nIndex);
-	}
-m_usedChannels.Shrink ();
-RETURN
+    if (nIndex < --nToS) { // move the top most entry in m_usedChannels to the position used for the unregistered channel
+        m_channels [m_usedChannels [nIndex]].SetIndex (-1);
+        m_usedChannels [nIndex] = m_usedChannels [nToS]; // remap the moved channel's index in m_usedChannels
+        m_channels [m_usedChannels [nIndex]].SetIndex (nIndex);
+    }
+    m_usedChannels.Shrink ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::StopAllChannels (bool bPause)
 {
-ENTER (0, 0);
-if (!bPause) {
-	StopLoopingSound ();
-	StopObjectSounds ();
-	}
-soundQueue.Init ();
-lightningManager.Mute ();
-for (int32_t i = 0; i < m_info.nMaxChannels; i++)
-	audio.StopSound (i);
-gameData.multiplayer.bMoving = -1;
-gameData.weaponData.firing [0].bSound = 0;
-RETURN
+    ENTER (0, 0);
+    if (!bPause) {
+        StopLoopingSound ();
+        StopObjectSounds ();
+    }
+    soundQueue.Init ();
+    lightningManager.Mute ();
+    for (int32_t i = 0; i < m_info.nMaxChannels; i++)
+        audio.StopSound (i);
+    gameData.multiplayer.bMoving = -1;
+    gameData.weaponData.firing [0].bSound = 0;
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 int32_t CAudio::SoundClassCount (int32_t nSoundClass)
 {
-ENTER (1, 0);
-	CAudioChannel	*pChannel;
-	int32_t			h, i;
+    ENTER (1, 0);
+    CAudioChannel	*pChannel;
+    int32_t			h, i;
 
-for (h = 0, i = m_info.nMaxChannels, pChannel = audio.m_channels.Buffer (); i; i--, pChannel++)
-	if (pChannel->Playing () && (pChannel->SoundClass () == nSoundClass))
-		h++;
-RETVAL (h)
+    for (h = 0, i = m_info.nMaxChannels, pChannel = audio.m_channels.Buffer (); i; i--, pChannel++)
+        if (pChannel->Playing () && (pChannel->SoundClass () == nSoundClass))
+            h++;
+    RETVAL (h)
 }
 
 //------------------------------------------------------------------------------
 
 CAudioChannel* CAudio::FindFreeChannel (int32_t nSoundClass)
 {
-ENTER (1, 0);
-	CAudioChannel	* pChannel, * channelMinVolP [2] = {NULL, NULL};
-	int32_t			nStartChannel;
-	int32_t			bUseClass = SoundClassCount (nSoundClass) >= m_info.nMaxChannels / 2;
+    ENTER (1, 0);
+    CAudioChannel	* pChannel, * channelMinVolP [2] = {NULL, NULL};
+    int32_t			nStartChannel;
+    int32_t			bUseClass = SoundClassCount (nSoundClass) >= m_info.nMaxChannels / 2;
 
-nStartChannel = m_info.nFreeChannel;
-DestroyObjectSound (-1); // destroy all 
-do {
-	pChannel = audio.m_channels + m_info.nFreeChannel;
-	if (!pChannel->Playing ())
-		RETVAL (pChannel)
-	if ((!bUseClass || (pChannel->SoundClass () == nSoundClass)) &&
-	    (!channelMinVolP [pChannel->Persistent ()] || (channelMinVolP [pChannel->Persistent ()]->Volume () > pChannel->Volume ())))
-		channelMinVolP [pChannel->Persistent ()] = pChannel;
-	m_info.nFreeChannel = (m_info.nFreeChannel + 1) % m_info.nMaxChannels;
-	} while (m_info.nFreeChannel != nStartChannel);
-m_info.nFreeChannel = audio.m_channels.Index (channelMinVolP [0] ? channelMinVolP [0] : channelMinVolP [1]);
-RETVAL (channelMinVolP [0] ? channelMinVolP [0] : channelMinVolP [1])
+    nStartChannel = m_info.nFreeChannel;
+    DestroyObjectSound (-1); // destroy all
+    do {
+        pChannel = audio.m_channels + m_info.nFreeChannel;
+        if (!pChannel->Playing ())
+            RETVAL (pChannel)
+        if ((!bUseClass || (pChannel->SoundClass () == nSoundClass)) &&
+            (!channelMinVolP [pChannel->Persistent ()] || (channelMinVolP [pChannel->Persistent ()]->Volume () > pChannel->Volume ())))
+            channelMinVolP [pChannel->Persistent ()] = pChannel;
+        m_info.nFreeChannel = (m_info.nFreeChannel + 1) % m_info.nMaxChannels;
+    } while (m_info.nFreeChannel != nStartChannel);
+    m_info.nFreeChannel = audio.m_channels.Index (channelMinVolP [0] ? channelMinVolP [0] : channelMinVolP [1]);
+    RETVAL (channelMinVolP [0] ? channelMinVolP [0] : channelMinVolP [1])
 }
 
 //------------------------------------------------------------------------------
 
 // Volume 0-I2X (1)
-int32_t CAudio::StartSound (int16_t nSound, int32_t nSoundClass, fix nVolume, int32_t nPan, int32_t bLooping, 
-									 int32_t nLoopStart, int32_t nLoopEnd, int32_t nSoundObj, int32_t nSpeed, 
-									 const char *pszWAV, CFixVector* vPos)
-{
-ENTER (0, 0);
-if (!gameStates.app.bUseSound)
-	RETVAL (-1)
-if (!m_info.bAvailable) 
-	RETVAL (-1)
-if (((nSoundObj > -1) || bLooping || (nVolume > I2X (1))) && !nSoundClass)
-	nSoundClass = -1;
+int32_t CAudio::StartSound (
+    int16_t nSound,
+    int32_t nSoundClass,
+    fix nVolume,
+    int32_t nPan,
+    int32_t bLooping,
+    int32_t nLoopStart,
+    int32_t nLoopEnd,
+    int32_t nSoundObj,
+    int32_t nSpeed,
+    const char *pszWAV,
+    CFixVector* vPos
+) {
+    ENTER (0, 0);
+    if (!gameStates.app.bUseSound)
+        RETVAL (-1)
+    if (!m_info.bAvailable)
+        RETVAL (-1)
+    if (((nSoundObj > -1) || bLooping || (nVolume > I2X (1))) && !nSoundClass)
+        nSoundClass = -1;
 
-CAudioChannel*	pChannel = FindFreeChannel (nSoundClass);
-if (!pChannel)
-	RETVAL (-1)
-if (0 > pChannel->Start (nSound, nSoundClass, nVolume, nPan, bLooping, nLoopStart, nLoopEnd, nSoundObj, nSpeed, pszWAV, vPos)) {
-	RETVAL (-1)
-	}
-int32_t i = m_info.nFreeChannel;
-if (++m_info.nFreeChannel >= m_info.nMaxChannels)
-	m_info.nFreeChannel = 0;
-RETVAL (i)
+    CAudioChannel*	pChannel = FindFreeChannel (nSoundClass);
+    if (!pChannel)
+        RETVAL (-1)
+    if (0 > pChannel->Start (nSound, nSoundClass, nVolume, nPan, bLooping, nLoopStart, nLoopEnd, nSoundObj, nSpeed, pszWAV, vPos)) {
+        RETVAL (-1)
+    }
+    int32_t i = m_info.nFreeChannel;
+    if (++m_info.nFreeChannel >= m_info.nMaxChannels)
+        m_info.nFreeChannel = 0;
+    RETVAL (i)
 }
 
 //------------------------------------------------------------------------------
@@ -1082,97 +1017,97 @@ RETVAL (i)
 
 int32_t CAudio::FindChannel (int16_t nSound)
 {
-ENTER (1, 0);
-if (!gameStates.app.bUseSound)
-	RETVAL (-1)
-if (!m_info.bAvailable) 
-	RETVAL (-1)
-if (nSound < 0)
-	RETVAL (-1)
-CSoundSample *pSound = &gameData.pigData.sound.sounds [gameStates.sound.bD1Sound][nSound];
-if (!pSound->data [pSound->bCustom].Buffer ()) {
-	Int3 ();
-	RETVAL (-1)
-	}
-for (int32_t nChannel = 0; nChannel < m_info.nMaxChannels; nChannel++) {
-	if (m_channels [nChannel].Playing () && (m_channels [nChannel].Sound () == nSound))
-		RETVAL (nChannel)
-	}
-RETVAL (-1)
+    ENTER (1, 0);
+    if (!gameStates.app.bUseSound)
+        RETVAL (-1)
+    if (!m_info.bAvailable)
+        RETVAL (-1)
+    if (nSound < 0)
+        RETVAL (-1)
+    CSoundSample *pSound = &gameData.pigData.sound.sounds [gameStates.sound.bD1Sound][nSound];
+    if (!pSound->data [pSound->bCustom].Buffer ()) {
+        Int3 ();
+        RETVAL (-1)
+    }
+    for (int32_t nChannel = 0; nChannel < m_info.nMaxChannels; nChannel++) {
+        if (m_channels [nChannel].Playing () && (m_channels [nChannel].Sound () == nSound))
+            RETVAL (nChannel)
+    }
+    RETVAL (-1)
 }
 
 //------------------------------------------------------------------------------
 //added on 980905 by adb from original source to make sfx nVolume work
 void CAudio::SetFxVolume (int32_t fxVolume, int32_t nType)
 {
-ENTER (0, 0);
-if (!gameStates.app.bUseSound)
-	RETURN;
+    ENTER (0, 0);
+    if (!gameStates.app.bUseSound)
+        RETURN;
 #ifdef _WIN32
-int32_t nVolume = FixMulDiv (fxVolume, SOUND_MAX_VOLUME, 0x7fff);
-if (nVolume > SOUND_MAX_VOLUME)
-	m_info.nVolume [nType] = SOUND_MAX_VOLUME;
-else if (nVolume < 0)
-	m_info.nVolume [nType] = 0;
-else
-	m_info.nVolume [nType] = nVolume;
-if (!m_info.bAvailable) 
-	RETURN;
-if (!(nType || songManager.Playing ()))
-	midi.FixVolume (FixMulDiv (fxVolume, 128, SOUND_MAX_VOLUME));
+    int32_t nVolume = FixMulDiv (fxVolume, SOUND_MAX_VOLUME, 0x7fff);
+    if (nVolume > SOUND_MAX_VOLUME)
+        m_info.nVolume [nType] = SOUND_MAX_VOLUME;
+    else if (nVolume < 0)
+        m_info.nVolume [nType] = 0;
+    else
+        m_info.nVolume [nType] = nVolume;
+    if (!m_info.bAvailable)
+        RETURN;
+    if (!(nType || songManager.Playing ()))
+        midi.FixVolume (FixMulDiv (fxVolume, 128, SOUND_MAX_VOLUME));
 #endif
-SyncSounds ();
-RETURN
+    SyncSounds ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::SetVolumes (int32_t fxVolume, int32_t midiVolume)
 {
-ENTER (0, 0);
-if (!gameStates.app.bUseSound)
-	RETURN
-SetFxVolume (fxVolume);
-midi.SetVolume (midiVolume);
-RETURN
+    ENTER (0, 0);
+    if (!gameStates.app.bUseSound)
+        RETURN
+    SetFxVolume (fxVolume);
+    midi.SetVolume (midiVolume);
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 int32_t CAudio::SoundIsPlaying (int16_t nSound)
 {
-ENTER (0, 0);
-nSound = XlatSound (nSound);
-for (int32_t i = 0; i < m_info.nMaxChannels; i++)
-  if (audio.m_channels [i].Playing () && (audio.m_channels [i].Sound () == nSound)) 
-		RETVAL (1)
-RETVAL (0)
+    ENTER (0, 0);
+    nSound = XlatSound (nSound);
+    for (int32_t i = 0; i < m_info.nMaxChannels; i++)
+        if (audio.m_channels [i].Playing () && (audio.m_channels [i].Sound () == nSound))
+            RETVAL (1)
+    RETVAL (0)
 }
 
 //------------------------------------------------------------------------------
 //added on 980905 by adb to make sound nChannel setting work
 void CAudio::SetMaxChannels (int32_t nChannels) 
-{ 
-ENTER (0, 0);
-if (!gameStates.app.bUseSound)
-	RETURN;
-if (m_info.nMaxChannels	== nChannels)
-	RETURN;
-if (m_info.bAvailable) 
-	audio.StopAllChannels ();
-m_info.nMaxChannels = (nChannels < 2) ? 2 : (nChannels > MAX_SOUND_CHANNELS) ? MAX_SOUND_CHANNELS : nChannels;
-gameStates.sound.audio.nMaxChannels = m_info.nMaxChannels;
-Init ();
-if (gameStates.app.bGameRunning)
-	SetSoundSources ();
-RETURN
+{
+    ENTER (0, 0);
+    if (!gameStates.app.bUseSound)
+        RETURN;
+    if (m_info.nMaxChannels	== nChannels)
+        RETURN;
+    if (m_info.bAvailable)
+        audio.StopAllChannels ();
+    m_info.nMaxChannels = (nChannels < 2) ? 2 : (nChannels > MAX_SOUND_CHANNELS) ? MAX_SOUND_CHANNELS : nChannels;
+    gameStates.sound.audio.nMaxChannels = m_info.nMaxChannels;
+    Init ();
+    if (gameStates.app.bGameRunning)
+        SetSoundSources ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 int32_t CAudio::GetMaxChannels (void) 
-{ 
-return m_info.nMaxChannels; 
+{
+    return m_info.nMaxChannels;
 }
 // end edit by adb
 
@@ -1180,109 +1115,100 @@ return m_info.nMaxChannels;
 
 int32_t CAudio::ChannelIsPlaying (int32_t nChannel)
 {
-if (!m_info.bAvailable) 
-	return 0;
-if ((nChannel < 0) || (nChannel >= m_info.nMaxChannels))
-	return 0;
-#ifdef _WIN32
-return audio.m_channels [nChannel].Playing ();
-#else
-bool b = audio.m_channels [nChannel].Playing ();
-return b;
-#endif
+    if (!m_info.bAvailable)
+        return 0;
+    if ((nChannel < 0) || (nChannel >= m_info.nMaxChannels))
+        return 0;
+    return audio.m_channels [nChannel].Playing() != 0;
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::SetVolume (int32_t nChannel, int32_t nVolume)
 {
-ENTER (0, 0);
-if (!gameStates.app.bUseSound)
-	RETURN;
-if (!m_info.bAvailable) 
-	RETURN;
-m_channels [nChannel].SetVolume (nVolume);
-RETURN
+    ENTER (0, 0);
+    if (!gameStates.app.bUseSound)
+        RETURN;
+    if (!m_info.bAvailable)
+        RETURN;
+    m_channels [nChannel].SetVolume (nVolume);
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::SetPan (int32_t nChannel, int32_t nPan)
 {
-ENTER (0, 0);
-if (!gameStates.app.bUseSound)
-	RETURN;
-if (!m_info.bAvailable) 
-	RETURN;
-if ((nChannel < 0) || (nChannel >= m_info.nMaxChannels))
-	RETURN;
-m_channels [nChannel].SetPan (nPan);
-RETURN
+    ENTER (0, 0);
+    if (!gameStates.app.bUseSound)
+        RETURN;
+    if (!m_info.bAvailable)
+        RETURN;
+    if ((nChannel < 0) || (nChannel >= m_info.nMaxChannels))
+        RETURN;
+    m_channels [nChannel].SetPan (nPan);
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::StopSound (int32_t nChannel)
 {
-ENTER (0, 0);
-if (!gameStates.app.bUseSound)
-	RETURN;
-if ((nChannel < 0) || (nChannel >= m_info.nMaxChannels))
-	RETURN;
-m_channels [nChannel].Stop ();
-RETURN
+    ENTER (0, 0);
+    if (!gameStates.app.bUseSound)
+        RETURN;
+    if ((nChannel < 0) || (nChannel >= m_info.nMaxChannels))
+        RETURN;
+    m_channels [nChannel].Stop ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::StopActiveSound (int32_t nChannel)
 {
-ENTER (0, 0);
-if (!gameStates.app.bUseSound)
-	RETURN;
-if (!m_info.bAvailable)
-	RETURN;
-if ((nChannel < 0) || (nChannel >= m_info.nMaxChannels))
-	RETURN;
-if (!audio.m_channels [nChannel].Playing ())
-	RETURN;
-audio.StopSound (nChannel);
-RETURN
+    ENTER (0, 0);
+    if (!gameStates.app.bUseSound)
+        RETURN;
+    if (!m_info.bAvailable)
+        RETURN;
+    if ((nChannel < 0) || (nChannel >= m_info.nMaxChannels))
+        RETURN;
+    if (!audio.m_channels [nChannel].Playing ())
+        RETURN;
+    audio.StopSound (nChannel);
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::StopCurrentSong ()
 {
-ENTER (0, 0);
-if (songManager.Playing ()) {
-	midi.Fadeout ();
-#if USE_SDL_MIXER
-	if (!gameOpts->sound.bUseSDLMixer)
-#endif
-	m_info.nMidiVolume = midi.SetVolume (0);
+    ENTER (0, 0);
+    if (songManager.Playing ()) {
+        midi.Fadeout ();
+        if (!gameOpts->sound.bUseSDLMixer)
+            m_info.nMidiVolume = midi.SetVolume (0);
 #if defined (_WIN32)
-#	if USE_SDL_MIXER
-if (!gameOpts->sound.bUseSDLMixer)
-#	endif
-	midi.Shutdown ();
+        if (!gameOpts->sound.bUseSDLMixer)
+            midi.Shutdown ();
 #endif
-	songManager.SetPlaying (0);
-	}
-RETURN
+        songManager.SetPlaying (0);
+    }
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::DestroyBuffers (void)
 {
-ENTER (0, 0);
-	CAudioChannel	*pChannel = audio.m_channels.Buffer ();
+    ENTER (0, 0);
+    CAudioChannel	*pChannel = audio.m_channels.Buffer ();
 
-for (int32_t i = audio.m_channels.Length (); i; i--, pChannel++)
-	if (pChannel->Resampled ())
-		pChannel->Destroy ();
-RETURN
+    for (int32_t i = audio.m_channels.Length (); i; i--, pChannel++)
+        if (pChannel->Resampled ())
+            pChannel->Destroy ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------

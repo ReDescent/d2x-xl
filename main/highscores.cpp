@@ -575,7 +575,6 @@ for (;;) {
 	if (m_bNetwork)
 		NetworkEndLevelPoll2 (m, key, 0, 0); // check the states of the other players
 
-	redbook.CheckRepeat ();
 	i = Input ();
 	if (i < 0)
 		return;

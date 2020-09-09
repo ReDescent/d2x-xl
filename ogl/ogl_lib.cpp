@@ -272,30 +272,30 @@ else
 
 void G3CalcNormal (CRenderPoint **pointList, CFloatVector *pvNormal)
 {
-	CFixVector	vNormal;
+    CFixVector	vNormal;
 
-if (gameStates.render.nState == 1)	// an object polymodel
-	vNormal = CFixVector::Normal (pointList [0]->ViewPos (), pointList [1]->ViewPos (), pointList [2]->ViewPos ());
-else {
-	uint16_t v [4], vSorted [4];
+    if (gameStates.render.nState == 1)	// an object polymodel
+        vNormal = CFixVector::Normal (pointList [0]->ViewPos (), pointList [1]->ViewPos (), pointList [2]->ViewPos ());
+    else {
+        uint16_t v [4], vSorted [4];
 
-	v [0] = pointList [0]->Index ();
-	v [1] = pointList [1]->Index ();
-	v [2] = pointList [2]->Index ();
+        v [0] = pointList [0]->Index ();
+        v [1] = pointList [1]->Index ();
+        v [2] = pointList [2]->Index ();
 
-	if ((v [0] < 0) || (v [1] < 0) || (v [2] < 0)) {
-		vNormal = CFixVector::Normal (pointList [0]->ViewPos (), pointList [1]->ViewPos (), pointList [2]->ViewPos ());
-		}
-	else {
-		int32_t bFlip = SortVertsForNormal (v [0], v [1], v [2], 0xFFFF, vSorted);
-		vNormal = CFixVector::Normal (gameData.segData.vertices [vSorted [0]],
-												gameData.segData.vertices [vSorted [1]],
-												gameData.segData.vertices [vSorted [2]]);
-		if (bFlip)
-			vNormal.Neg ();
-		}
-	}
-pvNormal->Assign (vNormal);
+        if ((v [0] < 0) || (v [1] < 0) || (v [2] < 0)) {
+            vNormal = CFixVector::Normal (pointList [0]->ViewPos (), pointList [1]->ViewPos (), pointList [2]->ViewPos ());
+        }
+        else {
+            int32_t bFlip = SortVertsForNormal (v [0], v [1], v [2], 0xFFFF, vSorted);
+            vNormal = CFixVector::Normal (gameData.segData.vertices [vSorted [0]],
+                                                    gameData.segData.vertices [vSorted [1]],
+                                                    gameData.segData.vertices [vSorted [2]]);
+            if (bFlip)
+                vNormal.Neg ();
+        }
+    }
+    pvNormal->Assign (vNormal);
 }
 
 //------------------------------------------------------------------------------
@@ -304,28 +304,28 @@ pvNormal->Assign (vNormal);
 
 void COglStates::Initialize (void)
 {
-memset (this, 0, sizeof (*this));
-nContrast = 8;
-nColorBits = 32;
-nDepthBits = 24;
-bEnableTexture2D = -1;
-bEnableTexClamp = -1;
-texMinFilter = GL_NEAREST;
-texMinFilter = GL_NEAREST;
-nTexMagFilterState = -1,
-nTexMinFilterState = -1;
-nTexEnvModeState = -1,
-viewport [0] = CViewport (),
-viewport [1] = CViewport (),
-nCurWidth =
-nCurHeight = -1;
-bCurFullScreen = -1;
-bpp = 32;
-nRGBAFormat = GL_RGBA;
-nRGBFormat = GL_RGB;
-bIntensity4 = 1;
-bLuminance4Alpha4 = 1;
-nDrawBuffer = -1;
+    memset (this, 0, sizeof (*this));
+    nContrast = 8;
+    nColorBits = 32;
+    nDepthBits = 24;
+    bEnableTexture2D = -1;
+    bEnableTexClamp = -1;
+    texMinFilter = GL_NEAREST;
+    texMinFilter = GL_NEAREST;
+    nTexMagFilterState = -1,
+    nTexMinFilterState = -1;
+    nTexEnvModeState = -1,
+    viewport [0] = CViewport (),
+    viewport [1] = CViewport (),
+    nCurWidth =
+    nCurHeight = -1;
+    bCurFullScreen = -1;
+    bpp = 32;
+    nRGBAFormat = GL_RGBA;
+    nRGBFormat = GL_RGB;
+    bIntensity4 = 1;
+    bLuminance4Alpha4 = 1;
+    nDrawBuffer = -1;
 }
 
 // ----------------------------------------------------------------------------
@@ -334,65 +334,65 @@ nDrawBuffer = -1;
 
 void COglData::Initialize (void)
 {
-palette = NULL;
-memset (bUseTextures, 0, sizeof (bUseTextures));
-nTMU [0] = 
-nTMU [1] = 0;
-if (/*gameStates.app.bInitialized &&*/ ogl.m_states.bInitialized) {
-#ifndef GL_VERSION_20
-	if (glActiveTexture) 
-#endif
-		{
-		glActiveTexture (GL_TEXTURE3);
-		glBindTexture (GL_TEXTURE_2D, nTexture [3] = 0);
-		glDisable (GL_TEXTURE_2D);
-		glActiveTexture (GL_TEXTURE2);
-		glBindTexture (GL_TEXTURE_2D, nTexture [2] = 0);
-		glDisable (GL_TEXTURE_2D);
-		glActiveTexture (GL_TEXTURE1);
-		glBindTexture (GL_TEXTURE_2D, nTexture [1] = 0);
-		glDisable (GL_TEXTURE_2D);
-		glActiveTexture (GL_TEXTURE0);
-		glBindTexture (GL_TEXTURE_2D, nTexture [0] = 0);
-		glDisable (GL_TEXTURE_2D);
-		}
-	bUseBlending = true;
-	glEnable (GL_BLEND);
-	glBlendFunc (nSrcBlendMode = GL_SRC_ALPHA, nDestBlendMode = GL_ONE_MINUS_SRC_ALPHA);
-	bDepthTest = false;
-	glDisable (GL_DEPTH_TEST);
-	bDepthWrite = false;
-	glDepthMask (0);
-	bStencilTest = false;
-	glDisable (GL_STENCIL_TEST);
-	bCullFaces = false;
-	glDisable (GL_CULL_FACE);
-	glCullFace (nCullMode = GL_BACK);
-	bScissorTest = false;
-	glDisable (GL_SCISSOR_TEST);
-	bAlphaTest = false;
-	glDisable (GL_ALPHA_TEST);
-	bLineSmooth = false;
-	glDisable (GL_LINE_SMOOTH);
-	bLighting = false;
-	glDisable (GL_LIGHTING);
-	bPolyOffsetFill = false;
-	glDisable (GL_POLYGON_OFFSET_FILL);
-	glGetFloatv (GL_SMOOTH_LINE_WIDTH_RANGE, lineWidthRange);
-	}
-zNear = 1.0f;
-zFar = 5000.0f;
-depthScale.SetZero ();
-windowScale.dim.x =
-windowScale.dim.y = 0;
-CLEAR (nPerPixelLights);
-CLEAR (lightRads);
-CLEAR (lightPos);
-bLightmaps = 0;
-nHeadlights = 0;
-pDrawBuffer = &drawBuffers [0];
+    palette = NULL;
+    memset (bUseTextures, 0, sizeof (bUseTextures));
+    nTMU [0] =
+    nTMU [1] = 0;
+    if (/*gameStates.app.bInitialized &&*/ ogl.m_states.bInitialized) {
+    #ifndef GL_VERSION_20
+        if (glActiveTexture)
+    #endif
+        {
+            glActiveTexture (GL_TEXTURE3);
+            glBindTexture (GL_TEXTURE_2D, nTexture [3] = 0);
+            glDisable (GL_TEXTURE_2D);
+            glActiveTexture (GL_TEXTURE2);
+            glBindTexture (GL_TEXTURE_2D, nTexture [2] = 0);
+            glDisable (GL_TEXTURE_2D);
+            glActiveTexture (GL_TEXTURE1);
+            glBindTexture (GL_TEXTURE_2D, nTexture [1] = 0);
+            glDisable (GL_TEXTURE_2D);
+            glActiveTexture (GL_TEXTURE0);
+            glBindTexture (GL_TEXTURE_2D, nTexture [0] = 0);
+            glDisable (GL_TEXTURE_2D);
+        }
+        bUseBlending = true;
+        glEnable (GL_BLEND);
+        glBlendFunc (nSrcBlendMode = GL_SRC_ALPHA, nDestBlendMode = GL_ONE_MINUS_SRC_ALPHA);
+        bDepthTest = false;
+        glDisable (GL_DEPTH_TEST);
+        bDepthWrite = false;
+        glDepthMask (0);
+        bStencilTest = false;
+        glDisable (GL_STENCIL_TEST);
+        bCullFaces = false;
+        glDisable (GL_CULL_FACE);
+        glCullFace (nCullMode = GL_BACK);
+        bScissorTest = false;
+        glDisable (GL_SCISSOR_TEST);
+        bAlphaTest = false;
+        glDisable (GL_ALPHA_TEST);
+        bLineSmooth = false;
+        glDisable (GL_LINE_SMOOTH);
+        bLighting = false;
+        glDisable (GL_LIGHTING);
+        bPolyOffsetFill = false;
+        glDisable (GL_POLYGON_OFFSET_FILL);
+        glGetFloatv (GL_SMOOTH_LINE_WIDTH_RANGE, lineWidthRange);
+    }
+    zNear = 1.0f;
+    zFar = 5000.0f;
+    depthScale.SetZero ();
+    windowScale.dim.x =
+    windowScale.dim.y = 0;
+    CLEAR (nPerPixelLights);
+    CLEAR (lightRads);
+    CLEAR (lightPos);
+    bLightmaps = 0;
+    nHeadlights = 0;
+    pDrawBuffer = &drawBuffers [0];
 #if DBG_OGL
-memset (clientBuffers, sizeof (clientBuffers), 0);
+    memset (clientBuffers, sizeof (clientBuffers), 0);
 #endif
 };
 
@@ -609,298 +609,298 @@ else //GLASSES_SHUTTER_NVIDIA, GLASSES_OCULUS_RIFT or NONE
 
 void COGL::StartFrame (int32_t bFlat, int32_t bResetColorBuf, fix xStereoSeparation)
 {
-SetStereoSeparation (xStereoSeparation);
-m_states.bEnableScissor = 1;
-if (!gameStates.render.nWindow [0])
-	ChooseDrawBuffer ();
-ogl.SetPolyOffsetFill (false);
-#if !MAX_SHADOWMAPS
-if (gameStates.render.nShadowPass) {
+    SetStereoSeparation (xStereoSeparation);
+    m_states.bEnableScissor = 1;
+    if (!gameStates.render.nWindow [0])
+        ChooseDrawBuffer ();
+    ogl.SetPolyOffsetFill (false);
+    #if !MAX_SHADOWMAPS
+    if (gameStates.render.nShadowPass) {
 
-	SetDepthMode (GL_LESS);
-	SetDepthWrite (true);
-	if (gameStates.render.nShadowPass == 1) {	//render unlit/final scene
-		if (!gameStates.render.nShadowMap) {
-#if GL_INFINITY
-			glMatrixMode (GL_PROJECTION);
-			float	infProj [4][4];	//projection to infinity
-			memset (infProj, 0, sizeof (infProj));
-			infProj [1][1] = 1.0f / (float) tan (gameStates.render.glFOV);
-			infProj [0][0] = infProj [1][1] / (float) gameStates.render.glAspect;
-			infProj [3][2] = -0.02f;	// -2 * near
-			infProj [2][2] =
-			infProj [2][3] = -1.0f;
-			glLoadMatrixf (reinterpret_cast<float*> (infProj));
-#endif
-			SetDepthTest (true);
-			SetStencilTest (false);
-			SetFaceCulling (true);
-			OglCullFace (0);
-			if (!FAST_SHADOWS)
-				ColorMask (0,0,0,0,0);
-			}
-		}
-	else if (gameStates.render.nShadowPass == 2) {	//render occluders / shadow maps
-		if (gameStates.render.nShadowMap) {
-			ColorMask (0,0,0,0,0);
-			ogl.SetPolyOffsetFill (true);
-			glPolygonOffset (1.0f, 2.0f);
-			}
-		else {
+        SetDepthMode (GL_LESS);
+        SetDepthWrite (true);
+        if (gameStates.render.nShadowPass == 1) {	//render unlit/final scene
+            if (!gameStates.render.nShadowMap) {
+    #if GL_INFINITY
+                glMatrixMode (GL_PROJECTION);
+                float	infProj [4][4];	//projection to infinity
+                memset (infProj, 0, sizeof (infProj));
+                infProj [1][1] = 1.0f / (float) tan (gameStates.render.glFOV);
+                infProj [0][0] = infProj [1][1] / (float) gameStates.render.glAspect;
+                infProj [3][2] = -0.02f;	// -2 * near
+                infProj [2][2] =
+                infProj [2][3] = -1.0f;
+                glLoadMatrixf (reinterpret_cast<float*> (infProj));
+    #endif
+                SetDepthTest (true);
+                SetStencilTest (false);
+                SetFaceCulling (true);
+                OglCullFace (0);
+                if (!FAST_SHADOWS)
+                    ColorMask (0,0,0,0,0);
+            }
+        }
+        else if (gameStates.render.nShadowPass == 2) {	//render occluders / shadow maps
+            if (gameStates.render.nShadowMap) {
+                ColorMask (0,0,0,0,0);
+                ogl.SetPolyOffsetFill (true);
+                glPolygonOffset (1.0f, 2.0f);
+            }
+            else {
+    #	if DBG_SHADOWS
+                if (bShadowTest) {
+                    ColorMask (1,1,1,1,0);
+                    SetDepthWrite (false);
+                    SetBlendMode (OGL_BLEND_ALPHA);
+                    SetStencilTest (false);
+                }
+                else
+    #	endif
+                {
+                    ColorMask (0,0,0,0,0);
+                    SetDepthWrite (false);
+                    glClearStencil (0);
+                    glClear (GL_STENCIL_BUFFER_BIT);
+                        bSingleStencil = 1;
 #	if DBG_SHADOWS
-			if (bShadowTest) {
-				ColorMask (1,1,1,1,0);
-				SetDepthWrite (false);
-				SetBlendMode (OGL_BLEND_ALPHA);
-				SetStencilTest (false);
-				}
-			else
+                    if (bShadowTest)
 #	endif
-			 {
-				ColorMask (0,0,0,0,0);
-				SetDepthWrite (false);
-				glClearStencil (0);
-				glClear (GL_STENCIL_BUFFER_BIT);
-					bSingleStencil = 1;
-#	if DBG_SHADOWS
-				if (bShadowTest)
-#	endif
-					{
-					glStencilMask (~0);
-					glStencilFunc (GL_ALWAYS, 0, ~0);
-					}
-				}
-			}
-		}
-	else if (gameStates.render.nShadowPass == 3) { //render final lit scene
-		if (gameStates.render.nShadowMap) {
-			ogl.SetPolyOffsetFill (false);
-			SetDepthMode (GL_LESS);
-			}
-		else {
-			if (gameStates.render.nShadowBlurPass == 2)
-				SetStencilTest (false);
-         else if (FAST_SHADOWS) {
-				glStencilFunc (GL_NOTEQUAL, 0, ~0);
-				glStencilOp (GL_REPLACE, GL_KEEP, GL_KEEP);
-				}
-			else
-			 {
-				glStencilFunc (GL_EQUAL, 0, ~0);
-				glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
-				}
-			OglCullFace (0);
-			ogl.SetDepthMode (GL_LESS);
-			ColorMask (1,1,1,1,1);
-			}
-		}
-	else if (gameStates.render.nShadowPass == 4) {	//render unlit/final scene
-		SetDepthTest (true);
-		SetDepthMode (GL_LESS);
-		SetFaceCulling (true);
-		OglCullFace (0);
-		}
+                    {
+                        glStencilMask (~0);
+                        glStencilFunc (GL_ALWAYS, 0, ~0);
+                    }
+                }
+            }
+        }
+        else if (gameStates.render.nShadowPass == 3) { //render final lit scene
+            if (gameStates.render.nShadowMap) {
+                ogl.SetPolyOffsetFill (false);
+                SetDepthMode (GL_LESS);
+            }
+            else {
+                if (gameStates.render.nShadowBlurPass == 2)
+                    SetStencilTest (false);
+                else if (FAST_SHADOWS) {
+                    glStencilFunc (GL_NOTEQUAL, 0, ~0);
+                    glStencilOp (GL_REPLACE, GL_KEEP, GL_KEEP);
+                }
+                else
+                {
+                    glStencilFunc (GL_EQUAL, 0, ~0);
+                    glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
+                }
+                OglCullFace (0);
+                ogl.SetDepthMode (GL_LESS);
+                ColorMask (1,1,1,1,1);
+            }
+        }
+        else if (gameStates.render.nShadowPass == 4) {	//render unlit/final scene
+            SetDepthTest (true);
+            SetDepthMode (GL_LESS);
+            SetFaceCulling (true);
+            OglCullFace (0);
+        }
 #if GL_INFINITY
-	glMatrixMode (GL_MODELVIEW);
-	glLoadIdentity ();
+        glMatrixMode (GL_MODELVIEW);
+        glLoadIdentity ();
 #endif
-	}
-else 
+    }
+    else
 #endif
-	{
-	r_polyc =
-	r_tpolyc =
-	r_tvertexc =
-	r_bitmapc =
-	r_ubitmapc =
-	r_ubitbltc =
-	r_upixelc = 0;
+    {
+        r_polyc =
+        r_tpolyc =
+        r_tvertexc =
+        r_bitmapc =
+        r_ubitmapc =
+        r_ubitbltc =
+        r_upixelc = 0;
 
-	glMatrixMode (GL_MODELVIEW);
-	glLoadIdentity ();
-	if (gameStates.render.nRenderPass < 0) {
-		ogl.SetDepthWrite (true);
-		glClearDepth (/*gameStates.render.nWindow [0] ? 1.0 : 0.0*/ 1.0);
+        glMatrixMode (GL_MODELVIEW);
+        glLoadIdentity ();
+        if (gameStates.render.nRenderPass < 0) {
+            ogl.SetDepthWrite (true);
+            glClearDepth (/*gameStates.render.nWindow [0] ? 1.0 : 0.0*/ 1.0);
 #if MAX_SHADOWMAPS > 0
-		if (gameStates.render.nShadowMap) {
-			ColorMask (0, 0, 0, 0, 0);
-			glClear (GL_DEPTH_BUFFER_BIT);
-			}
-		else 
+            if (gameStates.render.nShadowMap) {
+                ColorMask (0, 0, 0, 0, 0);
+                glClear (GL_DEPTH_BUFFER_BIT);
+            }
+            else
 #endif
-			{
-			ColorMask (1, 1, 1, 1, 1);
-			//SetViewport (0, 0, gameData.renderData.screen.Width (), gameData.renderData.screen.Height ());
-			GLbitfield mask = 0;
-			if (!bResetColorBuf)
-				mask = GL_DEPTH_BUFFER_BIT;
-			else /*if (automap.Active () || (gameStates.render.bRenderIndirect > 0))*/ {
-				glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
-				mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-				}
-			if (mask) {
-				gameData.renderData.frame.Activate ("StartFrame (frame)");
-				glClear (mask);
-				gameData.renderData.frame.Deactivate ();
-				}
-			}
-		}
-	else if (gameStates.render.nRenderPass) {
-		SetDepthWrite (false);
-		ColorMask (1,1,1,1,1);
-		glClearColor (0,0,0,1);
-		if (bResetColorBuf)
-			glClear (GL_COLOR_BUFFER_BIT);
-		}
-	else { //make a depth-only render pass first to decrease bandwidth waste due to overdraw
-		ogl.SetDepthWrite (true);
-		ColorMask (0,0,0,0,0);
-		glClear (GL_DEPTH_BUFFER_BIT);
-		}
-	if (m_features.bAntiAliasing/*.Apply ()*/)
-		glEnable (GL_MULTISAMPLE_ARB);
-	if (bFlat) {
-		SetDepthTest (false);
-		SetAlphaTest (false);
-		SetFaceCulling (false);
-		}
-	else {
-		SetFaceCulling (true);
-		glFrontFace (GL_CW);	//Weird, huh? Well, D2 renders everything reverse ...
+            {
+                ColorMask (1, 1, 1, 1, 1);
+                //SetViewport (0, 0, gameData.renderData.screen.Width (), gameData.renderData.screen.Height ());
+                GLbitfield mask = 0;
+                if (!bResetColorBuf)
+                    mask = GL_DEPTH_BUFFER_BIT;
+                else /*if (automap.Active () || (gameStates.render.bRenderIndirect > 0))*/ {
+                    glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
+                    mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+                }
+                if (mask) {
+                    gameData.renderData.frame.Activate ("StartFrame (frame)");
+                    glClear (mask);
+                    gameData.renderData.frame.Deactivate ();
+                }
+            }
+        }
+        else if (gameStates.render.nRenderPass) {
+            SetDepthWrite (false);
+            ColorMask (1,1,1,1,1);
+            glClearColor (0,0,0,1);
+            if (bResetColorBuf)
+                glClear (GL_COLOR_BUFFER_BIT);
+        }
+        else { //make a depth-only render pass first to decrease bandwidth waste due to overdraw
+            ogl.SetDepthWrite (true);
+            ColorMask (0,0,0,0,0);
+            glClear (GL_DEPTH_BUFFER_BIT);
+        }
+        if (m_features.bAntiAliasing/*.Apply ()*/)
+            glEnable (GL_MULTISAMPLE_ARB);
+        if (bFlat) {
+            SetDepthTest (false);
+            SetAlphaTest (false);
+            SetFaceCulling (false);
+        }
+        else {
+            SetFaceCulling (true);
+            glFrontFace (GL_CW);	//Weird, huh? Well, D2 renders everything reverse ...
 #if MAX_SHADOWMAPS > 0
-		if (gameStates.render.nShadowMap) {
+            if (gameStates.render.nShadowMap) {
 #	if 1
-			ogl.SetPolyOffsetFill (true);
-			glPolygonOffset (1.0f, 2.0f);
+                ogl.SetPolyOffsetFill (true);
+                glPolygonOffset (1.0f, 2.0f);
 #	endif
-			SetCullMode ((gameStates.render.bRearView < 0) ? GL_BACK : GL_FRONT);
-			}
-		else
+                SetCullMode ((gameStates.render.bRearView < 0) ? GL_BACK : GL_FRONT);
+            }
+            else
 #endif
-			SetCullMode ((gameStates.render.bRearView < 0) ? GL_FRONT : GL_BACK);
-		SetDepthTest (true);
-		SetDepthMode (GL_LESS);
-		SetAlphaTest (true);
-		glAlphaFunc (GL_GEQUAL, (float) 0.005);
-		}
-	SetBlending (true);
-	SetBlendMode (OGL_BLEND_ALPHA);
-	SetStencilTest (false);
-	CCanvas::Current ()->SetViewport ();
-	}
+                SetCullMode ((gameStates.render.bRearView < 0) ? GL_FRONT : GL_BACK);
+            SetDepthTest (true);
+            SetDepthMode (GL_LESS);
+            SetAlphaTest (true);
+            glAlphaFunc (GL_GEQUAL, (float) 0.005);
+        }
+        SetBlending (true);
+        SetBlendMode (OGL_BLEND_ALPHA);
+        SetStencilTest (false);
+        CCanvas::Current ()->SetViewport ();
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void COGL::EndFrame (int32_t nWindow)
 {
-//SetViewport (0, 0, gameData.renderData.screen.Width (), gameData.renderData.screen.Height ());
-#if 1
-if ((nWindow == 0) && (ogl.StereoSeparation () <= 0)) 
-	postProcessManager.Update ();
-#endif
+    //SetViewport (0, 0, gameData.renderData.screen.Width (), gameData.renderData.screen.Height ());
+    #if 1
+    if ((nWindow == 0) && (ogl.StereoSeparation () <= 0))
+        postProcessManager.Update ();
+    #endif
 
-CCanvas::Current ()->Deactivate ();
-if ((nWindow >= 0) && !(gameStates.render.cameras.bActive || gameStates.render.bBriefing)) {
-	if (gameStates.render.bRenderIndirect > 0)
-		SelectDrawBuffer (0);
-	SetDrawBuffer (GL_BACK, gameStates.render.bRenderIndirect > 0);
-	}
-if (m_features.bShaders)
-	shaderManager.Deploy (-1);
-ogl.SetTexturing (true);
-DisableClientStates (1, 1, 1, GL_TEXTURE3);
-ogl.BindTexture (0);
-DisableClientStates (1, 1, 1, GL_TEXTURE2);
-ogl.BindTexture (0);
-DisableClientStates (1, 1, 1, GL_TEXTURE1);
-ogl.BindTexture (0);
-DisableClientStates (1, 1, 1, GL_TEXTURE0);
-ogl.BindTexture (0);
-SetBlendMode (OGL_BLEND_ALPHA);
-glMatrixMode (GL_PROJECTION);
-glLoadIdentity ();//clear matrix
-glOrtho (0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
-glMatrixMode (GL_MODELVIEW);
-glLoadIdentity ();//clear matrix
-//SetScissorTest (false);
-SetAlphaTest (false);
-SetDepthTest (false);
-SetFaceCulling (false);
-SetStencilTest (false);
-if (SHOW_DYN_LIGHT) {
-	SetLighting (false);
-	glDisable (GL_COLOR_MATERIAL);
-	}
-ogl.SetDepthWrite (true);
-ColorMask (1,1,1,1,0);
-if (m_features.bAntiAliasing/*.Apply ()*/)
-	glDisable (GL_MULTISAMPLE_ARB);
+    CCanvas::Current ()->Deactivate ();
+    if ((nWindow >= 0) && !(gameStates.render.cameras.bActive || gameStates.render.bBriefing)) {
+        if (gameStates.render.bRenderIndirect > 0)
+            SelectDrawBuffer (0);
+        SetDrawBuffer (GL_BACK, gameStates.render.bRenderIndirect > 0);
+    }
+    if (m_features.bShaders)
+        shaderManager.Deploy (-1);
+    ogl.SetTexturing (true);
+    DisableClientStates (1, 1, 1, GL_TEXTURE3);
+    ogl.BindTexture (0);
+    DisableClientStates (1, 1, 1, GL_TEXTURE2);
+    ogl.BindTexture (0);
+    DisableClientStates (1, 1, 1, GL_TEXTURE1);
+    ogl.BindTexture (0);
+    DisableClientStates (1, 1, 1, GL_TEXTURE0);
+    ogl.BindTexture (0);
+    SetBlendMode (OGL_BLEND_ALPHA);
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity ();//clear matrix
+    glOrtho (0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
+    glMatrixMode (GL_MODELVIEW);
+    glLoadIdentity ();//clear matrix
+    //SetScissorTest (false);
+    SetAlphaTest (false);
+    SetDepthTest (false);
+    SetFaceCulling (false);
+    SetStencilTest (false);
+    if (SHOW_DYN_LIGHT) {
+        SetLighting (false);
+        glDisable (GL_COLOR_MATERIAL);
+    }
+    ogl.SetDepthWrite (true);
+    ColorMask (1,1,1,1,0);
+    if (m_features.bAntiAliasing/*.Apply ()*/)
+        glDisable (GL_MULTISAMPLE_ARB);
 }
 
 //------------------------------------------------------------------------------
 
 void COGL::EnableLighting (int32_t bSpecular)
 {
-if (gameOpts->ogl.bObjLighting || (gameStates.render.bPerPixelLighting == 2)) {
-		static GLfloat fBlack [] = {0.0f, 0.0f, 0.0f, 1.0f};
+    if (gameOpts->ogl.bObjLighting || (gameStates.render.bPerPixelLighting == 2)) {
+            static GLfloat fBlack [] = {0.0f, 0.0f, 0.0f, 1.0f};
 #	if 0
-		static GLfloat fWhite [] = {1.0f, 1.0f, 1.0f, 1.0f};
+            static GLfloat fWhite [] = {1.0f, 1.0f, 1.0f, 1.0f};
 #	endif
 #if 1
-		static GLfloat fAmbient [] = {0.1f, 0.1f, 0.1f, 1.0f};
-		static GLfloat fDiffuse [] = {0.9f, 0.9f, 0.9f, 1.0f};
+            static GLfloat fAmbient [] = {0.1f, 0.1f, 0.1f, 1.0f};
+            static GLfloat fDiffuse [] = {0.9f, 0.9f, 0.9f, 1.0f};
 #endif
-		static GLfloat fSpecular [] = {0.5f, 0.5f, 0.5f, 1.0f};
+            static GLfloat fSpecular [] = {0.5f, 0.5f, 0.5f, 1.0f};
 
-	SetLighting (true);
-	glShadeModel (GL_SMOOTH);
-	glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT, fAmbient);
-	glMaterialfv (GL_FRONT_AND_BACK, GL_DIFFUSE, fDiffuse);
-	if (bSpecular) {
-		glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, fSpecular);
-		glMateriali (GL_FRONT_AND_BACK, GL_SHININESS, (bSpecular < 0) ? 8 : gameOpts->render.bHiresModels [0] ? 127 : 8);
-		}
-	else
-		glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, fBlack);
-	glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-	glEnable (GL_COLOR_MATERIAL);
-	}
+        SetLighting (true);
+        glShadeModel (GL_SMOOTH);
+        glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT, fAmbient);
+        glMaterialfv (GL_FRONT_AND_BACK, GL_DIFFUSE, fDiffuse);
+        if (bSpecular) {
+            glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, fSpecular);
+            glMateriali (GL_FRONT_AND_BACK, GL_SHININESS, (bSpecular < 0) ? 8 : gameOpts->render.bHiresModels [0] ? 127 : 8);
+            }
+        else
+            glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, fBlack);
+        glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        glEnable (GL_COLOR_MATERIAL);
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void COGL::DisableLighting (void)
 {
-if (gameOpts->ogl.bObjLighting || (gameStates.render.bPerPixelLighting == 2)) {
-	SetLighting (false);
-	glDisable (GL_COLOR_MATERIAL);
-	}
+    if (gameOpts->ogl.bObjLighting || (gameStates.render.bPerPixelLighting == 2)) {
+        SetLighting (false);
+        glDisable (GL_COLOR_MATERIAL);
+    }
 }
 
 // -----------------------------------------------------------------------------------
 
 void COGL::SetupTransform (int32_t bForce)
 {
-if (!m_states.nTransformCalls && (m_states.bUseTransform || bForce)) {
-	glMatrixMode (GL_MODELVIEW);
-	glPushMatrix ();
-	glLoadIdentity ();
-	glScalef (1, 1, -1);
-	glMultMatrixf (reinterpret_cast<GLfloat*> (transformation.m_info.viewf [2].m.vec));
-	glTranslatef (-transformation.m_info.posf [1].v.coord.x, -transformation.m_info.posf [1].v.coord.y, -transformation.m_info.posf [1].v.coord.z);
-	++m_states.nTransformCalls;
-	}
+    if (!m_states.nTransformCalls && (m_states.bUseTransform || bForce)) {
+        glMatrixMode (GL_MODELVIEW);
+        glPushMatrix ();
+        glLoadIdentity ();
+        glScalef (1, 1, -1);
+        glMultMatrixf (reinterpret_cast<GLfloat*> (transformation.m_info.viewf [2].m.vec));
+        glTranslatef (-transformation.m_info.posf [1].v.coord.x, -transformation.m_info.posf [1].v.coord.y, -transformation.m_info.posf [1].v.coord.z);
+        ++m_states.nTransformCalls;
+    }
 }
 
 // -----------------------------------------------------------------------------------
 
 void COGL::ResetTransform (int32_t bForce)
 {
-if ((m_states.nTransformCalls > 0) && (m_states.bUseTransform || bForce) && !--m_states.nTransformCalls) {
-	glMatrixMode (GL_MODELVIEW);
-	glPopMatrix ();
-	}
+    if ((m_states.nTransformCalls > 0) && (m_states.bUseTransform || bForce) && !--m_states.nTransformCalls) {
+        glMatrixMode (GL_MODELVIEW);
+        glPopMatrix ();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -908,100 +908,100 @@ if ((m_states.nTransformCalls > 0) && (m_states.bUseTransform || bForce) && !--m
 void COGL::DrawArrays (GLenum mode, GLint first, GLsizei count)
 {
 #if 0 //DBG
-if (count < 1)
-	PrintLog (0, "glDrawArrays: invalid count\n");
-else if (count > 100000)
-	PrintLog (0, "glDrawArrays: suspiciously high count\n");
-else if (mode > GL_POLYGON)
-	PrintLog (0, "glDrawArrays: invalid mode\n");
-#if TRACK_STATES || DBG_OGL
-else if (m_data.bUseTextures [m_data.nTMU [0]] && !m_data.clientStates [m_data.nTMU [0]][0])
-	PrintLog (0, "glDrawArrays: client data not enabled\n");
-#endif
-else
+    if (count < 1)
+        PrintLog (0, "glDrawArrays: invalid count\n");
+    else if (count > 100000)
+        PrintLog (0, "glDrawArrays: suspiciously high count\n");
+    else if (mode > GL_POLYGON)
+        PrintLog (0, "glDrawArrays: invalid mode\n");
+    #if TRACK_STATES || DBG_OGL
+    else if (m_data.bUseTextures [m_data.nTMU [0]] && !m_data.clientStates [m_data.nTMU [0]][0])
+        PrintLog (0, "glDrawArrays: client data not enabled\n");
+    #endif
+    else
 #endif
 #if 0 //DBG_OGL
-if (!m_data.clientBuffers [/*m_data.nTMU [0]*/0][0].buffer)
-	PrintLog (0, "glDrawArrays: client data not enabled\n");
-else
+    if (!m_data.clientBuffers [/*m_data.nTMU [0]*/0][0].buffer)
+        PrintLog (0, "glDrawArrays: client data not enabled\n");
+    else
 #endif
-	glDrawArrays (mode, first, count);
+    glDrawArrays (mode, first, count);
 }
 
 //------------------------------------------------------------------------------
 
 void COGL::RebuildContext (int32_t bGame)
 {
-m_states.bRebuilding = 1;
-cameraManager.Destroy ();
-m_data.Initialize ();
-SetupExtensions ();
-backgroundManager.Rebuild ();
-#if 0
-if (!gameStates.app.bGameRunning)
-	messageBox.Show (TXT_PREPARE_FOR_DESCENT);
-#endif
-ResetClientStates ();
-ResetTextures (1, bGame);
-if (bGame) {
-	InitShaders ();
-	ClearError (0);
-	gameData.modelData.Destroy ();
-	gameData.modelData.Prepare ();
-	if (bGame && lightmapManager.HaveLightmaps ())
-		lightmapManager.BindAll ();
-#if GPGPU_VERTEX_LIGHTING
-	gpgpuLighting.End ();
-	gpgpuLighting.Begin ();
-#endif
-	SelectDrawBuffer (0);
-	cameraManager.Create ();
-	InitSpheres ();
-	cockpit->Rebuild ();
-	}
-else {
-	shaderManager.Destroy (true);
-	ogl.InitEnhanced3DShader ();
-	}
-//gameData.modelData.Prepare ();
-if (!gameStates.app.bGameRunning)
-	messageBox.Clear ();
-SetDrawBuffer (m_states.nDrawBuffer, 1);
-m_states.bRebuilding = 0;
+    m_states.bRebuilding = 1;
+    cameraManager.Destroy ();
+    m_data.Initialize ();
+    SetupExtensions ();
+    backgroundManager.Rebuild ();
+    #if 0
+    if (!gameStates.app.bGameRunning)
+        messageBox.Show (TXT_PREPARE_FOR_DESCENT);
+    #endif
+    ResetClientStates ();
+    ResetTextures (1, bGame);
+    if (bGame) {
+        InitShaders ();
+        ClearError (0);
+        gameData.modelData.Destroy ();
+        gameData.modelData.Prepare ();
+        if (bGame && lightmapManager.HaveLightmaps ())
+            lightmapManager.BindAll ();
+    #if GPGPU_VERTEX_LIGHTING
+        gpgpuLighting.End ();
+        gpgpuLighting.Begin ();
+    #endif
+        SelectDrawBuffer (0);
+        cameraManager.Create ();
+        InitSpheres ();
+        cockpit->Rebuild ();
+    }
+    else {
+        shaderManager.Destroy (true);
+        ogl.InitEnhanced3DShader ();
+    }
+    //gameData.modelData.Prepare ();
+    if (!gameStates.app.bGameRunning)
+        messageBox.Clear ();
+    SetDrawBuffer (m_states.nDrawBuffer, 1);
+    m_states.bRebuilding = 0;
 }
 
 //------------------------------------------------------------------------------
 
 void COGL::SetScreenMode (void)
 {
-if (/*(gameStates.video.nLastScreenMode == gameStates.video.nScreenMode) &&*/
-	 (m_states.bLastFullScreen == m_states.bFullScreen) &&
-	 (gameStates.app.bGameRunning || (gameStates.video.nScreenMode == SCREEN_GAME) /*|| (m_states.nDrawBuffer == GL_FRONT)*/))
-	return;
-m_data.Initialize ();
-if (gameStates.video.nScreenMode == SCREEN_GAME)
-	SetDrawBuffer (GL_BACK, 1);
-else {
-	SetDrawBuffer (GL_BACK, 1);
-	if (!(gameStates.app.bGameRunning && gameOpts->menus.nStyle)) {
-		glClearColor (0,0,0,1);
-		glClear (GL_COLOR_BUFFER_BIT);
-		glMatrixMode (GL_PROJECTION);
-		glLoadIdentity ();//clear matrix
-		glOrtho (0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
-		glMatrixMode (GL_MODELVIEW);
-		glLoadIdentity ();//clear matrix
-		SetBlending (true);
-		SetBlendMode (OGL_BLEND_ALPHA);
-		SetTexturing (false);
-		SetDepthMode (GL_ALWAYS); //LEQUAL);
-		SetDepthTest (false);
-		}
-	}
-if (gameStates.app.bInitialized)
-	RebuildContext (gameStates.video.nScreenMode == SCREEN_GAME);
-gameStates.video.nLastScreenMode = gameStates.video.nScreenMode;
-m_states.bLastFullScreen = m_states.bFullScreen;
+    if (/*(gameStates.video.nLastScreenMode == gameStates.video.nScreenMode) &&*/
+        (m_states.bLastFullScreen == m_states.bFullScreen) &&
+        (gameStates.app.bGameRunning || (gameStates.video.nScreenMode == SCREEN_GAME) /*|| (m_states.nDrawBuffer == GL_FRONT)*/))
+        return;
+    m_data.Initialize ();
+    if (gameStates.video.nScreenMode == SCREEN_GAME)
+        SetDrawBuffer (GL_BACK, 1);
+    else {
+        SetDrawBuffer (GL_BACK, 1);
+        if (!(gameStates.app.bGameRunning && gameOpts->menus.nStyle)) {
+            glClearColor (0,0,0,1);
+            glClear (GL_COLOR_BUFFER_BIT);
+            glMatrixMode (GL_PROJECTION);
+            glLoadIdentity ();//clear matrix
+            glOrtho (0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
+            glMatrixMode (GL_MODELVIEW);
+            glLoadIdentity ();//clear matrix
+            SetBlending (true);
+            SetBlendMode (OGL_BLEND_ALPHA);
+            SetTexturing (false);
+            SetDepthMode (GL_ALWAYS); //LEQUAL);
+            SetDepthTest (false);
+        }
+    }
+    if (gameStates.app.bInitialized)
+        RebuildContext (gameStates.video.nScreenMode == SCREEN_GAME);
+    gameStates.video.nLastScreenMode = gameStates.video.nScreenMode;
+    m_states.bLastFullScreen = m_states.bFullScreen;
 }
 
 //------------------------------------------------------------------------------

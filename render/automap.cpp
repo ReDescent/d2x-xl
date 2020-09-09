@@ -1053,7 +1053,6 @@ do {
 	if (!controls [0].automapState && (nLeaveMode == 1))
 		bDone = 1;
 	bDone = GameFrame (bPauseGame, bDone);
-	redbook.CheckRepeat ();
 	bDone = gameStates.menus.nInMenu || ReadControls (nLeaveMode, bDone, bPauseGame);
 	Update ();
 	if (!ogl.StereoDevice ())

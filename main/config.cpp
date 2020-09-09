@@ -74,27 +74,25 @@ gameOpts = gameOptions + gameStates.app.iNostalgia;
 
 void InitGameConfig (void)
 {
-*gameConfig.szLastPlayer = '\0';
-*gameConfig.szLastMission = '\0';
-gameConfig.vrType = 0;
-gameConfig.vrResolution = 0;
-gameConfig.vrTracking = 0;
-gameConfig.nDigiType = 0;
-gameConfig.nDigiDMA = 0;
-gameConfig.nMidiType = 0;
-gameConfig.nAudioVolume [0] = 4;
-gameConfig.nAudioVolume [1] = 4;
-gameConfig.nMidiVolume = 0;
-gameConfig.nRedbookVolume = 0;
-gameConfig.nControlType = 0;
-gameConfig.bReverseChannels = 0;
-gameConfig.nVersion = 0;
+    *gameConfig.szLastPlayer = '\0';
+    *gameConfig.szLastMission = '\0';
+    gameConfig.vrType = 0;
+    gameConfig.vrResolution = 0;
+    gameConfig.vrTracking = 0;
+    gameConfig.nDigiType = 0;
+    gameConfig.nDigiDMA = 0;
+    gameConfig.nMidiType = 0;
+    gameConfig.nAudioVolume [0] = 4;
+    gameConfig.nAudioVolume [1] = 4;
+    gameConfig.nMidiVolume = 0;
+    gameConfig.nControlType = 0;
+    gameConfig.bReverseChannels = 0;
+    gameConfig.nVersion = 0;
 }
 
 // ----------------------------------------------------------------------------
 
 int32_t bHiresMoviesSave;
-int32_t bRedbookEnabledSave;
 
 #define MAX_JOY_AXIS
 
@@ -112,13 +110,11 @@ JoySetCalVals (cal, sizeofa (cal));
 gameConfig.nAudioVolume [0] = 4;
 gameConfig.nAudioVolume [1] = 4;
 gameConfig.nMidiVolume = 0;
-gameConfig.nRedbookVolume = 0;
 gameConfig.nControlType = 0;
 gameConfig.bReverseChannels = 0;
 
 //set these here in case no cfg file
 bHiresMoviesSave = gameOpts->movies.bHires;
-bRedbookEnabledSave = redbook.Enabled ();
 
 if (!cf.Open ("descent.cfg", gameFolders.user.szConfig, "rb", 0))
 	return 1;
@@ -143,10 +139,6 @@ while (!cf.EoF ()) {
 			gameConfig.nAudioVolume [1] = (uint8_t) strtol (value, NULL, 10);
 		else if (!strcmp (token, pszMidiVolume))
 			gameConfig.nMidiVolume = (uint8_t) strtol (value, NULL, 10);
-		else if (!strcmp (token, pszRedbookEnabled))
-			redbook.Enable (bRedbookEnabledSave = strtol (value, NULL, 10));
-		else if (!strcmp (token, pszRedbookVolume))
-			gameConfig.nRedbookVolume = (uint8_t) strtol (value, NULL, 10);
 		else if (!strcmp (token, pszStereoRev))
 			gameConfig.bReverseChannels = (uint8_t) strtol (value, NULL, 10);
 		else if (!strcmp (token, pszGammaLevel)) {
@@ -213,8 +205,7 @@ if (i > 0) {
 		i = 100;
 	gameConfig.nAudioVolume [0] =
 	gameConfig.nAudioVolume [1] =
-	gameConfig.nMidiVolume =
-	gameConfig.nRedbookVolume = (i * 8) / 100;
+	gameConfig.nMidiVolume = (i * 8) / 100;
 	}
 
 if (gameConfig.nAudioVolume [0] > 8)
@@ -223,8 +214,6 @@ if (gameConfig.nAudioVolume [1] > 8)
 	gameConfig.nAudioVolume [1] = 8;
 if (gameConfig.nMidiVolume > 8)
 	gameConfig.nMidiVolume = 8;
-if (gameConfig.nRedbookVolume > 8)
-	gameConfig.nRedbookVolume = 8;
 audio.SetFxVolume ((gameConfig.nAudioVolume [1] * 32768) / 8, 1);
 audio.SetVolumes ((gameConfig.nAudioVolume [0] * 32768) / 8, (gameConfig.nMidiVolume * 128) / 8);
 if (cf.Open ("descentw.cfg", gameFolders.user.szConfig, "rb", 0)) {
@@ -286,10 +275,6 @@ cf.PutS (str);
 sprintf (str, "%s=%d\n", pszAmbientVolume, gameConfig.nAudioVolume [1]);
 cf.PutS (str);
 sprintf (str, "%s=%d\n", pszMidiVolume, gameConfig.nMidiVolume);
-cf.PutS (str);
-sprintf (str, "%s=%d\n", pszRedbookEnabled, FindArg ("-noredbook")?bRedbookEnabledSave:redbook.Enabled ());
-cf.PutS (str);
-sprintf (str, "%s=%d\n", pszRedbookVolume, gameConfig.nRedbookVolume);
 cf.PutS (str);
 sprintf (str, "%s=%d\n", pszStereoRev, gameConfig.bReverseChannels);
 cf.PutS (str);

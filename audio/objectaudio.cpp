@@ -827,9 +827,7 @@ while (i) {
 	CSoundObject& soundObj = m_objects [--i];
 	if (soundObj.m_flags & SOF_USED) {
 		nOldVolume = FixMulDiv (soundObj.m_volume, soundObj.m_audioVolume, I2X (1));
-#if USE_SDL_MIXER
 		nOldVolume = (fix) FRound (X2F (2 * nOldVolume) * MIX_MAX_VOLUME);
-#endif
 #if DBG
 		if ((nOldVolume <= 0) && (soundObj.m_channel >= 0))
 			BRP;
@@ -874,9 +872,7 @@ while (i) {
 			}
 		if (!soundObj.m_bCustom) {
 			nNewVolume = FixMulDiv (soundObj.m_volume, nAudioVolume [soundObj.m_bAmbient], I2X (1));
-#if USE_SDL_MIXER
 			nNewVolume = (fix) FRound (X2F (2 * nNewVolume) * MIX_MAX_VOLUME);
-#endif
 			if ((nOldVolume != nNewVolume) || ((nNewVolume <= 0) != (soundObj.m_channel < 0))) {
 #if DBG
 				if (soundObj.m_linkType.pos.nSegment == nDbgSeg)
@@ -918,68 +914,66 @@ RETURN
 
 void CAudio::PauseSounds (void)
 {
-ENTER (0, 0);
-PauseLoopingSound ();
+    ENTER (0, 0);
+    PauseLoopingSound ();
 
-	uint32_t i = m_objects.ToS ();
-	CSoundObject*	pSoundObj = m_objects.Buffer () + i;
+    uint32_t i = m_objects.ToS ();
+    CSoundObject*	pSoundObj = m_objects.Buffer () + i;
 
-while (i) {
-	i--;
-	pSoundObj--;
-	if ((pSoundObj->m_flags & SOF_USED) && (pSoundObj->m_channel > -1)) {
-#if 1
-		if ((m_objects [i].m_flags & SOF_PLAY_FOREVER))
-			pSoundObj->Stop ();
-		else
-#endif
-			DeleteSoundObject (i);
-		}
-	}
-StopAllChannels (true);
-soundQueue.Pause ();
-RETURN
+    while (i) {
+        i--;
+        pSoundObj--;
+        if ((pSoundObj->m_flags & SOF_USED) && (pSoundObj->m_channel > -1)) {
+            if ((m_objects [i].m_flags & SOF_PLAY_FOREVER))
+                pSoundObj->Stop ();
+            else
+                DeleteSoundObject (i);
+        }
+    }
+    StopAllChannels (true);
+    soundQueue.Pause ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::PauseAll (void)
 {
-ENTER (0, 0);
-midi.Pause ();
-StopTriggeredSounds ();
-PauseSounds ();
-RETURN
+    ENTER (0, 0);
+    midi.Pause ();
+    StopTriggeredSounds ();
+    PauseSounds ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::ResumeSounds (void)
 {
-ENTER (0, 0);
-//SetSoundSources ();
-PrintLog (1, "syncing sounds\n");
-SyncSounds ();	//don't think we really need to do this, but can't hurt
-PrintLog (0, "resuming looping sounds\n");
-ResumeLoopingSound ();
-PrintLog (-1);
-RETURN
+    ENTER (0, 0);
+    //SetSoundSources ();
+    PrintLog (1, "syncing sounds\n");
+    SyncSounds ();	//don't think we really need to do this, but can't hurt
+    PrintLog (0, "resuming looping sounds\n");
+    ResumeLoopingSound ();
+    PrintLog (-1);
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::ResumeAll (void)
 {
-ENTER (0, 0);
-PrintLog (1, "restarting sounds\n");
-PrintLog (0, "resuming midi system\n");
-midi.Resume ();
-PrintLog (0, "resuming sounds\n");
-ResumeSounds ();
-PrintLog (0, "starting triggered sounds\n");
-StartTriggeredSounds ();
-PrintLog (-1);
-RETURN
+    ENTER (0, 0);
+    PrintLog (1, "restarting sounds\n");
+    PrintLog (0, "resuming midi system\n");
+    midi.Resume ();
+    PrintLog (0, "resuming sounds\n");
+    ResumeSounds ();
+    PrintLog (0, "starting triggered sounds\n");
+    StartTriggeredSounds ();
+    PrintLog (-1);
+    RETURN
 }
 
 //------------------------------------------------------------------------------
@@ -987,36 +981,36 @@ RETURN
 // slot because the sound was done playing.
 void CAudio::EndSoundObject (int32_t i)
 {
-ENTER (0, 0);
-if (m_objects [i].m_flags & SOF_PLAY_FOREVER)
-	m_objects [i].m_channel = -1;
-else
-	DeleteSoundObject (i);
-RETURN
+    ENTER (0, 0);
+    if (m_objects [i].m_flags & SOF_PLAY_FOREVER)
+        m_objects [i].m_channel = -1;
+    else
+        DeleteSoundObject (i);
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::StopObjectSounds (void)
 {
-ENTER (0, 0);
-	uint32_t i = m_objects.ToS ();
+    ENTER (0, 0);
+    uint32_t i = m_objects.ToS ();
 
-while (i)
-	DeleteSoundObject (--i);
-RETURN
+    while (i)
+        DeleteSoundObject (--i);
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CAudio::StopAll (void)
 {
-ENTER (0, 0);
-StopLoopingSound ();
-StopObjectSounds ();
-StopCurrentSong ();
-StopAllChannels ();
-RETURN
+    ENTER (0, 0);
+    StopLoopingSound ();
+    StopObjectSounds ();
+    StopCurrentSong ();
+    StopAllChannels ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
@@ -1024,109 +1018,107 @@ RETURN
 #if DBG
 int32_t CAudio::VerifyChannelFree (int32_t channel)
 {
-for (int32_t i = 0; i < MAX_SOUND_OBJECTS; i++) {
-	if (m_objects [i].m_flags & SOF_USED) {
-		if (m_objects [i].m_channel == channel) {
-			Int3 ();	// Get John!
-			}
-		}
-	}
-return 0;
+    for (int32_t i = 0; i < MAX_SOUND_OBJECTS; i++) {
+        if (m_objects [i].m_flags & SOF_USED) {
+            if (m_objects [i].m_channel == channel) {
+                Int3 ();	// Get John!
+            }
+        }
+    }
+    return 0;
 }
 #endif
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
 CSoundQueue soundQueue;
 
 void CSoundQueue::Init (void)
 {
-m_data.nHead =
-m_data.nTail =
-m_data.nSounds = 0;
-m_data.nChannel = -1;
-m_data.queue.Create (MAX_SOUND_QUEUE, "CSoundQueue::m_data.queue");
+    m_data.nHead =
+    m_data.nTail =
+    m_data.nSounds = 0;
+    m_data.nChannel = -1;
+    m_data.queue.Create (MAX_SOUND_QUEUE, "CSoundQueue::m_data.queue");
 }
 
 //------------------------------------------------------------------------------
 
 void CSoundQueue::Destroy (void)
 {
-m_data.queue.Destroy ();
+    m_data.queue.Destroy ();
 }
 
 //------------------------------------------------------------------------------
 
 void CSoundQueue::Pause (void)
 {
-soundQueue.m_data.nChannel = -1;
+    soundQueue.m_data.nChannel = -1;
 }
 
 //------------------------------------------------------------------------------
 
 void CSoundQueue::End (void)
 {
-ENTER (0, 0);
-	// Current playing sound is stopped, so take it off the Queue
-if (++m_data.nHead >= MAX_SOUND_QUEUE)
-	m_data.nHead = 0;
-m_data.nSounds--;
-m_data.nChannel = -1;
-RETURN
+    ENTER (0, 0);
+    // Current playing sound is stopped, so take it off the Queue
+    if (++m_data.nHead >= MAX_SOUND_QUEUE)
+        m_data.nHead = 0;
+    m_data.nSounds--;
+    m_data.nChannel = -1;
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CSoundQueue::Process (void)
 {
-ENTER (0, 0);
-	fix curtime = TimerGetApproxSeconds ();
-	tSoundQueueEntry *q;
+    ENTER (0, 0);
+    fix curtime = TimerGetApproxSeconds ();
+    tSoundQueueEntry *q;
 
-if (m_data.nChannel > -1) {
-	if (audio.ChannelIsPlaying (m_data.nChannel))
-		RETURN
-	End ();
-	}
-while (m_data.nHead != m_data.nTail) {
-	q = m_data.queue + m_data.nHead;
-	if (q->timeAdded + MAX_LIFE > curtime) {
-		m_data.nChannel = audio.StartSound (q->nSound, SOUNDCLASS_GENERIC, I2X (1) + 1);
-		RETURN
-		}
-	End ();
-	}
-RETURN
+    if (m_data.nChannel > -1) {
+        if (audio.ChannelIsPlaying (m_data.nChannel))
+            RETURN
+        End ();
+    }
+    while (m_data.nHead != m_data.nTail) {
+        q = m_data.queue + m_data.nHead;
+        if (q->timeAdded + MAX_LIFE > curtime) {
+            m_data.nChannel = audio.StartSound (q->nSound, SOUNDCLASS_GENERIC, I2X (1) + 1);
+            RETURN
+        }
+        End ();
+    }
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 void CSoundQueue::StartSound (int16_t nSound, fix nVolume)
 {
-ENTER (0, 0);
-	int32_t				i;
-	tSoundQueueEntry *q;
+    ENTER (0, 0);
+    int32_t i;
+    tSoundQueueEntry *q;
 
-nSound = audio.XlatSound (nSound);
-if (nSound < 0)
-	RETURN
-i = m_data.nTail + 1;
-if (i >= MAX_SOUND_QUEUE)
-	i = 0;
-// Make sure its loud so it doesn't get cancelled!
-if (nVolume < I2X (1) + 1)
-	nVolume = I2X (1) + 1;
-if (i != m_data.nHead) {
-	q = m_data.queue + m_data.nTail;
-	q->timeAdded = TimerGetApproxSeconds ();
-	q->nSound = nSound;
-	m_data.nSounds++;
-	m_data.nTail = i;
-	}
-Process ();
-RETURN
+    nSound = audio.XlatSound (nSound);
+    if (nSound < 0)
+        RETURN
+    i = m_data.nTail + 1;
+    if (i >= MAX_SOUND_QUEUE)
+        i = 0;
+    // Make sure its loud so it doesn't get cancelled!
+    if (nVolume < I2X (1) + 1)
+        nVolume = I2X (1) + 1;
+    if (i != m_data.nHead) {
+        q = m_data.queue + m_data.nTail;
+        q->timeAdded = TimerGetApproxSeconds ();
+        q->nSound = nSound;
+        m_data.nSounds++;
+        m_data.nTail = i;
+    }
+    Process ();
+    RETURN
 }
 
 //------------------------------------------------------------------------------
@@ -1135,41 +1127,41 @@ RETURN
 
 void SetD1Sound (void)
 {
-gameStates.sound.bD1Sound = gameStates.app.bD1Mission && gameOpts->sound.bUseD1Sounds && (gameStates.app.bHaveD1Data || gameOpts->UseHiresSound ());
+    gameStates.sound.bD1Sound = gameStates.app.bD1Mission && gameOpts->sound.bUseD1Sounds && (gameStates.app.bHaveD1Data || gameOpts->UseHiresSound ());
 }
 
 //------------------------------------------------------------------------------
 
 static int32_t SideIsSoundSource (int16_t nSegment, int16_t nSide)
 {
-ENTER (0, 0);
-CSegment* pSeg = SEGMENT (nSegment);
-if (!(pSeg->IsPassable (nSide, NULL) & WID_VISIBLE_FLAG))
-	RETVAL (-1)
-int16_t nOvlTex = pSeg->m_sides [nSide].m_nOvlTex;
-int16_t nEffect = nOvlTex ? gameData.pigData.tex.pTexMapInfo [nOvlTex].nEffectClip : -1;
-if (nEffect < 0)
-	nEffect = gameData.pigData.tex.pTexMapInfo [pSeg->m_sides [nSide].m_nBaseTex].nEffectClip;
-if (nEffect < 0)
-	RETVAL (-1)
-int32_t nSound = gameData.effectData.pEffect [nEffect].nSound;
-if (nSound == -1)
-	RETVAL (-1)
-int16_t nConnSeg = pSeg->m_children [nSide];
+    ENTER (0, 0);
+    CSegment* pSeg = SEGMENT (nSegment);
+    if (!(pSeg->IsPassable (nSide, NULL) & WID_VISIBLE_FLAG))
+        RETVAL (-1)
+    int16_t nOvlTex = pSeg->m_sides [nSide].m_nOvlTex;
+    int16_t nEffect = nOvlTex ? gameData.pigData.tex.pTexMapInfo [nOvlTex].nEffectClip : -1;
+    if (nEffect < 0)
+        nEffect = gameData.pigData.tex.pTexMapInfo [pSeg->m_sides [nSide].m_nBaseTex].nEffectClip;
+    if (nEffect < 0)
+        RETVAL (-1)
+    int32_t nSound = gameData.effectData.pEffect [nEffect].nSound;
+    if (nSound == -1)
+        RETVAL (-1)
+    int16_t nConnSeg = pSeg->m_children [nSide];
 
-//check for sound on other CSide of CWall.  Don't add on
-//both walls if sound travels through CWall.  If sound
-//does travel through CWall, add sound for lower-numbered
-//CSegment.
+    //check for sound on other CSide of CWall.  Don't add on
+    //both walls if sound travels through CWall.  If sound
+    //does travel through CWall, add sound for lower-numbered
+    //CSegment.
 
-if (IS_CHILD (nConnSeg) && (nConnSeg < nSegment) &&
-	 (pSeg->IsPassable (nSide, NULL) & (WID_PASSABLE_FLAG | WID_TRANSPARENT_FLAG))) {
-	CSegment* pConnSeg = SEGMENT (pSeg->m_children [nSide]);
-	int16_t nConnSide = pSeg->ConnectedSide (pConnSeg);
-	if (pConnSeg->m_sides [nConnSide].m_nOvlTex == pSeg->m_sides [nSide].m_nOvlTex)
-		RETVAL (-1)		//skip this one
-	}
-RETVAL (nSound)
+    if (IS_CHILD (nConnSeg) && (nConnSeg < nSegment) &&
+        (pSeg->IsPassable (nSide, NULL) & (WID_PASSABLE_FLAG | WID_TRANSPARENT_FLAG))) {
+        CSegment* pConnSeg = SEGMENT (pSeg->m_children [nSide]);
+        int16_t nConnSide = pSeg->ConnectedSide (pConnSeg);
+        if (pConnSeg->m_sides [nConnSide].m_nOvlTex == pSeg->m_sides [nSide].m_nOvlTex)
+            RETVAL (-1)		//skip this one
+    }
+    RETVAL (nSound)
 }
 
 //------------------------------------------------------------------------------

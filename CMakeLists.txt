@@ -14,68 +14,6 @@ endif()
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-strict-aliasing")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
 
-#finds
-find_package(OpenMP)
-if(OPENMP_FOUND)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-endif(OPENMP_FOUND)
-
-find_package(OpenGL REQUIRED)
-if(OPENGL_FOUND)
-	include_directories(${OPENGL_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${OPENGL_LIBRARY})
-endif(OPENGL_FOUND)
-
-find_package(GLEW REQUIRED)
-
-find_package(ZLIB REQUIRED)
-if(ZLIB_FOUND)
-	include_directories(${ZLIB_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${ZLIB_LIBRARY})
-endif(ZLIB_FOUND)
-
-find_package(SDL REQUIRED)
-if(SDL_FOUND)
-	add_definitions(-DSDL_INPUT)
-	include_directories(${SDL_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${SDL_LIBRARY})
-endif(SDL_FOUND)
-
-find_package(SDL_image REQUIRED)
-if(SDL_IMAGE_FOUND)
-	add_definitions(-DUSE_SDL_IMAGE)
-	include_directories(${SDL_IMAGE_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${SDL_IMAGE_LIBRARY})
-elseif(SDLIMAGE_FOUND)
-	add_definitions(-DUSE_SDL_IMAGE)
-	include_directories(${SDLIMAGE_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${SDLIMAGE_LIBRARY})
-endif()
-
-find_package(SDL_mixer REQUIRED)
-if(SDL_MIXER_FOUND)
-	add_definitions(-DUSE_SDL_MIXER)
-	include_directories(${SDL_MIXER_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${SDL_MIXER_LIBRARY})
-elseif(SDLMIXER_FOUND)
-	add_definitions(-DUSE_SDL_MIXER)
-	include_directories(${SDLMIXER_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${SDLMIXER_LIBRARY})
-endif()
-
-find_package(SDL_net REQUIRED)
-if(SDL_NET_FOUND)
-	add_definitions(-DUSE_SDL_NET)
-	include_directories(${SDL_NET_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${SDL_NET_LIBRARY})
-elseif(SDLNET_FOUND)
-	add_definitions(-DUSE_SDL_NET)
-	include_directories(${SDLNET_INCLUDE_DIR})
-	set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${SDLNET_LIBRARY})
-endif()
-
 #local includes
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/input/include)
@@ -138,12 +76,10 @@ set(ai_sources
 
 set(audio_sources
     audio/linux/hmiplay.cpp
-    audio/linux/hmistub.cpp
     audio/linux/hmpfile.cpp
     audio/win32/midi.cpp
     audio/audio.cpp
     audio/objectaudio.cpp
-    audio/rbaudio.cpp
     audio/songs.cpp
     audio/soundthreads.cpp
 )
@@ -506,6 +442,42 @@ add_executable(d2x-xl
     ${weapon_sources}
 )
 
-target_link_libraries(d2x-xl ${EXTRA_LIBRARIES} GLEW::GLEW)
+#finds
+find_package(OpenMP)
+if(OPENMP_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif(OPENMP_FOUND)
+
+find_package(OpenGL REQUIRED)
+if(OPENGL_FOUND)
+    include_directories(${OPENGL_INCLUDE_DIR})
+    set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${OPENGL_LIBRARY})
+endif(OPENGL_FOUND)
+
+
+find_package(ZLIB REQUIRED)
+if(ZLIB_FOUND)
+    include_directories(${ZLIB_INCLUDE_DIR})
+    set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${ZLIB_LIBRARY})
+endif(ZLIB_FOUND)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+find_package(GLEW REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_net REQUIRED)
+find_package(SDL2_mixer REQUIRED)
+
+target_link_libraries(d2x-xl
+    ${EXTRA_LIBRARIES}
+    SDL2::Main
+    SDL2::Image
+    SDL2::Net
+    SDL2::Mixer
+    GLEW::GLEW
+)
 
 install(TARGETS d2x-xl DESTINATION .)

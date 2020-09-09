@@ -416,7 +416,6 @@ do {
 		G3_SLEEP (4 - t);
 	t0 = SDL_GetTicks ();
 	Render (nCurItem);
-	redbook.CheckRepeat ();
 } while (HandleInput (nCurItem));
 paletteManager.DisableEffect ();
 GameFlushInputs ();
