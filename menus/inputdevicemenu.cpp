@@ -5,9 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
 #include <string.h>
 
 #include "pstypes.h"

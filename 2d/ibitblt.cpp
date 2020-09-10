@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include "descent.h"
 #include "pa_enabl.h"
 #include "pstypes.h"
@@ -160,7 +156,7 @@ void gr_ibitblt_find_hole_size(CBitmap *mask_bmp, int32_t *minx, int32_t *miny, 
 	*maxy = 0;
 
 	if (scanline == NULL)
-		scanline = NEW double [MAX_WIDTH / sizeof(double)];
+		scanline = new double [MAX_WIDTH / sizeof(double)];
 
 	for (y = 0; y < mask_bmp->Height (); y++) {
 		for (x = 0; x < mask_bmp->Width (); x++) {

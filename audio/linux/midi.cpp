@@ -1,9 +1,5 @@
 // MIDI stuff follows.
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #if defined (_WIN32) || defined (USE_SDL_MIXER)
 
 #include <stdio.h>

@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
@@ -1180,7 +1176,6 @@ if (!m_bQuick) {
 	}
 
 CleanupAfterGame ();
-LogMemBlocks (false);
 i = LoadState (0, bSecret);
 gameData.appData.bGamePaused = 0;
 if (i) {

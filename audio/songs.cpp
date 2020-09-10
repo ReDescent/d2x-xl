@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -50,7 +46,7 @@ static void ShuffleIntegers (int32_t* v, int32_t l)
 {
     if ((l < 1) || !v)
         return;
-    int32_t* index = NEW int32_t [l];
+    int32_t* index = new int32_t [l];
     if (!index)
         return;
     for (int32_t i = 0; i < l; i++)
@@ -186,7 +182,7 @@ int32_t CPlaylist::Load (char* pszFolder, char* pszPlaylist)
                     CFile::SplitPath (szSong, szSongFolder, NULL, NULL);
                     if (!*szSongFolder)
                         i += (int32_t) strlen (szListFolder);
-                    pszSong = NEW char [i - bSecret];
+                    pszSong = new char [i - bSecret];
                     if (!pszSong) {
                         cf.Close ();
                         Destroy ();

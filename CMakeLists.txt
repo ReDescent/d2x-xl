@@ -28,7 +28,6 @@ set(2d_sources
     2d/bitblt.cpp
     2d/bitmap.cpp
     2d/canvas.cpp
-    2d/circle.cpp
     2d/font.cpp
     2d/ibitblt.cpp
     2d/palette.cpp
@@ -182,8 +181,8 @@ set(lighting_sources
     lighting/dynlight.cpp
     lighting/grayscaleshaders.cpp
     lighting/headlight.cpp
-    lighting/lightcluster.cpp
     lighting/light.cpp
+    lighting/lightcluster.cpp
     lighting/lightmap.cpp
     lighting/lightmapshaders.cpp
     lighting/lightprecalc.cpp

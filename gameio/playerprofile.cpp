@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -227,10 +223,10 @@ int32_t CPlayerProfile::Register (void *valP, const char *pszIdent, int32_t i, i
 	CParam	*pp;
 
 l = (int32_t) strlen (MakeTag (szTag, pszIdent, i, j));
-pp = NEW CParam;
+pp = new CParam;
 if (!pp)
 	return 0;
-pp->szTag = NEW char [l + 1];
+pp->szTag = new char [l + 1];
 if (!pp->szTag)
 	return 0;
 memcpy (pp->szTag, szTag, l + 1);

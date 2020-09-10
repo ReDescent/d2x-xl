@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <string.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -166,7 +162,7 @@ return 0;
 //------------------------------------------------------------------------------
 
 static void ipx_win_CloseSocket(ipx_socket_t *mysock) {
-  /* now close the file descriptor for the socket, and D2_FREE it */
+  /* now close the file descriptor for the socket */
 #if TRACE
 PrintLog (0, "IPX: closing file descriptor on socket %x\n", mysock->socket);
 #endif

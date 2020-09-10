@@ -3,10 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-//#include  "oof.h
 #include "descent.h"
 #include "args.h"
 #include "u_mem.h"
@@ -99,7 +95,7 @@ static char *OOF_ReadString (CFile& cf, const char *pszIdent)
 	int32_t	l;
 
 l = OOF_ReadInt (cf, "string length");
-if (!(psz = NEW char [l + 1]))
+if (!(psz = new char [l + 1]))
 	return NULL;
 if (!l || cf.Read (psz, l, 1)) {
 	psz [l] = '\0';

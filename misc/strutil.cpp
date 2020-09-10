@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -48,7 +44,7 @@ char *StrDup (const char *source)
 	char	*newstr;
 	int32_t	l = (int32_t) strlen (source) + 1;
 
-if ((newstr = NEW char [l]))
+if ((newstr = new char [l]))
 	memcpy (newstr, source, l);
 return newstr;
 }

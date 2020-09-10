@@ -2,8 +2,6 @@
 #	include <windows.h>
 #	include <stddef.h>
 #	include <io.h>
-#elif !defined (__unix__)
-#	include <conf.h>
 #endif
 #include <string.h>
 #include <math.h>
@@ -320,7 +318,7 @@ if (!m_buffers.Create (nBuffers))
 	return false;
 m_buffers.Clear ();
 for (int32_t i = 0; i < nBuffers; i++) {
-	if (!(m_buffers [i] = NEW CLightmapBuffer)) {
+	if (!(m_buffers [i] = new CLightmapBuffer)) {
 		for (; i > 0; --i)
 			delete m_buffers [i];
 		m_buffers.Destroy ();
@@ -372,7 +370,7 @@ if (buffers.Create (nBuffers)) {
 		}
 	else {
 		for (int32_t i = m_nBuffers; i < nBuffers; i++) {
-			if (!(buffers [i] = NEW CLightmapBuffer)) {
+			if (!(buffers [i] = new CLightmapBuffer)) {
 				for (; i > m_nBuffers; --i)
 					delete buffers [i];
 				buffers.Destroy ();

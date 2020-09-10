@@ -1,10 +1,6 @@
 
 #include <string.h>
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif 
-
 #include "descent.h"
 #include "strutil.h"
 #include "u_mem.h"

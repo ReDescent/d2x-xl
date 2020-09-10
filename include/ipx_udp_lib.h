@@ -1,10 +1,6 @@
 #ifndef _IPX_UDP_LIB_H
 #define _IPX_UDP_LIB_H
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #ifndef _WIN32

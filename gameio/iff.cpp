@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #define COMPRESS		1	//do the RLE or not? (for debugging mostly)
 #define WRITE_TINY	0	//should we write a TINY chunk?
 
@@ -420,7 +416,7 @@ while ((Pos() < endPos) && (sig = GetSig ()) != EOF) {
 					return IFF_BM_MISMATCH;
 				}
 			else {
-				bmHeader->raw_data = NEW uint8_t [bmHeader->w * bmHeader->h];
+				bmHeader->raw_data = new uint8_t [bmHeader->w * bmHeader->h];
 				if (!bmHeader->raw_data)
 					return IFF_NO_MEM;
 				}
@@ -433,7 +429,7 @@ while ((Pos() < endPos) && (sig = GetSig ()) != EOF) {
 			bmHeader->w = pPrevBm->Width ();
 			bmHeader->h = pPrevBm->Height ();
 			bmHeader->nType = pPrevBm->Mode ();
-			bmHeader->raw_data = NEW uint8_t [bmHeader->w * bmHeader->h];
+			bmHeader->raw_data = new uint8_t [bmHeader->w * bmHeader->h];
 			memcpy (bmHeader->raw_data, pPrevBm->Buffer (), bmHeader->w * bmHeader->h);
 			SkipChunk (len);
 			break;
@@ -490,7 +486,7 @@ int32_t CIFF::ConvertToPBM (tIFFBitmapHeader *bmHeader)
 	int32_t bytes_per_row, byteofs;
 	uint8_t checkmask, newbyte, setbit;
 
-new_data = NEW uint8_t [bmHeader->w * bmHeader->h];
+new_data = new uint8_t [bmHeader->w * bmHeader->h];
 if (new_data == NULL) 
 	return IFF_NO_MEM;
 destptr = new_data;
@@ -526,7 +522,7 @@ int32_t CIFF::ConvertRgb15 (CBitmap *pBm, tIFFBitmapHeader *bmHeader)
 	tPalEntry *palptr;
 
 palptr = bmHeader->palette;
-new_data = NEW uint16_t [pBm->FrameSize () * 2];
+new_data = new uint16_t [pBm->FrameSize () * 2];
 if (new_data == NULL)
 	return IFF_NO_MEM;
 for (y=0; y < pBm->Height (); y++) {
@@ -550,7 +546,7 @@ Data() = NULL;
 if (!cf.Open (cfname, gameFolders.game.szData [0], "rb", gameStates.app.bD1Mission))
 	return IFF_NO_FILE;
 SetLen ((int32_t) cf.Length ());
-Data() = NEW uint8_t [Len ()];
+Data() = new uint8_t [Len ()];
 if (cf.Read (Data(), 1, Len()) < (size_t) Len())
 	ret = IFF_READ_ERROR;
 else
@@ -784,7 +780,7 @@ int32_t CIFF::WriteBody (FILE *fp, tIFFBitmapHeader *bitmap_header, int32_t bCom
 PutSig(body_sig, fp);
 save_pos = ftell(fp);
 PutLong(len, fp);
-new_span = NEW uint8_t [bitmap_header->w + (bitmap_header->w/128+2)*2];
+new_span = new uint8_t [bitmap_header->w + (bitmap_header->w/128+2)*2];
 if (new_span == NULL) 
 	return IFF_NO_MEM;
 for (y=bitmap_header->h;y--;) {
@@ -907,7 +903,7 @@ else if (formType == anim_sig) {
 		while (Pos() < anim_end && *n_bitmaps < max_bitmaps) {
 			CBitmap *pPrevBm;
 			pPrevBm = *n_bitmaps>0?bm_list[*n_bitmaps-1]:NULL;
-			bm_list [*n_bitmaps] = NEW CBitmap;
+			bm_list [*n_bitmaps] = new CBitmap;
 			bm_list [*n_bitmaps]->SetBuffer (NULL);
 			ret = ParseBitmap (bm_list[*n_bitmaps], formType, pPrevBm);
 			if (ret != IFF_NO_ERROR)

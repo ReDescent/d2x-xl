@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <string.h>	// for memset
 #include <stdio.h>
 #include <time.h>

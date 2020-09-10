@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -61,7 +57,7 @@ CCvar* CCvar::Register (const char name[], char value[])
 	CCvar*	ptr;
 
 if (!(ptr = Find (name))) {
-	if (!(ptr = NEW CCvar))
+	if (!(ptr = new CCvar))
 		return NULL;
 	if (!(ptr->m_name = StrDup (name))) {
 		delete ptr;

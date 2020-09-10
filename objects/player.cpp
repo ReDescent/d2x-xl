@@ -4,10 +4,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include "descent.h"
 #include "input.h"
 #include "renderlib.h"

@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <math.h>
 #include <stdlib.h>
 #include "error.h"

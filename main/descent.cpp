@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPORATION";
 
 #include <ctype.h>
@@ -382,6 +378,7 @@ void GrabMouse (int32_t bGrab, int32_t bForce)
 {
     //if (gameStates.input.bGrabMouse && (bForce || gameStates.app.bGameRunning))
     auto relativeMode = ((bGrab && gameStates.input.bGrabMouse) || ogl.m_states.bFullScreen) ? SDL_TRUE : SDL_FALSE;
+    PrintLog (0, "GrabMouse (%d)\n", relativeMode);
     SDL_SetRelativeMouseMode(relativeMode);
 }
 

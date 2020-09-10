@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #include <math.h>
 #include <stdio.h>
 #include <string.h>	// for memset ()
@@ -892,7 +888,7 @@ if (!info.bVariable)
 int16_t nLightSeg = LightSeg ();
 if ((nLightSeg < 0) || (info.nSide < 0))
 	RETVAL (0)
-if (!(info.visibleVertices || (info.visibleVertices = NEW CByteArray ())))
+if (!(info.visibleVertices || (info.visibleVertices = new CByteArray ())))
 	RETVAL (-1);
 if (!info.visibleVertices->Create (gameData.segData.nVertices))
 	RETVAL (-1);

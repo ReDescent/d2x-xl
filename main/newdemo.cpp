@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -3190,7 +3186,7 @@ else {
 				int32_t i, j, nObjects, nLevel, nSig;
 
 				nObjects = gameData.objData.nLastObject [0];
-				if (!(curObjs = NEW CObject [nObjects + 1])) {
+				if (!(curObjs = new CObject [nObjects + 1])) {
 					Warning (TXT_INTERPOLATE_BOTS, sizeof (CObject) * nObjects);
 					break;
 					}
@@ -3557,7 +3553,7 @@ void NDStopPlayback ()
 {
 if (bRevertFormat > 0) {
 	int32_t h = (int32_t) (ndInFile.Length () - ndInFile.Tell ());
-	char *p = NEW char [h];
+	char *p = new char [h];
 	if (p) {
 		bRevertFormat = 0;
 		NDRead (p, h, 1);
@@ -3587,62 +3583,62 @@ longjmp (gameExitPoint, 0);               // Exit game loop
 
 void NDStripFrames (char *outname, int32_t bytes_to_strip)
 {
-	CFile	ndOutFile;
-	char	*buf;
-	int32_t	nTotalSize, bytes_done, read_elems, bytes_back;
-	int32_t	trailer_start, loc1, loc2, stop_loc, bytes_to_read;
-	int16_t	nPrevFrameLength;
+    CFile	ndOutFile;
+    char	*buf;
+    int32_t	nTotalSize, bytes_done, read_elems, bytes_back;
+    int32_t	trailer_start, loc1, loc2, stop_loc, bytes_to_read;
+    int16_t	nPrevFrameLength;
 
-bytes_done = 0;
-nTotalSize = (int32_t) ndInFile.Length ();
-if (!ndOutFile.Open (outname, "", "wb", 0)) {
-	NDErrorMsg ("Can't open output file", NULL, NULL);
-	NDStopPlayback ();
-	return;
-	}
-if (!(buf = NEW char [BUF_SIZE])) {
-	NDErrorMsg ("Mot enough memory for output buffer", NULL, NULL);
-	ndOutFile.Close ();
-	NDStopPlayback ();
-	return;
-	}
-NDGotoEnd ();
-trailer_start = (int32_t) ndInFile.Tell ();
-ndInFile.Seek (11, SEEK_CUR);
-bytes_back = 0;
-while (bytes_back < bytes_to_strip) {
-	loc1 = (int32_t) ndInFile.Tell ();
-	//ndInFile.Seek (-10, SEEK_CUR);
-	//NDReadShort (&nPrevFrameLength);
-	//ndInFile.Seek (8 - nPrevFrameLength, SEEK_CUR);
-	NDBackFrames (1);
-	loc2 = (int32_t) ndInFile.Tell ();
-	bytes_back += (loc1 - loc2);
-	}
-ndInFile.Seek (-10, SEEK_CUR);
-nPrevFrameLength = NDReadShort ();
-ndInFile.Seek (-3, SEEK_CUR);
-stop_loc = (int32_t) ndInFile.Tell ();
-ndInFile.Seek (0, SEEK_SET);
-while (stop_loc > 0) {
-	if (stop_loc < BUF_SIZE)
-		bytes_to_read = stop_loc;
-	else
-		bytes_to_read = BUF_SIZE;
-	read_elems = (int32_t) ndInFile.Read (buf, 1, bytes_to_read);
-	ndOutFile.Write (buf, 1, read_elems);
-	stop_loc -= read_elems;
-	}
-stop_loc = (int32_t) ndOutFile.Tell ();
-ndInFile.Seek (trailer_start, SEEK_SET);
-while ((read_elems = (int32_t) ndInFile.Read (buf, 1, BUF_SIZE)))
-	ndOutFile.Write (buf, 1, read_elems);
-ndOutFile.Seek (stop_loc, SEEK_SET);
-ndOutFile.Seek (1, SEEK_CUR);
-ndOutFile.Write (&nPrevFrameLength, 2, 1);
-ndOutFile.Close ();
-NDStopPlayback ();
-particleManager.Shutdown ();
+    bytes_done = 0;
+    nTotalSize = (int32_t) ndInFile.Length ();
+    if (!ndOutFile.Open (outname, "", "wb", 0)) {
+        NDErrorMsg ("Can't open output file", NULL, NULL);
+        NDStopPlayback ();
+        return;
+    }
+    if (!(buf = new char [BUF_SIZE])) {
+        NDErrorMsg ("Mot enough memory for output buffer", NULL, NULL);
+        ndOutFile.Close ();
+        NDStopPlayback ();
+        return;
+    }
+    NDGotoEnd ();
+    trailer_start = (int32_t) ndInFile.Tell ();
+    ndInFile.Seek (11, SEEK_CUR);
+    bytes_back = 0;
+    while (bytes_back < bytes_to_strip) {
+        loc1 = (int32_t) ndInFile.Tell ();
+        //ndInFile.Seek (-10, SEEK_CUR);
+        //NDReadShort (&nPrevFrameLength);
+        //ndInFile.Seek (8 - nPrevFrameLength, SEEK_CUR);
+        NDBackFrames (1);
+        loc2 = (int32_t) ndInFile.Tell ();
+        bytes_back += (loc1 - loc2);
+    }
+    ndInFile.Seek (-10, SEEK_CUR);
+    nPrevFrameLength = NDReadShort ();
+    ndInFile.Seek (-3, SEEK_CUR);
+    stop_loc = (int32_t) ndInFile.Tell ();
+    ndInFile.Seek (0, SEEK_SET);
+    while (stop_loc > 0) {
+        if (stop_loc < BUF_SIZE)
+            bytes_to_read = stop_loc;
+        else
+            bytes_to_read = BUF_SIZE;
+        read_elems = (int32_t) ndInFile.Read (buf, 1, bytes_to_read);
+        ndOutFile.Write (buf, 1, read_elems);
+        stop_loc -= read_elems;
+    }
+    stop_loc = (int32_t) ndOutFile.Tell ();
+    ndInFile.Seek (trailer_start, SEEK_SET);
+    while ((read_elems = (int32_t) ndInFile.Read (buf, 1, BUF_SIZE)))
+        ndOutFile.Write (buf, 1, read_elems);
+    ndOutFile.Seek (stop_loc, SEEK_SET);
+    ndOutFile.Seek (1, SEEK_CUR);
+    ndOutFile.Write (&nPrevFrameLength, 2, 1);
+    ndOutFile.Close ();
+    NDStopPlayback ();
+    particleManager.Shutdown ();
 }
 
 #endif

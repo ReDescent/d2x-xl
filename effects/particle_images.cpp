@@ -7,10 +7,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #ifdef __macosx__
 # include <SDL/SDL.h>
 #else
@@ -197,7 +193,7 @@ void CParticleImageManager::AdjustBrightness (CBitmap *pBm)
 
 if (j < 2)
 	return;
-if (!(fFrameBright = NEW float [j]))
+if (!(fFrameBright = new float [j]))
 	return;
 for (i = 0, pBmf = pBm->Frames (); i < j; i++, pBmf++) {
 	CTGA tga (pBmf);

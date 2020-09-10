@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #ifdef _WIN32
 #	include <windows.h>
 #	include <stddef.h>

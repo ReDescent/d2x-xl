@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,11 +20,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
-#ifdef __macosx__
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+#include <SDL.h>
 
 #include "descent.h"
 #include "ogl_defs.h"
@@ -84,7 +76,7 @@ else {
 		outBufSize = imgSize;
 		if (outBuf)
 			delete outBuf;
-		outBuf = NEW tBGR [outBufSize];
+		outBuf = new tBGR [outBufSize];
 		}
 	if (outBuf) {
 		tTGAHeader hdr;
@@ -164,7 +156,7 @@ do {
 	} while (!access (szSaveName, 0));
 
 if ((bTmpBuf = (buf == NULL))) {
-	buf = NEW uint8_t [gameData.renderData.screen.Width () * gameData.renderData.screen.Height () * 3];
+	buf = new uint8_t [gameData.renderData.screen.Width () * gameData.renderData.screen.Height () * 3];
 	ogl.SetTexturing (false);
 	ogl.SetReadBuffer (GL_FRONT, 0);
 	gameData.renderData.screen.Activate ("SaveScreenShot (screen)");

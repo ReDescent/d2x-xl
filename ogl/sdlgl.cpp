@@ -5,20 +5,9 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
-#ifdef __macosx__
-# include <SDL/SDL.h>
-# ifdef SDL_IMAGE
-#  include <SDL/SDL_image.h>
-# endif
-#else
-# include <SDL.h>
-# ifdef SDL_IMAGE
-#  include <SDL_image.h>
-# endif
+#include <SDL.h>
+#ifdef SDL_IMAGE
+#include <SDL_image.h>
 #endif
 
 #include "descent.h"

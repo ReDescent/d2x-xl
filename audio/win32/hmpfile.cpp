@@ -22,7 +22,7 @@ hmp_file *hmp_open(const char *filename, int32_t bUseD1Hog)
 
 	if (!cf.Open (const_cast<char*> (filename), gameFolders.game.szData [0], "rb", bUseD1Hog))
 		return NULL;
-	hmp = NEW hmp_file;
+	hmp = new hmp_file;
 	if (!hmp) {
 		cf.Close ();
 		return NULL;
@@ -54,7 +54,7 @@ hmp_file *hmp_open(const char *filename, int32_t bUseD1Hog)
 		    data += sizeof(hmp_tempo);
 #endif
 		hmp->trks [i].len = data;
-		if (!(p = hmp->trks [i].data = NEW uint8_t [data]))
+		if (!(p = hmp->trks [i].data = new uint8_t [data]))
 			goto err;
 #if 0
 		if (i == 0) { /* track 0: add tempo */

@@ -3,10 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-//#include  "oof.h
 #include "descent.h"
 #include "u_mem.h"
 #include "error.h"
@@ -739,7 +735,7 @@ int32_t CModel::ReadSubModel (CFile& cf)
 
 if (CharTok (" \t") != '{')
 	return CModel::Error ("syntax error");
-if (!(psm = NEW CSubModel))
+if (!(psm = new CSubModel))
 	return CModel::Error ("out of memory");
 psm->m_nSubModel = m_nSubModels++;
 psm->m_next = m_subModels;
@@ -1060,7 +1056,7 @@ CSubModel*	pSubModel, * pTail = NULL;
 
 m_subModels = NULL;
 for (i = 0; i < m_nSubModels; i++) {
-	if (!(pSubModel = NEW CSubModel)) {
+	if (!(pSubModel = new CSubModel)) {
 		cf.Close ();
 		Destroy ();
 		return 0;

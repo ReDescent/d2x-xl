@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <string.h>   // for memset
 #ifdef __macosx__
 # include <SDL/SDL.h>

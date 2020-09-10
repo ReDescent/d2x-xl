@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -214,7 +210,7 @@ CNetworkPacket* CNetworkPacketQueue::Alloc (bool bLock)
     if (m_packets [2])
         m_packets [2] = m_packets [2]->Next ();
     else
-        packet = NEW CNetworkPacket;
+        packet = new CNetworkPacket;
     ++m_nPackets;
     Unlock (bLock, __FUNCTION__);
     return packet;

@@ -17,10 +17,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -132,7 +128,7 @@ if (ps->pszText && (ps->nLength < l)) {
 	}
 if (!ps->pszText) {
 	ps->nLength = 3 * l / 2;
-	if (!(ps->pszText = NEW char [ps->nLength])) {
+	if (!(ps->pszText = new char [ps->nLength])) {
 		delete ps->pBm;
 		ps->pBm = NULL;
 		*idP = 0;

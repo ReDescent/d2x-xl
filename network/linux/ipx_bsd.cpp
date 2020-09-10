@@ -6,10 +6,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -184,7 +180,7 @@ static int32_t ipx_bsd_OpenSocket (ipx_socket_t *sk, int32_t port)
 // ----------------------------------------------------------------------------
 
 static void ipx_bsd_CloseSocket (ipx_socket_t *mysock) {
-	/* now close the file descriptor for the socket, and D2_FREE it */
+	/* now close the file descriptor for the socket */
 	close (mysock->fd);
 	Fail ("IPX: closing file descriptor on socket %x\n", mysock->socket);
 }

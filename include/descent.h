@@ -4099,12 +4099,6 @@ extern tBossProps bossProps [2][NUM_D2_BOSSES];
 extern char szAutoMission [255];
 extern char szAutoHogFile [255];
 
-#if 0
-static inline uint16_t WallNumS (CSide *pSide) { return (pSide)->nWall; }
-static inline uint16_t WallNumP (CSegment *pSeg, int16_t nSide) { return WallNumS ((pSeg)->m_sides + (nSide)); }
-static inline uint16_t WallNumI (int16_t nSegment, int16_t nSide) { return WallNumP (SEGMENT (nSegment), nSide); }
-#endif
-
 //-----------------------------------------------------------------------------
 
 #pragma pack(push, 1)

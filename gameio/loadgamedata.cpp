@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -194,12 +190,12 @@ return i;
 // If editor is in, bm_init_use_table () is called.
 int32_t BMInit (void)
 {
-if (!PiggyInit ())				// This calls BMReadAll
-	Error ("Cannot open pig and/or ham file");
-/*---*/PrintLog (1, "Initializing endlevel data\n");
-InitEndLevel ();		//this is in bm_init_use_tbl (), so I gues it goes here
-PrintLog (-1);
-return 0;
+    if (!PiggyInit ())				// This calls BMReadAll
+        Error ("Cannot open pig and/or ham file");
+    /*---*/PrintLog (1, "Initializing endlevel data\n");
+    InitEndLevel ();
+    PrintLog (-1);
+    return 0;
 }
 
 //------------------------------------------------------------------------------

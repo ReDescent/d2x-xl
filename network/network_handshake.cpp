@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #ifndef _WIN32
 #	include <arpa/inet.h>
 #	include <netinet/in.h> /* for htons & co. */
@@ -101,7 +97,7 @@ CMessage* msg = FreeList ();
 if (msg)
 	SetFreeList (msg->GetNext ());
 else
-	msg = NEW CMessage;
+	msg = new CMessage;
 return msg;
 }
 

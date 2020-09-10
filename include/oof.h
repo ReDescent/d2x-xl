@@ -1,10 +1,6 @@
 #ifndef __OOF_H
 #define __OOF_H
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #if DBG
 #	define OOF_TEST_CUBE 0
 #endif

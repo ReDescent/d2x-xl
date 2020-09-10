@@ -13,10 +13,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 // The code in this file sends a game host's game data to a client connecting to the host
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #ifndef _WIN32
 #	include <arpa/inet.h>
 #	include <netinet/in.h> /* for htons & co. */

@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #ifdef _WIN32
 #	include <windows.h>
 #	include <stddef.h>
@@ -18,12 +14,7 @@
 #include <math.h>
 #include <fcntl.h>
 #include <stdio.h>
-#ifdef __macosx__
-# include <stdlib.h>
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+#include <SDL.h>
 
 #include "descent.h"
 #include "error.h"
@@ -160,7 +151,7 @@ if (fSize <= 0) {
 	}
 #endif
 
-if (!(pBuffer = NEW char [fSize + 1])) {
+if (!(pBuffer = new char [fSize + 1])) {
 	fclose (fp);
 	return NULL;	// out of memory
 	}
@@ -205,7 +196,7 @@ else {
 	}
 #else
 glGetObjectParameterivARB (GLuint (intptr_t (handle)), GL_OBJECT_INFO_LOG_LENGTH_ARB, &nLogLen);
-if ((nLogLen > 0) && (infoLog = NEW char [nLogLen])) {
+if ((nLogLen > 0) && (infoLog = new char [nLogLen])) {
 	glGetInfoLogARB (GLuint (intptr_t (handle)), nLogLen, &charsWritten, infoLog);
 	if (*infoLog) {
 		::PrintLog (1);

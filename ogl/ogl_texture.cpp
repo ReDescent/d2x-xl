@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #ifdef _WIN32
 #	include <windows.h>
 #	include <stddef.h>
@@ -18,12 +14,7 @@
 #include <math.h>
 #include <fcntl.h>
 #include <stdio.h>
-#ifdef __macosx__
-# include <stdlib.h>
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+#include <SDL.h>
 
 #include "descent.h"
 #include "error.h"
@@ -53,55 +44,43 @@ GLubyte *Cartoonize (CBitmap *pBm, GLubyte *pBuffer, int32_t dxo, int32_t dyo, i
 //little hack to find the largest or equal multiple of 2 for a given number
 int32_t Pow2ize (int32_t v, int32_t max)
 {
-	int32_t i;
+    int32_t i;
 
-for (i = 2; i <= max; i *= 2)
-	if (v <= i)
-		return i;
-return i;
+    for (i = 2; i <= max; i *= 2)
+        if (v <= i)
+            return i;
+    return i;
 }
 
 //------------------------------------------------------------------------------
 
 int32_t Luminance (int32_t r, int32_t g, int32_t b)
 {
-	int32_t minColor, maxColor;
+    int32_t minColor, maxColor;
 
-if (r < g) {
-	minColor = (r < b) ? r : b;
-	maxColor = (g > b) ? g : b;
-	}
-else {
-	minColor = (g < b) ? g : b;
-	maxColor = (r > b) ? r : b;
-	}
-return (minColor + maxColor) / 2;
+    if (r < g) {
+        minColor = (r < b) ? r : b;
+        maxColor = (g > b) ? g : b;
+    }
+    else {
+        minColor = (g < b) ? g : b;
+        maxColor = (r > b) ? r : b;
+    }
+    return (minColor + maxColor) / 2;
 }
 
 //------------------------------------------------------------------------------
 
 void CTextureManager::Init (void)
 {
-#if DBG_MALLOC
-bool b = TrackMemory (true);
-#endif
-#if 1
-m_textures.Create (1000, "CTextureManager::m_textures");
-m_textures.SetGrowth (1000);
+    m_textures.Create (1000, "CTextureManager::m_textures");
+    m_textures.SetGrowth (1000);
 #if DBG
-texIds.Create (1000, "texIds");
-texIds.SetGrowth (1000);
-#endif
-#else
-m_textures.Create (TEXTURE_LIST_SIZE, "CTextureManager::m_textures");
-for (int32_t i = 0; i < TEXTURE_LIST_SIZE; i++)
-	m_textures [i].SetIndex (i);
+    texIds.Create (1000, "texIds");
+    texIds.SetGrowth (1000);
 #endif
 #if DBG
-usedHandles.Clear ();
-#endif
-#if DBG_MALLOC
-TrackMemory (b);
+    usedHandles.Clear ();
 #endif
 }
 
@@ -109,64 +88,58 @@ TrackMemory (b);
 
 void TextureError (void)
 {
-PrintLog (0, "Error in texture management\n");
+    PrintLog (0, "Error in texture management\n");
 }
 
 //------------------------------------------------------------------------------
 
 void CTextureManager::Destroy (void)
 {
-ENTER (2, 0);
+    ENTER (2, 0);
 #if DBG
-Check ();
+    Check ();
 #endif
-#if DBG_MALLOC
-bool b = TrackMemory (true);
-#endif
-ogl.DestroyDrawBuffers ();
-cameraManager.Destroy ();
-OglDeleteLists (&hBigSphere, 1);
-OglDeleteLists (&hSmallSphere, 1);
-OglDeleteLists (&circleh5, 1);
-OglDeleteLists (&circleh10, 1);
-OglDeleteLists (cross_lh, sizeof (cross_lh) / sizeof (GLuint));
-OglDeleteLists (primary_lh, sizeof (primary_lh) / sizeof (GLuint));
-OglDeleteLists (secondary_lh, sizeof (secondary_lh) / sizeof (GLuint));
-OglDeleteLists (g3InitTMU [0], sizeof (g3InitTMU) / sizeof (GLuint));
-OglDeleteLists (g3ExitTMU, sizeof (g3ExitTMU) / sizeof (GLuint));
-OglDeleteLists (&mouseIndList, 1);
+    ogl.DestroyDrawBuffers ();
+    cameraManager.Destroy ();
+    OglDeleteLists (&hBigSphere, 1);
+    OglDeleteLists (&hSmallSphere, 1);
+    OglDeleteLists (&circleh5, 1);
+    OglDeleteLists (&circleh10, 1);
+    OglDeleteLists (cross_lh, sizeof (cross_lh) / sizeof (GLuint));
+    OglDeleteLists (primary_lh, sizeof (primary_lh) / sizeof (GLuint));
+    OglDeleteLists (secondary_lh, sizeof (secondary_lh) / sizeof (GLuint));
+    OglDeleteLists (g3InitTMU [0], sizeof (g3InitTMU) / sizeof (GLuint));
+    OglDeleteLists (g3ExitTMU, sizeof (g3ExitTMU) / sizeof (GLuint));
+    OglDeleteLists (&mouseIndList, 1);
 #if DBG
-Check ();
+    Check ();
 #endif
 
-for (uint32_t i = m_textures.ToS (); i > 0; ) {
-	CTexture* pTexture = m_textures [--i];
+    for (uint32_t i = m_textures.ToS (); i > 0; ) {
+        CTexture* pTexture = m_textures [--i];
 #if DBG
-	if (pTexture->Registered () != i + 1)
-		TextureError ();
+        if (pTexture->Registered () != i + 1)
+            TextureError ();
 #endif
-	pTexture->Destroy ();
+        pTexture->Destroy ();
 #if DBG
-	if (texIds [i])
-		delete texIds [i];
+        if (texIds [i])
+            delete texIds [i];
 #endif
-	}
-m_textures.Reset ();
+        }
+    m_textures.Reset ();
 #if DBG
-texIds.Reset ();
+    texIds.Reset ();
 #endif
-#if DBG_MALLOC
-TrackMemory (b);
-#endif
-RETURN
+    RETURN
 }
 
 //------------------------------------------------------------------------------
 
 uint32_t CTextureManager::Check (CTexture* pTexture)
 {
-uint32_t i = pTexture->Registered ();
-return i && (i <= m_textures.ToS ()) && (m_textures [i] != pTexture) ? i : 0;
+    uint32_t i = pTexture->Registered ();
+    return i && (i <= m_textures.ToS ()) && (m_textures [i] != pTexture) ? i : 0;
 }
 
 //------------------------------------------------------------------------------
@@ -174,98 +147,87 @@ return i && (i <= m_textures.ToS ()) && (m_textures [i] != pTexture) ? i : 0;
 bool CTextureManager::Check (void)
 {
 #if DBG
-for (uint32_t i = 0, j = m_textures.ToS (); i < j; i++) {
-	CTexture* pTexture = m_textures [i]; 
-	if (pTexture->Registered () != i + 1) {
-		TextureError ();
-		return false;
-		}
-	}
+    for (uint32_t i = 0, j = m_textures.ToS (); i < j; i++) {
+        CTexture* pTexture = m_textures [i];
+        if (pTexture->Registered () != i + 1) {
+            TextureError ();
+            return false;
+            }
+        }
 #endif
-return true;
+    return true;
 }
 
 //------------------------------------------------------------------------------
 
 uint32_t CTextureManager::Find (CTexture* pTexture)
 {
-for (uint32_t i = 0, j = m_textures.ToS (); i < j; i++) 
-	if (m_textures [i] == pTexture)
-		return i + 1;
-return 0;
+    for (uint32_t i = 0, j = m_textures.ToS (); i < j; i++)
+        if (m_textures [i] == pTexture)
+            return i + 1;
+    return 0;
 }
 
 //------------------------------------------------------------------------------
 
 uint32_t CTextureManager::Register (CTexture* pTexture)
 {
-ENTER (2, 0);
-uint32_t i = Find (pTexture);
-if (i) {
+    ENTER (2, 0);
+    uint32_t i = Find (pTexture);
+    if (i) {
 #if DBG
-	if (m_textures [i - 1]->Registered () != i)
-		TextureError ();
+        if (m_textures [i - 1]->Registered () != i)
+            TextureError ();
 #endif
-	RETVAL (i)
-	}
-#if DBG_MALLOC
-bool b = TrackMemory (true);
-#endif
-m_textures.Push (pTexture);
+        RETVAL (i)
+    }
+    m_textures.Push (pTexture);
 #if DBG
-int32_t l = (int32_t) strlen (pTexture->Bitmap ()->Name ()) + 1;
-char* s = NEW char [l];
-if (s)
-	strcpy (s, pTexture->Bitmap ()->Name ());
-texIds.Push (s);
-s = NULL;
+    int32_t l = (int32_t) strlen (pTexture->Bitmap ()->Name ()) + 1;
+    char* s = new char [l];
+    if (s)
+        strcpy (s, pTexture->Bitmap ()->Name ());
+    texIds.Push (s);
+    s = NULL;
 #endif
-#if DBG_MALLOC
-TrackMemory (b);
-#endif
-RETVAL (m_textures.ToS ())
+    RETVAL (m_textures.ToS ())
 }
 
 //------------------------------------------------------------------------------
 
 bool CTextureManager::Release (CTexture* pTexture)
 {
-ENTER (2, 0);
+    ENTER (2, 0);
 #if DBG
-Check ();
+    Check ();
 #endif
-uint32_t i = Check (pTexture);
-if (!i)
-	i = Find (pTexture);
-if (!i)
-	RETVAL (false)
+    uint32_t i = Check (pTexture);
+    if (!i)
+        i = Find (pTexture);
+    if (!i)
+        RETVAL (false)
 
-#if DBG_MALLOC
-bool b = TrackMemory (true);
-#endif
 #if DBG
-if (texIds [i - 1])
-	delete texIds [i - 1];
+    if (texIds [i - 1])
+        delete texIds [i - 1];
 #endif
 
-if (i != m_textures.ToS ()) {
-	m_textures [i - 1] = *m_textures.Top ();
-	m_textures [i - 1]->Register (i);
+    if (i != m_textures.ToS ()) {
+        m_textures [i - 1] = *m_textures.Top ();
+        m_textures [i - 1]->Register (i);
 #if DBG
-	texIds [i - 1] = *texIds.Top ();
+        texIds [i - 1] = *texIds.Top ();
 #endif
-	}
+        }
 #if DBG
-*texIds.Top () = NULL;
-texIds.Shrink ();
+    *texIds.Top () = NULL;
+    texIds.Shrink ();
 #endif
 
-*m_textures.Top () = 0;
-m_textures.Shrink ();
-#if DBG_MALLOC
-TrackMemory (b);
-#endif
-RETVAL (true)
+    *m_textures.Top () = 0;
+    m_textures.Shrink ();
+
+    RETVAL (true)
 }
 
 //------------------------------------------------------------------------------
@@ -275,113 +237,111 @@ RETVAL (true)
 void CTexture::Init (void)
 {
 #if DBG
-if (m_nRegistered)
-	Destroy ();
+    if (m_nRegistered)
+        Destroy ();
 #endif
-m_info.handle = 0;
-m_info.internalFormat = 4;
-m_info.format = ogl.m_states.nRGBAFormat;
-m_info.w =
-m_info.h = 0;
-m_info.tw =
-m_info.th = 0;
-m_info.lw = 0;
-m_info.bMipMaps = 0;
-m_info.bSmoothe = 0;
-m_info.u =
-m_info.v = 0;
-m_info.bRenderBuffer = 0;
-m_info.prio = 0.3f;
-m_info.pBm = NULL;
-m_nRegistered = 0;
+    m_info.handle = 0;
+    m_info.internalFormat = 4;
+    m_info.format = ogl.m_states.nRGBAFormat;
+    m_info.w =
+    m_info.h = 0;
+    m_info.tw =
+    m_info.th = 0;
+    m_info.lw = 0;
+    m_info.bMipMaps = 0;
+    m_info.bSmoothe = 0;
+    m_info.u =
+    m_info.v = 0;
+    m_info.bRenderBuffer = 0;
+    m_info.prio = 0.3f;
+    m_info.pBm = NULL;
+    m_nRegistered = 0;
 }
 
 //------------------------------------------------------------------------------
 
 void CTexture::Setup (int32_t w, int32_t h, int32_t lw, int32_t bpp, int32_t bMask, int32_t bMipMap, int32_t bSmoothe, CBitmap *pBm)
 {
-m_info.w = w;
-m_info.h = h;
-m_info.lw = lw;
-m_info.tw = Pow2ize (w);
-m_info.th = Pow2ize (h);
+    m_info.w = w;
+    m_info.h = h;
+    m_info.lw = lw;
+    m_info.tw = Pow2ize (w);
+    m_info.th = Pow2ize (h);
 #if DBG
-if (m_info.tw == 2 * w)
-	m_info.tw = Pow2ize (w);
-if (m_info.th == 2 * h)
-	m_info.th = Pow2ize (h);
+    if (m_info.tw == 2 * w)
+        m_info.tw = Pow2ize (w);
+    if (m_info.th == 2 * h)
+        m_info.th = Pow2ize (h);
 #endif
-if (bMask) {
-	m_info.format = GL_RED;
-	m_info.internalFormat = 1;
-	}
-else if (bpp == 3) {
-	m_info.format = GL_RGB;
+    if (bMask) {
+        m_info.format = GL_RED;
+        m_info.internalFormat = 1;
+        }
+    else if (bpp == 3) {
+        m_info.format = GL_RGB;
 #if TEXTURE_COMPRESSION
-	if ((w > 64) && (w == h))
-		m_info.internalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
-	else
+        if ((w > 64) && (w == h))
+            m_info.internalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+        else
 #endif
-	m_info.internalFormat = 3;
-	}
-else {
-	m_info.format = GL_RGBA;
+        m_info.internalFormat = 3;
+        }
+    else {
+        m_info.format = GL_RGBA;
 #if TEXTURE_COMPRESSION
-	if ((w > 64) && (w == h))
-		m_info.internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-	else
+        if ((w > 64) && (w == h))
+            m_info.internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+        else
 #endif
-	m_info.internalFormat = 4;
-	}
-m_info.bMipMaps = (bMipMap > 0) && !bMask;
-m_info.bSmoothe = (bMipMap < 0) ? -1 : bSmoothe || m_info.bMipMaps;
+        m_info.internalFormat = 4;
+        }
+    m_info.bMipMaps = (bMipMap > 0) && !bMask;
+    m_info.bSmoothe = (bMipMap < 0) ? -1 : bSmoothe || m_info.bMipMaps;
 }
 
 //------------------------------------------------------------------------------
 
 bool CTexture::Register (uint32_t i)
 {
-if (i)
-	m_nRegistered = i;
-else {
-	i = m_nRegistered;
-	m_nRegistered = textureManager.Register (this);
-	if (i)
-		return false;
-	}
-return m_nRegistered != 0;
+    if (i)
+        m_nRegistered = i;
+    else {
+        i = m_nRegistered;
+        m_nRegistered = textureManager.Register (this);
+        if (i)
+            return false;
+    }
+    return m_nRegistered != 0;
 }
 
 //------------------------------------------------------------------------------
 
 void CTexture::Release (void)
 {
-if (m_info.handle && (m_info.handle != GLuint (-1))) {
-#if DBG
-	if (usedHandles [m_info.handle])
-		usedHandles [m_info.handle] = 0;
-	else if (!m_info.bRenderBuffer)
-		TextureError ();
-#endif
-	if (!m_info.bRenderBuffer)
-		ogl.DeleteTextures (1, reinterpret_cast<GLuint*> (&m_info.handle));
-	m_info.handle = 0;
-#if 1
-	if (m_info.pBm)
-		m_info.pBm->NeedSetup ();
-#endif
-	}
+    if (m_info.handle && (m_info.handle != GLuint (-1))) {
+    #if DBG
+        if (usedHandles [m_info.handle])
+            usedHandles [m_info.handle] = 0;
+        else if (!m_info.bRenderBuffer)
+            TextureError ();
+    #endif
+        if (!m_info.bRenderBuffer)
+            ogl.DeleteTextures (1, reinterpret_cast<GLuint*> (&m_info.handle));
+        m_info.handle = 0;
+        if (m_info.pBm)
+            m_info.pBm->NeedSetup ();
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void CTexture::Destroy (void)
 {
-Release ();
-textureManager.Release (this);
-m_nRegistered = 0;
-//m_info.pBm = NULL;
-Init ();
+    Release ();
+    textureManager.Release (this);
+    m_nRegistered = 0;
+    //m_info.pBm = NULL;
+    Init ();
 }
 
 //------------------------------------------------------------------------------
@@ -389,9 +349,9 @@ Init ();
 bool CTexture::Check (void)
 {
 #if DBG
-return textureManager.Check (this) != 0;
+    return textureManager.Check (this) != 0;
 #endif
-return true;
+    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -955,7 +915,7 @@ GLuint CTexture::Create (int32_t w, int32_t h)
 {
 ENTER (2, 0);
 	int32_t		nSize = w * h * sizeof (uint32_t);
-	uint8_t		*data = NEW uint8_t [nSize];
+	uint8_t		*data = new uint8_t [nSize];
 
 if (!data)
 	RETVAL (0)
@@ -1371,7 +1331,7 @@ else {
 		BRP;
 #endif
 
-	m_info.frames.pBm = NEW CBitmap [nFrames];
+	m_info.frames.pBm = new CBitmap [nFrames];
 
 	int32_t	i, w = m_info.props.w;
 	CBitmap* pBmf = m_info.frames.pCurrent = m_info.frames.pBm;

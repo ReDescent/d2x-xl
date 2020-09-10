@@ -2,10 +2,6 @@
 #ifndef _OGL_DEFS_H
 #define _OGL_DEFS_H
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #define GL_FALLBACK	0	// fall back to glBegin/glEnd when client arrays aren't available
 
 #define TEXTURE_COMPRESSION	0

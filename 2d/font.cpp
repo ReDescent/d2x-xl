@@ -17,10 +17,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -433,7 +429,7 @@ if (!strncmp (fileId, "NFSP", 4)) {
 dataSize = cf.ReadInt ();
 dataSize -= GRS_FONT_SIZE; // subtract the size of the header.
 Read (cf);
-if (!(fontData || (fontData = NEW uint8_t [dataSize]))) {
+if (!(fontData || (fontData = new uint8_t [dataSize]))) {
 	cf.Close ();
 	return NULL;
 	}

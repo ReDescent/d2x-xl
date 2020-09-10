@@ -1,10 +1,6 @@
 #ifndef _CARRAY_H
 #define _CARRAY_H
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -201,10 +197,6 @@ class CArray : public CQuickSort < _T > {
 		void Destroy (void) { 
 			if (m_data.buffer) {
 				if (!m_data.nMode) {
-#if DBG_MALLOC
-					UnregisterMemBlock (m_data.buffer);
-					bool b = TrackMemory (false);
-#endif
 					try {
 						delete[] m_data.buffer;
 						}
@@ -213,9 +205,6 @@ class CArray : public CQuickSort < _T > {
 						ArrayError ("invalid buffer pointer\n");
 #endif
 						}
-#if DBG_MALLOC
-					TrackMemory (b);
-#endif
 #if DBG_ARRAYS
 					m_data.buffer = reinterpret_cast<_T *> (NULL); 
 #endif
@@ -231,11 +220,8 @@ class CArray : public CQuickSort < _T > {
 				SetName (pszName);
 			if (m_data.length != length) {
 				Destroy ();
-#if DBG_MALLOC
-				bool b = TrackMemory (false);
-#endif
 				try {
-					if ((m_data.buffer = NEW _T [length]))
+					if ((m_data.buffer = new _T [length]))
 						m_data.length = length;
 					}
 				catch(...) {
@@ -244,10 +230,6 @@ class CArray : public CQuickSort < _T > {
 #endif
 					m_data.buffer = NULL;
 					}
-#if DBG_MALLOC
-				TrackMemory (b);
-				RegisterMemBlock (m_data.buffer, length * sizeof (_T), m_data.szName, 0);
-#endif
 				}
 			return m_data.buffer;
 			}
@@ -277,11 +259,8 @@ class CArray : public CQuickSort < _T > {
 			if (!m_data.buffer)
 				return Create (length);
 			_T* p;
-#if DBG_MALLOC
-			bool b = TrackMemory (false);
-#endif
 			try {
-				p = NEW _T [length];
+				p = new _T [length];
 				}
 			catch(...) {
 #if DBG_ARRAYS
@@ -290,26 +269,14 @@ class CArray : public CQuickSort < _T > {
 				p = NULL;
 				}
 			if (!p) {
-#if DBG_MALLOC
-				TrackMemory (b);
-#endif
 				return m_data.buffer;
 				}
-#if DBG_MALLOC
-				TrackMemory (true);
-				RegisterMemBlock (p, length * sizeof (_T), m_data.szName, 0);
-#endif
 			if (bCopy) {
 				memcpy (p, m_data.buffer, ((length > m_data.length) ? m_data.length : length) * sizeof (_T)); 
 				Clear (); // hack to avoid d'tors
 				}
 			m_data.length = length;
 			m_data.pos %= length;
-#if DBG_MALLOC
-			if (!UnregisterMemBlock (m_data.buffer))
-				ArrayError ("invalid buffer pointer\n");
-			TrackMemory (false);
-#endif
 			try {
 				delete[] m_data.buffer;
 				}
@@ -318,9 +285,6 @@ class CArray : public CQuickSort < _T > {
 				ArrayError ("invalid buffer pointer\n");
 #endif
 				}
-#if DBG_MALLOC
-			TrackMemory (b);
-#endif
 			return m_data.buffer = p;
 			}
 

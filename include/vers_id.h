@@ -1,11 +1,9 @@
 #ifndef _VERS_ID_H
 #define _VERS_ID_H
 
-//#ifndef HAVE_CONFIG_H
-#	ifndef VERSION
-#		define VERSION		"1.18.74"
-#	endif
-//#endif
+#ifndef VERSION
+#	define VERSION		"1.18.74"
+#endif
 
 #define D2X_NAME		"D2X-XL "
 

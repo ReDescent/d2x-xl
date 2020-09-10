@@ -11,11 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #ifdef _WIN32
 #	include <windows.h>
 #endif
@@ -1039,8 +1034,8 @@ if (cf.Open (szFilename, gameFolders.game.szData [0], "rb", 0)) {
 		return;
 		}
 	nBitmapNum = cf.ReadInt ();
-	indices = NEW uint16_t [nBitmapNum];
-	bmh = NEW tPIGBitmapHeader [nBitmapNum];
+	indices = new uint16_t [nBitmapNum];
+	bmh = new tPIGBitmapHeader [nBitmapNum];
 #if 0
 	cf.Read (indices, nBitmapNum * sizeof (uint16_t), 1);
 	cf.Read (bmh, nBitmapNum * sizeof (tPIGBitmapHeader), 1);

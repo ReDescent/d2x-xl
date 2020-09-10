@@ -1,8 +1,4 @@
 /* $Id: mveplay.c,v 1.17 2003/11/26 12:26:28 btb Exp $ */
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <string.h>
 #ifndef _WIN32
 #	include <errno.h>

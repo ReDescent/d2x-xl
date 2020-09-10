@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE EVE.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1104,7 +1100,7 @@ CControlConfig::tItemPos* CControlConfig::GetItemPos (kcItem* items, int32_t nIt
 	tItemPos	*pos;
 	int32_t			i;
 
-if (!(pos = NEW tItemPos [nItems]))
+if (!(pos = new tItemPos [nItems]))
 	return NULL;
 for (i = 0; i < nItems; i++) {
 	pos [i].l = items [i].x + items [i].w1;
@@ -1123,7 +1119,7 @@ int32_t* CControlConfig::GetItemRef (int32_t nItems, tItemPos* pos)
 	int32_t	*ref;
 	int32_t	i;
 
-if (!(ref = NEW int32_t [nItems]))
+if (!(ref = new int32_t [nItems]))
 	return NULL;
 for (i = 0; i < nItems; i++)
 	ref [pos [i].i] = i;

@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -168,7 +164,7 @@ pExplObj->cType.explInfo.nDestroyedObj = -1;
 pExplObj->cType.explInfo.nDeleteTime = -1;
 
 if ((pParent && (nVClip == ANIM_POWERUP_DISAPPEARANCE)) || (nVClip == ANIM_MORPHING_ROBOT))
-	postProcessManager.Add (NEW CPostEffectShockwave (SDL_GetTicks (), pExplObj->LifeLeft () / 4, pExplObj->info.xSize, 1, pExplObj->Position ()));
+	postProcessManager.Add (new CPostEffectShockwave (SDL_GetTicks (), pExplObj->LifeLeft () / 4, pExplObj->info.xSize, 1, pExplObj->Position ()));
 
 if (SHOW_LIGHTNING (2)) {
 	bool bDie = true;
@@ -335,7 +331,7 @@ if (pExplObj) {
 		 ((pObj->info.nType == OBJ_PLAYER) && !SPECTATOR (pObj)) || 
 		 (pObj->info.nType == OBJ_ROBOT) || 
 		 pObj->IsSplashDamageWeapon ())
-		postProcessManager.Add (NEW CPostEffectShockwave (SDL_GetTicks (), BLAST_LIFE, pExplObj->info.xSize, 1, pExplObj->Position ()));
+		postProcessManager.Add (new CPostEffectShockwave (SDL_GetTicks (), BLAST_LIFE, pExplObj->info.xSize, 1, pExplObj->Position ()));
 	if (pObj && (pObj->info.nType == OBJ_WEAPON))
 		CreateSmartChildren (pObj, NUM_SMART_CHILDREN);
 	}

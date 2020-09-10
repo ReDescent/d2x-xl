@@ -2,10 +2,6 @@
 
 #include <math.h>
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #include "descent.h"
 #include "error.h"
 #include "network.h"
@@ -1559,7 +1555,7 @@ return NEW CRingedSphere ();
 #elif SPHERE_TYPE == SPHERE_TYPE_TRIANGLES
 return NEW CTriangleSphere ();
 #elif SPHERE_TYPE == SPHERE_TYPE_QUADS
-return NEW CQuadSphere ();
+return new CQuadSphere ();
 #endif
 }
 

@@ -12,10 +12,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #ifdef _WIN32
 #	include <windows.h>
 #endif
@@ -330,7 +326,7 @@ bitmapCacheSize = PIGGY_BUFFER_SIZE;
 // until memory could be allocated, and then once more to leave enough memory
 // for other parts of the program
 for (;;) {
-	if ((bitmapBits [0] = NEW uint8_t (bitmapCacheSize))) {
+	if ((bitmapBits [0] = new uint8_t (bitmapCacheSize))) {
 		delete[] bitmapBits [0];
 		break;
 		}
@@ -617,7 +613,7 @@ int32_t PiggyBitmapReadD1 (
 	CBitmap*				pBm, /* read into this pBm */
 	int32_t				nBmDataOffs, /* specific to file */
    tPIGBitmapHeader*	bmh, /* header info for pBm */
-   uint8_t**			pNextBmP, /* where to write it (if 0, use reinterpret_cast<uint8_t*> (D2_ALLOC) */
+   uint8_t**			pNextBmP, /* where to write it */
    uint8_t*				colorMap) /* how to translate pBm's colors */
 {
 memset (pBm, 0, sizeof (CBitmap));
@@ -698,7 +694,7 @@ void BMReadD1TMapNums (CFile& cf)
 
 	FreeD1TMapNums ();
 	cf.Seek (8, SEEK_SET);
-	d1_tmap_nums = NEW int16_t [D1_MAX_TMAP_NUM];
+	d1_tmap_nums = new int16_t [D1_MAX_TMAP_NUM];
 	for (i = 0; i < D1_MAX_TMAP_NUM; i++)
 		d1_tmap_nums [i] = -1;
 	for (i = 0; i < D1_MAX_TEXTURES; i++) {

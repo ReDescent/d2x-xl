@@ -14,10 +14,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _GAMEARGS_H
 #define _GAMEARGS_H
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 void EvalArgs (void);
 
 #endif //_GAMEARGS_H

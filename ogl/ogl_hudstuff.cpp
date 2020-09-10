@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #ifdef _WIN32
 #	include <windows.h>
 #	include <stddef.h>
@@ -11,12 +7,7 @@
 #include <math.h>
 #include <fcntl.h>
 #include <stdio.h>
-#ifdef __macosx__
-# include <stdlib.h>
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+#include <SDL.h>
 
 #include "descent.h"
 #include "error.h"

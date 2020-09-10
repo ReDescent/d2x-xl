@@ -1,10 +1,6 @@
 // tracker.c
 // game server tracker communication
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include  <string.h>
 #ifdef _WIN32
 #	include <winsock.h>
@@ -27,11 +23,7 @@
 #include "menu.h"
 #include "tracker.h"
 
-#ifdef __macosx__
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+#include <SDL.h>
 
 #if DBG
 static int32_t bTestTracker = 0;
@@ -237,7 +229,7 @@ if (trackerList.nServers >= MAX_TRACKER_SERVERS)
 	return -1;
 if (0 < (i = Find (addr)))
 	return i;
-if (!(pslt = NEW tServerListTable))
+if (!(pslt = new tServerListTable))
 	return -1;
 memset (pslt, 0, sizeof (*pslt));
 pslt->nextList = serverListTable;

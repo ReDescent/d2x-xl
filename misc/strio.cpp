@@ -2,10 +2,6 @@
  * strio.c: string/file manipulation functions by Victor Rachels
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -21,11 +17,11 @@ char *fsplitword (CFile& cf, char splitchar)
 	char	c, *buf;
 
 mem = 256;
-buf = NEW char [mem];
+buf = new char [mem];
 c = cf.GetC ();
 for (i = 0; (c != splitchar) && !cf.EoF (); i++) {
 	if (i == mem) {
-		char* newBuf = NEW char [mem + 256];
+		char* newBuf = new char [mem + 256];
 		memcpy (newBuf, buf, mem);
 		mem += 256;
 		delete[] buf;
@@ -49,7 +45,7 @@ char *splitword (char *s, char splitchar)
 l = (int32_t) strlen (s);
 p = strchr (s, splitchar);
 lw = p ? (int32_t) (p - s) : l;
-buf = NEW char [lw + 1];
+buf = new char [lw + 1];
 memcpy (buf, s, lw + 1);
 buf [lw] = '\0';
 if (p)

@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -161,7 +157,7 @@ bool CFaceGridSegment::AddFace (uint16_t nSegment, uint8_t nSide, CFloatVector v
 {
 if (!ContainsTriangle (vertices))
 	return true;
-CGridFace *pFace = NEW CGridFace;
+CGridFace *pFace = new CGridFace;
 if (!pFace)
 	return false;
 memcpy (pFace->m_vertices, vertices, 3 * sizeof (vertices [0]));
@@ -229,7 +225,7 @@ vOffs.Set ((m_vMax.v.coord.x - m_vMin.v.coord.x) / 2, (m_vMax.v.coord.y - m_vMin
 for (int32_t nChild = 0, z = 0; z < 2; z++) {
 	for (int32_t y = 0; y < 2; y++) {
 		for (int32_t x = 0; x < 2; x++, nChild++) {
-			if (!(m_pChildren [nChild] = NEW CFaceGridSegment ()))
+			if (!(m_pChildren [nChild] = new CFaceGridSegment ()))
 				return false;
 			CFloatVector vMin, vMax;
 			vMin.Set (m_vMin.v.coord.x + vOffs.v.coord.x * x, m_vMin.v.coord.y + vOffs.v.coord.y * y, m_vMin.v.coord.z + vOffs.v.coord.z * z);

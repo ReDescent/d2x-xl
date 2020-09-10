@@ -5,10 +5,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -444,7 +440,7 @@ ENTER (0, 0);
 	uint8_t	*pDest, *pSrc;
 
 l = FixMulDiv (m_info.bResampled ? m_info.nLength : pSound->nLength [pSound->bCustom], speed, I2X (1));
-if (!(pDest = NEW uint8_t [l]))
+if (!(pDest = new uint8_t [l]))
 	RETVAL (-1)
 pSrc = m_info.bResampled ? m_info.sample.Buffer () : pSound->data [pSound->bCustom].Buffer ();
 for (h = i = j = 0; i < l; i++) {

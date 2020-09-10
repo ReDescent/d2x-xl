@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -258,7 +254,7 @@ ENTER (0, nThread);
 if (!lightManager.LightCount (0))
 	RETVAL (0)
 
-if (!(pDists = NEW tLightDist [lightManager.LightCount (0)])) {
+if (!(pDists = new tLightDist [lightManager.LightCount (0)])) {
 	gameOpts->render.nLightingMethod = 0;
 	gameData.renderData.shadows.nLights = 0;
 	RETVAL (0)
@@ -314,7 +310,7 @@ G3_SLEEP (0);
 if (!lightManager.LightCount (0))
 	RETVAL (0)
 
-if (!(pDists = NEW tLightDist [lightManager.LightCount (0)])) {
+if (!(pDists = new tLightDist [lightManager.LightCount (0)])) {
 	gameOpts->render.nLightingMethod = 0;
 	gameData.renderData.shadows.nLights = 0;
 	RETVAL (0)

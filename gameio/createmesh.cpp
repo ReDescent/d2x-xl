@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -712,7 +708,7 @@ RETURN
 void CTriMeshBuilder::CreateFaceVertLists (void)
 {
 ENTER (0, 0);
-	int32_t*			bTags = NEW int32_t [gameData.segData.nVertices];
+	int32_t*			bTags = new int32_t [gameData.segData.nVertices];
 	CSegFace*		pFace;
 	tFaceTriangle*	pTriangle;
 	int32_t			h, i, j, k, nFace;
@@ -818,7 +814,7 @@ if (bOk) {
 		nExpectedSize += abs (nSizes [i]);
 	}
 if (bOk)
-	bOk = ((ioBuffer = NEW char [nExpectedSize]) != NULL);
+	bOk = ((ioBuffer = new char [nExpectedSize]) != NULL);
 if (bOk) {
 	if (!mdh.bCompressed)
 		bOk = cf.Read (ioBuffer, nExpectedSize, 1) == 1;

@@ -7,10 +7,6 @@
  *  in any of your programs.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -367,7 +363,7 @@ Update ();
 
 CConsole* CConsole::Create (void)
 {
-return NEW CConsole;
+return new CConsole;
 }
 
 //------------------------------------------------------------------------------

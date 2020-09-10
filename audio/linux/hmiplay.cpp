@@ -8,10 +8,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #if 1
 //void DigiSetMidiVolume( int mvolume ) { }
 int DigiPlayMidiSong( char * filename, char * melodic_bank, char * drum_bank, int loop ) {return 0;}

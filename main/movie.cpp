@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #define DEBUG_LEVEL CON_NORMAL
 
 #include <string.h>
@@ -124,7 +120,7 @@ if (!cf.Open (filename, gameFolders.game.szData [0], "rb", 0)) { // first try te
 	}
 
 size = (int32_t) cf.Length ();
-m_pRawData = NEW uint8_t [size+1];
+m_pRawData = new uint8_t [size+1];
 readCount = (int32_t) cf.Read (m_pRawData, 1, size);
 cf.Close ();
 m_pRawData [size] = 0;
@@ -244,7 +240,7 @@ while (nNextSubTitle < m_nCaptions && nFrame >= m_captions [nNextSubTitle].first
 
 void* CMovie::Alloc (uint32_t size)
 {
-return reinterpret_cast<void*> (NEW uint8_t [size]);
+return reinterpret_cast<void*> (new uint8_t [size]);
 }
 
 // ----------------------------------------------------------------------

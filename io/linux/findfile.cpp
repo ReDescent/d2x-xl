@@ -1,9 +1,5 @@
 #ifndef _WIN32
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <string.h>
 #include <stdio.h>
 

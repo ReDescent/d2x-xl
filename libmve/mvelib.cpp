@@ -471,7 +471,7 @@ mvefile_reset (movie->movie);
 
 void* MVE_Alloc (uint32_t size)
 {
-return reinterpret_cast<void*> (NEW uint8_t [size]);
+return reinterpret_cast<void*> (new uint8_t [size]);
 }
 
 //-----------------------------------------------------------------------

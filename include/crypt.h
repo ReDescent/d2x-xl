@@ -14,10 +14,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef __crypt_h
 #define __crypt_h
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include "pstypes.h"
 
 char *jcrypt (char *pszPlain);

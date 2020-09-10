@@ -3,10 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-//#include  "oof.h
 #include "descent.h"
 #include "args.h"
 #include "u_mem.h"

@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #include <math.h>
 #include <stdio.h>
 #include <string.h>	// for memset ()
@@ -964,7 +960,7 @@ char *BuildLightingShader (const char *pszTemplate, int32_t nLights)
 	int32_t	l = (int32_t) strlen (pszTemplate) + 1;
 	char	*pszFS, szLights [2];
 
-if (!(pszFS = NEW char [l]))
+if (!(pszFS = new char [l]))
 	return NULL;
 if (nLights > MAX_LIGHTS_PER_PIXEL)
 	nLights = MAX_LIGHTS_PER_PIXEL;

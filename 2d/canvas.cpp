@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -28,7 +24,7 @@ CCanvas *CCanvas::Create (int32_t w, int32_t h)
 {
     CCanvas *pCanvas;
 
-    if ((pCanvas = NEW CCanvas))
+    if ((pCanvas = new CCanvas))
         pCanvas->Setup (w, h);
     return pCanvas;
 }
@@ -59,7 +55,7 @@ CCanvas *CCanvas::CreatePane (int32_t x, int32_t y, int32_t w, int32_t h)
 {
     CCanvas *pPane;
 
-    if (!(pPane = NEW CCanvas))
+    if (!(pPane = new CCanvas))
         return NULL;
     //SetupPane (pPane, x, y, w, h);
     pPane->Setup (this, x, y, w, h);

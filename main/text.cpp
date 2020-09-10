@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -2835,10 +2831,10 @@ if (bDumpTexts == 1) {
 	}
 
 j = BASE_TEXT_COUNT + GameTextCount ();
-if (!(pszTexts = NEW char * [j + 1]))
+if (!(pszTexts = new char * [j + 1]))
 	return NULL;
 h = GameTextSize ();
-if (!(*pszTexts = NEW char [h])) {
+if (!(*pszTexts = new char [h])) {
 	delete[] pszTexts;
 	return NULL;
 	}
@@ -2955,7 +2951,7 @@ for (nLine = 0; cf.GetS (szText, sizeof (szText)); nLine++) {
 	l = int32_t (strlen (p));
 	if (!l)
 		continue;
-	if (!(t = NEW char [l + 1]))
+	if (!(t = new char [l + 1]))
 		break;
 	memcpy (t, p, l + 1);
 	SetupText (t, szFile, nLine);
@@ -3078,7 +3074,7 @@ if (!tFile.Open (filename, gameFolders.game.szData [0], "rb", 0)) {
 		}
 	bBinary = 1;
 	len = (int32_t) iFile.Length ();
-	text = NEW char [len];
+	text = new char [len];
 	atexit (free_text);
 	iFile.Read (text, 1, len);
 	iFile.Close ();
@@ -3088,7 +3084,7 @@ else {
 	char *pi, *pj;
 
 	len = (int32_t) tFile.Length ();
-	text = NEW char [len];
+	text = new char [len];
 	atexit (free_text);
 	tFile.Read (text, 1, len);
 	for (i = len, pi = pj = text; i; i--, pi++)

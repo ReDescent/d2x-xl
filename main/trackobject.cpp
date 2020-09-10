@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #include "descent.h"
 #include "error.h"
 #include "network.h"

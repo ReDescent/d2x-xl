@@ -64,7 +64,6 @@ extern int32_t Marker_model_num;
 
 // Initializes the palette, bitmap system...
 int32_t BMInit();
-void BMClose();
 
 // Initializes the Texture[] array of bmd_bitmap structures.
 void InitTextures();
@@ -82,9 +81,6 @@ void InitTextures();
 
 #define MAX_OBJ_BITMAPS     610
 #define D1_MAX_OBJ_BITMAPS  210
-
-// Initializes all bitmaps from BITMAPS.TBL file.
-int32_t bm_init_use_tbl(void);
 
 void BMReadAll (CFile& cf, bool bDefault = true);
 void BMReadWeaponInfoD1 (CFile& cf);

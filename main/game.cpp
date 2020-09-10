@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -523,7 +519,6 @@ if (gameStates.app.bGameRunning) {
 	ResetModFolders ();
 	gameStates.app.bGameRunning = 0;
 	backgroundManager.Rebuild ();
-	LogMemBlocks (false);
 	SetFunctionMode (FMODE_MENU);	
 	}
 RETURN

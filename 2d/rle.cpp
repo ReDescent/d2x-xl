@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -301,7 +297,7 @@ int32_t CBitmap::RLECompress (void)
 		}
 	}
 
-	if (!(rle_data = NEW uint8_t [MAX_BMP_SIZE (m_info.props.w, m_info.props.h)]))
+	if (!(rle_data = new uint8_t [MAX_BMP_SIZE (m_info.props.w, m_info.props.h)]))
 		return 0;
 	if (!large_rle)
 		doffset = 4 + m_info.props.h;
@@ -603,7 +599,7 @@ void CBitmap::RLESwapTransparencyColor (void)
 	uint16_t nLineSize;
 
 rle_big = m_info.props.flags & BM_FLAG_RLE_BIG;
-temp = NEW uint8_t [MAX_BMP_SIZE (m_info.props.w, m_info.props.h)];
+temp = new uint8_t [MAX_BMP_SIZE (m_info.props.w, m_info.props.h)];
 if (rle_big) {                  // set ptrs to first lines
 	ptr = Buffer () + 4 + 2 * m_info.props.h;
 	ptr2 = temp + 4 + 2 * m_info.props.h;
@@ -662,7 +658,7 @@ int32_t CBitmap::RLERemap (uint8_t *colorMap, int32_t maxLen)
 	uint16_t nLineSize;
 
 bWideRLE = m_info.props.flags & BM_FLAG_RLE_BIG;
-remapBuf = NEW uint8_t [MAX_BMP_SIZE (m_info.props.w, m_info.props.h) + 30000];
+remapBuf = new uint8_t [MAX_BMP_SIZE (m_info.props.w, m_info.props.h) + 30000];
 if (bWideRLE) {                  // set ptrs to first lines
 	pSrc = Buffer () + 4 + 2 * m_info.props.h;
 	pDest = remapBuf + 4 + 2 * m_info.props.h;

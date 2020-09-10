@@ -7,10 +7,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #ifdef __macosx__
 # include <SDL/SDL.h>
 #else
@@ -406,7 +402,7 @@ int32_t CParticleEmitter::SetDensity (int32_t nMaxParts/*, int32_t nDensity*/)
 if (m_nMaxParts == nMaxParts)
 	return 1;
 if (nMaxParts > m_nPartLimit) {
-	if (!(pp = NEW CParticle [nMaxParts]))
+	if (!(pp = new CParticle [nMaxParts]))
 		return 0;
 	if (m_particles.Buffer ()) {
 		if (m_nParts > nMaxParts)

@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #ifndef _WIN32
 #	include <arpa/inet.h>
 #	include <netinet/in.h> /* for htons & co. */

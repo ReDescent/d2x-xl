@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <string.h>
 
@@ -1859,7 +1855,7 @@ void NMWrapText (char* dbuf, char* sbuf, int32_t line_length)
 	char* wordptr;
 	char* tbuf;
 
-	tbuf = NEW char [strlen (sbuf) + 1];
+	tbuf = new char [strlen (sbuf) + 1];
 	strcpy (tbuf, sbuf);
 
 	wordptr = strtok (tbuf, " ");

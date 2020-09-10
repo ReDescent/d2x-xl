@@ -1,25 +1,16 @@
 // autodl.c
 // automatic level up/download
 
-#ifdef HAVE_CONFIG_H
-#	include <conf.h>
-#endif
-
 #include <time.h>
 #include <string.h>
 
-#ifdef __macosx__
-#	include <SDL/SDL.h>
-#	include <SDL/SDL_thread.h>
-#	include <SDL_net/SDL_net.h>
-#else
-#	ifdef _WIN32
-#		include <WinSock.h>
-#	endif
-#	include <SDL.h>
-#	include <SDL_thread.h>
-#	include <SDL_net.h>
+#ifdef _WIN32
+    #include <WinSock.h>
 #endif
+#include <SDL.h>
+#include <SDL_thread.h>
+#include <SDL_net.h>
+
 #include "descent.h"
 #include "network.h"
 #include "network_lib.h"

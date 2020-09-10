@@ -64,10 +64,6 @@ if	 ((gameStates.multi.nGameType == UDP_GAME) &&
 
 //------------------------------------------------------------------------------
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -498,7 +494,7 @@ if (_IOCTL (sock, SIOCGIFCOUNT, &cnt))
 	cnt = 2 * cnt + 2;
 #	endif
 ifconf.ifc_len = cnt * sizeof (struct ifreq);
-ifconf.ifc_req = NEW ifreq [ifconf.ifc_len];
+ifconf.ifc_req = new ifreq [ifconf.ifc_len];
 memset (ifconf.ifc_req, 0, ifconf.ifc_len);
 if (!_IOCTL (sock, SIOCGIFCONF, &ifconf) || (ifconf.ifc_len % sizeof (struct ifreq))) {
 	close (sock);

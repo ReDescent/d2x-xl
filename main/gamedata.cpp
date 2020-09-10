@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -74,6 +70,12 @@
 #if USE_DACS
 #	include "dialheap.h"
 #endif
+
+// FIXME: remove this BS
+#define CREATE(_p,_s,_f)	if ((_p).Create (_s, #_p)) (_p).Clear (_f); else return false
+#define RESIZE(_p,_s)			if (!(_p).Resize (_s)) return false
+#define DESTROY(_p)				(_p).Destroy ()
+
 
 // ----------------------------------------------------------------------------
 

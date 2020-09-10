@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>

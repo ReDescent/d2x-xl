@@ -1,8 +1,4 @@
 /* This is HMP file playing code by Arne de Bruijn */
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #if defined (_WIN32) || USE_SDL_MIXER
 
 #include <stdio.h>

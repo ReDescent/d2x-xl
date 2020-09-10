@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "cfile.h"

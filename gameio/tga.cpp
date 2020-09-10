@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include "descent.h"
 #include "u_mem.h"
 #include "gr.h"
@@ -745,7 +741,7 @@ nFactor2 = xFactor * yFactor;
 if (!bRealloc)
 	pDest = pData = m_pBm->Buffer ();
 else {
-	if (!(pData = NEW uint8_t [xMax * yMax * bpp]))
+	if (!(pData = new uint8_t [xMax * yMax * bpp]))
 		return 0;
 	UseBitmapCache (m_pBm, (int32_t) -m_pBm->Height () * int32_t (m_pBm->RowSize ()));
 	pDest = pData;
@@ -935,7 +931,7 @@ nScale = 1 << nScale;
 nFrames = m_pBm->Height () / m_pBm->Width ();
 nFrameSize = m_pBm->Width () * m_pBm->Width () * m_pBm->BPP ();
 nSize = nFrameSize * nFrames * nScale;
-if (!(pBuffer = NEW uint8_t [nSize]))
+if (!(pBuffer = new uint8_t [nSize]))
 	return 0;
 m_pBm->SetHeight (m_pBm->Height () * nScale);
 memset (pBuffer, 0, nSize);
@@ -983,7 +979,7 @@ if (q * q != nFrames)
 w = m_pBm->Width ();
 nFrameSize = w * w * m_pBm->BPP ();
 nSize = nFrameSize * nFrames;
-if (!(pBuffer = NEW uint8_t [nSize]))
+if (!(pBuffer = new uint8_t [nSize]))
 	return 0;
 srcP = m_pBm->Buffer ();
 nRowSize = w * m_pBm->BPP ();

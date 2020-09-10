@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <string.h>	// for memset
 #include <stdio.h>
 #include <time.h>
@@ -41,7 +37,7 @@ bool CLightningNode::CreateChild (CFixVector *vEnd, CFixVector *vDelta,
 											 char nStyle, float nWidth, CFloatVector *pColor, CLightning *pParent, int16_t nNode,
 											 int32_t nThread)
 {
-if (!(m_child = NEW CLightning))
+if (!(m_child = new CLightning))
 	return false;
 m_child->Init (&m_vPos, vEnd, vDelta, -1, nLife, 0, nLength, nAmplitude, nAngle, 0,
 					nNodes, nChildren, nSteps, nSmoothe, bClamp, bGlow, bBlur, bLight,

@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -255,7 +251,7 @@ class CFrameTimeFactory {
 	public:
 		static CFrameTimeFactory* GetInstance (void) {
 			if (!m_instance)
-				m_instance = NEW CFrameTimeFactory;
+				m_instance = new CFrameTimeFactory;
 			return m_instance;
 			}
 
@@ -264,7 +260,7 @@ class CFrameTimeFactory {
 #ifdef _WIN32
 				m_timer = NEW CWindowsFrameTime ();
 #elif defined (__unix__) || defined(__macosx__)
-				m_timer = NEW CUnixFrameTime ();
+				m_timer = new CUnixFrameTime ();
 #else
 				m_timer = NEW CSDLFrameTime ();
 #endif

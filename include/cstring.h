@@ -1,10 +1,6 @@
 #ifndef _CSTRING_H
 #define _CSTRING_H
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <string.h>
 #include <stdlib.h>
 

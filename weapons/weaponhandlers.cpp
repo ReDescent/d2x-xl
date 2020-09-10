@@ -11,10 +11,6 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <conf.h>
-#endif
-
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -174,8 +170,7 @@ if (!nFired) {
 		OBJECT (nLightObj)->Die ();
 	return 0;
 	}
-postProcessManager.Add (NEW CPostEffectShockwave (SDL_GetTicks (), I2X (1) / 3, pObj->info.xSize, 1, 
-																  OBJPOS (pObj)->vPos + OBJPOS (pObj)->mOrient.m.dir.f * pObj->info.xSize, pObj->Index ()));
+postProcessManager.Add (new CPostEffectShockwave (SDL_GetTicks (), I2X (1) / 3, pObj->info.xSize, 1, OBJPOS (pObj)->vPos + OBJPOS (pObj)->mOrient.m.dir.f * pObj->info.xSize, pObj->Index ()));
 vForce.v.coord.x = -(pObj->info.position.mOrient.m.dir.f.v.coord.x << 7);
 vForce.v.coord.y = -(pObj->info.position.mOrient.m.dir.f.v.coord.y << 7);
 vForce.v.coord.z = -(pObj->info.position.mOrient.m.dir.f.v.coord.z << 7);
