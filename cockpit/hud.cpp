@@ -325,70 +325,84 @@ if (ShowTextGauges ()) {
 
 void CHUD::DrawShieldBar (void)
 {
-if (cockpit->Hide ())
-	return;
+    if (cockpit->Hide ())
+        return;
 
-	static int32_t		bShow = 1;
-	static time_t		tToggle = 0, nBeep = -1;
-	//static int32_t		nIdLevel = 0;
+    static int32_t		bShow = 1;
+    static time_t		tToggle = 0, nBeep = -1;
+    //static int32_t		nIdLevel = 0;
 
-	time_t				t = gameStates.app.nSDLTicks [0];
-	int32_t				bLastFlash = gameStates.render.cockpit.nShieldFlash;
+    time_t				t = gameStates.app.nSDLTicks [0];
+    int32_t				bLastFlash = gameStates.render.cockpit.nShieldFlash;
 
-if (!ShowTextGauges ()) {
+    if (!ShowTextGauges ()) {
 
-	int32_t nLevel = m_info.nShield;
-	if ((t = FlashGauge (nLevel, &gameStates.render.cockpit.nShieldFlash, (int32_t) tToggle))) {
-		tToggle = t;
-		bShow = !bShow;
-		}
+        int32_t nLevel = m_info.nShield;
+        if ((t = FlashGauge (nLevel, &gameStates.render.cockpit.nShieldFlash, (int32_t) tToggle))) {
+            tToggle = t;
+            bShow = !bShow;
+        }
 
-	int32_t nLineSpacing = 5 * GAME_FONT->Height () / 4;
-	int32_t h = int32_t (9 * m_info.yGaugeScale), 
-		 w = int32_t (9 * m_info.xGaugeScale), 
-		 y = CCanvas::Current ()->Height () - (int32_t) (((IsMultiGame ? 6 : 2) * nLineSpacing - 1) * m_info.yGaugeScale);
-	if (hudIcons.LoadGaugeIcons () > 0)
-		hudIcons.GaugeIcon (0).RenderScaled (6, y, w, h);
-	int32_t x = 6 + int32_t (10 * m_info.xGaugeScale);
-	w = (nLevel > 100) ? 100 : 50;
-	CCanvas::Current ()->SetColorRGB (0, 64, 224, 255);
-	glLineWidth (1);
-	OglDrawEmptyRect (x, y, x + int32_t (w * m_info.xGaugeScale), y + h);
-	if (bShow) {
-		CCanvas::Current ()->SetColorRGB (0, 64, 224, 128);
-		if (nLevel <= 100)
-			OglDrawFilledRect (x, y, x + int32_t (nLevel * m_info.xGaugeScale / 2.0f), y + h);
-		else {
-			w = int32_t (50 * m_info.xGaugeScale);
-			OglDrawFilledRect (x, y, x + w, y + h);
-			while (nLevel > 100)
-				nLevel -= 100;
-			CCanvas::Current ()->SetColorRGB (0, 224, 224, 128);
-			OglDrawFilledRect (x + w, y, x + w + int32_t (nLevel * m_info.xGaugeScale / 2.0f), y + h);
-			}
-		}
-	}
-if (gameStates.render.cockpit.nShieldFlash) {
-	if (gameOpts->gameplay.bShieldWarning && gameOpts->sound.bUseSDLMixer) {
-		if ((nBeep < 0) || (bLastFlash != gameStates.render.cockpit.nShieldFlash)) {
-			if (nBeep >= 0)
-				audio.StopSound ((int32_t) nBeep);
-			nBeep = audio.StartSound (-1, SOUNDCLASS_GENERIC, I2X (2) / 3, 0xFFFF / 2, -1, -1, -1, -1, I2X (1),
-											  AddonSoundName ((gameStates.render.cockpit.nShieldFlash == 1) ? SND_ADDON_LOW_SHIELDS1 : SND_ADDON_LOW_SHIELDS2));
-			}
-		}
-	else if (nBeep >= 0) {
-		audio.StopSound ((int32_t) nBeep);
-		nBeep = -1;
-		}
-	}
-else {
-	bShow = 1;
-	if (nBeep >= 0) {
-		audio.StopSound ((int32_t) nBeep);
-		nBeep = -1;
-		}
-	}
+        int32_t nLineSpacing = 5 * GAME_FONT->Height () / 4;
+        int32_t h = int32_t (9 * m_info.yGaugeScale);
+        int32_t w = int32_t (9 * m_info.xGaugeScale);
+        int32_t y = CCanvas::Current ()->Height () - (int32_t) (((IsMultiGame ? 6 : 2) * nLineSpacing - 1) * m_info.yGaugeScale);
+
+        if (hudIcons.LoadGaugeIcons () > 0)
+            hudIcons.GaugeIcon (0).RenderScaled (6, y, w, h);
+
+        int32_t x = 6 + int32_t (10 * m_info.xGaugeScale);
+        w = (nLevel > 100) ? 100 : 50;
+        CCanvas::Current ()->SetColorRGB (0, 64, 224, 255);
+        glLineWidth (1);
+        OglDrawEmptyRect (x, y, x + int32_t (w * m_info.xGaugeScale), y + h);
+
+        if (bShow) {
+            CCanvas::Current ()->SetColorRGB (0, 64, 224, 128);
+            if (nLevel <= 100)
+                OglDrawFilledRect (x, y, x + int32_t (nLevel * m_info.xGaugeScale / 2.0f), y + h);
+            else {
+                w = int32_t (50 * m_info.xGaugeScale);
+                OglDrawFilledRect (x, y, x + w, y + h);
+                while (nLevel > 100)
+                    nLevel -= 100;
+                CCanvas::Current ()->SetColorRGB (0, 224, 224, 128);
+                OglDrawFilledRect (x + w, y, x + w + int32_t (nLevel * m_info.xGaugeScale / 2.0f), y + h);
+            }
+        }
+    }
+    if (gameStates.render.cockpit.nShieldFlash) {
+        if (gameOpts->gameplay.bShieldWarning) {
+            if ((nBeep < 0) || (bLastFlash != gameStates.render.cockpit.nShieldFlash)) {
+                if (nBeep >= 0) {
+                    audio.StopSound ((int32_t) nBeep);
+                }
+                nBeep = audio.StartSound (
+                    -1,
+                    SOUNDCLASS_GENERIC,
+                    I2X (2) / 3,
+                    0xFFFF / 2,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    I2X (1),
+                    AddonSoundName ((gameStates.render.cockpit.nShieldFlash == 1) ? SND_ADDON_LOW_SHIELDS1 : SND_ADDON_LOW_SHIELDS2)
+                );
+            }
+        }
+        else if (nBeep >= 0) {
+            audio.StopSound ((int32_t) nBeep);
+            nBeep = -1;
+        }
+    }
+    else {
+        bShow = 1;
+        if (nBeep >= 0) {
+            audio.StopSound ((int32_t) nBeep);
+            nBeep = -1;
+        }
+    }
 }
 
 //	-----------------------------------------------------------------------------

@@ -193,8 +193,6 @@ void EvalSoundArgs (void)
 {
     int32_t	t;
 
-    if ((t = FindArg ("-sdl_mixer")))
-        gameOptions [0].sound.bUseSDLMixer = NumArg (t, 1);
     if ((t = FindArg ("-midifix")))
         gameStates.sound.bMidiFix = NumArg (t, 1);
     if ((t = FindArg ("-dynamic_sound")))
@@ -202,10 +200,8 @@ void EvalSoundArgs (void)
     else
         gameStates.sound.bDynamic = 1;
 
-    if (gameOptions [0].sound.bUseSDLMixer) {
-        if ((t = FindArg ("-hires_sound")))
-            gameOptions [0].sound.bHires [0] = gameOptions [0].sound.bHires [1] = NumArg (t, 2);
-    }
+    if ((t = FindArg ("-hires_sound")))
+        gameOptions [0].sound.bHires [0] = gameOptions [0].sound.bHires [1] = NumArg (t, 2);
 }
 
 // ----------------------------------------------------------------------------
@@ -461,8 +457,6 @@ if ((t = FindArg ("-tracelevel")))
 	gameStates.app.nTraceLevel = NumArg (t, 0);
 else
 	gameStates.app.nTraceLevel = 0;
-if ((t = FindArg ("-nosound")))
-	gameStates.app.bUseSound = (NumArg (t, 1) == 0);
 if ((t = FindArg ("-progress_bars")))
 	gameStates.app.bProgressBars = NumArg (t, 1);
 if ((t = FindArg ("-altLanguage")))

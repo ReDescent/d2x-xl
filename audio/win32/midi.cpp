@@ -45,18 +45,16 @@ void CMidi::Fadeout (void)
     if (!audio.Available ())
         return;
 
-    if (gameOpts->sound.bUseSDLMixer) {
-        if (gameOpts->sound.bFadeMusic) {
-            Mix_FadeOutMusic (300);
-            SDL_Delay (330);
-        }
-        int32_t nVolume = m_nVolume;
-        SetVolume (0);
-        m_nVolume = nVolume;
-        Mix_HaltMusic ();
-        Mix_FreeMusic (m_music);
-        m_music = NULL;
+    if (gameOpts->sound.bFadeMusic) {
+        Mix_FadeOutMusic (300);
+        SDL_Delay (330);
     }
+    int32_t nVolume = m_nVolume;
+    SetVolume (0);
+    m_nVolume = nVolume;
+    Mix_HaltMusic ();
+    Mix_FreeMusic (m_music);
+    m_music = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -75,8 +73,8 @@ int32_t CMidi::SetVolume (int32_t nVolume)
     else
         m_nVolume = nVolume;
 
-    if (gameOpts->sound.bUseSDLMixer)
-        Mix_VolumeMusic (m_nVolume);
+    Mix_VolumeMusic (m_nVolume);
+
 # if defined (_WIN32)
     else if (m_hmp) {
         // scale up from 0-127 to 0-0xffff
@@ -139,7 +137,8 @@ int32_t CMidi::PlaySong (const char* pszSong, char* melodicBank, char* drumBank,
     }
     */
 
-    if (gameOpts->sound.bUseSDLMixer) {
+    // FIXME: IF midi is to be played through SDL (it shouldn't, use zmusic)
+    {
         char			fnSong [FILENAME_LEN];
         const char*	pfnSong;
 
@@ -205,8 +204,7 @@ void CMidi::Pause (void)
         return;
 
     if (!m_nPaused) {
-        if (gameOpts->sound.bUseSDLMixer)
-            Mix_PauseMusic ();
+        Mix_PauseMusic ();
     }
     m_nPaused++;
 }
@@ -219,8 +217,7 @@ void CMidi::Resume (void)
         return;
 
     if (m_nPaused == 1) {
-        if (gameOpts->sound.bUseSDLMixer)
-            Mix_ResumeMusic ();
+        Mix_ResumeMusic ();
     }
     m_nPaused--;
 }

@@ -32,24 +32,23 @@ gameStates.gameplay.slowmo [i].tUpdate = gameStates.app.nSDLTicks [0];
 
 void SlowMotionMessage (void)
 {
-if (gameStates.gameplay.slowmo [0].nState > 0) {
-	if (gameOpts->sound.bUseSDLMixer)
-		nSlowMotionChannel = audio.PlayWAV ("slowdown.wav");
-	HUDInitMessage (TXT_SLOWING_DOWN);
-	}
-else if ((gameStates.gameplay.slowmo [0].nState < 0) ||
-			((gameStates.gameplay.slowmo [0].nState == 0) && (gameStates.gameplay.slowmo [0].fSpeed == 1.0f)) || 
-			(gameStates.gameplay.slowmo [1].nState < 0) || 
-			((gameStates.gameplay.slowmo [1].nState == 0) && (gameStates.gameplay.slowmo [1].fSpeed == 1.0f))) {
-	if (gameOpts->sound.bUseSDLMixer)
-		nSlowMotionChannel = audio.PlayWAV ("speedup.wav");
-	HUDInitMessage (TXT_SPEEDING_UP);
-	}
-else {
-	if (gameOpts->sound.bUseSDLMixer)
-		nSlowMotionChannel = audio.PlayWAV ("slowdown.wav");
-	HUDInitMessage (TXT_SLOWING_DOWN);
-	}
+    if (gameStates.gameplay.slowmo [0].nState > 0) {
+        nSlowMotionChannel = audio.PlayWAV ("slowdown.wav");
+        HUDInitMessage (TXT_SLOWING_DOWN);
+    }
+    else if (
+        (gameStates.gameplay.slowmo [0].nState < 0) ||
+        ((gameStates.gameplay.slowmo [0].nState == 0) && (gameStates.gameplay.slowmo [0].fSpeed == 1.0f)) ||
+        (gameStates.gameplay.slowmo [1].nState < 0) ||
+        ((gameStates.gameplay.slowmo [1].nState == 0) && (gameStates.gameplay.slowmo [1].fSpeed == 1.0f))
+    ) {
+        nSlowMotionChannel = audio.PlayWAV ("speedup.wav");
+        HUDInitMessage (TXT_SPEEDING_UP);
+    }
+    else {
+        nSlowMotionChannel = audio.PlayWAV ("slowdown.wav");
+        HUDInitMessage (TXT_SLOWING_DOWN);
+    }
 }
 
 //	-----------------------------------------------------------------------------------------------------------

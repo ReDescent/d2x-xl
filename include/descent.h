@@ -607,7 +607,6 @@ class CSoundOptions {
 	public:
 		int32_t bUseD1Sounds;
 		int32_t bHires [2];
-		int32_t bUseSDLMixer;
 		int32_t bUseOpenAL;
 		int32_t bFadeMusic;
 		int32_t bShuffleMusic;
@@ -1246,7 +1245,6 @@ class CApplicationStates {
 		int32_t		bDeathSequenceAborted;
 		int32_t		bChangingShip;
 		int32_t		bPlayerFiredLaserThisFrame;
-		int32_t		bUseSound;
 		int32_t		bMacData;
 		int32_t		bCompressData;
 		int32_t		bLunacy;

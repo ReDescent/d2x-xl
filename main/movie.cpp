@@ -652,31 +652,35 @@ return NULL;    //couldn't find it
 
 int32_t CMovieManager::Play (const char* filename, int32_t bRequired, int32_t bForce, int32_t bFullScreen)
 {
-	char name [FILENAME_LEN], *p;
-	int32_t c, ret;
+    char name [FILENAME_LEN], *p;
+    int32_t c, ret;
 
-#if 1//!DBG
-if (!bForce && (gameOpts->movies.nLevel < 2))
-	return MOVIE_NOT_PLAYED;
-#endif
-strcpy (name, filename);
-if (!(p = strchr (name, '.')))		//add extension, if missing
-	strcat (name, ".mve");
-//check for escape already pressed & abort if so
-while ((c = KeyInKey ()))
-	if (c == KEY_ESC)
-		return MOVIE_ABORTED;
-// Stop all digital sounds currently playing.
-SetScreenMode (SCREEN_MENU);
-audio.Shutdown ();
-// Start sound
-MVE_sndInit (gameStates.app.bUseSound ? 1 : -1);
-midi.FixVolume (64);
-gameOpts->movies.bFullScreen = bFullScreen;
-ret = Run (name, gameOpts->movies.bHires, bRequired, -1, -1);
-audio.Setup (1);
-gameStates.video.nScreenMode = -1;		//force screen reset
-return ret;
+    if (!bForce && (gameOpts->movies.nLevel < 2))
+        return MOVIE_NOT_PLAYED;
+
+    strcpy (name, filename);
+    if (!(p = strchr (name, '.')))		//add extension, if missing
+        strcat (name, ".mve");
+
+    //check for escape already pressed & abort if so
+    while ((c = KeyInKey ()))
+        if (c == KEY_ESC)
+            return MOVIE_ABORTED;
+
+    // Stop all digital sounds currently playing.
+    SetScreenMode (SCREEN_MENU);
+    audio.Shutdown ();
+
+    // Start sound
+    MVE_sndInit (1);
+    midi.FixVolume (64);
+    gameOpts->movies.bFullScreen = bFullScreen;
+
+    ret = Run (name, gameOpts->movies.bHires, bRequired, -1, -1);
+
+    audio.Setup (1);
+    gameStates.video.nScreenMode = -1;		//force screen reset
+    return ret;
 }
 
 //-----------------------------------------------------------------------
