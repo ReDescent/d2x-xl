@@ -250,6 +250,7 @@ int32_t SetupSounds (CFile& cf, int32_t nSounds, int32_t nSoundStart, bool bCust
 
         pSound = &gameData.pigData.sound.pSound [j];
         if (!bUseLowRes && LoadHiresSound (pSound, szSoundName, bCustom)) {
+            PrintLog (0, "Loaded hires sound %s.wav.\n", szSoundName);
             nLoadedSounds [1]++;
             pSound->nOffset [0] = 0;
         }

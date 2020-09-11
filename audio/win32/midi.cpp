@@ -138,7 +138,6 @@ int32_t CMidi::PlaySong (const char* pszSong, char* melodicBank, char* drumBank,
         return 0;
     }
     */
-    return 0;
 
     if (gameOpts->sound.bUseSDLMixer) {
         char			fnSong [FILENAME_LEN];
@@ -148,6 +147,7 @@ int32_t CMidi::PlaySong (const char* pszSong, char* melodicBank, char* drumBank,
             pfnSong = pszSong;
         }
         else {
+            return 0;
             sprintf (fnSong, "%sd2x-temp.mid", *gameFolders.var.szCache ? gameFolders.var.szCache : gameFolders.user.szCache);
             if (!hmp_to_midi (m_hmp, fnSong)) {
                 PrintLog (-1, "SDL_mixer failed to load %s\n(%s)\n", fnSong, Mix_GetError ());

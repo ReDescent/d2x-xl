@@ -415,25 +415,25 @@ gameData.appData.bGamePaused = 0;
 //terminates with error code 1, printing message
 void _CDECL_ Error (const char *fmt,...)
 {
-	va_list arglist;
+    va_list arglist;
 
 #if !DBG
-strcpy (szExitMsg, TXT_TITLE_ERROR); // don't put the new line in for dialog output
+    strcpy (szExitMsg, TXT_TITLE_ERROR); // don't put the new line in for dialog output
 #else
-sprintf (szExitMsg, "\n%s", TXT_TITLE_ERROR);
+    sprintf (szExitMsg, "\n%s", TXT_TITLE_ERROR);
 #endif
-va_start (arglist,fmt);
-vsprintf (szExitMsg + strlen (szExitMsg), fmt, arglist);
-va_end(arglist);
-PrintLog (0, "ERROR: %s\n", szExitMsg);
-gameStates.app.bShowError = 1;
-D2MsgBox (szExitMsg, MB_ICONERROR);
-gameStates.app.bShowError = 0;
-Int3();
-if (!err_initialized)
-	print_exit_message();
+    va_start (arglist,fmt);
+    vsprintf (szExitMsg + strlen (szExitMsg), fmt, arglist);
+    va_end(arglist);
+    PrintLog (0, "ERROR: %s\n", szExitMsg);
+    gameStates.app.bShowError = 1;
+    D2MsgBox (szExitMsg, MB_ICONERROR);
+    gameStates.app.bShowError = 0;
+    Int3();
+    if (!err_initialized)
+        print_exit_message();
 #if !DBG
-exit (1);
+    exit (1);
 #endif
 }
 
