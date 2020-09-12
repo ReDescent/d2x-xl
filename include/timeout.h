@@ -8,11 +8,7 @@
 #ifndef TIMEOUT_H_
 #define TIMEOUT_H_
 
-#ifdef __macosx__
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+#include <SDL.h>
 
 #ifndef G3_SLEEP
 #	ifdef _WIN32

@@ -115,15 +115,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //#include "console.h"
 #include "vecmat.h"
 
-#ifdef __macosx__
-# include <SDL/SDL.h>
-# include <SDL/SDL_thread.h>
-# include <SDL_net/SDL_net.h>
-#else
-# include <SDL.h>
-# include <SDL_thread.h>
-# include <SDL_net.h>
-#endif
+#include <SDL.h>
+#include <SDL_thread.h>
+#include <SDL_net.h>
 
 /**
  **	Constants
@@ -160,212 +154,212 @@ typedef int32_t _CDECL_ tThreadFunc (void *);
 typedef tThreadFunc *pThreadFunc;
 
 class CThreadInfo {
-	public:
-		SDL_Thread*	pThread;
-		SDL_sem*		done;
-		SDL_sem*		exec;
-		int32_t		nId;
-		int32_t		bExec;
-		int32_t		bDone;
-		int32_t		bBlock;
-		int32_t		bQuit;
-	};
+public:
+    SDL_Thread*	pThread;
+    SDL_sem*		done;
+    SDL_sem*		exec;
+    int32_t		nId;
+    int32_t		bExec;
+    int32_t		bDone;
+    int32_t		bBlock;
+    int32_t		bQuit;
+};
 
 //------------------------------------------------------------------------------
 
 // The version number of the game
 class CLegacyOptions {
-	public:
-		int32_t bInput;
-		int32_t bProducers;
-		int32_t bMouse;
-		int32_t bHomers;
-		int32_t bRender;
-		int32_t bSwitches;
-		int32_t bWalls;
+public:
+    int32_t bInput;
+    int32_t bProducers;
+    int32_t bMouse;
+    int32_t bHomers;
+    int32_t bRender;
+    int32_t bSwitches;
+    int32_t bWalls;
 
-	public:
-		CLegacyOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    CLegacyOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 typedef struct tCameraOptions {
-	int32_t nFPS;
-	int32_t nSpeed;
-	int32_t bFitToWall;
-	int32_t bHires;
+    int32_t nFPS;
+    int32_t nSpeed;
+    int32_t bFitToWall;
+    int32_t bHires;
 } tCameraOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tWeaponIconOptions {
-	int32_t bSmall;
-	int32_t nHiliteColor;
-	char bShowAmmo;
-	char bEquipment;
-	char bBoldHighlight;
-	char nSort;
-	uint8_t alpha;
+    int32_t bSmall;
+    int32_t nHiliteColor;
+    char bShowAmmo;
+    char bEquipment;
+    char bBoldHighlight;
+    char nSort;
+    uint8_t alpha;
 } tWeaponIconOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tColorOptions {
-	int32_t bCap;
-	int32_t nLevel;
-	int32_t bWalls;
-	int32_t bMix;
-	int32_t bUseLightmaps;
-	int32_t bConfigurable;
-	int32_t nLightmapRange;
-	int32_t nSaturation;
-	int32_t nAmbientLight;
-	int32_t nSpecularLight;
+    int32_t bCap;
+    int32_t nLevel;
+    int32_t bWalls;
+    int32_t bMix;
+    int32_t bUseLightmaps;
+    int32_t bConfigurable;
+    int32_t nLightmapRange;
+    int32_t nSaturation;
+    int32_t nAmbientLight;
+    int32_t nSpecularLight;
 } tColorOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tCockpitOptions {
-	int32_t bHUD;
-	int32_t bHUDMsgs;
-	int32_t bSplitHUDMsgs;	//split player and other message displays
-	int32_t bWideDisplays;
-	int32_t bReticle;
-	int32_t nShipStateLayout;
-	int32_t bSeparators;
-	int32_t bMouseIndicator;
-	int32_t bTextGauges;
-	int32_t bScaleGauges;
-	int32_t bFlashGauges;
-	int32_t bMissileView;
-	int32_t bGuidedInMainView;
-	int32_t bObjectTally;
-	int32_t bRotateMslLockInd;
-	int32_t bPlayerStats;
-	int32_t nWindowPos;
-	int32_t nWindowSize;
-	int32_t nWindowZoom;
-	int32_t nRadarPos;
-	int32_t nRadarSize;
-	int32_t nRadarRange;
-	int32_t nRadarColor;
-	int32_t nRadarStyle;
-	int32_t nColorScheme;
-	int32_t nCompactWidth;
-	int32_t nCompactHeight;
+    int32_t bHUD;
+    int32_t bHUDMsgs;
+    int32_t bSplitHUDMsgs;	//split player and other message displays
+    int32_t bWideDisplays;
+    int32_t bReticle;
+    int32_t nShipStateLayout;
+    int32_t bSeparators;
+    int32_t bMouseIndicator;
+    int32_t bTextGauges;
+    int32_t bScaleGauges;
+    int32_t bFlashGauges;
+    int32_t bMissileView;
+    int32_t bGuidedInMainView;
+    int32_t bObjectTally;
+    int32_t bRotateMslLockInd;
+    int32_t bPlayerStats;
+    int32_t nWindowPos;
+    int32_t nWindowSize;
+    int32_t nWindowZoom;
+    int32_t nRadarPos;
+    int32_t nRadarSize;
+    int32_t nRadarRange;
+    int32_t nRadarColor;
+    int32_t nRadarStyle;
+    int32_t nColorScheme;
+    int32_t nCompactWidth;
+    int32_t nCompactHeight;
 } tCockpitOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tTextureOptions {
-	int32_t bUseHires [2];
-	int32_t nQuality;
+    int32_t bUseHires [2];
+    int32_t nQuality;
 } tTextureOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tParticleOptions {
-	int32_t nQuality;
-	int32_t nDens [5];
-	int32_t nSize [5];
-	int32_t nLife [5];
-	int32_t nAlpha [5];
-	int32_t bSyncSizes;
-	int32_t bPlayers;
-	int32_t bRobots;
-	int32_t bMissiles;
-	int32_t bPlasmaTrails;
-	int32_t bDebris;
-	int32_t bStatic;
-	int32_t bBubbles;
-	int32_t bWobbleBubbles;
-	int32_t bWiggleBubbles;
-	int32_t bCollisions;
-	int32_t bDisperse;
-	int32_t bRotate;
-	int32_t bSort;
-	int32_t bDecreaseLag;	//only render if player is moving forward
-	int32_t bAuxViews;
-	int32_t bMonitors;
+    int32_t nQuality;
+    int32_t nDens [5];
+    int32_t nSize [5];
+    int32_t nLife [5];
+    int32_t nAlpha [5];
+    int32_t bSyncSizes;
+    int32_t bPlayers;
+    int32_t bRobots;
+    int32_t bMissiles;
+    int32_t bPlasmaTrails;
+    int32_t bDebris;
+    int32_t bStatic;
+    int32_t bBubbles;
+    int32_t bWobbleBubbles;
+    int32_t bWiggleBubbles;
+    int32_t bCollisions;
+    int32_t bDisperse;
+    int32_t bRotate;
+    int32_t bSort;
+    int32_t bDecreaseLag;	//only render if player is moving forward
+    int32_t bAuxViews;
+    int32_t bMonitors;
 } tParticleOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tLightningOptions {
-	int32_t nQuality;
-	int32_t nStyle;
-	int32_t bGlow;
-	int32_t bPlayers;
-	int32_t bRobots;
-	int32_t bDamage;
-	int32_t bExplosions;
-	int32_t bStatic;
-	int32_t bOmega;
-	int32_t bRobotOmega;
-	int32_t bAuxViews;
-	int32_t bMonitors;
+    int32_t nQuality;
+    int32_t nStyle;
+    int32_t bGlow;
+    int32_t bPlayers;
+    int32_t bRobots;
+    int32_t bDamage;
+    int32_t bExplosions;
+    int32_t bStatic;
+    int32_t bOmega;
+    int32_t bRobotOmega;
+    int32_t bAuxViews;
+    int32_t bMonitors;
 } tLightningOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tShadowOptions {
-	int32_t nReach;
-	int32_t nLights;
-	int32_t bFast;
-	int32_t nClip;
-	int32_t bSoft;
-	int32_t bPlayers;
-	int32_t bRobots;
-	int32_t bMissiles;
-	int32_t bPowerups;
-	int32_t bReactors;
-	} tShadowOptions;
+    int32_t nReach;
+    int32_t nLights;
+    int32_t bFast;
+    int32_t nClip;
+    int32_t bSoft;
+    int32_t bPlayers;
+    int32_t bRobots;
+    int32_t bMissiles;
+    int32_t bPowerups;
+    int32_t bReactors;
+} tShadowOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tPowerupOptions {
-	int32_t b3D;
-	int32_t b3DShields;
-	int32_t nSpin;
+    int32_t b3D;
+    int32_t b3DShields;
+    int32_t nSpin;
 } tPowerupOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tAutomapOptions {
-	int32_t bTextured;
-	int32_t bBright;
-	int32_t bCoronas;
-	int32_t bParticles;
-	int32_t bSparks;
-	int32_t bLightning;
-	int32_t bGrayOut;
-	int32_t bSkybox;
-	int32_t nColor;
-	//int32_t nRange;
+    int32_t bTextured;
+    int32_t bBright;
+    int32_t bCoronas;
+    int32_t bParticles;
+    int32_t bSparks;
+    int32_t bLightning;
+    int32_t bGrayOut;
+    int32_t bSkybox;
+    int32_t nColor;
+    //int32_t nRange;
 } tAutomapOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tShipRenderOptions {
-	int32_t nWingtip;
-	int32_t bBullets;
-	int32_t nColor;
+    int32_t nWingtip;
+    int32_t bBullets;
+    int32_t nColor;
 } tShipRenderOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tCoronaRenderOptions {
-	int32_t bUse;
-	int32_t nStyle;
-	int32_t bShots;
-	int32_t bWeapons;
-	int32_t bPowerups;
-	int32_t bAdditive; //additive corona blending for wall lights 
-	int32_t bAdditiveObjs; //additive corona blending for light emitting weapons
-	int32_t nIntensity;
-	int32_t nObjIntensity;
+    int32_t bUse;
+    int32_t nStyle;
+    int32_t bShots;
+    int32_t bWeapons;
+    int32_t bPowerups;
+    int32_t bAdditive; //additive corona blending for wall lights
+    int32_t bAdditiveObjs; //additive corona blending for light emitting weapons
+    int32_t nIntensity;
+    int32_t nObjIntensity;
 } tCoronaRenderOptions;
 
 //------------------------------------------------------------------------------
@@ -374,30 +368,30 @@ typedef struct tCoronaRenderOptions {
 #define SOFT_BLEND_PARTICLES	2
 
 typedef struct tEffectRenderOptions {
-	int32_t bEnabled;
-	int32_t nShockwaves;
-	int32_t nDebris;
-	int32_t nShrapnels;
-	int32_t bEnergySparks;
-	int32_t bShields;
-	int32_t bOnlyShieldHits;
-	int32_t bAutoTransparency;
-	int32_t bTransparent;
-	int32_t bSoftParticles;
-	int32_t bMovingSparks;
-	int32_t bGlow;
-	int32_t bFog;
-	int32_t bWarpAppearance;
+    int32_t bEnabled;
+    int32_t nShockwaves;
+    int32_t nDebris;
+    int32_t nShrapnels;
+    int32_t bEnergySparks;
+    int32_t bShields;
+    int32_t bOnlyShieldHits;
+    int32_t bAutoTransparency;
+    int32_t bTransparent;
+    int32_t bSoftParticles;
+    int32_t bMovingSparks;
+    int32_t bGlow;
+    int32_t bFog;
+    int32_t bWarpAppearance;
 } tEffectRenderOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tDebugRenderOptions {
-	int32_t bDynamicLight;
-	int32_t bObjects;
-	int32_t bTextures;
-	int32_t bWalls;
-	int32_t bWireFrame;
+    int32_t bDynamicLight;
+    int32_t bObjects;
+    int32_t bTextures;
+    int32_t bWalls;
+    int32_t bWireFrame;
 } tDebugRenderOptions;
 
 //------------------------------------------------------------------------------
@@ -417,309 +411,308 @@ typedef struct tDebugRenderOptions {
 #define STEREO_TOE_IN					1
 
 typedef struct tStereoRenderOptions {
-	int32_t nGlasses;
-	int32_t nMethod;
-	int32_t nScreenDist;
-	int32_t bEnhance;
-	int32_t bColorGain;
-	int32_t bDeghost;
-	int32_t bFlipFrames;
-	int32_t bBrighten;
-	int32_t bChromAbCorr;
-	int32_t nRiftFOV;
-	fix xSeparation [2];
+    int32_t nGlasses;
+    int32_t nMethod;
+    int32_t nScreenDist;
+    int32_t bEnhance;
+    int32_t bColorGain;
+    int32_t bDeghost;
+    int32_t bFlipFrames;
+    int32_t bBrighten;
+    int32_t bChromAbCorr;
+    int32_t nRiftFOV;
+    fix xSeparation [2];
 } tStereoRenderOptions;
 
 class CRenderOptions {
-	public:
-		int32_t bAllSegs;
-		int32_t nLightingMethod;
-		int32_t bHiresModels [2];
-		int32_t nMeshQuality;
-		int32_t bUseLightmaps;
-		int32_t nLightmapQuality;
-		int32_t nLightmapPrecision;
-		int32_t bUseShaders;
-		int32_t bUseRift;
-		int32_t nMathFormat;
-		int32_t nDefMathFormat;
-		int16_t nMaxFPS;
-		int32_t nPath;
-		int32_t nQuality;
-		int32_t nImageQuality;
-		int32_t nDebrisLife;
-		int32_t bCartoonize;
-		int32_t bPowerupSpinType;
-		tCameraOptions cameras;
-		tColorOptions color;
-		tCockpitOptions cockpit;
-		tTextureOptions textures;
-		tWeaponIconOptions weaponIcons;
-		tParticleOptions particles;
-		tLightningOptions lightning;
-		tShadowOptions shadows;
-		tPowerupOptions powerups;
-		tAutomapOptions automap;
-		tShipRenderOptions ship;
-		tCoronaRenderOptions coronas;
-		tEffectRenderOptions effects;
-		tStereoRenderOptions stereo;
-		tDebugRenderOptions debug;
+public:
+    int32_t bAllSegs;
+    int32_t nLightingMethod;
+    int32_t bHiresModels [2];
+    int32_t nMeshQuality;
+    int32_t bUseLightmaps;
+    int32_t nLightmapQuality;
+    int32_t nLightmapPrecision;
+    int32_t bUseShaders;
+    int32_t bUseRift;
+    int32_t nMathFormat;
+    int32_t nDefMathFormat;
+    int16_t nMaxFPS;
+    int32_t nPath;
+    int32_t nQuality;
+    int32_t nImageQuality;
+    int32_t nDebrisLife;
+    int32_t bCartoonize;
+    int32_t bPowerupSpinType;
+    tCameraOptions cameras;
+    tColorOptions color;
+    tCockpitOptions cockpit;
+    tTextureOptions textures;
+    tWeaponIconOptions weaponIcons;
+    tParticleOptions particles;
+    tLightningOptions lightning;
+    tShadowOptions shadows;
+    tPowerupOptions powerups;
+    tAutomapOptions automap;
+    tShipRenderOptions ship;
+    tCoronaRenderOptions coronas;
+    tEffectRenderOptions effects;
+    tStereoRenderOptions stereo;
+    tDebugRenderOptions debug;
 
-	public:
-		CRenderOptions () { Init (); }
-		void Init (int32_t i = 0);
-		int32_t ShadowQuality (void);
-	};
+public:
+    CRenderOptions () { Init (); }
+    void Init (int32_t i = 0);
+    int32_t ShadowQuality (void);
+};
 
 //------------------------------------------------------------------------------
 
 class COglOptions {
-	public:
-		int32_t bGlTexMerge;
-		int32_t bLightObjects;
-		int32_t bLightPowerups;
-		int32_t bObjLighting;
-		int32_t bHeadlight;
-		int32_t nMaxLightsPerFace;
-		int32_t nMaxLightsPerPass;
-		int32_t nMaxLightsPerObject;
+public:
+    int32_t bGlTexMerge;
+    int32_t bLightObjects;
+    int32_t bLightPowerups;
+    int32_t bObjLighting;
+    int32_t bHeadlight;
+    int32_t nMaxLightsPerFace;
+    int32_t nMaxLightsPerPass;
+    int32_t nMaxLightsPerObject;
 
-	public:
-		COglOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    COglOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 class CMovieOptions {
-	public:
-		int32_t bHires;
-		int32_t nQuality;
-		int32_t nLevel;
-		int32_t bResize;
-		int32_t bFullScreen;
-		int32_t bSubTitles;
+public:
+    int32_t bHires;
+    int32_t nQuality;
+    int32_t nLevel;
+    int32_t bResize;
+    int32_t bFullScreen;
+    int32_t bSubTitles;
 
-	public:
-		CMovieOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    CMovieOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 class CGameplayOptions {
-	public:
-		int32_t nAutoSelectWeapon;
-		int32_t bSecretSave;
-		int32_t bTurboMode;
-		int32_t bFastRespawn;
-		int32_t nAutoLeveling;
-		int32_t bEscortHotKeys;
-		int32_t bSkipBriefingScreens;
-		int32_t bHeadlightOnWhenPickedUp;
-		int32_t bShieldWarning;
-		int32_t bInventory;
-		int32_t bIdleAnims;
-		int32_t nAIAwareness;
-		int32_t nAIAggressivity;
-		int32_t nSlowMotionSpeedup;
-		int32_t bUseD1AI;
-		int32_t bNoThief;
-		int32_t bObserve;
-		int32_t nShip [2];
+public:
+    int32_t nAutoSelectWeapon;
+    int32_t bSecretSave;
+    int32_t bTurboMode;
+    int32_t bFastRespawn;
+    int32_t nAutoLeveling;
+    int32_t bEscortHotKeys;
+    int32_t bSkipBriefingScreens;
+    int32_t bHeadlightOnWhenPickedUp;
+    int32_t bShieldWarning;
+    int32_t bInventory;
+    int32_t bIdleAnims;
+    int32_t nAIAwareness;
+    int32_t nAIAggressivity;
+    int32_t nSlowMotionSpeedup;
+    int32_t bUseD1AI;
+    int32_t bNoThief;
+    int32_t bObserve;
+    int32_t nShip [2];
 
-	public:
-		CGameplayOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    CGameplayOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 #define UNIQUE_JOY_AXES	5
 
 typedef struct tMouseInputOptions {
-	int32_t bUse;
-	int32_t bSyncAxis;
-	int32_t bJoystick;
-	int32_t nDeadzone;
-	int32_t sensitivity [3];
-	} tMouseInputOptions;
+    int32_t bUse;
+    int32_t bSyncAxis;
+    int32_t bJoystick;
+    int32_t nDeadzone;
+    int32_t sensitivity [3];
+} tMouseInputOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tJoystickInputOptions {
-	int32_t bUse;
-	int32_t bSyncAxis;
-	int32_t bLinearSens;
-	int32_t sensitivity [UNIQUE_JOY_AXES];
-	int32_t deadzones [UNIQUE_JOY_AXES];
-	} tJoystickInputOptions;
+    int32_t bUse;
+    int32_t bSyncAxis;
+    int32_t bLinearSens;
+    int32_t sensitivity [UNIQUE_JOY_AXES];
+    int32_t deadzones [UNIQUE_JOY_AXES];
+} tJoystickInputOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tOculusRiftInputOptions {
-	int32_t nDeadzone;
-	} tOculusRiftInputOptions;
+    int32_t nDeadzone;
+} tOculusRiftInputOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tTrackIRInputOptions {
-	int32_t bPresent;
-	int32_t bUse;
-	int32_t nMode;
-	int32_t bMove [5];
-	int32_t nDeadzone;
-	int32_t sensitivity [3];
-	int32_t bSyncAxis;
-	} tTrackIRInputOptions;
+    int32_t bPresent;
+    int32_t bUse;
+    int32_t nMode;
+    int32_t bMove [5];
+    int32_t nDeadzone;
+    int32_t sensitivity [3];
+    int32_t bSyncAxis;
+} tTrackIRInputOptions;
 
 //------------------------------------------------------------------------------
 
 typedef struct tKeyboardInputOptions {
-	int32_t nType;
-	int32_t bUse;
-	int32_t nRamp;
-	int32_t bRamp [3];
-	} tKeyboardInputOptions;
+    int32_t nType;
+    int32_t bUse;
+    int32_t nRamp;
+    int32_t bRamp [3];
+} tKeyboardInputOptions;
 
 //------------------------------------------------------------------------------
 
 class CInputOptions {
-	public:
-		int32_t bLimitTurnRate;
-		int32_t nMinTurnRate;
-		int32_t bUseHotKeys;
-		tMouseInputOptions mouse;
-		tJoystickInputOptions joystick;
-		tOculusRiftInputOptions oculusRift;
-		tTrackIRInputOptions trackIR;
-		tKeyboardInputOptions keyboard;
+public:
+    int32_t bLimitTurnRate;
+    int32_t nMinTurnRate;
+    int32_t bUseHotKeys;
+    tMouseInputOptions mouse;
+    tJoystickInputOptions joystick;
+    tOculusRiftInputOptions oculusRift;
+    tTrackIRInputOptions trackIR;
+    tKeyboardInputOptions keyboard;
 
-	public:
-		CInputOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    CInputOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 class CSoundOptions {
-	public:
-		int32_t bUseD1Sounds;
-		int32_t bHires [2];
-		int32_t bUseOpenAL;
-		int32_t bFadeMusic;
-		int32_t bShuffleMusic;
-		int32_t bLinkVolumes;
-		int32_t audioSampleRate;	// what's used by the audio system
-		int32_t soundSampleRate;	// what the default sounds are in
-		int32_t bShip;
-		int32_t bMissiles;
-		int32_t bGatling;
-		int32_t bScrape;
-		int32_t bSpeedUp;
-		fix xCustomSoundVolume;
+public:
+    int32_t bUseD1Sounds;
+    int32_t bHires [2];
+    int32_t bFadeMusic;
+    int32_t bShuffleMusic;
+    int32_t bLinkVolumes;
+    int32_t audioSampleRate;	// what's used by the audio system
+    int32_t soundSampleRate;	// what the default sounds are in
+    int32_t bShip;
+    int32_t bMissiles;
+    int32_t bGatling;
+    int32_t bScrape;
+    int32_t bSpeedUp;
+    fix xCustomSoundVolume;
 
-	public:
-		CSoundOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    CSoundOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 typedef struct tAltBgOptions {
-	int32_t	bHave;
-	double	alpha;
-	double	brightness;
-	int32_t	grayscale;
-	int32_t	bCartoonize;
-	char szName [2][FILENAME_LEN];
+    int32_t	bHave;
+    double	alpha;
+    double	brightness;
+    int32_t	grayscale;
+    int32_t	bCartoonize;
+    char szName [2][FILENAME_LEN];
 } tAltBgOptions;
 
 //------------------------------------------------------------------------------
 
 class CMenuOptions {
-	public:
-		int32_t	nStyle;
-		int32_t	bFastMenus;
-		uint32_t	nFade;
-		int32_t	bSmartFileSearch;
-		int32_t	bShowLevelVersion;
-		char		nHotKeys;
-		tAltBgOptions altBg;
+public:
+    int32_t	nStyle;
+    int32_t	bFastMenus;
+    uint32_t	nFade;
+    int32_t	bSmartFileSearch;
+    int32_t	bShowLevelVersion;
+    char		nHotKeys;
+    tAltBgOptions altBg;
 
-	public:
-		CMenuOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    CMenuOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 class CDemoOptions {
-	public:
-		int32_t bOldFormat;
-		int32_t bRevertFormat;
+public:
+    int32_t bOldFormat;
+    int32_t bRevertFormat;
 
-	public:
-		CDemoOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    CDemoOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 class CMultiplayerOptions {
-	public:
-		int32_t bNoRankings;
-		int32_t bTimeoutPlayers;
-		int32_t bUseMacros;
-		int32_t bNoRedundancy;
+public:
+    int32_t bNoRankings;
+    int32_t bTimeoutPlayers;
+    int32_t bUseMacros;
+    int32_t bNoRedundancy;
 
-	public:
-		CMultiplayerOptions () { Init (); }
-		void Init (int32_t i = 0);
-	};
+public:
+    CMultiplayerOptions () { Init (); }
+    void Init (int32_t i = 0);
+};
 
 //------------------------------------------------------------------------------
 
 class CApplicationOptions {
-	public:
-		int32_t bAutoRunMission;
-		int32_t nVersionFilter;
-		int32_t bSinglePlayer;
-		int32_t bEnableMods;
-		int32_t bExpertMode;
-		int32_t bEpilepticFriendly;
-		int32_t bColorblindFriendly;
-		int32_t bNotebookFriendly;
-		int32_t nScreenShotInterval;
+public:
+    int32_t bAutoRunMission;
+    int32_t nVersionFilter;
+    int32_t bSinglePlayer;
+    int32_t bEnableMods;
+    int32_t bExpertMode;
+    int32_t bEpilepticFriendly;
+    int32_t bColorblindFriendly;
+    int32_t bNotebookFriendly;
+    int32_t nScreenShotInterval;
 
-	public:
-		CApplicationOptions () { Init (); }
-		void Init (int32_t i = 0);
+public:
+    CApplicationOptions () { Init (); }
+    void Init (int32_t i = 0);
 };
 
 //------------------------------------------------------------------------------
 
 class CGameOptions {
-	public:
-		CRenderOptions			render;
-		CGameplayOptions		gameplay;
-		CInputOptions			input;
-		CMenuOptions			menus;
-		CSoundOptions			sound;
-		CMovieOptions			movies;
-		CLegacyOptions			legacy;
-		COglOptions				ogl;
-		CApplicationOptions	app;
-		CMultiplayerOptions	multi;
-		CDemoOptions			demo;
+public:
+    CRenderOptions			render;
+    CGameplayOptions		gameplay;
+    CInputOptions			input;
+    CMenuOptions			menus;
+    CSoundOptions			sound;
+    CMovieOptions			movies;
+    CLegacyOptions			legacy;
+    COglOptions				ogl;
+    CApplicationOptions	app;
+    CMultiplayerOptions	multi;
+    CDemoOptions			demo;
 
-	public:
-		CGameOptions () { Init (); }
-		void Init (int32_t i = 0);
-		bool Use3DPowerups (void);
-		int32_t UseHiresSound (void);
-		inline int32_t SoftBlend (int32_t nFlag) { return (render.effects.bSoftParticles & nFlag) != 0; }
+public:
+    CGameOptions () { Init (); }
+    void Init (int32_t i = 0);
+    bool Use3DPowerups (void);
+    int32_t UseHiresSound (void);
+    inline int32_t SoftBlend (int32_t nFlag) { return (render.effects.bSoftParticles & nFlag) != 0; }
 };
 
 //------------------------------------------------------------------------------

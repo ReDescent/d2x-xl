@@ -12,11 +12,8 @@
 #ifndef _WIN32
 #	include <fcntl.h>
 #endif
-#ifdef __macosx__
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+
+#include <SDL.h>
 
 #include "descent.h"
 #include "error.h"

@@ -62,13 +62,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define ML_MSNROOTDIR	5
 
 //where the missions go
-#ifdef __macosx__
-#	define BASE_MISSION_FOLDER	"Missions/"
-#	define MISSION_FOLDER		((gameOpts->app.bSinglePlayer && !gameStates.app.bPrecomputeLightmaps) ? BASE_MISSION_FOLDER "Single/" : BASE_MISSION_FOLDER)
-#else
-#	define BASE_MISSION_FOLDER	"missions/"
-#	define MISSION_FOLDER		((gameOpts->app.bSinglePlayer && !gameStates.app.bPrecomputeLightmaps) ? BASE_MISSION_FOLDER "single/" : BASE_MISSION_FOLDER)
-#endif
+#define BASE_MISSION_FOLDER	"missions/"
+#define MISSION_FOLDER		((gameOpts->app.bSinglePlayer && !gameStates.app.bPrecomputeLightmaps) ? BASE_MISSION_FOLDER "single/" : BASE_MISSION_FOLDER)
 
 //------------------------------------------------------------------------------
 

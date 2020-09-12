@@ -575,155 +575,87 @@ memcpy (qhbuf + 4, &srcPort, 2);
 //------------------------------------------------------------------------------
 // Do hostname resolve on name "buf" and return the address in buffer "qhbuf".
 
-#if 1//def __macosx__
-
 static void SetupHints (struct addrinfo *hints)
 {
-hints->ai_family = PF_INET;
-hints->ai_protocol = IPPROTO_UDP;
-hints->ai_socktype = 0;
-hints->ai_flags = 0;
-hints->ai_addrlen = 0;
-hints->ai_addr = NULL;
-hints->ai_canonname = NULL;
-hints->ai_next = NULL;
+    hints->ai_family = PF_INET;
+    hints->ai_protocol = IPPROTO_UDP;
+    hints->ai_socktype = 0;
+    hints->ai_flags = 0;
+    hints->ai_addrlen = 0;
+    hints->ai_addr = NULL;
+    hints->ai_canonname = NULL;
+    hints->ai_next = NULL;
 }
 
 
 uint8_t *QueryHost (char *buf)
 {
-   struct addrinfo* info, * ip, hints;
-	int32_t error, bufLen = int32_t (strlen (buf));
+    struct addrinfo* info, * ip, hints;
+    int32_t error, bufLen = int32_t (strlen (buf));
 
-	char*	s;
-	char	c = 0;
+    char*	s;
+    char	c = 0;
 
-if ((s = strrchr (buf, ':'))) {
-	c = *s;
-	*s = '\0';
-	PortShift (s + 1);
-	}
-else
-	memset (qhbuf + 4, 0, 2);
-SetupHints (&hints);
-error = getaddrinfo (buf, NULL, &hints, &info);
-if (error != 0) {
-	// Trying again, but appending ".local" to the hostname. Why does this work?
-	// AFAIK, this suffix has to do with zeroconf (aka Bonjour aka Rendezvous).
-	strcat (buf, ".local");
-	SetupHints (&hints);
-	error = getaddrinfo (buf, NULL, &hints, &info);
-	}
-if (c)
-	*s = c;
-buf [bufLen] = '\0';
-if (error)
-	return NULL;
+    if ((s = strrchr (buf, ':'))) {
+        c = *s;
+        *s = '\0';
+        PortShift (s + 1);
+    }
+    else {
+        memset (qhbuf + 4, 0, 2);
+    }
+    SetupHints (&hints);
 
-// Here's another kludge: for some reason we have to filter out PF_INET6 protocol family
-// entries in the results list. Then we just grab the first regular IPv4 address we find
-// and cross our fingers.
-ip = info;
-for (ip = info; ip; ip = ip->ai_next)
-	if (ip->ai_family == PF_INET)
-		break;
-if (!ip)
-	return NULL;
+    error = getaddrinfo (buf, NULL, &hints, &info);
+    if (error != 0) {
+        // Trying again, but appending ".local" to the hostname. Why does this work?
+        // AFAIK, this suffix has to do with zeroconf (aka Bonjour aka Rendezvous).
+        strcat (buf, ".local");
+        SetupHints (&hints);
+        error = getaddrinfo (buf, NULL, &hints, &info);
+    }
 
-memcpy (qhbuf, & (reinterpret_cast<struct sockaddr_in*> (ip->ai_addr)->sin_addr), 4);
-memset (qhbuf + 4, 0, 2);
-freeaddrinfo (info);
-return qhbuf;
+    if (c)
+        *s = c;
+    buf [bufLen] = '\0';
+    if (error)
+        return NULL;
+
+    // Here's another kludge: for some reason we have to filter out PF_INET6 protocol family
+    // entries in the results list. Then we just grab the first regular IPv4 address we find
+    // and cross our fingers.
+    ip = info;
+    for (ip = info; ip; ip = ip->ai_next)
+        if (ip->ai_family == PF_INET)
+            break;
+
+    if (!ip)
+        return NULL;
+
+    memcpy (qhbuf, & (reinterpret_cast<struct sockaddr_in*> (ip->ai_addr)->sin_addr), 4);
+    memset (qhbuf + 4, 0, 2);
+    freeaddrinfo (info);
+    return qhbuf;
 }
 
-#else //------------------------------------------------------------------------
-
-uint8_t *QueryHost (char *buf)
-{
-	struct hostent *he;
-	char*	s;
-	char	coord = 0;
-
-if ((s = strrchr (buf, ':'))) {
-	coord = *s;
-	*s = '\0';
-	PortShift (s + 1);
-	}
-else
-	memset (qhbuf + 4, 0, 2);
-he = gethostbyname (reinterpret_cast<char*> (buf));
-if (s)
-	*s = coord;
-if (!he) {
-	PrintLog (0, "Error resolving my hostname \"%s\"\n", buf);
-	return NULL;
-	}
-if ((he->h_addrtype != AF_INET) || (he->h_length != 4)) {
-	PrintLog (0, "Error parsing resolved my hostname \"%s\"\n", buf);
-	return NULL;
-	}
-if (!*he->h_addr_list) {
-	PrintLog (0, "My resolved hostname \"%s\" address list empty\n", buf);
-	return NULL;
-	}
-memcpy (qhbuf, *he->h_addr_list, 4);
-return qhbuf;
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-// Dump raw form of IP address/port by fancy output to user
-
-#if 0
-
-static void DumpRawAddr (uint8_t *vec)
-{
-int16_t port;
-
-PrintLog (0, "[%u.%u.%u.%u]", vec[0], vec[1], vec[2], vec[3]);
-console.printf (0, "[%u.%u.%u.%u]", vec[0], vec[1], vec[2], vec[3]);
-port=(signed int16_t)ntohs (*reinterpret_cast<uint16_t*> (vec+4));
-if (port) {
-	PrintLog (0, ":%+d", port);
-	console.printf (0, ":%+d", port);
-	}
-PrintLog (-1, "\n");
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-// Like DumpRawAddr() but for structure "sockaddr_in"
-#if 0
-static void dumpaddr(struct sockaddr_in *sin)
-{
-uint16_t srcPort;
-
-memcpy(qhbuf, &sin->sin_addr, 4);
-srcPort = htons ((uint16_t) (ntohs (sin->sin_port) - UDP_BASEPORT));
-memcpy(qhbuf + 4, &srcPort, 2);
-DumpRawAddr (qhbuf);
-}
-#endif
 //------------------------------------------------------------------------------
 // Startup... Uninteresting parsing...
 
 int32_t UDPGetMyAddress (void)
 {
-	char			buf [256];
+    char			buf [256];
 
-if (!HaveEmptyAddress ())
-	return 0;
-if (gethostname (buf, sizeof (buf)))
-	FAIL ("error getting my hostname");
-if (!(QueryHost (buf)))
-	FAIL ("querying my hostname \"%s\"", buf);
-ipx_MyAddress.Reset ();
-ipx_MyAddress.SetNode (qhbuf);
-clientManager.BuildInterfaceList ();
-clientManager.Unify ();
-return 0;
+    if (!HaveEmptyAddress ())
+        return 0;
+    if (gethostname (buf, sizeof (buf)))
+        FAIL ("error getting my hostname");
+    if (!(QueryHost (buf)))
+        FAIL ("querying my hostname \"%s\"", buf);
+    ipx_MyAddress.Reset ();
+    ipx_MyAddress.SetNode (qhbuf);
+    clientManager.BuildInterfaceList ();
+    clientManager.Unify ();
+    return 0;
 }
 
 //------------------------------------------------------------------------------

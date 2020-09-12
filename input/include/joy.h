@@ -16,11 +16,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "pstypes.h"
 #include "fix.h"
-#ifdef __macosx__
-#	include "SDL/SDL_joystick.h"
-#else
-#	include "SDL_joystick.h"
-#endif
+#include "SDL_joystick.h"
 
 #define JOY_1_BUTTON_A  1
 #define JOY_1_BUTTON_B  2

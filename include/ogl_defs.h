@@ -22,22 +22,17 @@
 #	include <stddef.h>
 #endif
 
-#ifdef __macosx__
-#	include "glew.h"
-#	include <OpenGL/gl.h>
-#	include <OpenGL/glu.h>
+#ifdef __unix__
+#include <GL/glew.h>
+#include <GL/glxew.h>
+#include <GL/glx.h>
 #else
-#	ifdef __unix__
-#		include <GL/glew.h>
-#		include <GL/glxew.h>
-#		include <GL/glx.h>
-#	else
-#		include "glew.h"
-#		include "wglew.h"
-#	endif
-#	include <GL/gl.h>
-#	include <GL/glu.h>
+#include "glew.h"
+#include "wglew.h"
 #endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #define DEFAULT_FOV				105.0
 #define FISHEYE_FOV				135.0

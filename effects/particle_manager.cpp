@@ -7,11 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef __macosx__
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+#include <SDL.h>
 
 #include "pstypes.h"
 #include "descent.h"

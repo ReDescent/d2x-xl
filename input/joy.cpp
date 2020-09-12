@@ -6,11 +6,8 @@
  */
 
 #include <string.h>   // for memset
-#ifdef __macosx__
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+
+#include <SDL.h>
 
 #include "descent.h"
 #include "joy.h"

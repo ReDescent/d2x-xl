@@ -1116,51 +1116,51 @@ if (bAddon || (Type () == BM_TYPE_STD)) {
 
 int32_t BitmapFrame (CBitmap* pBm, int16_t nTexture, int16_t nSegment, int32_t nFrame)
 {
-if (nSegment < 0)
-	return nFrame;
-if (nTexture != 361)
-	return nFrame;
-tObjectProducerInfo* p = gameData.producerData.Find (nSegment);
-if (!p)
-	return nFrame;
-if (gameData.producerData.producers [p->nProducer].bEnabled)
-	return nFrame;
-return 3; // that's the number of the animation's darkest frame
+    if (nSegment < 0)
+        return nFrame;
+    if (nTexture != 361)
+        return nFrame;
+    tObjectProducerInfo* p = gameData.producerData.Find (nSegment);
+    if (!p)
+        return nFrame;
+    if (gameData.producerData.producers [p->nProducer].bEnabled)
+        return nFrame;
+    return 3; // that's the number of the animation's darkest frame
 }
 
 //------------------------------------------------------------------------------
 
 CBitmap *LoadFaceBitmap (int16_t nTexture, int16_t nFrameIdx, int32_t bLoadTextures)
 {
-ENTER (2, 0);
-	CBitmap*	pBm, * pBmo, * pBmf;
-	int32_t	nFrames;
+    ENTER (2, 0);
+    CBitmap*	pBm, * pBmo, * pBmf;
+    int32_t	nFrames;
 
-#if DBG
-if (nTexture == nDbgTexture)
-	BRP;
-#endif
-LoadTexture (gameData.pigData.tex.pBmIndex [nTexture].index, 0, gameStates.app.bD1Mission);
-pBm = gameData.pigData.tex.pBitmap + gameData.pigData.tex.pBmIndex [nTexture].index;
-pBm->SetStatic (1);
-if (!(pBmo = pBm->Override ()))
-	RETVAL (pBm)
-pBmo->SetStatic (1);
-if (!pBmo->WallAnim ())
-	RETVAL (pBmo)
-if (2 > (nFrames = pBmo->FrameCount ()))
-	RETVAL (pBmo)
-pBmo->SetTranspType (3);
-pBmo->SetupTexture (1, bLoadTextures);
-if (!(pBmf = pBmo->Frames ()))
-	RETVAL (pBmo)
-if ((nFrameIdx < 0) && (nFrames >= -nFrameIdx))
-	pBmf -= (nFrameIdx + 1);
-pBmo->SetCurFrame (pBmf);
-pBmf->SetTranspType (3);
-pBmf->SetupTexture (1, bLoadTextures);
-pBmf->SetStatic (1);
-RETVAL (pBmf)
+    #if DBG
+    if (nTexture == nDbgTexture)
+        BRP;
+    #endif
+    LoadTexture (gameData.pigData.tex.pBmIndex [nTexture].index, 0, gameStates.app.bD1Mission);
+    pBm = gameData.pigData.tex.pBitmap + gameData.pigData.tex.pBmIndex [nTexture].index;
+    pBm->SetStatic (1);
+    if (!(pBmo = pBm->Override ()))
+        RETVAL (pBm)
+    pBmo->SetStatic (1);
+    if (!pBmo->WallAnim ())
+        RETVAL (pBmo)
+    if (2 > (nFrames = pBmo->FrameCount ()))
+        RETVAL (pBmo)
+    pBmo->SetTranspType (3);
+    pBmo->SetupTexture (1, bLoadTextures);
+    if (!(pBmf = pBmo->Frames ()))
+        RETVAL (pBmo)
+    if ((nFrameIdx < 0) && (nFrames >= -nFrameIdx))
+        pBmf -= (nFrameIdx + 1);
+    pBmo->SetCurFrame (pBmf);
+    pBmf->SetTranspType (3);
+    pBmf->SetupTexture (1, bLoadTextures);
+    pBmf->SetStatic (1);
+    RETVAL (pBmf)
 }
 
 //------------------------------------------------------------------------------
@@ -1169,85 +1169,85 @@ RETVAL (pBmf)
 //stores OpenGL textured id in *texid and u/v values required to get only the real data in *u/*v
 int32_t CBitmap::LoadTexture (int32_t dxo, int32_t dyo, int32_t superTransp)
 {
-ENTER (2, 0);
-	uint8_t*		data = Buffer ();
+    ENTER (2, 0);
+        uint8_t*		data = Buffer ();
 
-if (!data)
-	RETVAL (1)
+    if (!data)
+        RETVAL (1)
 
-	GLubyte*		pBuffer = NULL;
-	CTexture		texture;
-	bool			bLocal;
-	int32_t		funcRes = 0;
+        GLubyte*		pBuffer = NULL;
+        CTexture		texture;
+        bool			bLocal;
+        int32_t		funcRes = 0;
 
-if ((bLocal = (m_info.pTexture == NULL))) {
-	texture.Setup (m_info.props.w, m_info.props.h, m_info.props.rowSize, m_info.nBPP);
-	}
+    if ((bLocal = (m_info.pTexture == NULL))) {
+        texture.Setup (m_info.props.w, m_info.props.h, m_info.props.rowSize, m_info.nBPP);
+    }
 #if TEXTURE_COMPRESSION
-m_info.pTexture->Prepare (m_info.compressed.bCompressed);
+    m_info.pTexture->Prepare (m_info.compressed.bCompressed);
 #	ifndef __macosx__
-if (!(m_info.compressed.bCompressed || Parent ())) {
-	if (ogl.m_features.bTextureCompression &&
-		 ((m_info.pTexture->Format () == GL_RGBA) || (m_info.pTexture->Format () == GL_RGB)) &&
-		 (m_info.pTexture->TW () >= 64) && (m_info.pTexture->TH () >= 64))
-		m_info.pTexture->SetInternalFormat (GL_COMPRESSED_RGBA);
-	if (m_info.pTexture->Verify ())
-		RETVAL (1)
-	}
+    if (!(m_info.compressed.bCompressed || Parent ())) {
+        if (ogl.m_features.bTextureCompression &&
+            ((m_info.pTexture->Format () == GL_RGBA) || (m_info.pTexture->Format () == GL_RGB)) &&
+            (m_info.pTexture->TW () >= 64) && (m_info.pTexture->TH () >= 64))
+            m_info.pTexture->SetInternalFormat (GL_COMPRESSED_RGBA);
+        if (m_info.pTexture->Verify ())
+            RETVAL (1)
+    }
 #	endif
 #else
-m_info.pTexture->Prepare ();
+    m_info.pTexture->Prepare ();
 #endif
 
 #if 1// DBG
-if (strstr (m_info.szName, "targ"))
-	BRP;
-if (strstr (m_info.szName, "door"))
-	BRP;
+    if (strstr (m_info.szName, "targ"))
+        BRP;
+    if (strstr (m_info.szName, "door"))
+        BRP;
 #endif
-//	if (width!=twidth || height!=theight)
+    //	if (width!=twidth || height!=theight)
 #if RENDER2TEXTURE
-if (!m_info.pTexture->IsRenderBuffer ())
+    if (!m_info.pTexture->IsRenderBuffer ())
 #endif
- {
-	if (data) {
+    {
+        if (data) {
 #if TEXTURE_COMPRESSION
-		if (m_info.compressed.bCompressed)
-			pBuffer = CompressedBuffer ().Buffer ();
-		else
+            if (m_info.compressed.bCompressed)
+                pBuffer = CompressedBuffer ().Buffer ();
+            else
 #endif
-		int32_t nColors;
-		if ((m_info.nTranspType < 0) || (Flags () & BM_FLAG_TGA)) {
-			//CBitmap* pBm = m_info.pTexture->Bitmap ();
-			//m_info.pTexture->SetBitmap (this);
-			pBuffer = m_info.pTexture->Copy (dxo, dyo, data);
-			//m_info.pTexture->SetBitmap (pBm);
-			nColors = BPP ();
+            int32_t nColors;
+            if ((m_info.nTranspType < 0) || (Flags () & BM_FLAG_TGA)) {
+                //CBitmap* pBm = m_info.pTexture->Bitmap ();
+                //m_info.pTexture->SetBitmap (this);
+                pBuffer = m_info.pTexture->Copy (dxo, dyo, data);
+                //m_info.pTexture->SetBitmap (pBm);
+                nColors = BPP ();
 #if DBG
-			if (nColors == 1)
-				BRP;
+                if (nColors == 1)
+                    BRP;
 #endif
-			}
-		else {
-			pBuffer = m_info.pTexture->Convert (dxo = 0, dyo = 0, this, m_info.nTranspType, superTransp, nColors);
-			}
+            }
+            else {
+                pBuffer = m_info.pTexture->Convert (dxo = 0, dyo = 0, this, m_info.nTranspType, superTransp, nColors);
+            }
 #if DBG
-		if (strstr (m_info.szName, "String Bitmap"))
-			BRP;
-		if (strstr (m_info.szName, "door52"))
-			BRP;
+            if (strstr (m_info.szName, "String Bitmap"))
+                BRP;
+            if (strstr (m_info.szName, "door52"))
+                BRP;
 #endif
-		pBuffer = Cartoonize (this, pBuffer, dxo, dyo, nColors);
-		}
+            pBuffer = Cartoonize (this, pBuffer, dxo, dyo, nColors);
+        }
 #if TEXTURE_COMPRESSION
-	m_info.pTexture->Load (pBuffer, m_info.compressed.buffer.Size (), m_info.compressed.nFormat, m_info.compressed.bCompressed);
+        m_info.pTexture->Load (pBuffer, m_info.compressed.buffer.Size (), m_info.compressed.nFormat, m_info.compressed.bCompressed);
 #else
-	funcRes = m_info.pTexture->Load (pBuffer);
+        funcRes = m_info.pTexture->Load (pBuffer);
 #endif
-	if (bLocal)
-		m_info.pTexture->Destroy ();
-	}
-RETVAL (funcRes)
+        if (bLocal)
+            m_info.pTexture->Destroy ();
+    }
+    RETVAL (funcRes)
 }
 
 //------------------------------------------------------------------------------

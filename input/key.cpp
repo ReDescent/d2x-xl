@@ -9,11 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef __macosx__
-# include <SDL/SDL.h>
-#else
-# include <SDL.h>
-#endif
+#include <SDL.h>
 
 #include "descent.h"
 #include "event.h"

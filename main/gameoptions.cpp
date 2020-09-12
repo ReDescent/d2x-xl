@@ -10,14 +10,9 @@
 #include <sys/types.h>
 #endif
 
-#ifdef __macosx__
-#	include "SDL/SDL_main.h"
-#	include "SDL/SDL_keyboard.h"
-#	include "FolderDetector.h"
-#else
-#	include "SDL_main.h"
-#	include "SDL_keyboard.h"
-#endif
+#include "SDL_main.h"
+#include "SDL_keyboard.h"
+
 #include "descent.h"
 #include "u_mem.h"
 #include "strutil.h"
@@ -66,399 +61,399 @@
 
 void CRenderOptions::Init (int32_t i)
 {
-nLightingMethod = 0;
+    nLightingMethod = 0;
 
-if (i) {
-	extraGameInfo [0].bPowerupsOnRadar = 0;
-	extraGameInfo [0].bRobotsOnRadar = 0;
-	extraGameInfo [0].bUseCameras = 0;
-	if (gameStates.app.bNostalgia > 2)
-		extraGameInfo [0].nWeaponIcons = 0;
-	extraGameInfo [0].bWiggle = 1;
-	extraGameInfo [0].nWeaponIcons = 0;
-	extraGameInfo [0].bDamageExplosions = 0;
-	extraGameInfo [0].bThrusterFlames = 0;
-	extraGameInfo [0].bShadows = 0;
-	extraGameInfo [0].bShowWeapons = 1;
+    if (i) {
+        extraGameInfo [0].bPowerupsOnRadar = 0;
+        extraGameInfo [0].bRobotsOnRadar = 0;
+        extraGameInfo [0].bUseCameras = 0;
+        if (gameStates.app.bNostalgia > 2)
+            extraGameInfo [0].nWeaponIcons = 0;
+        extraGameInfo [0].bWiggle = 1;
+        extraGameInfo [0].nWeaponIcons = 0;
+        extraGameInfo [0].bDamageExplosions = 0;
+        extraGameInfo [0].bThrusterFlames = 0;
+        extraGameInfo [0].bShadows = 0;
+        extraGameInfo [0].bShowWeapons = 1;
 
-	nPath = 0;
-	shadows.bPlayers = 0;
-	shadows.bRobots = 0;
-	shadows.bMissiles = 0;
-	shadows.bPowerups = 0;
-	shadows.bReactors = 0;
-	shadows.bFast = 1;
-	shadows.nClip = 1;
-	shadows.nReach = 1;
-	ship.nWingtip = 1;
-	ship.bBullets = 1;
-	nMaxFPS = 60;
-	effects.bTransparent = 0;
-	debug.bDynamicLight = 1;
-	textures.bUseHires [0] =
-	textures.bUseHires [1] = 0;
-	if (gameStates.app.bNostalgia > 2)
-		nImageQuality = 0;
-	coronas.bUse = 0;
-	coronas.nStyle = 1;
-	coronas.bShots = 0;
-	coronas.bPowerups = 0;
-	coronas.bWeapons = 0;
-	coronas.bAdditive = 0;
-	coronas.bAdditiveObjs = 0;
-	effects.bShields = 1;
-	effects.bOnlyShieldHits = 0;
-	coronas.nIntensity = 1;
-	coronas.nObjIntensity = 1;
-	effects.nShockwaves = 1;
-	effects.nDebris = 1;
-	effects.nShrapnels = 0;
-	particles.bAuxViews = 0;
-	lightning.bAuxViews = 0;
-	debug.bWireFrame = 0;
-	debug.bTextures = 1;
-	debug.bObjects = 1;
-	debug.bWalls = 1;
-	bUseShaders = 1;
-	bUseRift = 0;
-	bHiresModels [0] =
-	bHiresModels [1] = 0;
-	bUseLightmaps = 0;
-	bCartoonize = 0;
-	bPowerupSpinType = 1;
-	effects.bAutoTransparency = 0;
-	nMeshQuality = 0;
-	nMathFormat = 2;
-	nDefMathFormat = 2;
-	nDebrisLife = 0;
-	shadows.nLights = 0;
-	cameras.bFitToWall = 0;
-	cameras.nFPS = 0;
-	cameras.nSpeed = 0;
-	cockpit.bHUD = 1;
-	cockpit.bHUDMsgs = 1;
-	cockpit.bSplitHUDMsgs = 0;
-	cockpit.bMouseIndicator = 1;
-	cockpit.bTextGauges = 1;
-	cockpit.bObjectTally = 0;
-	cockpit.bScaleGauges = 1;
-	cockpit.bFlashGauges = 1;
-	cockpit.bReticle = 1;
-	cockpit.bRotateMslLockInd = 0;
-	cockpit.nWindowSize = 0;
-	cockpit.nWindowZoom = 0;
-	cockpit.nWindowPos = 1;
-	color.bCap = 0;
-	color.nSaturation = 0;
-	color.nLevel = 0;
-	color.bMix = 1;
-	color.bUseLightmaps = 0;
-	color.bWalls = 0;
-	color.nLightmapRange = 5;
-	weaponIcons.bSmall = 0;
-	weaponIcons.bShowAmmo = 0;
-	weaponIcons.bEquipment = 0;
-	weaponIcons.nSort = 0;
-	textures.bUseHires [0] =
-	textures.bUseHires [1] = 0;
-	textures.nQuality = 0;
-	cockpit.bMissileView = 1;
-	cockpit.bGuidedInMainView = 1;
-	cockpit.nRadarPos = 0;
-	cockpit.nRadarRange = 0;
-	particles.nDens [0] =
-	particles.nDens [1] =
-	particles.nDens [2] =
-	particles.nDens [3] =
-	particles.nDens [4] = 0;
-	particles.nSize [0] =
-	particles.nSize [1] =
-	particles.nSize [2] =
-	particles.nSize [3] =
-	particles.nSize [4] = 0;
-	particles.nLife [0] =
-	particles.nLife [1] =
-	particles.nLife [2] = 0;
-	particles.nLife [3] = 1;
-	particles.nLife [4] = 0;
-	particles.nAlpha [0] =
-	particles.nAlpha [1] =
-	particles.nAlpha [2] =
-	particles.nAlpha [3] =
-	particles.nAlpha [4] = 0;
-	particles.bPlayers = 0;
-	particles.bRobots = 0;
-	particles.bMissiles = 0;
-	particles.bDebris = 0;
-	particles.bStatic = 0;
-	particles.bBubbles = 0;
-	particles.bWobbleBubbles = 1;
-	particles.bWiggleBubbles = 1;
-	particles.bCollisions = 0;
-	particles.bDisperse = 0;
-	particles.bRotate = 0;
-	particles.bSort = 0;
-	particles.bDecreaseLag = 0;
-	lightning.bOmega = 0;
-	lightning.bDamage = 0;
-	lightning.bExplosions = 0;
-	lightning.bPlayers = 0;
-	lightning.bRobots = 0;
-	lightning.bStatic = 0;
-	lightning.bGlow = 0;
-	lightning.nQuality = 0;
-	lightning.nStyle = 0;
-	powerups.b3D = gameStates.app.bStandalone;
-	powerups.nSpin = 0;
-	automap.bTextured = 0;
-	automap.bParticles = 0;
-	automap.bLightning = 0;
-	automap.bSkybox = 0;
-	automap.bBright = 1;
-	automap.bCoronas = 0;
-	automap.nColor = 0;
-	}
-else {
-	extraGameInfo [0].nWeaponIcons = 0;
-	extraGameInfo [0].bShadows = 0;
+        nPath = 0;
+        shadows.bPlayers = 0;
+        shadows.bRobots = 0;
+        shadows.bMissiles = 0;
+        shadows.bPowerups = 0;
+        shadows.bReactors = 0;
+        shadows.bFast = 1;
+        shadows.nClip = 1;
+        shadows.nReach = 1;
+        ship.nWingtip = 1;
+        ship.bBullets = 1;
+        nMaxFPS = 60;
+        effects.bTransparent = 0;
+        debug.bDynamicLight = 1;
+        textures.bUseHires [0] =
+        textures.bUseHires [1] = 0;
+        if (gameStates.app.bNostalgia > 2)
+            nImageQuality = 0;
+        coronas.bUse = 0;
+        coronas.nStyle = 1;
+        coronas.bShots = 0;
+        coronas.bPowerups = 0;
+        coronas.bWeapons = 0;
+        coronas.bAdditive = 0;
+        coronas.bAdditiveObjs = 0;
+        effects.bShields = 1;
+        effects.bOnlyShieldHits = 0;
+        coronas.nIntensity = 1;
+        coronas.nObjIntensity = 1;
+        effects.nShockwaves = 1;
+        effects.nDebris = 1;
+        effects.nShrapnels = 0;
+        particles.bAuxViews = 0;
+        lightning.bAuxViews = 0;
+        debug.bWireFrame = 0;
+        debug.bTextures = 1;
+        debug.bObjects = 1;
+        debug.bWalls = 1;
+        bUseShaders = 1;
+        bUseRift = 0;
+        bHiresModels [0] =
+        bHiresModels [1] = 0;
+        bUseLightmaps = 0;
+        bCartoonize = 0;
+        bPowerupSpinType = 1;
+        effects.bAutoTransparency = 0;
+        nMeshQuality = 0;
+        nMathFormat = 2;
+        nDefMathFormat = 2;
+        nDebrisLife = 0;
+        shadows.nLights = 0;
+        cameras.bFitToWall = 0;
+        cameras.nFPS = 0;
+        cameras.nSpeed = 0;
+        cockpit.bHUD = 1;
+        cockpit.bHUDMsgs = 1;
+        cockpit.bSplitHUDMsgs = 0;
+        cockpit.bMouseIndicator = 1;
+        cockpit.bTextGauges = 1;
+        cockpit.bObjectTally = 0;
+        cockpit.bScaleGauges = 1;
+        cockpit.bFlashGauges = 1;
+        cockpit.bReticle = 1;
+        cockpit.bRotateMslLockInd = 0;
+        cockpit.nWindowSize = 0;
+        cockpit.nWindowZoom = 0;
+        cockpit.nWindowPos = 1;
+        color.bCap = 0;
+        color.nSaturation = 0;
+        color.nLevel = 0;
+        color.bMix = 1;
+        color.bUseLightmaps = 0;
+        color.bWalls = 0;
+        color.nLightmapRange = 5;
+        weaponIcons.bSmall = 0;
+        weaponIcons.bShowAmmo = 0;
+        weaponIcons.bEquipment = 0;
+        weaponIcons.nSort = 0;
+        textures.bUseHires [0] =
+        textures.bUseHires [1] = 0;
+        textures.nQuality = 0;
+        cockpit.bMissileView = 1;
+        cockpit.bGuidedInMainView = 1;
+        cockpit.nRadarPos = 0;
+        cockpit.nRadarRange = 0;
+        particles.nDens [0] =
+        particles.nDens [1] =
+        particles.nDens [2] =
+        particles.nDens [3] =
+        particles.nDens [4] = 0;
+        particles.nSize [0] =
+        particles.nSize [1] =
+        particles.nSize [2] =
+        particles.nSize [3] =
+        particles.nSize [4] = 0;
+        particles.nLife [0] =
+        particles.nLife [1] =
+        particles.nLife [2] = 0;
+        particles.nLife [3] = 1;
+        particles.nLife [4] = 0;
+        particles.nAlpha [0] =
+        particles.nAlpha [1] =
+        particles.nAlpha [2] =
+        particles.nAlpha [3] =
+        particles.nAlpha [4] = 0;
+        particles.bPlayers = 0;
+        particles.bRobots = 0;
+        particles.bMissiles = 0;
+        particles.bDebris = 0;
+        particles.bStatic = 0;
+        particles.bBubbles = 0;
+        particles.bWobbleBubbles = 1;
+        particles.bWiggleBubbles = 1;
+        particles.bCollisions = 0;
+        particles.bDisperse = 0;
+        particles.bRotate = 0;
+        particles.bSort = 0;
+        particles.bDecreaseLag = 0;
+        lightning.bOmega = 0;
+        lightning.bDamage = 0;
+        lightning.bExplosions = 0;
+        lightning.bPlayers = 0;
+        lightning.bRobots = 0;
+        lightning.bStatic = 0;
+        lightning.bGlow = 0;
+        lightning.nQuality = 0;
+        lightning.nStyle = 0;
+        powerups.b3D = gameStates.app.bStandalone;
+        powerups.nSpin = 0;
+        automap.bTextured = 0;
+        automap.bParticles = 0;
+        automap.bLightning = 0;
+        automap.bSkybox = 0;
+        automap.bBright = 1;
+        automap.bCoronas = 0;
+        automap.nColor = 0;
+    }
+    else {
+        extraGameInfo [0].nWeaponIcons = 0;
+        extraGameInfo [0].bShadows = 0;
 
-	nPath = 1;
-	shadows.bPlayers = 1;
-	shadows.bRobots = 0;
-	shadows.bMissiles = 0;
-	shadows.bPowerups = 0;
-	shadows.bReactors = 0;
-	shadows.bFast = 1;
-	shadows.nClip = 1;
-	shadows.nReach = 1;
-	nMaxFPS = 60;
-	effects.bTransparent = 1;
-	debug.bDynamicLight = 1;
-	nImageQuality = 3;
-	debug.bWireFrame = 0;
-	debug.bTextures = 1;
-	debug.bObjects = 1;
-	debug.bWalls = 1;
-	bUseShaders = 1;
-	bUseRift = 0;
-	bHiresModels [0] =
-	bHiresModels [1] = 1;
-	bUseLightmaps = 0;
-	bCartoonize = 0;
-	bPowerupSpinType = 1;
-	effects.bAutoTransparency = 1;
-	nMathFormat = 2;
-	nDefMathFormat = 2;
-	nDebrisLife = 0;
-	particles.bAuxViews = 0;
-	lightning.bAuxViews = 0;
-	coronas.bUse = 0;
-	coronas.nStyle = 1;
-	coronas.bShots = 0;
-	coronas.bPowerups = 0;
-	coronas.bWeapons = 0;
-	coronas.bAdditive = 0;
-	coronas.bAdditiveObjs = 0;
-	coronas.nIntensity = 1;
-	coronas.nObjIntensity = 1;
-	effects.bShields = 1;
-	effects.bOnlyShieldHits = 0;
-	effects.nShockwaves = 1;
-	effects.nDebris = 1;
-	effects.nShrapnels = 0;
-#if DBG
-	shadows.nLights = 1;
-#else
-	shadows.nLights = 3;
-#endif
-	cameras.bFitToWall = 1;
-	cameras.nFPS = 0;
-	cameras.nSpeed = 5000;
-	cockpit.bHUD = 1;
-	cockpit.bHUDMsgs = 1;
-	cockpit.bSplitHUDMsgs = 0;
-	cockpit.bMouseIndicator = 0;
-	cockpit.bTextGauges = 1;
-	cockpit.bObjectTally = 1;
-	cockpit.bScaleGauges = 1;
-	cockpit.bFlashGauges = 1;
-	cockpit.bRotateMslLockInd = 0;
-	cockpit.bReticle = 1;
-	cockpit.nWindowSize = 0;
-	cockpit.nWindowZoom = 0;
-	cockpit.nWindowPos = 1;
-	cockpit.nRadarPos = 0;
-	cockpit.nRadarRange = 0;
-	color.nLevel = 2;
-	color.bMix = 1;
-	color.nSaturation = 0;
-	color.bUseLightmaps = 0;
-	color.bWalls = 0;
-	color.nLightmapRange = 5;
-	weaponIcons.bSmall = 1;
-	weaponIcons.bShowAmmo = 1;
-	weaponIcons.bEquipment = 1;
-	weaponIcons.nSort = 1;
-	weaponIcons.alpha = 4;
-	textures.bUseHires [0] = 
-	gameOptions [1].render.textures.bUseHires [1] = 0;
-	textures.nQuality = 3;
-	nMeshQuality = 0;
-	cockpit.bMissileView = 1;
-	cockpit.bGuidedInMainView = 1;
-	particles.nDens [0] =
-	particles.nDens [1] =
-	particles.nDens [2] =
-	particles.nDens [3] =
-	particles.nDens [4] = 2;
-	particles.nSize [0] =
-	particles.nSize [1] =
-	particles.nSize [2] =
-	particles.nSize [3] =
-	particles.nSize [4] = 1;
-	particles.nLife [0] =
-	particles.nLife [1] =
-	particles.nLife [2] = 0;
-	particles.nLife [3] = 1;
-	particles.nLife [4] = 0;
-	particles.nAlpha [0] =
-	particles.nAlpha [1] =
-	particles.nAlpha [2] =
-	particles.nAlpha [3] =
-	particles.nAlpha [4] = 0;
-	particles.bPlayers = 1;
-	particles.bRobots = 1;
-	particles.bMissiles = 1;
-	particles.bDebris = 1;
-	particles.bStatic = 1;
-	particles.bBubbles = 1;
-	particles.bWobbleBubbles = 1;
-	particles.bWiggleBubbles = 1;
-	particles.bCollisions = 0;
-	particles.bDisperse = 0;
-	particles.bRotate = 1;
-	particles.bSort = 1;
-	particles.bDecreaseLag = 1;
-	lightning.bOmega = 1;
-	lightning.bDamage = 1;
-	lightning.bExplosions = 1;
-	lightning.bPlayers = 1;
-	lightning.bRobots = 1;
-	lightning.bStatic = 1;
-	lightning.bGlow = 1;
-	lightning.nQuality = 0;
-	lightning.nStyle = 1;
-	powerups.b3D = gameStates.app.bStandalone;
-	powerups.nSpin = 0;
-	automap.bTextured = 0;
-	automap.bParticles = 0;
-	automap.bLightning = 0;
-	automap.bSkybox = 0;
-	automap.bBright = 1;
-	automap.bCoronas = 0;
-	automap.nColor = 0;
-	stereo.nMethod = 1;
-	stereo.nScreenDist = 5;
-	stereo.bColorGain = 1;
-	stereo.bDeghost = 1;
-	stereo.xSeparation [0] = 65536;
-	stereo.xSeparation [1] = MM2X (RIFT_DEFAULT_IPD);
-	stereo.bChromAbCorr = 1;
-	stereo.nRiftFOV = 4;
-	}
+        nPath = 1;
+        shadows.bPlayers = 1;
+        shadows.bRobots = 0;
+        shadows.bMissiles = 0;
+        shadows.bPowerups = 0;
+        shadows.bReactors = 0;
+        shadows.bFast = 1;
+        shadows.nClip = 1;
+        shadows.nReach = 1;
+        nMaxFPS = 60;
+        effects.bTransparent = 1;
+        debug.bDynamicLight = 1;
+        nImageQuality = 3;
+        debug.bWireFrame = 0;
+        debug.bTextures = 1;
+        debug.bObjects = 1;
+        debug.bWalls = 1;
+        bUseShaders = 1;
+        bUseRift = 0;
+        bHiresModels [0] =
+        bHiresModels [1] = 1;
+        bUseLightmaps = 0;
+        bCartoonize = 0;
+        bPowerupSpinType = 1;
+        effects.bAutoTransparency = 1;
+        nMathFormat = 2;
+        nDefMathFormat = 2;
+        nDebrisLife = 0;
+        particles.bAuxViews = 0;
+        lightning.bAuxViews = 0;
+        coronas.bUse = 0;
+        coronas.nStyle = 1;
+        coronas.bShots = 0;
+        coronas.bPowerups = 0;
+        coronas.bWeapons = 0;
+        coronas.bAdditive = 0;
+        coronas.bAdditiveObjs = 0;
+        coronas.nIntensity = 1;
+        coronas.nObjIntensity = 1;
+        effects.bShields = 1;
+        effects.bOnlyShieldHits = 0;
+        effects.nShockwaves = 1;
+        effects.nDebris = 1;
+        effects.nShrapnels = 0;
+    #if DBG
+        shadows.nLights = 1;
+    #else
+        shadows.nLights = 3;
+    #endif
+        cameras.bFitToWall = 1;
+        cameras.nFPS = 0;
+        cameras.nSpeed = 5000;
+        cockpit.bHUD = 1;
+        cockpit.bHUDMsgs = 1;
+        cockpit.bSplitHUDMsgs = 0;
+        cockpit.bMouseIndicator = 0;
+        cockpit.bTextGauges = 1;
+        cockpit.bObjectTally = 1;
+        cockpit.bScaleGauges = 1;
+        cockpit.bFlashGauges = 1;
+        cockpit.bRotateMslLockInd = 0;
+        cockpit.bReticle = 1;
+        cockpit.nWindowSize = 0;
+        cockpit.nWindowZoom = 0;
+        cockpit.nWindowPos = 1;
+        cockpit.nRadarPos = 0;
+        cockpit.nRadarRange = 0;
+        color.nLevel = 2;
+        color.bMix = 1;
+        color.nSaturation = 0;
+        color.bUseLightmaps = 0;
+        color.bWalls = 0;
+        color.nLightmapRange = 5;
+        weaponIcons.bSmall = 1;
+        weaponIcons.bShowAmmo = 1;
+        weaponIcons.bEquipment = 1;
+        weaponIcons.nSort = 1;
+        weaponIcons.alpha = 4;
+        textures.bUseHires [0] =
+        gameOptions [1].render.textures.bUseHires [1] = 0;
+        textures.nQuality = 3;
+        nMeshQuality = 0;
+        cockpit.bMissileView = 1;
+        cockpit.bGuidedInMainView = 1;
+        particles.nDens [0] =
+        particles.nDens [1] =
+        particles.nDens [2] =
+        particles.nDens [3] =
+        particles.nDens [4] = 2;
+        particles.nSize [0] =
+        particles.nSize [1] =
+        particles.nSize [2] =
+        particles.nSize [3] =
+        particles.nSize [4] = 1;
+        particles.nLife [0] =
+        particles.nLife [1] =
+        particles.nLife [2] = 0;
+        particles.nLife [3] = 1;
+        particles.nLife [4] = 0;
+        particles.nAlpha [0] =
+        particles.nAlpha [1] =
+        particles.nAlpha [2] =
+        particles.nAlpha [3] =
+        particles.nAlpha [4] = 0;
+        particles.bPlayers = 1;
+        particles.bRobots = 1;
+        particles.bMissiles = 1;
+        particles.bDebris = 1;
+        particles.bStatic = 1;
+        particles.bBubbles = 1;
+        particles.bWobbleBubbles = 1;
+        particles.bWiggleBubbles = 1;
+        particles.bCollisions = 0;
+        particles.bDisperse = 0;
+        particles.bRotate = 1;
+        particles.bSort = 1;
+        particles.bDecreaseLag = 1;
+        lightning.bOmega = 1;
+        lightning.bDamage = 1;
+        lightning.bExplosions = 1;
+        lightning.bPlayers = 1;
+        lightning.bRobots = 1;
+        lightning.bStatic = 1;
+        lightning.bGlow = 1;
+        lightning.nQuality = 0;
+        lightning.nStyle = 1;
+        powerups.b3D = gameStates.app.bStandalone;
+        powerups.nSpin = 0;
+        automap.bTextured = 0;
+        automap.bParticles = 0;
+        automap.bLightning = 0;
+        automap.bSkybox = 0;
+        automap.bBright = 1;
+        automap.bCoronas = 0;
+        automap.nColor = 0;
+        stereo.nMethod = 1;
+        stereo.nScreenDist = 5;
+        stereo.bColorGain = 1;
+        stereo.bDeghost = 1;
+        stereo.xSeparation [0] = 65536;
+        stereo.xSeparation [1] = MM2X (RIFT_DEFAULT_IPD);
+        stereo.bChromAbCorr = 1;
+        stereo.nRiftFOV = 4;
+    }
 }
 
 //------------------------------------------------------------------------------
 
 int32_t CRenderOptions::ShadowQuality (void)
 {
-if (!SHOW_SHADOWS)
-	return 0;
-if ((gameOpts->render.shadows.nReach < 2) || (gameOpts->render.shadows.nClip < 2))
-	return 1;
-return 2;
+    if (!SHOW_SHADOWS)
+        return 0;
+    if ((gameOpts->render.shadows.nReach < 2) || (gameOpts->render.shadows.nClip < 2))
+        return 1;
+    return 2;
 }
 
 //------------------------------------------------------------------------------
 
 void CGameplayOptions::Init (int32_t i)
 {
-if (i) {
-	extraGameInfo [0].nSpawnDelay = 0;
-	extraGameInfo [0].nFusionRamp = 2;
-	extraGameInfo [0].bFixedRespawns = 0;
-	extraGameInfo [0].bRobotsHitRobots = 0;
-	extraGameInfo [0].bDualMissileLaunch = 0;
-	extraGameInfo [0].bDropAllMissiles = 0;
-	extraGameInfo [0].bImmortalPowerups = 0;
-	extraGameInfo [0].bMultiBosses = 0;
-	extraGameInfo [0].bSmartWeaponSwitch = 0;
-	extraGameInfo [0].bFluidPhysics = 0;
-	extraGameInfo [0].nWeaponDropMode = 0;
-	extraGameInfo [0].nWeaponIcons = 0;
-	extraGameInfo [0].nZoomMode = 0;
-	extraGameInfo [0].nHitboxes = 0;
-	extraGameInfo [0].bTripleFusion = 0;
-	extraGameInfo [0].bKillMissiles = 0;
+    if (i) {
+        extraGameInfo [0].nSpawnDelay = 0;
+        extraGameInfo [0].nFusionRamp = 2;
+        extraGameInfo [0].bFixedRespawns = 0;
+        extraGameInfo [0].bRobotsHitRobots = 0;
+        extraGameInfo [0].bDualMissileLaunch = 0;
+        extraGameInfo [0].bDropAllMissiles = 0;
+        extraGameInfo [0].bImmortalPowerups = 0;
+        extraGameInfo [0].bMultiBosses = 0;
+        extraGameInfo [0].bSmartWeaponSwitch = 0;
+        extraGameInfo [0].bFluidPhysics = 0;
+        extraGameInfo [0].nWeaponDropMode = 0;
+        extraGameInfo [0].nWeaponIcons = 0;
+        extraGameInfo [0].nZoomMode = 0;
+        extraGameInfo [0].nHitboxes = 0;
+        extraGameInfo [0].bTripleFusion = 0;
+        extraGameInfo [0].bKillMissiles = 0;
 
-	nAutoSelectWeapon = 2;
-	bSecretSave = 0;
-	bTurboMode = 0;
-	bFastRespawn = 0;
-	nAutoLeveling = 1;
-	bEscortHotKeys = 1;
-	bSkipBriefingScreens = 0;
-	bHeadlightOnWhenPickedUp = 1;
-	bShieldWarning = 0;
-	bInventory = 0;
-	bIdleAnims = 0;
-	nAIAwareness = 0;
-	nAIAggressivity = 0;
-	nShip [0] = 0;
-	nShip [1] = -1;
-	}
-else {
-	nAutoSelectWeapon = 2;
-	bSecretSave = 0;
-	bTurboMode = 0;
-	bFastRespawn = 0;
-	nAutoLeveling = 1;
-	bEscortHotKeys = 1;
-	bSkipBriefingScreens = 0;
-	bHeadlightOnWhenPickedUp = 0;
-	bShieldWarning = 0;
-	bInventory = 0;
-	bIdleAnims = 0;
-	nAIAwareness = 0;
-	nAIAggressivity = 0;
-	nShip [0] = 0;
-	nShip [1] = -1;
-	}
+        nAutoSelectWeapon = 2;
+        bSecretSave = 0;
+        bTurboMode = 0;
+        bFastRespawn = 0;
+        nAutoLeveling = 1;
+        bEscortHotKeys = 1;
+        bSkipBriefingScreens = 0;
+        bHeadlightOnWhenPickedUp = 1;
+        bShieldWarning = 0;
+        bInventory = 0;
+        bIdleAnims = 0;
+        nAIAwareness = 0;
+        nAIAggressivity = 0;
+        nShip [0] = 0;
+        nShip [1] = -1;
+    }
+    else {
+        nAutoSelectWeapon = 2;
+        bSecretSave = 0;
+        bTurboMode = 0;
+        bFastRespawn = 0;
+        nAutoLeveling = 1;
+        bEscortHotKeys = 1;
+        bSkipBriefingScreens = 0;
+        bHeadlightOnWhenPickedUp = 0;
+        bShieldWarning = 0;
+        bInventory = 0;
+        bIdleAnims = 0;
+        nAIAwareness = 0;
+        nAIAggressivity = 0;
+        nShip [0] = 0;
+        nShip [1] = -1;
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void CMovieOptions::Init (int32_t i)
 {
-bHires = 1;
-nQuality = 0;
-nLevel = 2;
-bResize = !i;
-bFullScreen = !i;
-bSubTitles = 1;
+    bHires = 1;
+    nQuality = 0;
+    nLevel = 2;
+    bResize = !i;
+    bFullScreen = !i;
+    bSubTitles = 1;
 }
 
 //------------------------------------------------------------------------------
 
 void CLegacyOptions::Init (int32_t i)
 {
-bInput = 0;
-bProducers = 0;
-bMouse = 0;
-bHomers = 0;
-bRender = 0;
-bSwitches = 0;
-bWalls = 0;
+    bInput = 0;
+    bProducers = 0;
+    bMouse = 0;
+    bHomers = 0;
+    bRender = 0;
+    bSwitches = 0;
+    bWalls = 0;
 }
 
 //------------------------------------------------------------------------------
