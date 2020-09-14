@@ -439,7 +439,8 @@ target_compile_definitions(d2x-xl PRIVATE
 if (${CMAKE_BUILD_TYPE} MATCHES "Release")
     target_compile_definitions(d2x-xl PRIVATE -DRELEASE)
 elseif (${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    target_compile_definitions(d2x-xl PRIVATE -DDBG)
+    # BUG: this does too much weird shit
+    # target_compile_definitions(d2x-xl PRIVATE -DDBG)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
