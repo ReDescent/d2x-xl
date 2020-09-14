@@ -18,23 +18,19 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //------------------------------------------------------------------------------
 
-typedef enum tSoundTask {
-	stOpenAudio,
-	stCloseAudio,
-	stReconfigureAudio
-	} tSoundTask;
+typedef enum tSoundTask { stOpenAudio, stCloseAudio, stReconfigureAudio } tSoundTask;
 
 class CSoundThreadInfo : public CThreadInfo {
-	public:
-		tSoundTask	nTask;
-		float			fSlowDown;
+    public:
+    tSoundTask nTask;
+    float fSlowDown;
 };
 
-void CreateSoundThread (void);
-void DestroySoundThread (void);
-void WaitForSoundThread (time_t nTimeout = -1);
-int32_t StartSoundThread (tSoundTask nTask);
-bool HaveSoundThread (void);
+void CreateSoundThread(void);
+void DestroySoundThread(void);
+void WaitForSoundThread(time_t nTimeout = -1);
+int32_t StartSoundThread(tSoundTask nTask);
+bool HaveSoundThread(void);
 
 extern CSoundThreadInfo tiSound;
 

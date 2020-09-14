@@ -14,12 +14,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _DESW_H
 #define _DESW_H
 
-
-#define DESCENT_VIEWPORT_WIDTH  800
+#define DESCENT_VIEWPORT_WIDTH 800
 #define DESCENT_VIEWPORT_HEIGHT 600
-#define DESCENT_RENDER_WIDTH    320
-#define DESCENT_RENDER_HEIGHT   200
-
+#define DESCENT_RENDER_WIDTH 320
+#define DESCENT_RENDER_HEIGHT 200
 
 #include <windows.h>
 
@@ -31,82 +29,71 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #undef DEFAULT_PALETTE
 
-
 #define WINAPP_NAME "Descent II"
 
 typedef struct GAME_CONTEXT {
-	BOOL paused;
-	BOOL active;
+    BOOL paused;
+    BOOL active;
 };
 
 typedef struct SCREEN_CONTEXT {
-	char *bkg_filename;
+    char *bkg_filename;
 } SCREEN_CONTEXT;
 
-
 typedef struct PALETTE {
-	WORD version;
-	WORD num_entries;
-	PALETTEENTRY entries[256];
+    WORD version;
+    WORD num_entries;
+    PALETTEENTRY entries[256];
 } PALETTE;
 
 typedef struct RGBBITMAPINFO {
-	BITMAPINFOHEADER    bmiHeader;
-	RGBQUAD             rgb[256];
+    BITMAPINFOHEADER bmiHeader;
+    RGBQUAD rgb[256];
 } RGBBITMAPINFO;
-
-
 
 // Other Structures
 
-#define MSG_QUIT        0
-#define MSG_SHUTDOWN    1
-#define MSG_NORMAL      2
-
+#define MSG_QUIT 0
+#define MSG_SHUTDOWN 1
+#define MSG_NORMAL 2
 
 typedef struct WinJoystickDesc {
-	char title [32];
-	char cal_ztitle [16];
-	char cal_rtitle [16];
-	char cal_utitle [16];
-	char cal_vtitle [16];
-	char cal_zmsg[6][16];
-	char cal_rmsg[6][16];
-	char cal_umsg[6][16];
-	char cal_vmsg[6][16];
+    char title[32];
+    char cal_ztitle[16];
+    char cal_rtitle[16];
+    char cal_utitle[16];
+    char cal_vtitle[16];
+    char cal_zmsg[6][16];
+    char cal_rmsg[6][16];
+    char cal_umsg[6][16];
+    char cal_vmsg[6][16];
 } WinJoystickDesc;
-
 
 // Globals
 
-extern HWND             _hAppWnd;           // Descent Window
-extern HINSTANCE        _hAppInstance;
-extern int32_t              _DDraw;             // Direct X Implementation
-extern BOOL             _AppActive;
-extern BOOL             SOS_DLLInit;
-extern BOOL             _RedrawScreen;
-extern SCREEN_CONTEXT   _SCRContext;
-
+extern HWND _hAppWnd; // Descent Window
+extern HINSTANCE _hAppInstance;
+extern int32_t _DDraw; // Direct X Implementation
+extern BOOL _AppActive;
+extern BOOL SOS_DLLInit;
+extern BOOL _RedrawScreen;
+extern SCREEN_CONTEXT _SCRContext;
 
 extern ddgrs_canvas *dd_VR_offscreen_buffer;
 extern ddgrs_canvas dd_VR_screen_pages[2];
 extern ddgrs_canvas dd_VR_render_buffer[2];
 extern ddgrs_canvas dd_VR_render_sub_buffer[2];
 
-
-
 // WinG Stuff
 
-extern HPALETTE _hAppPalette;               // Application Palette
-
+extern HPALETTE _hAppPalette; // Application Palette
 
 // Other Globals
 
-extern RECT     ViewportRect;               // Viewport rect for window
-extern char     *_OffscreenCanvasBits;      // Pointer to DIB Bits.
-extern fix      WinFrameTime;               // Time per frame
-extern int32_t      Platform_system;            // Tells us the platform
-
+extern RECT ViewportRect; // Viewport rect for window
+extern char *_OffscreenCanvasBits; // Pointer to DIB Bits.
+extern fix WinFrameTime; // Time per frame
+extern int32_t Platform_system; // Tells us the platform
 
 // Functions
 
@@ -118,7 +105,6 @@ extern ddgrs_canvas *CurrentGameScreen();
 extern BOOL SOSInit();
 extern void SOSUnInit();
 
-
 #define MOUSE_DEFAULT_CURSOR 1
 #define MOUSE_WAIT_CURSOR 2
 
@@ -126,13 +112,11 @@ extern void LoadCursorWin(int32_t cursor);
 extern void ShowCursorW();
 extern void HideCursorW();
 
-
 // Macros
-#define CanvasWidth(C)  ((C).bmiHeader.biWidth)
-#define CanvasHeight(C) (((C).bmiHeader.biHeight > 0) ? \
-                         (C).bmiHeader.biHeight : -(C).bmiHeader.biHeight)
+#define CanvasWidth(C) ((C).bmiHeader.biWidth)
+#define CanvasHeight(C) (((C).bmiHeader.biHeight > 0) ? (C).bmiHeader.biHeight : -(C).bmiHeader.biHeight)
 
-#define DebugMessageBox(c) (InfoBox(NULL,c,"Message",MB_OK))
+#define DebugMessageBox(c) (InfoBox(NULL, c, "Message", MB_OK))
 
 #define DEFINE_SCREEN(fn) (_SCRContext.bkg_filename = fn)
 

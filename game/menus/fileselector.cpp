@@ -66,122 +66,130 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "menubackground.h"
 #include "songs.h"
 
-//------------------------------------------------------------------------------ 
+//------------------------------------------------------------------------------
 
-#define LHX(x) (gameStates.menus.bHires? 2 * (x) : x)
-#define LHY(y) (gameStates.menus.bHires? (24 * (y)) / 10 : y)
+#define LHX(x) (gameStates.menus.bHires ? 2 * (x) : x)
+#define LHY(y) (gameStates.menus.bHires ? (24 * (y)) / 10 : y)
 
-//------------------------------------------------------------------------------ 
+//------------------------------------------------------------------------------
 
-void DeleteSaveGames (char* name)
-{
-    char filename [16];
+void DeleteSaveGames(char *name) {
+    char filename[16];
 
     for (int32_t i = 0; i < 10; i++) {
-        sprintf (filename, "%s.sg%d", name, i);
-        CFile::Delete (filename, gameFolders.user.szSavegames);
+        sprintf(filename, "%s.sg%d", name, i);
+        CFile::Delete(filename, gameFolders.user.szSavegames);
     }
 }
 
-//------------------------------------------------------------------------------ 
+//------------------------------------------------------------------------------
 
-void CFileSelector::Render (void)
-{
+void CFileSelector::Render(void) {
     if (m_bDone)
         return;
 
-    gameData.SetStereoOffsetType (STEREO_OFFSET_FIXED);
-    fontManager.PushScale ();
-    fontManager.SetScale (fontManager.Scale (false) * GetScale ());
-    backgroundManager.Activate (m_background);
-    gameData.SetStereoOffsetType (STEREO_OFFSET_NONE);
+    gameData.SetStereoOffsetType(STEREO_OFFSET_FIXED);
+    fontManager.PushScale();
+    fontManager.SetScale(fontManager.Scale(false) * GetScale());
+    backgroundManager.Activate(m_background);
+    gameData.SetStereoOffsetType(STEREO_OFFSET_NONE);
 
-    fontManager.SetCurrent (NORMAL_FONT);
-    FadeIn ();
-    GrString (0x8000, 10, m_props.pszTitle);
+    fontManager.SetCurrent(NORMAL_FONT);
+    FadeIn();
+    GrString(0x8000, 10, m_props.pszTitle);
 
     CCanvas textArea;
-    textArea.Setup (&gameData.renderData.frame, m_nTextLeft, m_nTextTop, m_nTextWidth, m_nTextHeight, true);
-    textArea.Activate ("CFileSelector::Render", &m_background);
-    CCanvas::Current ()->SetColorRGB (0, 0, 0, 255);
-    OglDrawFilledRect (0, 0, CCanvas::Current ()->Width (), CCanvas::Current ()->Height ());
+    textArea.Setup(&gameData.renderData.frame, m_nTextLeft, m_nTextTop, m_nTextWidth, m_nTextHeight, true);
+    textArea.Activate("CFileSelector::Render", &m_background);
+    CCanvas::Current()->SetColorRGB(0, 0, 0, 255);
+    OglDrawFilledRect(0, 0, CCanvas::Current()->Width(), CCanvas::Current()->Height());
 
     int32_t y = 0;
     for (int32_t i = m_nFirstItem; i < m_nFirstItem + m_nVisibleItems; i++) {
         if (i < m_nFileCount) {
-            fontManager.SetCurrent ((i == m_nChoice) ? SELECTED_FONT : NORMAL_FONT);
-            GrString (5, y, reinterpret_cast<char*> (&m_filenames [i]) + (((m_nMode == 1) && (m_filenames [i][0] == '$')) ? 1 : 0));
-            y += CCanvas::Current ()->Font ()->Height () + Scaled (2);
+            fontManager.SetCurrent((i == m_nChoice) ? SELECTED_FONT : NORMAL_FONT);
+            GrString(
+                5,
+                y,
+                reinterpret_cast<char *>(&m_filenames[i]) + (((m_nMode == 1) && (m_filenames[i][0] == '$')) ? 1 : 0));
+            y += CCanvas::Current()->Font()->Height() + Scaled(2);
         }
     }
-    textArea.Deactivate ();
-    m_background.Deactivate ();
+    textArea.Deactivate();
+    m_background.Deactivate();
     gameStates.render.grAlpha = 1.0f;
-    fontManager.PopScale ();
-    SDL_ShowCursor (1);
+    fontManager.PopScale();
+    SDL_ShowCursor(1);
 }
 
-//------------------------------------------------------------------------------ 
+//------------------------------------------------------------------------------
 
-int32_t CFileSelector::DeleteFile (void)
-{
+int32_t CFileSelector::DeleteFile(void) {
     if (!m_nMode)
         return 0;
     if (((m_nMode == 1) && (m_nChoice < 1)) || ((m_nMode == 2) && (m_nChoice < 0)))
         return 0;
 
-    char* pszFile = (char*) (&m_filenames [m_nChoice][0]);
+    char *pszFile = (char *)(&m_filenames[m_nChoice][0]);
     if (*pszFile == '$')
         pszFile++;
-    SDL_ShowCursor (0);
-    if (InfoBox (NULL,NULL,  BG_STANDARD, 2, TXT_YES, TXT_NO, "%s %s?", (m_nMode == 1) ? TXT_DELETE_PILOT : TXT_DELETE_DEMO, pszFile)) {
-        SDL_ShowCursor (1);
+    SDL_ShowCursor(0);
+    if (InfoBox(
+            NULL,
+            NULL,
+            BG_STANDARD,
+            2,
+            TXT_YES,
+            TXT_NO,
+            "%s %s?",
+            (m_nMode == 1) ? TXT_DELETE_PILOT : TXT_DELETE_DEMO,
+            pszFile)) {
+        SDL_ShowCursor(1);
         return 0;
     }
 
     if (m_nMode == 2)
-        if (CFile::Delete (pszFile, gameFolders.user.szDemos))
-            TextBox (NULL, BG_STANDARD, 1, TXT_OK, "%s %s %s", TXT_COULDNT, TXT_DELETE_DEMO, pszFile);
+        if (CFile::Delete(pszFile, gameFolders.user.szDemos))
+            TextBox(NULL, BG_STANDARD, 1, TXT_OK, "%s %s %s", TXT_COULDNT, TXT_DELETE_DEMO, pszFile);
         else
             m_bDemosDeleted = 1;
     else {
-        char* p = pszFile + strlen (pszFile);
+        char *p = pszFile + strlen(pszFile);
         *p = '.'; // make the extension visible again
-        if (CFile::Delete (pszFile, gameFolders.user.szProfiles))
-            TextBox (NULL, BG_STANDARD, 1, TXT_OK, "%s %s %s", TXT_COULDNT, TXT_DELETE_PILOT, pszFile);
+        if (CFile::Delete(pszFile, gameFolders.user.szProfiles))
+            TextBox(NULL, BG_STANDARD, 1, TXT_OK, "%s %s %s", TXT_COULDNT, TXT_DELETE_PILOT, pszFile);
         else {
-            pszFile [strlen (pszFile) - 1] = 'x'; //turn ".plr" to ".plx"
-            CFile::Delete (pszFile, gameFolders.user.szProfiles);
-            if (!InfoBox (NULL,NULL,  BG_STANDARD, 2, TXT_YES, TXT_NO, "%s?", TXT_DELETE_SAVEGAMES)) {
+            pszFile[strlen(pszFile) - 1] = 'x'; // turn ".plr" to ".plx"
+            CFile::Delete(pszFile, gameFolders.user.szProfiles);
+            if (!InfoBox(NULL, NULL, BG_STANDARD, 2, TXT_YES, TXT_NO, "%s?", TXT_DELETE_SAVEGAMES)) {
                 *p = '\0'; // hide extension
-                DeleteSaveGames (pszFile);
+                DeleteSaveGames(pszFile);
             }
         }
         *p = '\0'; // hide extension
     }
-    SDL_ShowCursor (1);
+    SDL_ShowCursor(1);
     m_nFirstItem = -1;
     return 1;
 }
 
-//------------------------------------------------------------------------------ 
+//------------------------------------------------------------------------------
 
-int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec, char* filename, int32_t bAllowAbort)
-{
-    int32_t				i;
-    FFS					ffs;
-    int32_t				bKeyRepeat = gameStates.input.keys.bRepeat;
-    int32_t				bInitialized = 0;
-    int32_t				exitValue = 0;
-    int32_t				nWidth, nHeight, nTitleHeight;
-    int32_t				x1, x2, y1, y2, nMouseState, nOldMouseState;
-    int32_t				mouse2State, omouse2State, bWheelUp, bWheelDown;
-    int32_t				bDblClick = 0;
-    char					szPattern [40];
-    int32_t				nPatternLen = 0;
-    char*					pszFn;
+int32_t CFileSelector::FileSelector(const char *pszTitle, const char *filespec, char *filename, int32_t bAllowAbort) {
+    int32_t i;
+    FFS ffs;
+    int32_t bKeyRepeat = gameStates.input.keys.bRepeat;
+    int32_t bInitialized = 0;
+    int32_t exitValue = 0;
+    int32_t nWidth, nHeight, nTitleHeight;
+    int32_t x1, x2, y1, y2, nMouseState, nOldMouseState;
+    int32_t mouse2State, omouse2State, bWheelUp, bWheelDown;
+    int32_t bDblClick = 0;
+    char szPattern[40];
+    int32_t nPatternLen = 0;
+    char *pszFn;
 
-    gameData.renderData.frame.Activate ("CFileSelector::FileSelector (frame)");
+    gameData.renderData.frame.Activate("CFileSelector::FileSelector (frame)");
 
     m_tEnter = -1;
     m_nFirstItem = -1;
@@ -192,63 +200,63 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
 
     nWidth = nHeight = nTitleHeight = 0;
     m_nTextLeft = m_nTextTop = m_nTextWidth = m_nTextHeight = 0;
-    if (!m_filenames.Create (MENU_MAX_FILES))
+    if (!m_filenames.Create(MENU_MAX_FILES))
         return 0;
     m_nChoice = 0;
     gameStates.input.keys.bRepeat = 1;
 
-    if (strstr (filespec, "*.plr"))
+    if (strstr(filespec, "*.plr"))
         m_nMode = 1;
-    else if (strstr (filespec, "*.dem"))
+    else if (strstr(filespec, "*.dem"))
         m_nMode = 2;
     else
         m_nMode = 0;
 
-    ReadFileNames:
+ReadFileNames:
 
     m_bDone = 0;
     m_nFileCount = 0;
 
-#if !defined (APPLE_DEMO)		// no new pilots for special apple oem version
+#if !defined(APPLE_DEMO) // no new pilots for special apple oem version
     if ((m_nMode == 1) && !gameStates.app.bReadOnly) {
-        m_filenames [m_nFileCount] = TXT_CREATE_NEW;
+        m_filenames[m_nFileCount] = TXT_CREATE_NEW;
         m_nFileCount++;
     }
 #endif
 
-    if (!FFF (filespec, &ffs, 0)) {
+    if (!FFF(filespec, &ffs, 0)) {
         do {
             if (m_nFileCount < MENU_MAX_FILES) {
-                pszFn = (char*) (&m_filenames [m_nFileCount][0]);
-                strncpy (pszFn, ffs.name, FILENAME_LEN);
+                pszFn = (char *)(&m_filenames[m_nFileCount][0]);
+                strncpy(pszFn, ffs.name, FILENAME_LEN);
                 if (m_nMode == 1) {
-                    char* p = strchr (pszFn, '.');
+                    char *p = strchr(pszFn, '.');
                     if (p)
                         *p = '\0';
                 }
                 if (*pszFn) {
-                    strlwr (pszFn);
+                    strlwr(pszFn);
                     m_nFileCount++;
                 }
             } else {
                 break;
             }
-        } while (!FFN (&ffs, 0));
-        FFC (&ffs);
+        } while (!FFN(&ffs, 0));
+        FFC(&ffs);
     }
     if ((m_nMode == 2) && gameFolders.bAltHogDirInited) {
-        char filespec2 [PATH_MAX + FILENAME_LEN];
-        sprintf (filespec2, "%s%s", gameFolders.game.szAltHogs, filespec);
-        if (!FFF (filespec2, &ffs, 0)) {
+        char filespec2[PATH_MAX + FILENAME_LEN];
+        sprintf(filespec2, "%s%s", gameFolders.game.szAltHogs, filespec);
+        if (!FFF(filespec2, &ffs, 0)) {
             do {
                 if (m_nFileCount < MENU_MAX_FILES) {
-                    m_filenames [m_nFileCount] = ffs.name;
+                    m_filenames[m_nFileCount] = ffs.name;
                     m_nFileCount++;
                 } else {
                     break;
                 }
-            } while (!FFN (&ffs, 0));
-            FFC (&ffs);
+            } while (!FFN(&ffs, 0));
+            FFC(&ffs);
         }
     }
 
@@ -257,76 +265,77 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
         goto exitFileMenu;
     }
     if ((m_nFileCount < 1) && (m_nMode == 2)) {
-        TextBox (NULL, BG_STANDARD, 1, TXT_OK, "%s %s\n%s", TXT_NO_DEMO_FILES, TXT_USE_F5, TXT_TO_CREATE_ONE);
+        TextBox(NULL, BG_STANDARD, 1, TXT_OK, "%s %s\n%s", TXT_NO_DEMO_FILES, TXT_USE_F5, TXT_TO_CREATE_ONE);
         exitValue = 0;
         goto exitFileMenu;
     }
 
     if (m_nFileCount < 1) {
-    #ifndef APPLE_DEMO
-        TextBox (NULL, BG_STANDARD, 1, "Ok", "%s\n '%s' %s", TXT_NO_FILES_MATCHING, filespec, TXT_WERE_FOUND);
-    #endif
+#ifndef APPLE_DEMO
+        TextBox(NULL, BG_STANDARD, 1, "Ok", "%s\n '%s' %s", TXT_NO_FILES_MATCHING, filespec, TXT_WERE_FOUND);
+#endif
         exitValue = 0;
         goto exitFileMenu;
     }
 
     if (!bInitialized) {
-    //		SetScreenMode (SCREEN_MENU);
-        SetPopupScreenMode ();
-        fontManager.SetCurrent (SUBTITLE_FONT);
+        //		SetScreenMode (SCREEN_MENU);
+        SetPopupScreenMode();
+        fontManager.SetCurrent(SUBTITLE_FONT);
         nWidth = 0;
         nHeight = 0;
 
         for (i = 0; i < m_nFileCount; i++) {
             int32_t w, h, aw;
-            fontManager.Current ()->StringSize (m_filenames [i], w, h, aw);
+            fontManager.Current()->StringSize(m_filenames[i], w, h, aw);
             if (w > nWidth)
                 nWidth = w;
         }
         if (pszTitle) {
             int32_t w, h, aw;
-            fontManager.Current ()->StringSize (pszTitle, w, h, aw);
+            fontManager.Current()->StringSize(pszTitle, w, h, aw);
             if (w > nWidth)
                 nWidth = w;
-            nTitleHeight = h + (CCanvas::Current ()->Font ()->Height () * 2);		// add a little space at the bottom of the pszTitle
+            nTitleHeight =
+                h + (CCanvas::Current()->Font()->Height() * 2); // add a little space at the bottom of the pszTitle
         }
 
         m_nTextWidth = nWidth;
-        m_nTextHeight = (CCanvas::Current ()->Font ()->Height () + 2) * m_nVisibleItems;
+        m_nTextHeight = (CCanvas::Current()->Font()->Height() + 2) * m_nVisibleItems;
 
-        nWidth += (CCanvas::Current ()->Font ()->Width () * 4);
-        nHeight = nTitleHeight + m_nTextHeight + (CCanvas::Current ()->Font ()->Height () * 2);		// more space at bottom
+        nWidth += (CCanvas::Current()->Font()->Width() * 4);
+        nHeight = nTitleHeight + m_nTextHeight + (CCanvas::Current()->Font()->Height() * 2); // more space at bottom
 
-        nWidth = Scaled (nWidth);
-        nHeight = Scaled (nHeight);
+        nWidth = Scaled(nWidth);
+        nHeight = Scaled(nHeight);
 
-        if (nWidth > CCanvas::Current ()->Width (false))
-            nWidth = CCanvas::Current ()->Width (false);
-        if (nHeight > CCanvas::Current ()->Height (false))
-            nHeight = CCanvas::Current ()->Height (false);
+        if (nWidth > CCanvas::Current()->Width(false))
+            nWidth = CCanvas::Current()->Width(false);
+        if (nHeight > CCanvas::Current()->Height(false))
+            nHeight = CCanvas::Current()->Height(false);
         if (nWidth > 640)
             nWidth = 640;
         if (nHeight > 480)
             nHeight = 480;
 
-        backgroundManager.Setup (m_background, nWidth, nHeight);
-        m_nTextLeft = Scaled (CCanvas::Current ()->Font ()->Width () * 2);			// must be in sync with nWidth!!!
-        m_nTextTop = Scaled (nTitleHeight);
-        m_nTextWidth = Scaled (m_nTextWidth);
-        m_nTextHeight = Scaled (m_nTextHeight);
+        backgroundManager.Setup(m_background, nWidth, nHeight);
+        m_nTextLeft = Scaled(CCanvas::Current()->Font()->Width() * 2); // must be in sync with nWidth!!!
+        m_nTextTop = Scaled(nTitleHeight);
+        m_nTextWidth = Scaled(m_nTextWidth);
+        m_nTextHeight = Scaled(m_nTextHeight);
 
-    // save the screen behind the menu.
+        // save the screen behind the menu.
 
-        GrString (0x8000, 10, pszTitle);
+        GrString(0x8000, 10, pszTitle);
         bInitialized = 1;
     }
 
     if (m_nMode != 1)
-        m_filenames.SortAscending (0, m_nFileCount - 1);
+        m_filenames.SortAscending(0, m_nFileCount - 1);
     else {
-        m_filenames.SortAscending (1, m_nFileCount - 2);
+        m_filenames.SortAscending(1, m_nFileCount - 2);
         for (i = 0; i < m_nFileCount; i++) {
-            if (!stricmp (LOCALPLAYER.callsign, m_filenames [i])) {
+            if (!stricmp(LOCALPLAYER.callsign, m_filenames[i])) {
                 bDblClick = 1;
                 m_nChoice = i;
             }
@@ -335,40 +344,40 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
 
     nMouseState = nOldMouseState = 0;
     mouse2State = omouse2State = 0;
-    CMenu::DrawCloseBox (0, 0);
-    SDL_ShowCursor (1);
+    CMenu::DrawCloseBox(0, 0);
+    SDL_ShowCursor(1);
 
     // FIXME: SDL2 PORT
     // SDL_EnableKeyRepeat (60, 30);
 
-    Register ();
+    Register();
 
     while (!m_bDone) {
         nOldMouseState = nMouseState;
         omouse2State = mouse2State;
-        nMouseState = MouseButtonState (0);
-        mouse2State = MouseButtonState (1);
-        bWheelUp = MouseButtonState (3);
-        bWheelDown = MouseButtonState (4);
+        nMouseState = MouseButtonState(0);
+        mouse2State = MouseButtonState(1);
+        bWheelUp = MouseButtonState(3);
+        bWheelDown = MouseButtonState(4);
         if (bWheelUp)
             m_nKey = KEY_UP;
         else if (bWheelDown)
             m_nKey = KEY_DOWN;
         else
-            m_nKey = KeyInKey ();
+            m_nKey = KeyInKey();
         switch (m_nKey) {
         case KEY_CTRLED + KEY_F1:
-            SwitchDisplayMode (-1);
+            SwitchDisplayMode(-1);
             break;
 
         case KEY_CTRLED + KEY_F2:
-            SwitchDisplayMode (1);
+            SwitchDisplayMode(1);
             break;
 
         case KEY_COMMAND + KEY_SHIFTED + KEY_P:
         case KEY_PRINT_SCREEN:
             gameStates.app.bSaveScreenShot = 1;
-            //SaveScreenShot (NULL, 0);
+            // SaveScreenShot (NULL, 0);
             break;
 
         case KEY_CTRLED + KEY_S:
@@ -379,7 +388,7 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
             break;
 
         case KEY_CTRLED + KEY_D:
-            if (DeleteFile ())
+            if (DeleteFile())
                 goto ReadFileNames;
             break;
         case KEY_HOME:
@@ -421,11 +430,11 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
             if (!gameOpts->menus.bSmartFileSearch)
                 break;
             if (nPatternLen > 0)
-                szPattern [--nPatternLen] = '\0';
+                szPattern[--nPatternLen] = '\0';
 
         default:
-            if (!gameOpts->menus.bSmartFileSearch || (nPatternLen < (int32_t) sizeof (szPattern) - 1)) {
-                int32_t nStart, ascii = KeyToASCII (m_nKey);
+            if (!gameOpts->menus.bSmartFileSearch || (nPatternLen < (int32_t)sizeof(szPattern) - 1)) {
+                int32_t nStart, ascii = KeyToASCII(m_nKey);
                 if ((m_nKey == KEY_BACKSPACE) || (ascii < 255)) {
                     int32_t cc, bFound = 0;
                     if (!gameOpts->menus.bSmartFileSearch) {
@@ -435,18 +444,18 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
                             cc = 0;
                         else if (cc >= m_nFileCount)
                             cc = 0;
-                    }
-                    else {
+                    } else {
                         cc = 0;
                         nStart = 0;
                         if (m_nKey != KEY_BACKSPACE) {
-                            szPattern [nPatternLen++] = tolower (ascii);
-                            szPattern [nPatternLen] = '\0';
+                            szPattern[nPatternLen++] = tolower(ascii);
+                            szPattern[nPatternLen] = '\0';
                         }
                     }
                     do {
-                        pszFn = (char*) (&m_filenames [cc][0]);
-                        if (gameOpts->menus.bSmartFileSearch ? strstr (pszFn, szPattern) == pszFn : *pszFn == toupper (ascii)) {
+                        pszFn = (char *)(&m_filenames[cc][0]);
+                        if (gameOpts->menus.bSmartFileSearch ? strstr(pszFn, szPattern) == pszFn
+                                                             : *pszFn == toupper(ascii)) {
                             m_nChoice = cc;
                             bFound = 1;
                             break;
@@ -455,7 +464,7 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
                         cc %= m_nFileCount;
                     } while (cc != nStart);
                     if (gameOpts->menus.bSmartFileSearch && !bFound)
-                        szPattern [--nPatternLen] = '\0';
+                        szPattern[--nPatternLen] = '\0';
                 }
             }
         }
@@ -475,7 +484,7 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
             m_nFirstItem = m_nChoice - m_nVisibleItems + 1;
         if (m_nFileCount <= m_nVisibleItems)
             m_nFirstItem = 0;
-        if (m_nFirstItem>m_nFileCount - m_nVisibleItems)
+        if (m_nFirstItem > m_nFileCount - m_nVisibleItems)
             m_nFirstItem = m_nFileCount - m_nVisibleItems;
         if (m_nFirstItem < 0)
             m_nFirstItem = 0;
@@ -483,12 +492,12 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
         if (nMouseState || mouse2State) {
             int32_t w, h, aw;
 
-            GetMousePos ();
+            GetMousePos();
             for (i = m_nFirstItem; i < m_nFirstItem + m_nVisibleItems; i++) {
-                fontManager.Current ()->StringSize (m_filenames [i], w, h, aw);
+                fontManager.Current()->StringSize(m_filenames[i], w, h, aw);
                 x1 = m_nTextLeft;
                 x2 = m_nTextLeft + m_nTextWidth - 1;
-                y1 = (i - m_nFirstItem) * (CCanvas::Current ()->Font ()->Height () + 2) + m_nTextTop;
+                y1 = (i - m_nFirstItem) * (CCanvas::Current()->Font()->Height() + 2) + m_nTextTop;
                 y2 = y1 + h + 1;
                 if (((m_xMouse > x1) && (m_xMouse < x2)) && ((m_yMouse > y1) && (m_yMouse < y2))) {
                     if (i == m_nChoice && !mouse2State)
@@ -503,11 +512,11 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
         if (!nMouseState && nOldMouseState) {
             int32_t w, h, aw;
 
-            fontManager.Current ()->StringSize (m_filenames [m_nChoice], w, h, aw);
-            GetMousePos ();
+            fontManager.Current()->StringSize(m_filenames[m_nChoice], w, h, aw);
+            GetMousePos();
             x1 = m_nTextLeft;
             x2 = m_nTextLeft + m_nTextWidth - 1;
-            y1 = (m_nChoice - m_nFirstItem) * (CCanvas::Current ()->Font ()->Height () + 2) + m_nTextTop;
+            y1 = (m_nChoice - m_nFirstItem) * (CCanvas::Current()->Font()->Height() + 2) + m_nTextTop;
             y2 = y1 + h + 1;
             if (((m_xMouse > x1) && (m_xMouse < x2)) && ((m_yMouse > y1) && (m_yMouse < y2))) {
                 if (bDblClick)
@@ -518,35 +527,38 @@ int32_t CFileSelector::FileSelector (const char* pszTitle, const char* filespec,
         }
 
         if (!nMouseState && nOldMouseState) {
-            GetMousePos ();
-            x1 = XOffset () + MENU_CLOSE_X + 2;
+            GetMousePos();
+            x1 = XOffset() + MENU_CLOSE_X + 2;
             x2 = x1 + MENU_CLOSE_SIZE - 2;
-            y1 = YOffset () + MENU_CLOSE_Y + 2;
+            y1 = YOffset() + MENU_CLOSE_Y + 2;
             y2 = y1 + MENU_CLOSE_SIZE - 2;
             if (((m_xMouse > x1) && (m_xMouse < x2)) && ((m_yMouse > y1) && (m_yMouse < y2))) {
                 m_nChoice = -1;
                 m_bDone = 1;
             }
         }
-        CMenu::Render (pszTitle, NULL);
+        CMenu::Render(pszTitle, NULL);
     }
-    FadeOut ();
-    //exitFileMenuEarly:
+    FadeOut();
+    // exitFileMenuEarly:
     if (m_nChoice < 0)
         exitValue = 0;
     else {
-        strncpy (filename, reinterpret_cast<char*> (&m_filenames [m_nChoice]) + (m_nMode == 1 && m_filenames [m_nChoice][0] == '$'), FILENAME_LEN);
+        strncpy(
+            filename,
+            reinterpret_cast<char *>(&m_filenames[m_nChoice]) + (m_nMode == 1 && m_filenames[m_nChoice][0] == '$'),
+            FILENAME_LEN);
         exitValue = 1;
     }
 
-    exitFileMenu:
+exitFileMenu:
 
     gameStates.input.keys.bRepeat = bKeyRepeat;
 
-    backgroundManager.Draw ();
-    gameData.renderData.frame.Deactivate ();
+    backgroundManager.Draw();
+    gameData.renderData.frame.Deactivate();
     // FIXME: SDL2 PORT
     // SDL_EnableKeyRepeat(0, 0);
-    Unregister ();
+    Unregister();
     return exitValue;
 }

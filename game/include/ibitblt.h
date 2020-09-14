@@ -15,7 +15,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _IBITBLT_H
 
 // Finds location/size of the largest "hole" in bitmap mask_bmp
-void gr_ibitblt_find_hole_size ( CBitmap * mask_bmp, int32_t *minx, int32_t *miny, int32_t *maxx, int32_t *maxy );
+void gr_ibitblt_find_hole_size(CBitmap *mask_bmp, int32_t *minx, int32_t *miny, int32_t *maxx, int32_t *maxy);
 
 // Creates a code mask that will copy data from a bitmap that is sw by
 // sh starting from location sx, sy with a rowSize of srowSize onto

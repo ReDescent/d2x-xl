@@ -16,13 +16,13 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "object.h"
 
-#define EL_OFF				0		//not in endlevel
-#define EL_FLYTHROUGH	1		//auto-flythrough in tunnel
-#define EL_LOOKBACK		2		//looking back at CPlayerData
-#define EL_OUTSIDE		3		//flying outside for a while
-#define EL_STOPPED		4		//stopped, watching explosion
-#define EL_PANNING		5		//panning around, watching player
-#define EL_CHASING		6		//chasing player to station
+#define EL_OFF 0 // not in endlevel
+#define EL_FLYTHROUGH 1 // auto-flythrough in tunnel
+#define EL_LOOKBACK 2 // looking back at CPlayerData
+#define EL_OUTSIDE 3 // flying outside for a while
+#define EL_STOPPED 4 // stopped, watching explosion
+#define EL_PANNING 5 // panning around, watching player
+#define EL_CHASING 6 // chasing player to station
 
 extern int32_t Endlevel_sequence;
 void DoEndLevelFrame();
@@ -38,9 +38,9 @@ void InitEndLevel();
 //@@extern CObject external_explosion;
 //@@extern int32_t ext_expl_playing;
 
-//called for each level to load & setup the exit sequence
+// called for each level to load & setup the exit sequence
 void LoadEndLevelData(int32_t level_num);
 
-void InitEndLevelData (void);
+void InitEndLevelData(void);
 
 #endif /* _ENDLEVEL_H */

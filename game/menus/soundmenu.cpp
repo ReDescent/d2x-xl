@@ -56,103 +56,101 @@ extern tDetailData detailData;
 //------------------------------------------------------------------------------
 
 static struct {
-	int32_t	nDigiVol;
-	int32_t   nAmbientVol;
-	int32_t	nMusicVol;
-	int32_t	nLinkVols;
-	int32_t	nRedbook;
-	int32_t	nVolume;
-	int32_t	nGatling;
-	int32_t	nChannels;
+    int32_t nDigiVol;
+    int32_t nAmbientVol;
+    int32_t nMusicVol;
+    int32_t nLinkVols;
+    int32_t nRedbook;
+    int32_t nVolume;
+    int32_t nGatling;
+    int32_t nChannels;
 } soundOpts;
 
-static const char* pszLowMediumHigh [3];
+static const char *pszLowMediumHigh[3];
 
 //------------------------------------------------------------------------------
 
-void SetRedbookVolume (int32_t volume);
+void SetRedbookVolume(int32_t volume);
 
 //------------------------------------------------------------------------------
 
-int32_t SoundChannelIndex (void)
-{
-	int32_t	h, i;
+int32_t SoundChannelIndex(void) {
+    int32_t h, i;
 
-for (h = (int32_t) sizeofa (detailData.nSoundChannels), i = 0; i < h; i++)
-	if (audio.MaxChannels () < detailData.nSoundChannels [i])
-		break;
-return i - 1;
+    for (h = (int32_t)sizeofa(detailData.nSoundChannels), i = 0; i < h; i++)
+        if (audio.MaxChannels() < detailData.nSoundChannels[i])
+            break;
+    return i - 1;
 }
 
 //------------------------------------------------------------------------------
 
-int32_t SoundMenuCallback (CMenu& menu, int32_t& nKey, int32_t nCurItem, int32_t nState)
-{
+int32_t SoundMenuCallback(CMenu &menu, int32_t &nKey, int32_t nCurItem, int32_t nState) {
     if (nState)
         return nCurItem;
 
-    CMenuItem*	m;
-    int32_t			v;
+    CMenuItem *m;
+    int32_t v;
 
-    if ((m = menu ["channels"])) {
-        v = m->Value ();
+    if ((m = menu["channels"])) {
+        v = m->Value();
         if (gameStates.sound.nSoundChannels != v + 2) {
             gameStates.sound.nSoundChannels = v + 2;
-            sprintf (m->Text (), TXT_SOUND_CHANNEL_COUNT, pszLowMediumHigh [gameStates.sound.nSoundChannels - 2]);
-            m->Rebuild ();
+            sprintf(m->Text(), TXT_SOUND_CHANNEL_COUNT, pszLowMediumHigh[gameStates.sound.nSoundChannels - 2]);
+            m->Rebuild();
         }
     }
 
-    if ((m = menu ["gatling sound"])) {
-        v = m->Value ();
+    if ((m = menu["gatling sound"])) {
+        v = m->Value();
         if (gameOpts->sound.bGatling != v) {
             gameOpts->sound.bGatling = v;
             nKey = -2;
         }
     }
 
-    if ((m = menu ["scrape sound"])) {
-        v = m->Value ();
+    if ((m = menu["scrape sound"])) {
+        v = m->Value();
         if (gameOpts->sound.bScrape != v) {
             gameOpts->sound.bScrape = v;
             nKey = -2;
         }
     }
 
-    if ((m = menu ["fx volume"])) {
-        v = m->Value ();
-        if (gameConfig.nAudioVolume [0] != v) {
-            gameConfig.nAudioVolume [0] = v;
+    if ((m = menu["fx volume"])) {
+        v = m->Value();
+        if (gameConfig.nAudioVolume[0] != v) {
+            gameConfig.nAudioVolume[0] = v;
             if (gameOpts->sound.bLinkVolumes) {
-                gameConfig.nAudioVolume [1] = gameConfig.nAudioVolume [0];
-                audio.SetFxVolume ((gameConfig.nAudioVolume [1] * 32767) / 8, 1);
+                gameConfig.nAudioVolume[1] = gameConfig.nAudioVolume[0];
+                audio.SetFxVolume((gameConfig.nAudioVolume[1] * 32767) / 8, 1);
             }
-            audio.SetFxVolume ((gameConfig.nAudioVolume [0] * 32767) / 8);
-            audio.PlaySound (SOUND_DROP_BOMB);
+            audio.SetFxVolume((gameConfig.nAudioVolume[0] * 32767) / 8);
+            audio.PlaySound(SOUND_DROP_BOMB);
         }
     }
 
-    if (!gameOpts->sound.bLinkVolumes && (m = menu ["ambient volume"])) {
-        v = m->Value ();
-        if (gameConfig.nAudioVolume [1] != v) {
-            gameConfig.nAudioVolume [1] = v;
-            audio.SetFxVolume ((gameConfig.nAudioVolume [1] * 32767) / 8, 1);
+    if (!gameOpts->sound.bLinkVolumes && (m = menu["ambient volume"])) {
+        v = m->Value();
+        if (gameConfig.nAudioVolume[1] != v) {
+            gameConfig.nAudioVolume[1] = v;
+            audio.SetFxVolume((gameConfig.nAudioVolume[1] * 32767) / 8, 1);
         }
     }
 
-    if ((m = menu ["link volumes"])) {
-        v = m->Value ();
+    if ((m = menu["link volumes"])) {
+        v = m->Value();
         if (gameOpts->sound.bLinkVolumes != v) {
             if ((gameOpts->sound.bLinkVolumes = v)) {
-                gameConfig.nAudioVolume [1] = gameConfig.nAudioVolume [0];
-                audio.SetFxVolume ((gameConfig.nAudioVolume [1] * 32767) / 8, 1);
+                gameConfig.nAudioVolume[1] = gameConfig.nAudioVolume[0];
+                audio.SetFxVolume((gameConfig.nAudioVolume[1] * 32767) / 8, 1);
             }
             nKey = -2;
         }
     }
 
-    if ((m = menu ["music volume"])) {
-        v = m->Value ();
+    if ((m = menu["music volume"])) {
+        v = m->Value();
         if (gameConfig.nMidiVolume != v) {
             int32_t bSongPlaying = (gameConfig.nMidiVolume > 0);
 
@@ -160,111 +158,127 @@ int32_t SoundMenuCallback (CMenu& menu, int32_t& nKey, int32_t nCurItem, int32_t
                 nKey = -2;
             gameConfig.nMidiVolume = v;
             if (gameConfig.nMidiVolume < 1) {
-                midi.PlaySong (NULL, NULL, NULL, 1, 0);	// fade out first
-                midi.SetVolume (128 * gameConfig.nMidiVolume / 8);
-            }
-            else {
-                midi.SetVolume (128 * gameConfig.nMidiVolume / 8);
+                midi.PlaySong(NULL, NULL, NULL, 1, 0); // fade out first
+                midi.SetVolume(128 * gameConfig.nMidiVolume / 8);
+            } else {
+                midi.SetVolume(128 * gameConfig.nMidiVolume / 8);
                 if (!bSongPlaying) {
-                //audio.StopAllChannels ();
+                    // audio.StopAllChannels ();
                     if (gameStates.app.bGameRunning)
-                        songManager.PlayLevelSong (missionManager.nCurrentLevel ? missionManager.nCurrentLevel : 1, 1);
+                        songManager.PlayLevelSong(missionManager.nCurrentLevel ? missionManager.nCurrentLevel : 1, 1);
                     else
-                        songManager.Play (SONG_TITLE, 1);
+                        songManager.Play(SONG_TITLE, 1);
                 }
             }
         }
     }
     // don't enable redbook for a non-apple demo version of the shareware demo
-    return nCurItem;		//kill warning
+    return nCurItem; // kill warning
 }
 
 //------------------------------------------------------------------------------
 
-static void InitStrings (void)
-{
-	static bool bInitialized = false;
+static void InitStrings(void) {
+    static bool bInitialized = false;
 
-if (bInitialized)
-	return;
-bInitialized = true;
+    if (bInitialized)
+        return;
+    bInitialized = true;
 
-pszLowMediumHigh [0] = TXT_LOW;
-pszLowMediumHigh [1] = TXT_MEDIUM;
-pszLowMediumHigh [2] = TXT_HIGH;
+    pszLowMediumHigh[0] = TXT_LOW;
+    pszLowMediumHigh[1] = TXT_MEDIUM;
+    pszLowMediumHigh[2] = TXT_HIGH;
 }
 
 //------------------------------------------------------------------------------
 
-void SoundMenu (void)
-{
+void SoundMenu(void) {
     static int32_t choice = 0;
-    char szSlider [50];
+    char szSlider[50];
 
-    CMenu	m;
+    CMenu m;
 
-    int32_t	i;
-    int32_t	bSongPlaying = (gameConfig.nMidiVolume > 0);
-    int32_t	bShuffleMusic = gameOpts->sound.bShuffleMusic;
+    int32_t i;
+    int32_t bSongPlaying = (gameConfig.nMidiVolume > 0);
+    int32_t bShuffleMusic = gameOpts->sound.bShuffleMusic;
 
-    InitStrings ();
+    InitStrings();
 
-    gameStates.sound.nSoundChannels = SoundChannelIndex ();
+    gameStates.sound.nSoundChannels = SoundChannelIndex();
     do {
-        m.Destroy ();
-        m.Create (20, "SoundMenu");
+        m.Destroy();
+        m.Create(20, "SoundMenu");
         soundOpts.nGatling = -1;
         if (gameOpts->app.bNotebookFriendly || gameOpts->app.bExpertMode) {
-            sprintf (szSlider + 1, TXT_SOUND_CHANNEL_COUNT, pszLowMediumHigh [gameStates.sound.nSoundChannels - 2]);
+            sprintf(szSlider + 1, TXT_SOUND_CHANNEL_COUNT, pszLowMediumHigh[gameStates.sound.nSoundChannels - 2]);
             *szSlider = *(TXT_SOUND_CHANNEL_COUNT - 1);
-            m.AddSlider ("channels", szSlider + 1, gameStates.sound.nSoundChannels - 2, 0, 2, KEY_C, HTX_SOUND_CHANNEL_COUNT);
+            m.AddSlider(
+                "channels",
+                szSlider + 1,
+                gameStates.sound.nSoundChannels - 2,
+                0,
+                2,
+                KEY_C,
+                HTX_SOUND_CHANNEL_COUNT);
         }
-        m.AddSlider ("fx volume", TXT_FX_VOLUME, gameConfig.nAudioVolume [0], 0, 8, KEY_F, HTX_ONLINE_MANUAL);
+        m.AddSlider("fx volume", TXT_FX_VOLUME, gameConfig.nAudioVolume[0], 0, 8, KEY_F, HTX_ONLINE_MANUAL);
         if (!gameOpts->sound.bLinkVolumes)
-            m.AddSlider ("ambient volume", TXT_AMBIENT_VOLUME, gameConfig.nAudioVolume [1], 0, 8, KEY_A, HTX_ONLINE_MANUAL);
-        m.AddSlider ("music volume", TXT_MIDI_VOLUME, gameConfig.nMidiVolume, 0, 8, KEY_M, HTX_ONLINE_MANUAL);
-        m.AddText ("", "");
-        m.AddCheck ("link volumes", TXT_LINK_AUDIO_VOLUMES, gameOpts->sound.bLinkVolumes, KEY_L, HTX_SYNC_VOLUME);
-        m.AddCheck ("reverse stereo", TXT_REVERSE_STEREO, gameConfig.bReverseChannels, KEY_R, HTX_ONLINE_MANUAL);
-        m.AddCheck ("shuffle music", TXT_SHUFFLE_MUSIC, gameOpts->sound.bShuffleMusic, KEY_U, HTX_ONLINE_MANUAL);
+            m.AddSlider(
+                "ambient volume",
+                TXT_AMBIENT_VOLUME,
+                gameConfig.nAudioVolume[1],
+                0,
+                8,
+                KEY_A,
+                HTX_ONLINE_MANUAL);
+        m.AddSlider("music volume", TXT_MIDI_VOLUME, gameConfig.nMidiVolume, 0, 8, KEY_M, HTX_ONLINE_MANUAL);
+        m.AddText("", "");
+        m.AddCheck("link volumes", TXT_LINK_AUDIO_VOLUMES, gameOpts->sound.bLinkVolumes, KEY_L, HTX_SYNC_VOLUME);
+        m.AddCheck("reverse stereo", TXT_REVERSE_STEREO, gameConfig.bReverseChannels, KEY_R, HTX_ONLINE_MANUAL);
+        m.AddCheck("shuffle music", TXT_SHUFFLE_MUSIC, gameOpts->sound.bShuffleMusic, KEY_U, HTX_ONLINE_MANUAL);
         if (!gameStates.app.bNostalgia) {
-            m.AddCheck ("fade music", TXT_FADE_MUSIC, gameOpts->sound.bFadeMusic, KEY_F, HTX_FADE_MUSIC);
-            m.AddText ("", "");
-            m.AddCheck ("ship sound", TXT_SHIP_SOUND, gameOpts->sound.bShip, KEY_S, HTX_SHIP_SOUND);
-            m.AddCheck ("missile sound", TXT_MISSILE_SOUND, gameOpts->sound.bMissiles, KEY_M, HTX_MISSILE_SOUND);
-            m.AddCheck ("gatling sound", TXT_GATLING_SOUND, gameOpts->sound.bGatling, KEY_G, HTX_GATLING_SOUND);
-            m.AddCheck ("scrape sound", TXT_SCRAPE_SOUND, gameOpts->sound.bScrape, KEY_P, HTX_SCRAPE_SOUND);
+            m.AddCheck("fade music", TXT_FADE_MUSIC, gameOpts->sound.bFadeMusic, KEY_F, HTX_FADE_MUSIC);
+            m.AddText("", "");
+            m.AddCheck("ship sound", TXT_SHIP_SOUND, gameOpts->sound.bShip, KEY_S, HTX_SHIP_SOUND);
+            m.AddCheck("missile sound", TXT_MISSILE_SOUND, gameOpts->sound.bMissiles, KEY_M, HTX_MISSILE_SOUND);
+            m.AddCheck("gatling sound", TXT_GATLING_SOUND, gameOpts->sound.bGatling, KEY_G, HTX_GATLING_SOUND);
+            m.AddCheck("scrape sound", TXT_SCRAPE_SOUND, gameOpts->sound.bScrape, KEY_P, HTX_SCRAPE_SOUND);
             if (!gameOpts->render.cockpit.bTextGauges)
-                m.AddCheck ("shield warning", TXT_SHIELD_WARNING, gameOpts->gameplay.bShieldWarning, KEY_W, HTX_CPIT_SHIELDWARN);
+                m.AddCheck(
+                    "shield warning",
+                    TXT_SHIELD_WARNING,
+                    gameOpts->gameplay.bShieldWarning,
+                    KEY_W,
+                    HTX_CPIT_SHIELDWARN);
         }
 
-        i = m.Menu (NULL, TXT_SOUND_OPTS, SoundMenuCallback, &choice);
-        gameConfig.bReverseChannels = m.Value ("reverse stereo");
-        gameOpts->sound.bShuffleMusic = m.Value ("shuffle music");
+        i = m.Menu(NULL, TXT_SOUND_OPTS, SoundMenuCallback, &choice);
+        gameConfig.bReverseChannels = m.Value("reverse stereo");
+        gameOpts->sound.bShuffleMusic = m.Value("shuffle music");
         if (!gameStates.app.bNostalgia) {
             if (gameConfig.nMidiVolume) {
-                GET_VAL (gameOpts->sound.bFadeMusic, "fade music");
+                GET_VAL(gameOpts->sound.bFadeMusic, "fade music");
             }
-            GET_VAL (gameOpts->sound.bShip, "ship sound");
-            GET_VAL (gameOpts->sound.bMissiles, "missile sound");
-            GET_VAL (gameOpts->sound.bGatling, "gatling sound");
-            GET_VAL (gameOpts->sound.bScrape, "scrape sound");
-            GET_VAL (gameOpts->gameplay.bShieldWarning, "shield warning");
+            GET_VAL(gameOpts->sound.bShip, "ship sound");
+            GET_VAL(gameOpts->sound.bMissiles, "missile sound");
+            GET_VAL(gameOpts->sound.bGatling, "gatling sound");
+            GET_VAL(gameOpts->sound.bScrape, "scrape sound");
+            GET_VAL(gameOpts->gameplay.bShieldWarning, "shield warning");
             if (gameStates.app.bGameRunning && !(gameOpts->sound.bShip && gameOpts->sound.bGatling))
-                audio.DestroyObjectSound (LOCALPLAYER.nObject);
+                audio.DestroyObjectSound(LOCALPLAYER.nObject);
         }
-        gameOpts->sound.xCustomSoundVolume = (I2X (1) / 8) * gameConfig.nAudioVolume [0];
+        gameOpts->sound.xCustomSoundVolume = (I2X(1) / 8) * gameConfig.nAudioVolume[0];
     } while (i == -2);
 
     if (gameConfig.nMidiVolume < 1)
-        midi.PlaySong (NULL, NULL, NULL, 0, 0);
+        midi.PlaySong(NULL, NULL, NULL, 0, 0);
     else if (!bSongPlaying)
-        songManager.PlayCurrent (1);
+        songManager.PlayCurrent(1);
 
-    audio.SetMaxChannels (32 << (gameStates.sound.nSoundChannels - 2));
+    audio.SetMaxChannels(32 << (gameStates.sound.nSoundChannels - 2));
     if (bShuffleMusic != gameOpts->sound.bShuffleMusic) {
-        songManager.Align ();
+        songManager.Align();
         if (gameStates.app.bGameRunning)
-            songManager.PlayLevelSong (missionManager.nCurrentLevel, 1);
+            songManager.PlayLevelSong(missionManager.nCurrentLevel, 1);
     }
 }

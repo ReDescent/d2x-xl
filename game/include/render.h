@@ -21,18 +21,18 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "renderlib.h"
 #include "flightpath.h"
 
-#define	APPEND_LAYERED_TEXTURES 0
+#define APPEND_LAYERED_TEXTURES 0
 
-extern int nClearWindow;    // 1 = Clear whole background window, 2 = clear view portals into rest of world, 0 = no clear
+extern int nClearWindow; // 1 = Clear whole background window, 2 = clear view portals into rest of world, 0 = no clear
 
-void GameRenderFrame (void);
-void RenderFrame (fix eye_offset, int window_num);  //draws the world into the current canvas
-int RenderMissileView (void);
+void GameRenderFrame(void);
+void RenderFrame(fix eye_offset, int window_num); // draws the world into the current canvas
+int RenderMissileView(void);
 
 // cycle the flashing light for when mine destroyed
-void FlashFrame (void);
+void FlashFrame(void);
 
-int FindSegSideFace (short x,short y,int *seg,int *CSide,int *face,int *poly);
+int FindSegSideFace(short x, short y, int *seg, int *CSide, int *face, int *poly);
 
 // these functions change different rendering parameters
 // all return the new value of the parameter
@@ -53,12 +53,12 @@ int ToggleShowOnlyCurSide(void);
 
 // When any render function needs to know what's looking at it, it
 // should access RenderViewerObject members.
-extern fix xRenderZoom;     // the CPlayerData's zoom factor
+extern fix xRenderZoom; // the CPlayerData's zoom factor
 
 // This is used internally to RenderFrame(), but is included here so AI
 // can use it for its own purposes.
 
-extern short nRenderList [MAX_SEGMENTS_D2X];
+extern short nRenderList[MAX_SEGMENTS_D2X];
 
 // Set the following to turn on CPlayerData head turning
 // If the above flag is set, these angles specify the orientation of the head
@@ -69,67 +69,61 @@ extern CAngleVector Player_head_angles;
 //
 
 // This must be called at the start of the frame if RotateVertexList() will be used
-void RenderStartFrame (void);
-void SetRenderView (fix nEyeOffset, short *pnStartSeg, int bOglScale);
+void RenderStartFrame(void);
+void SetRenderView(fix nEyeOffset, short *pnStartSeg, int bOglScale);
 
-void RenderMine (short nStartSeg, fix xExeOffset, int nWindow);
-void RenderShadowQuad (int bWhite);
-int RenderShadowMap (CDynLight *pLight);
-void UpdateRenderedData (int window_num, CObject *viewer, int rearViewFlag, int user);
-void RenderObjList (int nListPos, int nWindow);
-void RenderMineSegment (int nn);
-void RenderEffects (int nWindow);
+void RenderMine(short nStartSeg, fix xExeOffset, int nWindow);
+void RenderShadowQuad(int bWhite);
+int RenderShadowMap(CDynLight *pLight);
+void UpdateRenderedData(int window_num, CObject *viewer, int rearViewFlag, int user);
+void RenderObjList(int nListPos, int nWindow);
+void RenderMineSegment(int nn);
+void RenderEffects(int nWindow);
 
-void InitSegZRef (int i, int j, int nThread);
-void QSortSegZRef (short left, short right);
+void InitSegZRef(int i, int j, int nThread);
+void QSortSegZRef(short left, short right);
 
-void BuildRenderSegList (short nStartSeg, int nWindow);
-void InitVertLightShader (void);
-void InitDynLighting (void);
-void CloseDynLighting (void);
+void BuildRenderSegList(short nStartSeg, int nWindow);
+void InitVertLightShader(void);
+void InitDynLighting(void);
+void CloseDynLighting(void);
 
 //------------------------------------------------------------------------------
 
-static inline bool GuidedMslView (CObject ** objPP)
-{
-	CObject *objP = gameData.objs.guidedMissile [gameData.multiplayer.nLocalPlayer].objP;
+static inline bool GuidedMslView(CObject **objPP) {
+    CObject *objP = gameData.objs.guidedMissile[gameData.multiplayer.nLocalPlayer].objP;
 
-*objPP = objP;
-return objP && 
-		 (objP->info.nType == OBJ_WEAPON) && 
-		 (objP->info.nId == GUIDEDMSL_ID) && 
-		 (objP->info.nSignature == gameData.objs.guidedMissile [gameData.multiplayer.nLocalPlayer].nSignature);
+    *objPP = objP;
+    return objP && (objP->info.nType == OBJ_WEAPON) && (objP->info.nId == GUIDEDMSL_ID) &&
+           (objP->info.nSignature == gameData.objs.guidedMissile[gameData.multiplayer.nLocalPlayer].nSignature);
 }
 
 //------------------------------------------------------------------------------
 
-static inline CObject *GuidedInMainView (void)
-{
-if (!gameOpts->render.cockpit.bGuidedInMainView)
-	return NULL;
+static inline CObject *GuidedInMainView(void) {
+    if (!gameOpts->render.cockpit.bGuidedInMainView)
+        return NULL;
 
-CObject *objP;
+    CObject *objP;
 
-return GuidedMslView (&objP) ? objP : NULL;
+    return GuidedMslView(&objP) ? objP : NULL;
 }
 
 //------------------------------------------------------------------------------
 
-static inline int StencilOff (void)
-{
-if (!SHOW_SHADOWS || (gameStates.render.nShadowPass != 3))
-	return 0;
-glDisable (GL_STENCIL_TEST);
-gameStates.ogl.nStencil--;
-return 1;
+static inline int StencilOff(void) {
+    if (!SHOW_SHADOWS || (gameStates.render.nShadowPass != 3))
+        return 0;
+    glDisable(GL_STENCIL_TEST);
+    gameStates.ogl.nStencil--;
+    return 1;
 }
 
-static inline void StencilOn (int bStencil)
-{
-if (bStencil) {
-	glEnable (GL_STENCIL_TEST);
-	gameStates.ogl.nStencil++;
-	}
+static inline void StencilOn(int bStencil) {
+    if (bStencil) {
+        glEnable(GL_STENCIL_TEST);
+        gameStates.ogl.nStencil++;
+    }
 }
 
 //------------------------------------------------------------------------------

@@ -14,29 +14,29 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _PCX_H
 #define _PCX_H
 
-#define PCX_ERROR_NONE          0
-#define PCX_ERROR_OPENING       1
-#define PCX_ERROR_NO_HEADER     2
+#define PCX_ERROR_NONE 0
+#define PCX_ERROR_OPENING 1
+#define PCX_ERROR_NO_HEADER 2
 #define PCX_ERROR_WRONG_VERSION 3
-#define PCX_ERROR_READING       4
-#define PCX_ERROR_NO_PALETTE    5
-#define PCX_ERROR_WRITING       6
-#define PCX_ERROR_MEMORY        7
+#define PCX_ERROR_READING 4
+#define PCX_ERROR_NO_PALETTE 5
+#define PCX_ERROR_WRITING 6
+#define PCX_ERROR_MEMORY 7
 
 // Reads filename into bitmap bmp, and fills in palette.  If bmp->bm_data==NULL,
 // then bmp->bm_data is allocated and the w,h are filled.
 // If palette==NULL the palette isn't read in.  Returns error code.
 
-int32_t PCXGetDimensions (const char *filename, int32_t *width, int32_t *height);
+int32_t PCXGetDimensions(const char *filename, int32_t *width, int32_t *height);
 
-int32_t PCXReadBitmap (const char * filename, CBitmap * bmp, int32_t bitmapType, int32_t bD1Mission );
+int32_t PCXReadBitmap(const char *filename, CBitmap *bmp, int32_t bitmapType, int32_t bD1Mission);
 
 // Writes the bitmap bmp to filename, using palette. Returns error code.
 
-int32_t pcx_write_bitmap (const char * filename, CBitmap * bmp);
+int32_t pcx_write_bitmap(const char *filename, CBitmap *bmp);
 
 const char *PcxErrorMsg(int32_t error_number);
 
-int32_t PcxReadFullScrImage (const char * filename, int32_t bD1Mission);
+int32_t PcxReadFullScrImage(const char *filename, int32_t bD1Mission);
 
 #endif

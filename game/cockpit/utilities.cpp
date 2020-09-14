@@ -53,105 +53,99 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //------------------------------------------------------------------------------
 
-char* CGenericCockpit::ftoa (char *pszVal, fix f)
-{
-	int32_t decimal, fractional;
+char *CGenericCockpit::ftoa(char *pszVal, fix f) {
+    int32_t decimal, fractional;
 
-decimal = X2I (f);
-fractional = ((f & 0xffff) * 100) / 65536;
-if (fractional < 0)
-	fractional = -fractional;
-if (fractional > 99)
-	fractional = 99;
-sprintf (pszVal, "%d.%02d", decimal, fractional);
-return pszVal;
+    decimal = X2I(f);
+    fractional = ((f & 0xffff) * 100) / 65536;
+    if (fractional < 0)
+        fractional = -fractional;
+    if (fractional > 99)
+        fractional = 99;
+    sprintf(pszVal, "%d.%02d", decimal, fractional);
+    return pszVal;
 }
 
 //------------------------------------------------------------------------------
 
-char* CGenericCockpit::Convert1s (char* s)
-{
-char* p = s;
-while ((p = strchr (p, '1')))
-	*p = char (132);
-return s;
+char *CGenericCockpit::Convert1s(char *s) {
+    char *p = s;
+    while ((p = strchr(p, '1')))
+        *p = char(132);
+    return s;
 }
 
 //	-----------------------------------------------------------------------------
 
-void CGenericCockpit::PlayHomingWarning (void)
-{
-	fix	xBeepDelay;
+void CGenericCockpit::PlayHomingWarning(void) {
+    fix xBeepDelay;
 
-if (gameStates.app.bEndLevelSequence || gameStates.app.bPlayerIsDead)
-	return;
-if (LOCALPLAYER.homingObjectDist >= 0) {
-	xBeepDelay = LOCALPLAYER.homingObjectDist/128;
-	if (xBeepDelay > I2X (1))
-		xBeepDelay = I2X (1);
-	else if (xBeepDelay < I2X (1)/8)
-		xBeepDelay = I2X (1)/8;
-	if (m_info.lastWarningBeepTime [0] > gameData.timeData.xGame)
-		m_info.lastWarningBeepTime [0] = 0;
-	if (gameData.timeData.xGame - m_info.lastWarningBeepTime [0] > xBeepDelay / 2) {
-		audio.PlaySound (SOUND_HOMING_WARNING);
-		m_info.lastWarningBeepTime [0] = gameData.timeData.xGame;
-		}
-	}
+    if (gameStates.app.bEndLevelSequence || gameStates.app.bPlayerIsDead)
+        return;
+    if (LOCALPLAYER.homingObjectDist >= 0) {
+        xBeepDelay = LOCALPLAYER.homingObjectDist / 128;
+        if (xBeepDelay > I2X(1))
+            xBeepDelay = I2X(1);
+        else if (xBeepDelay < I2X(1) / 8)
+            xBeepDelay = I2X(1) / 8;
+        if (m_info.lastWarningBeepTime[0] > gameData.timeData.xGame)
+            m_info.lastWarningBeepTime[0] = 0;
+        if (gameData.timeData.xGame - m_info.lastWarningBeepTime[0] > xBeepDelay / 2) {
+            audio.PlaySound(SOUND_HOMING_WARNING);
+            m_info.lastWarningBeepTime[0] = gameData.timeData.xGame;
+        }
+    }
 }
 
 //	-----------------------------------------------------------------------------
 
-void CGenericCockpit::CheckForExtraLife (int32_t nPrevScore)
-{
-if (LOCALPLAYER.score / EXTRA_SHIP_SCORE != nPrevScore / EXTRA_SHIP_SCORE) {
-	LOCALPLAYER.lives += LOCALPLAYER.score / EXTRA_SHIP_SCORE - nPrevScore / EXTRA_SHIP_SCORE;
-	PickupEffect (20, 20, 20, 0, TXT_EXTRA_LIFE);
-	int16_t nSound = gameData.objData.pwrUp.info [POW_EXTRA_LIFE].hitSound;
-	if (nSound > -1)
-		audio.PlaySound (nSound);
-	}
+void CGenericCockpit::CheckForExtraLife(int32_t nPrevScore) {
+    if (LOCALPLAYER.score / EXTRA_SHIP_SCORE != nPrevScore / EXTRA_SHIP_SCORE) {
+        LOCALPLAYER.lives += LOCALPLAYER.score / EXTRA_SHIP_SCORE - nPrevScore / EXTRA_SHIP_SCORE;
+        PickupEffect(20, 20, 20, 0, TXT_EXTRA_LIFE);
+        int16_t nSound = gameData.objData.pwrUp.info[POW_EXTRA_LIFE].hitSound;
+        if (nSound > -1)
+            audio.PlaySound(nSound);
+    }
 }
 
 //	-----------------------------------------------------------------------------
 
-void CGenericCockpit::AddPointsToScore (int32_t points)
-{
-	int32_t nPrevScore;
+void CGenericCockpit::AddPointsToScore(int32_t points) {
+    int32_t nPrevScore;
 
-m_info.scoreTime += I2X (1) * 2;
-cockpit->AddScore (0, points);
-cockpit->AddScore (1, points);
-if (m_info.scoreTime > I2X (1) * 4)
-	m_info.scoreTime = I2X (1) * 4;
-if (!points || gameStates.app.cheats.bEnabled)
-	return;
-if (IsMultiGame && !IsCoopGame)
-	return;
-nPrevScore = LOCALPLAYER.score;
-LOCALPLAYER.score += points;
-if (gameData.demoData.nState == ND_STATE_RECORDING)
-	NDRecordPlayerScore (points);
-if (IsCoopGame)
-	MultiSendScore ();
-if (!IsMultiGame)
-	CheckForExtraLife (nPrevScore);
+    m_info.scoreTime += I2X(1) * 2;
+    cockpit->AddScore(0, points);
+    cockpit->AddScore(1, points);
+    if (m_info.scoreTime > I2X(1) * 4)
+        m_info.scoreTime = I2X(1) * 4;
+    if (!points || gameStates.app.cheats.bEnabled)
+        return;
+    if (IsMultiGame && !IsCoopGame)
+        return;
+    nPrevScore = LOCALPLAYER.score;
+    LOCALPLAYER.score += points;
+    if (gameData.demoData.nState == ND_STATE_RECORDING)
+        NDRecordPlayerScore(points);
+    if (IsCoopGame)
+        MultiSendScore();
+    if (!IsMultiGame)
+        CheckForExtraLife(nPrevScore);
 }
 
 //	-----------------------------------------------------------------------------
 
-void CGenericCockpit::AddBonusPointsToScore (int32_t points)
-{
-	int32_t nPrevScore;
+void CGenericCockpit::AddBonusPointsToScore(int32_t points) {
+    int32_t nPrevScore;
 
-if (!points || gameStates.app.cheats.bEnabled)
-	return;
-nPrevScore = LOCALPLAYER.score;
-LOCALPLAYER.score += points;
-if (gameData.demoData.nState == ND_STATE_RECORDING)
-	NDRecordPlayerScore (points);
-if (!IsMultiGame)
-	CheckForExtraLife (nPrevScore);
+    if (!points || gameStates.app.cheats.bEnabled)
+        return;
+    nPrevScore = LOCALPLAYER.score;
+    LOCALPLAYER.score += points;
+    if (gameData.demoData.nState == ND_STATE_RECORDING)
+        NDRecordPlayerScore(points);
+    if (!IsMultiGame)
+        CheckForExtraLife(nPrevScore);
 }
 
 //	-----------------------------------------------------------------------------
@@ -164,73 +158,70 @@ extern int32_t bSavingMovieFrames;
 
 //	-----------------------------------------------------------------------------
 
-bool CGenericCockpit::ShowTextGauges (void)
-{
-return gameOpts->render.cockpit.bTextGauges || gameOpts->render.cockpit.nShipStateLayout || ogl.IsOculusRift ();
+bool CGenericCockpit::ShowTextGauges(void) {
+    return gameOpts->render.cockpit.bTextGauges || gameOpts->render.cockpit.nShipStateLayout || ogl.IsOculusRift();
 }
 
 //	-----------------------------------------------------------------------------
-//returns true if pViewer can see CObject
+// returns true if pViewer can see CObject
 
-int32_t CGenericCockpit::CanSeeObject (int32_t nObject, int32_t bCheckObjs)
-{
-if (!OBJECT (nObject))
-	return 0;
+int32_t CGenericCockpit::CanSeeObject(int32_t nObject, int32_t bCheckObjs) {
+    if (!OBJECT(nObject))
+        return 0;
 
-	CHitQuery hitQuery ((bCheckObjs ? FQ_VISIBILITY | FQ_CHECK_OBJS | FQ_TRANSWALL : FQ_VISIBILITY | FQ_TRANSWALL),
-							  &gameData.objData.pViewer->info.position.vPos,
-							  &OBJECT (nObject)->info.position.vPos,
-							  gameData.objData.pViewer->info.nSegment,
-							  gameStates.render.cameras.bActive ? -1 : OBJ_IDX (gameData.objData.pViewer),
-							  0, 0,
-							  ++gameData.physicsData.bIgnoreObjFlag
-							 );
+    CHitQuery hitQuery(
+        (bCheckObjs ? FQ_VISIBILITY | FQ_CHECK_OBJS | FQ_TRANSWALL : FQ_VISIBILITY | FQ_TRANSWALL),
+        &gameData.objData.pViewer->info.position.vPos,
+        &OBJECT(nObject)->info.position.vPos,
+        gameData.objData.pViewer->info.nSegment,
+        gameStates.render.cameras.bActive ? -1 : OBJ_IDX(gameData.objData.pViewer),
+        0,
+        0,
+        ++gameData.physicsData.bIgnoreObjFlag);
 
-	CHitResult hitResult;
+    CHitResult hitResult;
 
-int32_t nHitType = FindHitpoint (hitQuery, hitResult);
-return bCheckObjs ? (nHitType == HIT_OBJECT) && (hitResult.nObject == nObject) : (nHitType != HIT_WALL);
+    int32_t nHitType = FindHitpoint(hitQuery, hitResult);
+    return bCheckObjs ? (nHitType == HIT_OBJECT) && (hitResult.nObject == nObject) : (nHitType != HIT_WALL);
 }
 
 //	-----------------------------------------------------------------------------
 
-void CGenericCockpit::DemoRecording (void)
-{
-if (gameData.demoData.nState == ND_STATE_RECORDING) {
-	if (LOCALPLAYER.homingObjectDist >= 0)
-		NDRecordHomingDistance (LOCALPLAYER.homingObjectDist);
+void CGenericCockpit::DemoRecording(void) {
+    if (gameData.demoData.nState == ND_STATE_RECORDING) {
+        if (LOCALPLAYER.homingObjectDist >= 0)
+            NDRecordHomingDistance(LOCALPLAYER.homingObjectDist);
 
-	if (m_info.nEnergy != m_history [0].energy) {
-		NDRecordPlayerEnergy (m_history [0].energy, m_info.nEnergy);
-		m_history [0].energy = m_info.nEnergy;
-		}
+        if (m_info.nEnergy != m_history[0].energy) {
+            NDRecordPlayerEnergy(m_history[0].energy, m_info.nEnergy);
+            m_history[0].energy = m_info.nEnergy;
+        }
 
-	if (gameData.physicsData.xAfterburnerCharge != m_history [0].afterburner) {
-		NDRecordPlayerAfterburner (m_history [0].afterburner, gameData.physicsData.xAfterburnerCharge);
-		m_history [0].afterburner = gameData.physicsData.xAfterburnerCharge;
-		}
+        if (gameData.physicsData.xAfterburnerCharge != m_history[0].afterburner) {
+            NDRecordPlayerAfterburner(m_history[0].afterburner, gameData.physicsData.xAfterburnerCharge);
+            m_history[0].afterburner = gameData.physicsData.xAfterburnerCharge;
+        }
 
-	if (LOCALPLAYER.flags & PLAYER_FLAGS_INVULNERABLE)
-		m_history [0].shield = m_info.nShield ^ 1;
-	else {
-		if (m_info.nShield != m_history [0].shield) {		// Draw the shield gauge
-			NDRecordPlayerShield (m_history [0].shield, m_info.nShield);
-			m_history [0].shield = m_info.nShield;
-			}
-		}
-	if (LOCALPLAYER.flags != m_history [0].flags) {
-		NDRecordPlayerFlags (m_history [0].flags, LOCALPLAYER.flags);
-		m_history [0].flags = LOCALPLAYER.flags;
-		}
-	}
+        if (LOCALPLAYER.flags & PLAYER_FLAGS_INVULNERABLE)
+            m_history[0].shield = m_info.nShield ^ 1;
+        else {
+            if (m_info.nShield != m_history[0].shield) { // Draw the shield gauge
+                NDRecordPlayerShield(m_history[0].shield, m_info.nShield);
+                m_history[0].shield = m_info.nShield;
+            }
+        }
+        if (LOCALPLAYER.flags != m_history[0].flags) {
+            NDRecordPlayerFlags(m_history[0].flags, LOCALPLAYER.flags);
+            m_history[0].flags = LOCALPLAYER.flags;
+        }
+    }
 }
 
 //	---------------------------------------------------------------------------------------------------------
 //	Call when picked up a laser powerup.
 //	If laser is active, set previous weapon [0] to -1 to force redraw.
 
-void CGenericCockpit::UpdateLaserWeaponInfo (void)
-{
+void CGenericCockpit::UpdateLaserWeaponInfo(void) {
 #if 0
 if (m_history [0].weapon [0] == 0)
 	if (!(LOCALPLAYER.laserLevel > MAX_LASER_LEVEL && m_history [0].laserLevel <= MAX_LASER_LEVEL))
@@ -240,29 +231,24 @@ if (m_history [0].weapon [0] == 0)
 
 //------------------------------------------------------------------------------
 
-int32_t CGenericCockpit::WidthPad (char* pszText)
-{
-	int32_t	w, h, aw;
+int32_t CGenericCockpit::WidthPad(char *pszText) {
+    int32_t w, h, aw;
 
-fontManager.Current ()->StringSize (pszText, w, h, aw);
-return ((int32_t) FRound (ScaleX (w) / fontManager.Scale ()) - w) / 2;
+    fontManager.Current()->StringSize(pszText, w, h, aw);
+    return ((int32_t)FRound(ScaleX(w) / fontManager.Scale()) - w) / 2;
 }
 
 //------------------------------------------------------------------------------
 
-int32_t CGenericCockpit::HeightPad (void)
-{
-return (int32_t) FRound (m_info.heightPad / fontManager.Scale ());
-}
+int32_t CGenericCockpit::HeightPad(void) { return (int32_t)FRound(m_info.heightPad / fontManager.Scale()); }
 
 //------------------------------------------------------------------------------
 
-int32_t CGenericCockpit::WidthPad (int32_t nValue)
-{
-	char szValue [20];
+int32_t CGenericCockpit::WidthPad(int32_t nValue) {
+    char szValue[20];
 
-sprintf (szValue, "%d", nValue);
-return WidthPad (szValue);
+    sprintf(szValue, "%d", nValue);
+    return WidthPad(szValue);
 }
 
 //	-----------------------------------------------------------------------------

@@ -31,27 +31,25 @@
 
 //------------------------------------------------------------------------------
 
-void CPaletteManager::RenderEffect (void)
-{
+void CPaletteManager::RenderEffect(void) {
 #if 1
-if (m_data.nSuspended)
-	return;
-UpdateEffect ();
-if (!m_data.bDoEffect)
-	return;
-if (gameOpts->app.bEpilepticFriendly)
-	return;
-ogl.SetBlending (true);
-ogl.SetBlendMode (OGL_BLEND_ADD);
-glColor3fv (reinterpret_cast<GLfloat*> (&m_data.flash));
-bool bDepthTest = ogl.GetDepthTest ();
-ogl.SetDepthTest (false);
-ogl.SetTexturing (false);
-ogl.RenderScreenQuad ();
-ogl.SetDepthTest (bDepthTest);
-ogl.SetBlendMode (OGL_BLEND_ALPHA);
+    if (m_data.nSuspended)
+        return;
+    UpdateEffect();
+    if (!m_data.bDoEffect)
+        return;
+    if (gameOpts->app.bEpilepticFriendly)
+        return;
+    ogl.SetBlending(true);
+    ogl.SetBlendMode(OGL_BLEND_ADD);
+    glColor3fv(reinterpret_cast<GLfloat *>(&m_data.flash));
+    bool bDepthTest = ogl.GetDepthTest();
+    ogl.SetDepthTest(false);
+    ogl.SetTexturing(false);
+    ogl.RenderScreenQuad();
+    ogl.SetDepthTest(bDepthTest);
+    ogl.SetBlendMode(OGL_BLEND_ALPHA);
 #endif
 }
 
 //------------------------------------------------------------------------------
-

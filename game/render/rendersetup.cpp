@@ -59,128 +59,131 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "oglmatrix.h"
 
 //------------------------------------------------------------------------------
-//increment counter for checking if points bTransformed
+// increment counter for checking if points bTransformed
 
-void RenderStartFrame (void)
-{
-if (!++gameStates.render.nFrameCount)		//wrap!
-	gameStates.render.nFrameCount = 1;
+void RenderStartFrame(void) {
+    if (!++gameStates.render.nFrameCount) // wrap!
+        gameStates.render.nFrameCount = 1;
 }
 
 //------------------------------------------------------------------------------
 
-static void ComputeShadowTransformation (int32_t nLight)
-{
+static void ComputeShadowTransformation(int32_t nLight) {
 
-	static double biasData [16] = {0.5, 0.0, 0.0, 0.0,
-											 0.0, 0.5, 0.0, 0.0,
-											 0.0, 0.0, 0.5, 0.0,
-											 0.5, 0.5, 0.5, 1.0};
+    static double biasData[16] = {0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0};
 
-	COGLMatrix	bias, modelView, projection;
-	GLint matrixMode;
+    COGLMatrix bias, modelView, projection;
+    GLint matrixMode;
 
-ogl.SetupTransform (1);
-glGetIntegerv (GL_MATRIX_MODE, &matrixMode);
-bias = biasData;
-modelView.Get (GL_MODELVIEW_MATRIX);
-projection.Get (GL_PROJECTION_MATRIX);
-ogl.ResetTransform (1);
-glMatrixMode (GL_TEXTURE);
-glActiveTexture (GL_TEXTURE1 + nLight);
+    ogl.SetupTransform(1);
+    glGetIntegerv(GL_MATRIX_MODE, &matrixMode);
+    bias = biasData;
+    modelView.Get(GL_MODELVIEW_MATRIX);
+    projection.Get(GL_PROJECTION_MATRIX);
+    ogl.ResetTransform(1);
+    glMatrixMode(GL_TEXTURE);
+    glActiveTexture(GL_TEXTURE1 + nLight);
 #if 1
-bias.Set ();
-projection.Mul ();
+    bias.Set();
+    projection.Mul();
 #else
-projection.Set ();
+    projection.Set();
 #endif
-modelView.Mul ();
-transformation.SystemMatrix (nLight).Get (GL_TEXTURE_MATRIX);
-glMatrixMode (matrixMode);
+    modelView.Mul();
+    transformation.SystemMatrix(nLight).Get(GL_TEXTURE_MATRIX);
+    glMatrixMode(matrixMode);
 }
 
 //------------------------------------------------------------------------------
 
-void SetupRenderView (fix xStereoSeparation, int16_t *pnStartSeg, int32_t bOglScale)
-{
-	int16_t		nStartSeg;
-	bool			bPlayer = (gameData.objData.pViewer == LOCALOBJECT);
-	CFixMatrix	mView = gameData.objData.pViewer->info.position.mOrient;
-	fix			xZoom = gameStates.render.xZoom;
+void SetupRenderView(fix xStereoSeparation, int16_t *pnStartSeg, int32_t bOglScale) {
+    int16_t nStartSeg;
+    bool bPlayer = (gameData.objData.pViewer == LOCALOBJECT);
+    CFixMatrix mView = gameData.objData.pViewer->info.position.mOrient;
+    fix xZoom = gameStates.render.xZoom;
 
+    gameData.renderData.mine.viewer = gameData.objData.pViewer->info.position;
+    if (LOCALPLAYER.ObservedPlayer() == N_LOCALPLAYER)
+        FLIGHTPATH.SetPos(NULL);
 
-gameData.renderData.mine.viewer = gameData.objData.pViewer->info.position;
-if (LOCALPLAYER.ObservedPlayer () == N_LOCALPLAYER)
-	FLIGHTPATH.SetPos (NULL);
-
-if (gameStates.render.cameras.bActive)
-	nStartSeg = gameData.objData.pViewer->info.nSegment;
-else {
-	if (bPlayer) {
-		if (xStereoSeparation)
-			gameData.renderData.mine.viewer.vPos += gameData.objData.pViewer->info.position.mOrient.m.dir.r * xStereoSeparation;
+    if (gameStates.render.cameras.bActive)
+        nStartSeg = gameData.objData.pViewer->info.nSegment;
+    else {
+        if (bPlayer) {
+            if (xStereoSeparation)
+                gameData.renderData.mine.viewer.vPos +=
+                    gameData.objData.pViewer->info.position.mOrient.m.dir.r * xStereoSeparation;
 #if 0 // is done in the game loop anyway
 		if ((LOCALPLAYER.ObservedPlayer () == N_LOCALPLAYER) && !gameStates.render.nWindow [0])
 			FLIGHTPATH.Update (gameData.objData.pViewer);
 #endif
-		if (gameStates.render.bRearView) { // no zoom, no head tracking
-			mView.m.dir.f.Neg ();
-			mView.m.dir.r.Neg ();
-			xZoom = FixDiv (gameStates.render.xZoom, gameStates.zoom.nFactor);
-			}
-	#if DBG
-		else if (gameStates.render.bChaseCam) { // no zoom, no head tracking
-	#else
-		else if (gameStates.render.bChaseCam && (!IsMultiGame || IsCoopGame || (EGI_FLAG (bEnableCheats, 0, 0, 0) && !COMPETITION))) {
-	#endif
-			FLIGHTPATH.GetViewPoint ();
-			if (FLIGHTPATH.Tail ())
-				mView = FLIGHTPATH.Tail ()->mOrient;
-			else if (gameData.multiplayer.tAppearing [N_LOCALPLAYER][0] != 0) {
-				mView.m.dir.f.Neg ();
-				mView.m.dir.r.Neg ();
-				}
-			}
-		else {
-			if (transformation.m_info.bUsePlayerHeadAngles) {
-				CFixMatrix mHead = CFixMatrix::Create (transformation.m_info.playerHeadAngles);
-				mView = gameData.objData.pViewer->info.position.mOrient * mHead;
-				}
-			if (!IsMultiGame || gameStates.app.bHaveExtraGameInfo [1]) { // zoom?
-				if (!(gameStates.zoom.nMinFactor = I2X (gameStates.render.glAspect)))
-					gameStates.zoom.nMinFactor = I2X (1);
-				gameStates.zoom.nMaxFactor = gameStates.zoom.nMinFactor * 5;
-				HandleZoom ();
-				xZoom = FixDiv (gameStates.render.xZoom, gameStates.zoom.nFactor);
-				}
-			}
-		}
-	if (!pnStartSeg)
-		nStartSeg = gameStates.render.nStartSeg; // re-use start segment
-	else if (0 > (nStartSeg = FindSegByPos (gameData.renderData.mine.viewer.vPos, gameData.objData.pViewer->info.nSegment, 1, 0)))
-		nStartSeg = gameData.objData.pViewer->info.nSegment;
-	}
-if (pnStartSeg)
-	*pnStartSeg = nStartSeg;
-
-SetupTransformation (transformation, gameData.renderData.mine.viewer.vPos, mView, xZoom, bOglScale, xStereoSeparation);
+            if (gameStates.render.bRearView) { // no zoom, no head tracking
+                mView.m.dir.f.Neg();
+                mView.m.dir.r.Neg();
+                xZoom = FixDiv(gameStates.render.xZoom, gameStates.zoom.nFactor);
+            }
 #if DBG
-{
-CFixVector p, m_pos = OBJECT (0)->FrontPosition ();
-tScreenPos s;
-transformation.TransformAndEncode (p, m_pos);
-//SetupCanvasses ();
-gameData.renderData.frame.Activate ("");
-ProjectPoint (p, s, 0, 0);
-gameData.renderData.frame.Deactivate ();
-}
+            else if (gameStates.render.bChaseCam) { // no zoom, no head tracking
+#else
+            else if (
+                gameStates.render.bChaseCam &&
+                (!IsMultiGame || IsCoopGame || (EGI_FLAG(bEnableCheats, 0, 0, 0) && !COMPETITION))) {
 #endif
-CCanvas::Current ()->Reactivate ();
-if (gameStates.render.cameras.bActive && (gameStates.render.nShadowMap > 0))
-	ComputeShadowTransformation (gameStates.render.nShadowMap - 1);
-ogl.SetupTransform (1);
-transformation.m_info.oglModelview.Get (GL_MODELVIEW_MATRIX);
-ogl.ResetTransform (1);
+                FLIGHTPATH.GetViewPoint();
+                if (FLIGHTPATH.Tail())
+                    mView = FLIGHTPATH.Tail()->mOrient;
+                else if (gameData.multiplayer.tAppearing[N_LOCALPLAYER][0] != 0) {
+                    mView.m.dir.f.Neg();
+                    mView.m.dir.r.Neg();
+                }
+            } else {
+                if (transformation.m_info.bUsePlayerHeadAngles) {
+                    CFixMatrix mHead = CFixMatrix::Create(transformation.m_info.playerHeadAngles);
+                    mView = gameData.objData.pViewer->info.position.mOrient * mHead;
+                }
+                if (!IsMultiGame || gameStates.app.bHaveExtraGameInfo[1]) { // zoom?
+                    if (!(gameStates.zoom.nMinFactor = I2X(gameStates.render.glAspect)))
+                        gameStates.zoom.nMinFactor = I2X(1);
+                    gameStates.zoom.nMaxFactor = gameStates.zoom.nMinFactor * 5;
+                    HandleZoom();
+                    xZoom = FixDiv(gameStates.render.xZoom, gameStates.zoom.nFactor);
+                }
+            }
+        }
+        if (!pnStartSeg)
+            nStartSeg = gameStates.render.nStartSeg; // re-use start segment
+        else if (
+            0 > (nStartSeg =
+                     FindSegByPos(gameData.renderData.mine.viewer.vPos, gameData.objData.pViewer->info.nSegment, 1, 0)))
+            nStartSeg = gameData.objData.pViewer->info.nSegment;
+    }
+    if (pnStartSeg)
+        *pnStartSeg = nStartSeg;
+
+    SetupTransformation(
+        transformation,
+        gameData.renderData.mine.viewer.vPos,
+        mView,
+        xZoom,
+        bOglScale,
+        xStereoSeparation);
+#if DBG
+    {
+        CFixVector p, m_pos = OBJECT(0)->FrontPosition();
+        tScreenPos s;
+        transformation.TransformAndEncode(p, m_pos);
+        // SetupCanvasses ();
+        gameData.renderData.frame.Activate("");
+        ProjectPoint(p, s, 0, 0);
+        gameData.renderData.frame.Deactivate();
+    }
+#endif
+    CCanvas::Current()->Reactivate();
+    if (gameStates.render.cameras.bActive && (gameStates.render.nShadowMap > 0))
+        ComputeShadowTransformation(gameStates.render.nShadowMap - 1);
+    ogl.SetupTransform(1);
+    transformation.m_info.oglModelview.Get(GL_MODELVIEW_MATRIX);
+    ogl.ResetTransform(1);
 }
 
 //------------------------------------------------------------------------------
@@ -189,65 +192,66 @@ ogl.ResetTransform (1);
 static int32_t bDbgFullBright = -1;
 #endif
 
-int32_t BeginRenderMine (int16_t nStartSeg, fix xStereoSeparation, int32_t nWindow)
-{
-PROF_START
+int32_t BeginRenderMine(int16_t nStartSeg, fix xStereoSeparation, int32_t nWindow) {
+    PROF_START
 #if DBG
-if (bDbgFullBright >= 0)
-	gameStates.render.bFullBright = bDbgFullBright;
-else if ((gameStates.app.bEndLevelSequence == EL_FLYTHROUGH) || (gameStates.app.bEndLevelSequence == EL_LOOKBACK))
-	gameStates.render.bFullBright = 2;
-else if (automap.Active () && gameOpts->render.automap.bBright) 
-	gameStates.render.bFullBright = 1;
-else
-	gameStates.render.bFullBright = 0;
+    if (bDbgFullBright >= 0)
+        gameStates.render.bFullBright = bDbgFullBright;
+    else if ((gameStates.app.bEndLevelSequence == EL_FLYTHROUGH) || (gameStates.app.bEndLevelSequence == EL_LOOKBACK))
+        gameStates.render.bFullBright = 2;
+    else if (automap.Active() && gameOpts->render.automap.bBright)
+        gameStates.render.bFullBright = 1;
+    else
+        gameStates.render.bFullBright = 0;
 #else
-gameStates.render.bFullBright = (automap.Active () && gameOpts->render.automap.bBright)
+    gameStates.render.bFullBright = (automap.Active() && gameOpts->render.automap.bBright)
 #if MAX_SHADOWMAPS
-										  || (gameStates.render.nShadowMap > 0)
+                                    || (gameStates.render.nShadowMap > 0)
 #endif
-										  ;
+        ;
 #endif
-ogl.m_states.bStandardContrast = gameStates.app.bNostalgia || IsMultiGame || (ogl.m_states.nContrast == 8);
-ogl.m_states.bScaleLight = EGI_FLAG (bShadows, 0, 1, 0) && (gameStates.render.nShadowPass < 3) && !FAST_SHADOWS;
-gameStates.render.bUseCameras = USE_CAMERAS;
+    ogl.m_states.bStandardContrast = gameStates.app.bNostalgia || IsMultiGame || (ogl.m_states.nContrast == 8);
+    ogl.m_states.bScaleLight = EGI_FLAG(bShadows, 0, 1, 0) && (gameStates.render.nShadowPass < 3) && !FAST_SHADOWS;
+    gameStates.render.bUseCameras = USE_CAMERAS;
 
-if (!nWindow)
-	GetPlayerMslLock ();	// uses rendered object info from previous frame stored in windowRenderedData
-if (!gameStates.render.cameras.bActive)
-	windowRenderedData [nWindow].nObjects = 0;
-ogl.m_states.fAlpha = FADE_LEVELS;
-if (((gameStates.render.nRenderPass <= 0) && (gameStates.render.nShadowPass < 2) && (gameStates.render.nShadowBlurPass < 2)) || gameStates.render.nShadowMap) {
-	if (!automap.Active ())
-		RenderStartFrame ();
-	}
-if ((gameStates.render.nRenderPass <= 0) && (gameStates.render.nShadowPass < 2)) {
-	ogl.SetTransform (1);
-	BuildRenderSegList (nStartSeg, nWindow);		//fills in gameData.renderData.mine.renderSegList & gameData.renderData.mine.visibility [0].nSegments
-	if ((gameStates.render.nRenderPass <= 0) && (gameStates.render.nShadowPass < 2)) {
-		BuildRenderObjLists (gameData.renderData.mine.visibility [0].nSegments);
-		if (xStereoSeparation <= 0)	// Do for left eye or zero.
-			SetDynamicLight ();
-		}
-	ogl.SetTransform (0);
-	lightManager.Transform (0, 1);
-	}
-PROF_END(ptAux);
-return !gameStates.render.cameras.bActive && (gameData.objData.pViewer->info.nType != OBJ_ROBOT);
+    if (!nWindow)
+        GetPlayerMslLock(); // uses rendered object info from previous frame stored in windowRenderedData
+    if (!gameStates.render.cameras.bActive)
+        windowRenderedData[nWindow].nObjects = 0;
+    ogl.m_states.fAlpha = FADE_LEVELS;
+    if (((gameStates.render.nRenderPass <= 0) && (gameStates.render.nShadowPass < 2) &&
+         (gameStates.render.nShadowBlurPass < 2)) ||
+        gameStates.render.nShadowMap) {
+        if (!automap.Active())
+            RenderStartFrame();
+    }
+    if ((gameStates.render.nRenderPass <= 0) && (gameStates.render.nShadowPass < 2)) {
+        ogl.SetTransform(1);
+        BuildRenderSegList(nStartSeg, nWindow); // fills in gameData.renderData.mine.renderSegList &
+                                                // gameData.renderData.mine.visibility [0].nSegments
+        if ((gameStates.render.nRenderPass <= 0) && (gameStates.render.nShadowPass < 2)) {
+            BuildRenderObjLists(gameData.renderData.mine.visibility[0].nSegments);
+            if (xStereoSeparation <= 0) // Do for left eye or zero.
+                SetDynamicLight();
+        }
+        ogl.SetTransform(0);
+        lightManager.Transform(0, 1);
+    }
+    PROF_END(ptAux);
+    return !gameStates.render.cameras.bActive && (gameData.objData.pViewer->info.nType != OBJ_ROBOT);
 }
 
 //------------------------------------------------------------------------------
 
-void SetupMineRenderer (int32_t nWindow)
-{
+void SetupMineRenderer(int32_t nWindow) {
 #if DBG
-if (gameStates.app.bNostalgia) {
-	gameOptions [1].render.debug.bWireFrame = 0;
-	gameOptions [1].render.debug.bTextures = 1;
-	gameOptions [1].render.debug.bObjects = 1;
-	gameOptions [1].render.debug.bWalls = 1;
-	gameOptions [1].render.debug.bDynamicLight = 1;
-	}
+    if (gameStates.app.bNostalgia) {
+        gameOptions[1].render.debug.bWireFrame = 0;
+        gameOptions[1].render.debug.bTextures = 1;
+        gameOptions[1].render.debug.bObjects = 1;
+        gameOptions[1].render.debug.bWalls = 1;
+        gameOptions[1].render.debug.bDynamicLight = 1;
+    }
 #endif
 
 #if 0
@@ -266,109 +270,103 @@ else {
 	}
 #endif
 
-if ((nWindow == 0) && (gameStates.render.nShadowPass < 2)) {
-	ogl.m_states.bDepthBuffer [0] =
-	ogl.m_states.bDepthBuffer [1] = 0;
-	ogl.SetDepthWrite (true);
-	}
-gameData.renderData.nUsedFaces =
-gameData.renderData.nTotalFaces =
-gameData.renderData.nTotalObjects =
-gameData.renderData.nTotalSprites =
-gameData.renderData.nTotalLights =
-gameData.renderData.nMaxLights =
-gameData.renderData.nStateChanges =
-gameData.renderData.nShaderChanges = 0;
-gameData.renderData.fBrightness = paletteManager.Brightness ();
-if (ogl.IsAnaglyphDevice () && (!gameOpts->app.bExpertMode || gameOpts->render.stereo.bBrighten))
-	gameData.renderData.fBrightness *= 1.25f;
+    if ((nWindow == 0) && (gameStates.render.nShadowPass < 2)) {
+        ogl.m_states.bDepthBuffer[0] = ogl.m_states.bDepthBuffer[1] = 0;
+        ogl.SetDepthWrite(true);
+    }
+    gameData.renderData.nUsedFaces = gameData.renderData.nTotalFaces = gameData.renderData.nTotalObjects =
+        gameData.renderData.nTotalSprites = gameData.renderData.nTotalLights = gameData.renderData.nMaxLights =
+            gameData.renderData.nStateChanges = gameData.renderData.nShaderChanges = 0;
+    gameData.renderData.fBrightness = paletteManager.Brightness();
+    if (ogl.IsAnaglyphDevice() && (!gameOpts->app.bExpertMode || gameOpts->render.stereo.bBrighten))
+        gameData.renderData.fBrightness *= 1.25f;
 
-SetFaceDrawer (-1);
-gameData.renderData.vertColor.bNoShadow = !FAST_SHADOWS && (gameStates.render.nShadowPass == 4);
-gameData.renderData.vertColor.bDarkness = IsMultiGame && gameStates.app.bHaveExtraGameInfo [1] && extraGameInfo [IsMultiGame].bDarkness;
-gameStates.render.bApplyDynLight =
-gameStates.render.bUseDynLight = SHOW_DYN_LIGHT;
-if (!EGI_FLAG (bPowerupLights, 0, 0, 0))
-	gameData.renderData.nPowerupFilter = 0;
-else if (gameStates.render.bPerPixelLighting == 2)
-	gameData.renderData.nPowerupFilter = 1;
-else
-	gameData.renderData.nPowerupFilter = 2;
-gameStates.render.bDoCameras = extraGameInfo [0].bUseCameras &&
-									    (!IsMultiGame || (gameStates.app.bHaveExtraGameInfo [1] && extraGameInfo [1].bUseCameras)) &&
-										 !gameStates.render.cameras.bActive;
-gameStates.render.bDoLightmaps = 0;
+    SetFaceDrawer(-1);
+    gameData.renderData.vertColor.bNoShadow = !FAST_SHADOWS && (gameStates.render.nShadowPass == 4);
+    gameData.renderData.vertColor.bDarkness =
+        IsMultiGame && gameStates.app.bHaveExtraGameInfo[1] && extraGameInfo[IsMultiGame].bDarkness;
+    gameStates.render.bApplyDynLight = gameStates.render.bUseDynLight = SHOW_DYN_LIGHT;
+    if (!EGI_FLAG(bPowerupLights, 0, 0, 0))
+        gameData.renderData.nPowerupFilter = 0;
+    else if (gameStates.render.bPerPixelLighting == 2)
+        gameData.renderData.nPowerupFilter = 1;
+    else
+        gameData.renderData.nPowerupFilter = 2;
+    gameStates.render.bDoCameras =
+        extraGameInfo[0].bUseCameras &&
+        (!IsMultiGame || (gameStates.app.bHaveExtraGameInfo[1] && extraGameInfo[1].bUseCameras)) &&
+        !gameStates.render.cameras.bActive;
+    gameStates.render.bDoLightmaps = 0;
 }
 
 //------------------------------------------------------------------------------
 // Always needs to be executed, since it resets the face list and sets segment visibility
 
-void ComputeMineLighting (int16_t nStartSeg, fix xStereoSeparation, int32_t nWindow)
-{
-PROF_START
-ogl.m_states.fLightRange = fLightRanges [IsMultiGame ? 1 : extraGameInfo [IsMultiGame].nLightRange];
-if ((gameStates.render.nRenderPass <= 0) && (gameStates.render.nShadowPass < 2)) {
-	gameData.renderData.mine.bSetAutomapVisited = BeginRenderMine (nStartSeg, xStereoSeparation, nWindow);
+void ComputeMineLighting(int16_t nStartSeg, fix xStereoSeparation, int32_t nWindow) {
+    PROF_START
+    ogl.m_states.fLightRange = fLightRanges[IsMultiGame ? 1 : extraGameInfo[IsMultiGame].nLightRange];
+    if ((gameStates.render.nRenderPass <= 0) && (gameStates.render.nShadowPass < 2)) {
+        gameData.renderData.mine.bSetAutomapVisited = BeginRenderMine(nStartSeg, xStereoSeparation, nWindow);
 
-	if (!ogl.StereoSeparation () || gameStates.render.Dirty ()) {
-		ResetFaceList ();
-		gameStates.render.nThreads = gameStates.app.nThreads;
-		lightManager.ResetSegmentLights ();
-		lightManager.ResetIndex ();
-		if ((gameStates.render.bPerPixelLighting == 2) || (CountRenderFaces () < 16) || (gameStates.app.nThreads < 2)
-#	if !USE_OPENMP
-			 || !RunRenderThreads (rtComputeFaceLight, gameStates.app.nThreads)
-#	endif
-			)
-			{
-			gameStates.render.nThreads = 1;
-			if (gameStates.render.bTriangleMesh || !gameStates.render.bApplyDynLight || (gameData.renderData.mine.visibility [0].nSegments < gameData.segData.nSegments))
-				ComputeFaceLight (0, gameData.renderData.mine.visibility [0].nSegments, 0);
-			else if (gameStates.app.bEndLevelSequence < EL_OUTSIDE)
-				ComputeFaceLight (0, FACES.nFaces, 0);
-			else
-				ComputeFaceLight (0, gameData.segData.nSegments, 0);
-			}
+        if (!ogl.StereoSeparation() || gameStates.render.Dirty()) {
+            ResetFaceList();
+            gameStates.render.nThreads = gameStates.app.nThreads;
+            lightManager.ResetSegmentLights();
+            lightManager.ResetIndex();
+            if ((gameStates.render.bPerPixelLighting == 2) || (CountRenderFaces() < 16) || (gameStates.app.nThreads < 2)
+#if !USE_OPENMP
+                || !RunRenderThreads(rtComputeFaceLight, gameStates.app.nThreads)
+#endif
+            ) {
+                gameStates.render.nThreads = 1;
+                if (gameStates.render.bTriangleMesh || !gameStates.render.bApplyDynLight ||
+                    (gameData.renderData.mine.visibility[0].nSegments < gameData.segData.nSegments))
+                    ComputeFaceLight(0, gameData.renderData.mine.visibility[0].nSegments, 0);
+                else if (gameStates.app.bEndLevelSequence < EL_OUTSIDE)
+                    ComputeFaceLight(0, FACES.nFaces, 0);
+                else
+                    ComputeFaceLight(0, gameData.segData.nSegments, 0);
+            }
 #if USE_OPENMP //> 1
-		else {
-				int32_t	nStart, nEnd, nMax;
+            else {
+                int32_t nStart, nEnd, nMax;
 
-			if (gameStates.render.bTriangleMesh || !gameStates.render.bApplyDynLight || (gameData.renderData.mine.visibility [0].nSegments < gameData.segData.nSegments))
-				nMax = gameData.renderData.mine.visibility [0].nSegments;
-			else if (gameStates.app.bEndLevelSequence < EL_OUTSIDE)
-				nMax = FACES.nFaces;
-			else
-				nMax = gameData.segData.nSegments;
-			if (gameStates.app.nThreads & 1) {
-#			pragma omp parallel for private (nStart, nEnd)
-				for (int32_t i = 0; i < gameStates.app.nThreads; i++) {
-					ComputeThreadRange (i, nMax, nStart, nEnd);
-					ComputeFaceLight (nStart, nEnd, i);
-					}
-				}
-			else {
-				int32_t	nPivot = gameStates.app.nThreads / 2;
-#				pragma omp parallel for private (nStart, nEnd)
-				for (int32_t i = 0; i < gameStates.app.nThreads; i++) {
-					if (i < nPivot) {
-						ComputeThreadRange (i, tiRender.nMiddle, nStart, nEnd, nPivot);
-						ComputeFaceLight (nStart, nEnd, i);
-						}
-					else {
-						ComputeThreadRange (i - nPivot, nMax - tiRender.nMiddle, nStart, nEnd, nPivot);
-						ComputeFaceLight (nStart + tiRender.nMiddle, nEnd + tiRender.nMiddle, i);
-						}
-					}
-				}
-			}
+                if (gameStates.render.bTriangleMesh || !gameStates.render.bApplyDynLight ||
+                    (gameData.renderData.mine.visibility[0].nSegments < gameData.segData.nSegments))
+                    nMax = gameData.renderData.mine.visibility[0].nSegments;
+                else if (gameStates.app.bEndLevelSequence < EL_OUTSIDE)
+                    nMax = FACES.nFaces;
+                else
+                    nMax = gameData.segData.nSegments;
+                if (gameStates.app.nThreads & 1) {
+#pragma omp parallel for private(nStart, nEnd)
+                    for (int32_t i = 0; i < gameStates.app.nThreads; i++) {
+                        ComputeThreadRange(i, nMax, nStart, nEnd);
+                        ComputeFaceLight(nStart, nEnd, i);
+                    }
+                } else {
+                    int32_t nPivot = gameStates.app.nThreads / 2;
+#pragma omp parallel for private(nStart, nEnd)
+                    for (int32_t i = 0; i < gameStates.app.nThreads; i++) {
+                        if (i < nPivot) {
+                            ComputeThreadRange(i, tiRender.nMiddle, nStart, nEnd, nPivot);
+                            ComputeFaceLight(nStart, nEnd, i);
+                        } else {
+                            ComputeThreadRange(i - nPivot, nMax - tiRender.nMiddle, nStart, nEnd, nPivot);
+                            ComputeFaceLight(nStart + tiRender.nMiddle, nEnd + tiRender.nMiddle, i);
+                        }
+                    }
+                }
+            }
 #endif //_OPENMP
-		if ((gameStates.render.bPerPixelLighting == 2) && !gameData.appData.nFrameCount)
-			meshBuilder.BuildVBOs ();
-		gameStates.render.bHeadlights = gameOpts->ogl.bHeadlight && lightManager.Headlights ().nLights && !(gameStates.render.bFullBright || automap.Active ());
-		}
-	transparencyRenderer.InitBuffer (gameData.renderData.zMin, gameData.renderData.zMax, nWindow);
-	}
-PROF_END(ptLighting)
+            if ((gameStates.render.bPerPixelLighting == 2) && !gameData.appData.nFrameCount)
+                meshBuilder.BuildVBOs();
+            gameStates.render.bHeadlights = gameOpts->ogl.bHeadlight && lightManager.Headlights().nLights &&
+                                            !(gameStates.render.bFullBright || automap.Active());
+        }
+        transparencyRenderer.InitBuffer(gameData.renderData.zMin, gameData.renderData.zMax, nWindow);
+    }
+    PROF_END(ptLighting)
 }
 
 //------------------------------------------------------------------------------

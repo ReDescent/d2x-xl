@@ -18,20 +18,19 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
-
 #ifndef _SLEW_H
 #define _SLEW_H
 
 #include "object.h"
 
-//from slew.c
+// from slew.c
 
 #if DBG
 
-void slew_init(CObject *obj);                // say this is slew obj
-int32_t slew_stop();                            // Stops CObject
-void slew_reset_orient();                   // Resets orientation
-int32_t slew_frame(int32_t dont_check_keys);        // Does slew frame
+void slew_init(CObject *obj); // say this is slew obj
+int32_t slew_stop(); // Stops CObject
+void slew_reset_orient(); // Resets orientation
+int32_t slew_frame(int32_t dont_check_keys); // Does slew frame
 
 #else
 

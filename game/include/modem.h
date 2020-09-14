@@ -91,7 +91,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
-
 #ifndef _MODEM_H
 #define _MODEM_H
 
@@ -106,7 +105,6 @@ void com_endlevel(int *secret);
 void com_abort(void);
 void com_send_data(char *buf, int len, int repeat);
 int comLevel_sync(void);
-
 
 extern int com_port_num;
 extern int serial_active;

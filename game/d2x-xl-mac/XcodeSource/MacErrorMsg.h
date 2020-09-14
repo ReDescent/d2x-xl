@@ -18,7 +18,7 @@
  *
  *	Change History:
  *			2013_12_04_itaylo	Standard format.
- *	
+ *
  ******************************************************************************/
 
 #ifndef MACERRORMSG_H_INCLUDED

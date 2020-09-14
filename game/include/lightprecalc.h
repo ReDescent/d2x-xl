@@ -15,7 +15,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _LIGHTPRECALC_H
 #define _LIGHTPRECALC_H
 
-int SortLightsGaugeSize ();
-void ComputeNearestLights (int nLevel);
+int SortLightsGaugeSize();
+void ComputeNearestLights(int nLevel);
 
 #endif //_LIGHTPRECALC_H

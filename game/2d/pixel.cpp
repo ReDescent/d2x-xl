@@ -28,50 +28,45 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //------------------------------------------------------------------------------
 
-void DrawPixel (int32_t x, int32_t y)
-{
+void DrawPixel(int32_t x, int32_t y) {
 #if 1
-OglDrawPixel (x, y);
+    OglDrawPixel(x, y);
 #else
-if (MODE == BM_OGL)
-	OglDrawPixel (x, y);
-else if (MODE == BM_LINEAR)
-	DATA [ROWSIZE * y + x] = (uint8_t) COLOR.index;
+    if (MODE == BM_OGL)
+        OglDrawPixel(x, y);
+    else if (MODE == BM_LINEAR)
+        DATA[ROWSIZE * y + x] = (uint8_t)COLOR.index;
 #endif
 }
 
 //------------------------------------------------------------------------------
 
-void DrawPixelClipped (int32_t x, int32_t y)
-{
-if (!CCanvas::Current ()->Clip (x, y))
-	DrawPixel (x, y);
+void DrawPixelClipped(int32_t x, int32_t y) {
+    if (!CCanvas::Current()->Clip(x, y))
+        DrawPixel(x, y);
 }
 
 //------------------------------------------------------------------------------
 
-void CBitmap::DrawPixel (int32_t x, int32_t y, uint8_t color)
-{
-if (!Buffer () || Clip (x, y))
-	return;
-if (Mode () == BM_OGL) {
-	CCanvasColor c;
-	c.index = color;
-	c.rgb = 0;
-	OglDrawPixel (Left () + x, Top () + y, &c);
-	}
-else if (Mode () == BM_LINEAR) 
-	Buffer () [RowSize () * y + x] = color;
+void CBitmap::DrawPixel(int32_t x, int32_t y, uint8_t color) {
+    if (!Buffer() || Clip(x, y))
+        return;
+    if (Mode() == BM_OGL) {
+        CCanvasColor c;
+        c.index = color;
+        c.rgb = 0;
+        OglDrawPixel(Left() + x, Top() + y, &c);
+    } else if (Mode() == BM_LINEAR)
+        Buffer()[RowSize() * y + x] = color;
 }
 
 //------------------------------------------------------------------------------
 
-uint8_t CBitmap::GetPixel (int32_t x, int32_t y)
-{
-if (!Buffer () || Clip (x, y))
-	return 0;
-return Buffer () [RowSize () * y + x];
+uint8_t CBitmap::GetPixel(int32_t x, int32_t y) {
+    if (!Buffer() || Clip(x, y))
+        return 0;
+    return Buffer()[RowSize() * y + x];
 }
 
 //------------------------------------------------------------------------------
-//eof
+// eof

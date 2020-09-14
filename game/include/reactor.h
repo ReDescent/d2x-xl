@@ -19,16 +19,16 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "wall.h"
 //#include "trigger.h"
 
-#define MAX_CONTROLCEN_GUNS     8
+#define MAX_CONTROLCEN_GUNS 8
 
-#define CONTROLCEN_WEAPON_NUM   6
+#define CONTROLCEN_WEAPON_NUM 6
 
 #pragma pack(push, 1)
 typedef struct tReactorProps {
-	int32_t nModel;
-	int32_t nGuns;
-	CFixVector gunPoints [MAX_CONTROLCEN_GUNS];
-	CFixVector gunDirs [MAX_CONTROLCEN_GUNS];
+    int32_t nModel;
+    int32_t nGuns;
+    CFixVector gunPoints[MAX_CONTROLCEN_GUNS];
+    CFixVector gunDirs[MAX_CONTROLCEN_GUNS];
 } tReactorProps;
 #pragma pack(pop)
 
@@ -45,19 +45,19 @@ void DoReactorFrame(CObject *obj);
 void InitReactorForLevel(int32_t bRestore);
 void DoReactorDestroyedStuff(CObject *objp);
 void DoReactorDeadFrame(void);
-fix ReactorStrength (void);
+fix ReactorStrength(void);
 
 /*
  * reads n reactor structs from a CFILE
  */
-int32_t ReadReactors (CFile& cf);
+int32_t ReadReactors(CFile &cf);
 
 /*
  * reads n tReactorTriggers structs from a CFILE
  */
-int32_t ReadReactorTriggers (CFile& cf);
+int32_t ReadReactorTriggers(CFile &cf);
 
-int32_t FindReactor (CObject *pObj);
-void InitCountdown (CTrigger *pTrigger, int32_t bReactorDestroyed, int32_t nTimer);
+int32_t FindReactor(CObject *pObj);
+void InitCountdown(CTrigger *pTrigger, int32_t bReactorDestroyed, int32_t nTimer);
 
 #endif /* _CNTRLCEN_H */

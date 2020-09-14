@@ -39,24 +39,24 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "pstypes.h"
 #include "gr.h"
 
-void gr_rle_decode( uint8_t * src, uint8_t * dest );
-int32_t gr_rle_encode( int32_t org_size, uint8_t *src, uint8_t *dest );
-int32_t gr_rle_getsize( int32_t org_size, uint8_t *src );
-uint8_t * r_rle_find_xth_pixel( uint8_t *src, int32_t x,int32_t * count, uint8_t color );
-int32_t gr_bitmap_rle_compress( CBitmap * bmp );
-void gr_rle_expand_scanline_masked( uint8_t *dest, uint8_t *src, int32_t x1, int32_t x2  );
-void gr_rle_expand_scanline( uint8_t *dest, uint8_t *src, int32_t x1, int32_t x2  );
+void gr_rle_decode(uint8_t *src, uint8_t *dest);
+int32_t gr_rle_encode(int32_t org_size, uint8_t *src, uint8_t *dest);
+int32_t gr_rle_getsize(int32_t org_size, uint8_t *src);
+uint8_t *r_rle_find_xth_pixel(uint8_t *src, int32_t x, int32_t *count, uint8_t color);
+int32_t gr_bitmap_rle_compress(CBitmap *bmp);
+void gr_rle_expand_scanline_masked(uint8_t *dest, uint8_t *src, int32_t x1, int32_t x2);
+void gr_rle_expand_scanline(uint8_t *dest, uint8_t *src, int32_t x1, int32_t x2);
 
-CBitmap * rle_expand_texture( CBitmap * pBm );
+CBitmap *rle_expand_texture(CBitmap *pBm);
 
 void RLECacheFlush();
 
 void rle_swap_0_255(CBitmap *pBm);
 
-int32_t rle_remap (CBitmap *pBm, uint8_t *colorMap, int32_t maxLen);
+int32_t rle_remap(CBitmap *pBm, uint8_t *colorMap, int32_t maxLen);
 
-int32_t rle_expand (CBitmap *pBm, uint8_t *colorMap, int32_t bSwapTranspColor);
+int32_t rle_expand(CBitmap *pBm, uint8_t *colorMap, int32_t bSwapTranspColor);
 
-void _CDECL_ RLECacheClose (void);
+void _CDECL_ RLECacheClose(void);
 
 #endif

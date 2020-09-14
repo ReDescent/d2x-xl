@@ -15,40 +15,55 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _FIREBALL_H
 
 // explosion types
-#define ET_SPARKS       0   //little sparks, like when laser hits CWall
-#define ET_MULTI_START  1   //first part of multi-part explosion
-#define ET_MULTI_SECOND 2   //second part of multi-part explosion
+#define ET_SPARKS 0 // little sparks, like when laser hits CWall
+#define ET_MULTI_START 1 // first part of multi-part explosion
+#define ET_MULTI_SECOND 2 // second part of multi-part explosion
 
-#define BLAST_LIFE		(I2X (2) / 5)
-#define SHOCKWAVE_LIFE	I2X (1)
+#define BLAST_LIFE (I2X(2) / 5)
+#define SHOCKWAVE_LIFE I2X(1)
 
-CObject *CreateSplashDamageExplosion (CObject* pParentObj, int16_t nSegment, CFixVector& position, CFixVector& impact, fix size, uint8_t vclipType,
-										        fix maxdamage, fix maxdistance, fix maxforce, int16_t nParent);
+CObject *CreateSplashDamageExplosion(
+    CObject *pParentObj,
+    int16_t nSegment,
+    CFixVector &position,
+    CFixVector &impact,
+    fix size,
+    uint8_t vclipType,
+    fix maxdamage,
+    fix maxdistance,
+    fix maxforce,
+    int16_t nParent);
 
 // blows up a splash damage weapon, creating the splash damage explosion
 // return the explosion CObject
 // blows up the player with a splash damage explosion
 // return the explosion CObject
-void DoDebrisFrame (CObject* pObj);      // deal with debris for this frame
-void DrawFireball (CObject* pObj);
-CObject* CreateExplosion (CObject* pParent, int16_t nSegment, CFixVector& vPos, CFixVector& vImpact, fix xSize, uint8_t nVClip, 
-                          fix xMaxDamage = 0, fix xMaxDistance = 0, fix xMaxForce = 0, int16_t nParent = -1);
+void DoDebrisFrame(CObject *pObj); // deal with debris for this frame
+void DrawFireball(CObject *pObj);
+CObject *CreateExplosion(
+    CObject *pParent,
+    int16_t nSegment,
+    CFixVector &vPos,
+    CFixVector &vImpact,
+    fix xSize,
+    uint8_t nVClip,
+    fix xMaxDamage = 0,
+    fix xMaxDistance = 0,
+    fix xMaxForce = 0,
+    int16_t nParent = -1);
 
-
-int16_t GetExplosionVClip (CObject *obj, int32_t stage);
+int16_t GetExplosionVClip(CObject *obj, int32_t stage);
 
 //------------------------------------------------------------------------------
 
-static inline CObject* CreateMuzzleFlash (int16_t nSegment, CFixVector& position, fix size, uint8_t nVClip)
-{
-return CreateExplosion (NULL, nSegment, position, position, size, nVClip, 0, 0, 0, -1);
+static inline CObject *CreateMuzzleFlash(int16_t nSegment, CFixVector &position, fix size, uint8_t nVClip) {
+    return CreateExplosion(NULL, nSegment, position, position, size, nVClip, 0, 0, 0, -1);
 }
 
 //------------------------------------------------------------------------------
 
-static inline CObject* CreateExplosion (int16_t nSegment, CFixVector& position, fix size, uint8_t nVClip)
-{
-return CreateExplosion (NULL, nSegment, position, position, size, nVClip, 0, 0, 0, -1);
+static inline CObject *CreateExplosion(int16_t nSegment, CFixVector &position, fix size, uint8_t nVClip) {
+    return CreateExplosion(NULL, nSegment, position, position, size, nVClip, 0, 0, 0, -1);
 }
 
 //------------------------------------------------------------------------------

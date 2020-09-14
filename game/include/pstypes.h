@@ -23,55 +23,54 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <stdint.h>
 
 #ifdef _WIN32
-# include <stdlib.h> // this is where minand max are defined
+#include <stdlib.h> // this is where minand max are defined
 #endif
 
 #if defined(_WIN32)
-# ifdef __MINGW32__
-#  include <sys/types.h>
-# else
-#  define PATH_MAX _MAX_PATH
-# endif
-# define FNAME_MAX 256
+#ifdef __MINGW32__
+#include <sys/types.h>
+#else
+#define PATH_MAX _MAX_PATH
+#endif
+#define FNAME_MAX 256
 #elif defined(__unix__) || defined(__macosx__)
-# include <sys/types.h>
-# ifndef PATH_MAX
-#  define PATH_MAX 1024
-# endif
-# define FNAME_MAX 256
+#include <sys/types.h>
+#ifndef PATH_MAX
+#define PATH_MAX 1024
+#endif
+#define FNAME_MAX 256
 #endif
 
 #ifdef __macosx__
-#	define uint16_t uint16_t
+#define uint16_t uint16_t
 #endif
 
 #ifndef NULL
-#	define NULL 0
+#define NULL 0
 #endif
 
 // the following stuff has nothing to do with types but needed everywhere,
 // and since this file is included everywhere, it's here.
 #ifdef __GNUC__
-# define __pack__
+#define __pack__
 #elif defined(_WIN32)
-# pragma pack(push, packing)
-# pragma pack(1)
-# define __pack__
+#pragma pack(push, packing)
+#pragma pack(1)
+#define __pack__
 #else
-# error d2x will not work without packed structures
+#error d2x will not work without packed structures
 #endif
 
 #ifdef _WIN32
-# define inline __inline
+#define inline __inline
 #endif
 
 #ifdef _WIN32
-#	ifndef _CDECL_
-#		define _CDECL_	_cdecl
-#	endif
-#	else
-#	define _CDECL_
+#ifndef _CDECL_
+#define _CDECL_ _cdecl
+#endif
+#else
+#define _CDECL_
 #endif
 
 #endif //_PSTYPES_H
-

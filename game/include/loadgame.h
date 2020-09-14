@@ -33,50 +33,50 @@ extern int32_t nTypingTimeout;
 //
 
 // starts a new game on the given level
-int32_t StartNewGame (int32_t nStartLevel);
+int32_t StartNewGame(int32_t nStartLevel);
 
 // starts the next level
-int32_t StartNewLevel (int32_t nLevel, bool bNewGame);
+int32_t StartNewLevel(int32_t nLevel, bool bNewGame);
 
 // Actually does the work to start new level
-void ResetPlayerData (bool bNewGame, bool bSecret, bool bRestore, int32_t nPlayer = -1);      //clear all stats
+void ResetPlayerData(bool bNewGame, bool bSecret, bool bRestore, int32_t nPlayer = -1); // clear all stats
 
-int32_t PrepareLevel (int32_t nLevel, bool bLoadTextures, bool bSecret, bool bRestore, bool bNewGame);
-void StartLevel (int32_t nLevel, int32_t bRandom);
-int32_t LoadLevel (int32_t nLevel, bool bLoadTextures, bool bRestore);
+int32_t PrepareLevel(int32_t nLevel, bool bLoadTextures, bool bSecret, bool bRestore, bool bNewGame);
+void StartLevel(int32_t nLevel, int32_t bRandom);
+int32_t LoadLevel(int32_t nLevel, bool bLoadTextures, bool bRestore);
 
-void GameStartInitNetworkPlayers (void);
+void GameStartInitNetworkPlayers(void);
 
 // starts a resumed game loaded from disk
-void ResumeSavedGame (int32_t startLevel);
+void ResumeSavedGame(int32_t startLevel);
 
 // called when the player has finished a level
 // if secret flag is true, advance to secret level, else next normal level
-void PlayerFinishedLevel (int32_t secretFlag);
+void PlayerFinishedLevel(int32_t secretFlag);
 
 // called when the player has died
-void DoPlayerDead (void);
+void DoPlayerDead(void);
 
-void SetPosFromReturnSegment (int32_t bRelink);
+void SetPosFromReturnSegment(int32_t bRelink);
 // load a level off disk. level numbers start at 1.
 // Secret levels are -1,-2,-3
-void UnloadLevelData (int32_t bRestore = 0, bool bQuit = true);
-void AddPlayerLoadout (bool bRestore = false);
-void ResetShipData (int32_t nPlayer = -1, int32_t nMode = 0);
+void UnloadLevelData(int32_t bRestore = 0, bool bQuit = true);
+void AddPlayerLoadout(bool bRestore = false);
+void ResetShipData(int32_t nPlayer = -1, int32_t nMode = 0);
 
-void GameStartRemoveUnusedPlayers (void);
+void GameStartRemoveUnusedPlayers(void);
 
-int32_t CountRobotsInLevel (void);
+int32_t CountRobotsInLevel(void);
 
-void ShowHelp (void);
-void UpdatePlayerStats (void);
+void ShowHelp(void);
+void UpdatePlayerStats(void);
 
 // from scores.c
 
 void show_high_scores(int32_t place);
 void draw_high_scores(int32_t place);
 int32_t add_player_to_high_scores(CPlayerInfo *pPlayer);
-void input_name (int32_t place);
+void input_name(int32_t place);
 int32_t reset_high_scores();
 
 void open_message_window(void);
@@ -98,12 +98,12 @@ extern int32_t NumNetPlayerPositions;
 void BashToShield(int32_t, const char *);
 void BashToEnergy(int32_t, const char *);
 
-fix RobotDefaultShield (CObject *pObj);
+fix RobotDefaultShield(CObject *pObj);
 
-char *LevelName (int32_t nLevel);
-char *LevelSongName (int32_t nLevel);
-char *MakeLevelFilename (int32_t nLevel, char *pszFilename, const char *pszFileExt);
+char *LevelName(int32_t nLevel);
+char *LevelSongName(int32_t nLevel);
+char *MakeLevelFilename(int32_t nLevel, char *pszFilename, const char *pszFileExt);
 
-int32_t GetRandomPlayerPosition (int32_t nPlayer);
+int32_t GetRandomPlayerPosition(int32_t nPlayer);
 
 #endif /* _LOADGAME_H */

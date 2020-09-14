@@ -15,7 +15,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _GAMEREND_H
 #define _GAMEREND_H
 
-void ShrinkWindow ();
-void GrowWindow ();
+void ShrinkWindow();
+void GrowWindow();
 
 #endif /* _GAMEREND_H */

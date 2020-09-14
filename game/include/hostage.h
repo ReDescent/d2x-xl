@@ -14,13 +14,13 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _HOSTAGE_H
 #define _HOSTAGE_H
 
-#define HOSTAGE_SIZE        I2X(5)  // 3d size of a hostage
+#define HOSTAGE_SIZE I2X(5) // 3d size of a hostage
 
-#define MAX_HOSTAGE_TYPES   1       //only one hostage bitmap
+#define MAX_HOSTAGE_TYPES 1 // only one hostage bitmap
 
 extern int32_t nHostageTypes;
 
-extern int32_t nHostageVClips [MAX_HOSTAGE_TYPES];    // for each nType of hostage
+extern int32_t nHostageVClips[MAX_HOSTAGE_TYPES]; // for each nType of hostage
 
 void DrawHostage(CObject *obj);
 void RescueHostage(int32_t nHostage);

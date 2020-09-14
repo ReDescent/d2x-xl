@@ -14,8 +14,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _GAMEARGS_H
 #define _GAMEARGS_H
 
-void EvalArgs (void);
+void EvalArgs(void);
 
 #endif //_GAMEARGS_H
 
-//eof
+// eof

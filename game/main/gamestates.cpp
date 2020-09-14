@@ -11,12 +11,12 @@
 #endif
 
 #ifdef __macosx__
-#	include "SDL/SDL_main.h"
-#	include "SDL/SDL_keyboard.h"
-#	include "FolderDetector.h"
+#include "SDL/SDL_main.h"
+#include "SDL/SDL_keyboard.h"
+#include "FolderDetector.h"
 #else
-#	include "SDL_main.h"
-#	include "SDL_keyboard.h"
+#include "SDL_main.h"
+#include "SDL_keyboard.h"
 #endif
 #include "descent.h"
 #include "u_mem.h"
@@ -66,8 +66,7 @@
 
 // ----------------------------------------------------------------------------
 
-void InitGameplayStates (void)
-{
+void InitGameplayStates(void) {
     gameStates.gameplay.bFinalBossIsDead = 0;
     gameStates.gameplay.bHaveSmartMines = 1;
     gameStates.gameplay.bMineDestroyed = 0;
@@ -82,25 +81,24 @@ void InitGameplayStates (void)
     gameStates.gameplay.seismic.nSound = SOUND_SEISMIC_DISTURBANCE_START;
     gameStates.gameplay.seismic.bSound = 0;
     gameStates.gameplay.seismic.nVolume = 0;
-    gameStates.gameplay.xInitialShield [0] = INITIAL_SHIELD;
-    gameStates.gameplay.xInitialShield [1] = -1;
-    gameStates.gameplay.xInitialEnergy [0] = INITIAL_ENERGY;
-    gameStates.gameplay.xInitialEnergy [1] = -1;
-    gameStates.gameplay.slowmo [0].nState = 0;
-    gameStates.gameplay.slowmo [0].fSpeed = 1;
-    gameStates.gameplay.slowmo [0].tUpdate = 0;
-    gameStates.gameplay.slowmo [0].bActive = 0;
-    gameStates.gameplay.slowmo [1].nState = 0;
-    gameStates.gameplay.slowmo [1].fSpeed = 1;
-    gameStates.gameplay.slowmo [1].tUpdate = 0;
-    gameStates.gameplay.slowmo [1].bActive = 0;
-    gameOpts->gameplay.nSlowMotionSpeedup = 6;	//max slow motion delay
+    gameStates.gameplay.xInitialShield[0] = INITIAL_SHIELD;
+    gameStates.gameplay.xInitialShield[1] = -1;
+    gameStates.gameplay.xInitialEnergy[0] = INITIAL_ENERGY;
+    gameStates.gameplay.xInitialEnergy[1] = -1;
+    gameStates.gameplay.slowmo[0].nState = 0;
+    gameStates.gameplay.slowmo[0].fSpeed = 1;
+    gameStates.gameplay.slowmo[0].tUpdate = 0;
+    gameStates.gameplay.slowmo[0].bActive = 0;
+    gameStates.gameplay.slowmo[1].nState = 0;
+    gameStates.gameplay.slowmo[1].fSpeed = 1;
+    gameStates.gameplay.slowmo[1].tUpdate = 0;
+    gameStates.gameplay.slowmo[1].bActive = 0;
+    gameOpts->gameplay.nSlowMotionSpeedup = 6; // max slow motion delay
 }
 
 // ----------------------------------------------------------------------------
 
-void InitInputStates (void)
-{
+void InitInputStates(void) {
     gameStates.input.nMouseType = -1;
     gameStates.input.nJoyType = -1;
     gameStates.input.bCybermouseActive = 0;
@@ -117,8 +115,7 @@ void InitInputStates (void)
 
 // ----------------------------------------------------------------------------
 
-void InitMenuStates (void)
-{
+void InitMenuStates(void) {
     gameStates.menus.bInitBG = 1;
     gameStates.menus.nInMenu = 0;
     gameStates.menus.bHires = 1;
@@ -130,20 +127,15 @@ void InitMenuStates (void)
 
 // ----------------------------------------------------------------------------
 
-void InitMovieStates (void)
-{
-    gameStates.movies.bIntroPlayed = 0;
-}
+void InitMovieStates(void) { gameStates.movies.bIntroPlayed = 0; }
 
 // ----------------------------------------------------------------------------
 
-void InitMultiplayerStates (void)
-{
+void InitMultiplayerStates(void) {
     gameStates.multi.nGameType = 0;
     gameStates.multi.nGameSubType = 0;
     tracker.m_bUse = 0;
-    gameStates.multi.bServer [0] =
-    gameStates.multi.bServer [1] = 1;
+    gameStates.multi.bServer[0] = gameStates.multi.bServer[1] = 1;
     gameStates.multi.bTryAutoDL = 0;
     gameStates.multi.bHaveLocalAddress = 0;
     gameStates.multi.bSurfingNet = 0;
@@ -151,24 +143,19 @@ void InitMultiplayerStates (void)
 
 // ----------------------------------------------------------------------------
 
-void InitGfxStates (void)
-{
+void InitGfxStates(void) {
     gameStates.gfx.bInstalled = 0;
     gameStates.gfx.nStartScrMode = 3;
-    gameStates.gfx.nStartScrSize = SM (800, 600);
+    gameStates.gfx.nStartScrSize = SM(800, 600);
 }
 
 // ----------------------------------------------------------------------------
 
-void InitZoomStates (void)
-{
-    gameStates.zoom.nChannel = -1;
-}
+void InitZoomStates(void) { gameStates.zoom.nChannel = -1; }
 
 // ----------------------------------------------------------------------------
 
-void InitRenderStates (void)
-{
+void InitRenderStates(void) {
     gameStates.render.xZoom = DEFAULT_ZOOM;
     gameStates.render.xZoomScale = 1;
     gameStates.render.nFrameCount = -1;
@@ -180,9 +167,9 @@ void InitRenderStates (void)
     gameStates.render.bShowFrameRate = 0;
     gameStates.render.bShowTime = 0;
     gameStates.render.cameras.bActive = 0;
-    gameStates.zoom.nFactor = I2X (1);
-    gameStates.zoom.nMinFactor = I2X (1);
-    gameStates.zoom.nMaxFactor = I2X (5);
+    gameStates.zoom.nFactor = I2X(1);
+    gameStates.zoom.nMinFactor = I2X(1);
+    gameStates.zoom.nMaxFactor = I2X(5);
     gameStates.render.textures.bGlTexMergeOk = 0;
     gameStates.render.textures.bHaveMaskShader = 0;
     gameStates.render.fonts.bHires = 0;
@@ -214,10 +201,8 @@ void InitRenderStates (void)
     gameStates.render.cockpit.bRedraw = 0;
     gameStates.render.cockpit.bBigWindowSwitch = 0;
     gameStates.render.cockpit.nShieldFlash = 0;
-    gameStates.render.cockpit.nCoopPlayerView [0] =
-    gameStates.render.cockpit.nCoopPlayerView [1] = -1;
-    gameStates.render.cockpit.n3DView [0] =
-    gameStates.render.cockpit.n3DView [1] = CV_NONE;
+    gameStates.render.cockpit.nCoopPlayerView[0] = gameStates.render.cockpit.nCoopPlayerView[1] = -1;
+    gameStates.render.cockpit.n3DView[0] = gameStates.render.cockpit.n3DView[1] = CV_NONE;
     gameStates.render.detail.nRenderDepth = DEFAULT_RENDER_DEPTH;
     gameStates.render.detail.nObjectComplexity = 4;
     gameStates.render.detail.nObjectDetail = 4;
@@ -234,16 +219,15 @@ void InitRenderStates (void)
     gameStates.render.outlineColor.g = 2;
     gameStates.render.outlineColor.b = 2;
     gameStates.render.outlineColor.a = 255;
-    gameStates.render.outlineWidth [0][0] = 3.0f;
-    gameStates.render.outlineWidth [0][1] = 2.0f;
-    gameStates.render.outlineWidth [1][0] = 2.0f;
-    gameStates.render.outlineWidth [1][1] = 1.0f;
+    gameStates.render.outlineWidth[0][0] = 3.0f;
+    gameStates.render.outlineWidth[0][1] = 2.0f;
+    gameStates.render.outlineWidth[1][0] = 2.0f;
+    gameStates.render.outlineWidth[1][1] = 1.0f;
 }
 
 // ----------------------------------------------------------------------------
 
-void InitSoundStates (void)
-{
+void InitSoundStates(void) {
     gameStates.sound.bWasRecording = 0;
     gameStates.sound.bDontStartObjects = 0;
     gameStates.sound.nConquerWarningSoundChannel = -1;
@@ -254,12 +238,11 @@ void InitSoundStates (void)
 
 // ----------------------------------------------------------------------------
 
-void InitVideoStates (void)
-{
+void InitVideoStates(void) {
     gameStates.video.nDisplayMode = 2;
     gameStates.video.nDefaultDisplayMode = 2;
-    gameStates.video.nScreenMode = (uint32_t) -1;
-    gameStates.video.nLastScreenMode = (uint32_t) -1;
+    gameStates.video.nScreenMode = (uint32_t)-1;
+    gameStates.video.nLastScreenMode = (uint32_t)-1;
     gameStates.video.nWidth = -1;
     gameStates.video.nHeight = -1;
     gameStates.video.bFullScreen = -1;
@@ -267,8 +250,7 @@ void InitVideoStates (void)
 
 // ----------------------------------------------------------------------------
 
-void InitAppStates (void)
-{
+void InitAppStates(void) {
     gameStates.app.bCheckAndFixSetup = 1;
     gameStates.app.bHaveExtraData = 0;
     gameStates.app.nExtGameStatus = 1;
@@ -286,9 +268,9 @@ void InitAppStates (void)
     gameStates.app.bEnterGame = 0;
     gameStates.app.bLunacy = 0;
     gameStates.app.nTraceLevel = -1;
-    gameStates.app.bHaveExtraGameInfo [0] = 1;
-    gameStates.app.bHaveExtraGameInfo [1] = 0;
-    gameStates.app.nSDLTicks [0] = -1;
+    gameStates.app.bHaveExtraGameInfo[0] = 1;
+    gameStates.app.bHaveExtraGameInfo[1] = 0;
+    gameStates.app.nSDLTicks[0] = -1;
 #if USE_OPENMP
     gameStates.app.bMultiThreaded = 1;
 #else
@@ -326,7 +308,7 @@ void InitAppStates (void)
     gameStates.app.nBaseCtrlCenExplTime = DEFAULT_CONTROL_CENTER_EXPLOSION_TIME;
     gameStates.app.bDebugSpew = 1;
     gameStates.app.bProgressBars = 1;
-#if 0 //DBG
+#if 0 // DBG
     gameStates.app.bFixModels = 0;
     gameStates.app.bAltModels = 0;
 #else
@@ -354,26 +336,25 @@ void InitAppStates (void)
     gameStates.limitFPS.bSeismic = 1;
     gameStates.limitFPS.bHomers = 1;
     gameStates.limitFPS.bOmega = 1;
-    gameStates.app.bHaveSDLNet = (SDLNet_Init () == 0);
+    gameStates.app.bHaveSDLNet = (SDLNet_Init() == 0);
 }
 
 // ----------------------------------------------------------------------------
 
-void InitGameStates (void)
-{
-    memset (&gameStates, 0, sizeof (gameStates));
-    CheckEndian ();
-    InitGameConfig ();
-    InitAppStates ();
-    InitGameplayStates ();
-    InitInputStates ();
-    InitMenuStates ();
-    InitMovieStates ();
-    InitMultiplayerStates ();
-    InitGfxStates ();
-    InitRenderStates ();
-    InitSoundStates ();
-    InitVideoStates ();
+void InitGameStates(void) {
+    memset(&gameStates, 0, sizeof(gameStates));
+    CheckEndian();
+    InitGameConfig();
+    InitAppStates();
+    InitGameplayStates();
+    InitInputStates();
+    InitMenuStates();
+    InitMovieStates();
+    InitMultiplayerStates();
+    InitGfxStates();
+    InitRenderStates();
+    InitSoundStates();
+    InitVideoStates();
 }
 
 // ----------------------------------------------------------------------------
@@ -381,27 +362,25 @@ void InitGameStates (void)
 #include "ogl_lib.h"
 #include "automap.h"
 
-float CRenderStates::OutlineWidth (int32_t bPartial, float fScale, int32_t nScale)
-{
+float CRenderStates::OutlineWidth(int32_t bPartial, float fScale, int32_t nScale) {
     if (fScale == 0.0f)
-        fScale = Max (1.0f, float (CCanvas::Current ()->Width ()) / 640.0f);
+        fScale = Max(1.0f, float(CCanvas::Current()->Width()) / 640.0f);
 
-    float w = fScale * outlineWidth [bPartial][automap.Active ()];
+    float w = fScale * outlineWidth[bPartial][automap.Active()];
 
     if (bPartial)
         w *= 2.0f / 3.0f;
 
     if (nScale)
-        w /= float (nScale * 2);
+        w /= float(nScale * 2);
 
-    return Clamp (w, ogl.m_data.lineWidthRange [0], Min (ogl.m_data.lineWidthRange [1], 10.f));
+    return Clamp(w, ogl.m_data.lineWidthRange[0], Min(ogl.m_data.lineWidthRange[1], 10.f));
 }
 
 // ----------------------------------------------------------------------------
 
-int32_t CRenderStates::EnableCartoonStyle (int32_t bBlur, int32_t bPosterize, int32_t bOutline) 
-{
-    return SetCartoonStyle (gameOpts->render.bCartoonize, bBlur, bPosterize, bOutline);
+int32_t CRenderStates::EnableCartoonStyle(int32_t bBlur, int32_t bPosterize, int32_t bOutline) {
+    return SetCartoonStyle(gameOpts->render.bCartoonize, bBlur, bPosterize, bOutline);
 }
 
 // ----------------------------------------------------------------------------

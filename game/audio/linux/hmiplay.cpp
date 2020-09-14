@@ -9,8 +9,8 @@
  */
 
 #if 1
-//void DigiSetMidiVolume( int mvolume ) { }
-int DigiPlayMidiSong( char * filename, char * melodic_bank, char * drum_bank, int loop ) {return 0;}
+// void DigiSetMidiVolume( int mvolume ) { }
+int DigiPlayMidiSong(char *filename, char *melodic_bank, char *drum_bank, int loop) { return 0; }
 
 #else
 
@@ -41,473 +41,408 @@ int DigiPlayMidiSong( char * filename, char * melodic_bank, char * drum_bank, in
 //#define WANT_MPU401 1
 
 #ifdef WANT_MPU401
-#define MIDI_MESSAGE2(a,b) {		\
-	SEQ_MIDIOUT(synth_dev,a);	\
-	SEQ_MIDIOUT(synth_dev,b);	\
-}
+#define MIDI_MESSAGE2(a, b) \
+    { \
+        SEQ_MIDIOUT(synth_dev, a); \
+        SEQ_MIDIOUT(synth_dev, b); \
+    }
 
-#define MIDI_MESSAGE3(a,b,c) {		\
-	SEQ_MIDIOUT(synth_dev,a);	\
-	SEQ_MIDIOUT(synth_dev,b);	\
-	SEQ_MIDIOUT(synth_dev,c);	\
-}
+#define MIDI_MESSAGE3(a, b, c) \
+    { \
+        SEQ_MIDIOUT(synth_dev, a); \
+        SEQ_MIDIOUT(synth_dev, b); \
+        SEQ_MIDIOUT(synth_dev, c); \
+    }
 #endif
 
 SEQ_DEFINEBUF(1024);
 
-int32_t drumflag = 1<<9;
+int32_t drumflag = 1 << 9;
 int32_t seqfd;
 int32_t synth_dev;
 int32_t program[16];
 int32_t stop;
-double volume=1;
+double volume = 1;
 
 int32_t ipc_queue_id = -1;
 struct msgbuf *snd;
 
-SDL_Thread *player_thread=NULL;
+SDL_Thread *player_thread = NULL;
 
 Voice_info *voices;
-uint8_t *data=NULL;
+uint8_t *data = NULL;
 
 struct synth_info card_info;
 
-void seqbuf_dump()
-{
-	if (_seqbufptr)
-	{
-		if (write(seqfd, _seqbuf, _seqbufptr) == -1)
-		{
-			perror ("Error writing sequencer device");
-			SDL_KillThread(player_thread);
-		}
-	}
-	_seqbufptr = 0;
-}
-	      
-void my_quit()
-{
-//	//printf("goodbye\n");//#####
-//	exit(0);
+void seqbuf_dump() {
+    if (_seqbufptr) {
+        if (write(seqfd, _seqbuf, _seqbufptr) == -1) {
+            perror("Error writing sequencer device");
+            SDL_KillThread(player_thread);
+        }
+    }
+    _seqbufptr = 0;
 }
 
-int32_t seq_init()
-{
-	int32_t nrmidis,nrsynths,i;
+void my_quit() {
+    //	//printf("goodbye\n");//#####
+    //	exit(0);
+}
 
-	if ((seqfd = open(SEQ_DEV, O_WRONLY, 0)) < 0)
-	{
-		perror ("Error opening sequencer device");
-		return (-1);
-	}
+int32_t seq_init() {
+    int32_t nrmidis, nrsynths, i;
 
-	if (ioctl(seqfd, SNDCTL_SEQ_NRSYNTHS, &nrsynths) == -1)
-	{
-		perror ("There is no soundcard");
-		return (-1);
-	}
+    if ((seqfd = open(SEQ_DEV, O_WRONLY, 0)) < 0) {
+        perror("Error opening sequencer device");
+        return (-1);
+    }
 
-	if (ioctl(seqfd, SNDCTL_SEQ_NRMIDIS, &nrmidis) == -1)
-	{
-		perror ("There is no soundcard");
-		return (-1);
-	}
+    if (ioctl(seqfd, SNDCTL_SEQ_NRSYNTHS, &nrsynths) == -1) {
+        perror("There is no soundcard");
+        return (-1);
+    }
 
+    if (ioctl(seqfd, SNDCTL_SEQ_NRMIDIS, &nrmidis) == -1) {
+        perror("There is no soundcard");
+        return (-1);
+    }
 
-	if(nrsynths < 1 && nrmidis < 1)
-	{
-		//printf("No synth or midi device!\n");
-		return -1;
-	}
+    if (nrsynths < 1 && nrmidis < 1) {
+        // printf("No synth or midi device!\n");
+        return -1;
+    }
 
-	synth_dev = 0;
+    synth_dev = 0;
 
-	//Check if we have wavetable synth device
-	for (i=0; i < nrsynths; i++)
-	{
-		card_info.device = i;
-		if (ioctl(seqfd, SNDCTL_SYNTH_INFO, &card_info) == -1)
-		{
-			perror("cannot get info on soundcard");
-			return (-1);
-		}
-	
-		if (card_info.synthType == SYNTH_TYPE_SAMPLE)
-		{    
-			synth_dev = i;
-			break;
-		}
-	}
+    // Check if we have wavetable synth device
+    for (i = 0; i < nrsynths; i++) {
+        card_info.device = i;
+        if (ioctl(seqfd, SNDCTL_SYNTH_INFO, &card_info) == -1) {
+            perror("cannot get info on soundcard");
+            return (-1);
+        }
+
+        if (card_info.synthType == SYNTH_TYPE_SAMPLE) {
+            synth_dev = i;
+            break;
+        }
+    }
 
 #ifdef WANT_AWE32
-	for (i=0; i < nrsynths; i++)
-	{
-		card_info.device = i;
-		if (ioctl(seqfd, SNDCTL_SYNTH_INFO, &card_info) == -1)
-		{
-			perror("cannot get info on soundcard");
-			return (-1);
-		}
-	
-		if (card_info.synthType==SYNTH_TYPE_SAMPLE
-		    &&card_info.synth_subtype==SAMPLE_TYPE_AWE32) {
-			synth_dev = i;
-			break;
-		}
-	}
+    for (i = 0; i < nrsynths; i++) {
+        card_info.device = i;
+        if (ioctl(seqfd, SNDCTL_SYNTH_INFO, &card_info) == -1) {
+            perror("cannot get info on soundcard");
+            return (-1);
+        }
+
+        if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+            synth_dev = i;
+            break;
+        }
+    }
 #endif
 
 #ifdef WANT_MPU401
-	for (i=0; i < nrmidis; i++)
-	{
-		struct midi_info cinfo;
-		cinfo.device = i;
-		if (ioctl(seqfd, SNDCTL_MIDI_INFO, &cinfo) == -1)
-		{
-			perror("cannot get info on soundcard");
-			return (-1);
-		}
-	
-		// Just take first available for now.
-		card_info.synthType=SYNTH_TYPE_MIDI;
-		card_info.device=i;
-		synth_dev=i;
-		break;
-	}
+    for (i = 0; i < nrmidis; i++) {
+        struct midi_info cinfo;
+        cinfo.device = i;
+        if (ioctl(seqfd, SNDCTL_MIDI_INFO, &cinfo) == -1) {
+            perror("cannot get info on soundcard");
+            return (-1);
+        }
 
-	if (card_info.synthType!=SYNTH_TYPE_MIDI) {
+        // Just take first available for now.
+        card_info.synthType = SYNTH_TYPE_MIDI;
+        card_info.device = i;
+        synth_dev = i;
+        break;
+    }
+
+    if (card_info.synthType != SYNTH_TYPE_MIDI) {
 #endif
-	
-		card_info.device = synth_dev;
-		if (ioctl(seqfd, SNDCTL_SYNTH_INFO, &card_info) == -1)
-		{
-			perror("cannot get info on soundcard");
-			return (-1);
-		}
-	
+
+        card_info.device = synth_dev;
+        if (ioctl(seqfd, SNDCTL_SYNTH_INFO, &card_info) == -1) {
+            perror("cannot get info on soundcard");
+            return (-1);
+        }
+
 #ifdef WANT_MPU401
-	}
+    }
 
-	if (card_info.synthType==SYNTH_TYPE_MIDI) {
-		// Insert some sort of midi reset here later.
-	} else
+    if (card_info.synthType == SYNTH_TYPE_MIDI) {
+        // Insert some sort of midi reset here later.
+    } else
 #endif
-#ifdef WANT_AWE32    
-	  if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	      && card_info.synth_subtype == SAMPLE_TYPE_AWE32)
-	{
-		AWE_SET_CHANNEL_MODE(synth_dev,1);
-		AWE_DRUM_CHANNELS(synth_dev,drumflag);
-	}
-	else
-#endif
-	{
-		voices = new Voice_info [card_info.nr_voices];
-		for (i=0;i<card_info.nr_voices;i++)
-		{
-			voices[i].note = -1;
-			voices[i].channel = -1;
-		}
-	}
-
-	return(0);
-}
-
-void seq_close()
-{
-	SEQ_DUMPBUF();
-	ioctl(seqfd,SNDCTL_SEQ_SYNC);
-	close(seqfd);
-	delete[] voices;
-	voices = NULL;
-}
-
-void set_program(int32_t channel, int32_t pgm)
-{
 #ifdef WANT_AWE32
-	if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	    && card_info.synth_subtype == SAMPLE_TYPE_AWE32)
-	{
-		SEQ_SET_PATCH(synth_dev,channel,pgm);
-	}
-	else
+        if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        AWE_SET_CHANNEL_MODE(synth_dev, 1);
+        AWE_DRUM_CHANNELS(synth_dev, drumflag);
+    } else
 #endif
-	  program[channel]=pgm;
+    {
+        voices = new Voice_info[card_info.nr_voices];
+        for (i = 0; i < card_info.nr_voices; i++) {
+            voices[i].note = -1;
+            voices[i].channel = -1;
+        }
+    }
+
+    return (0);
 }
 
-void start_note(int32_t channel, int32_t note, int32_t vel)
-{
-	int32_t i;
+void seq_close() {
+    SEQ_DUMPBUF();
+    ioctl(seqfd, SNDCTL_SEQ_SYNC);
+    close(seqfd);
+    delete[] voices;
+    voices = NULL;
+}
+
+void set_program(int32_t channel, int32_t pgm) {
+#ifdef WANT_AWE32
+    if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        SEQ_SET_PATCH(synth_dev, channel, pgm);
+    } else
+#endif
+        program[channel] = pgm;
+}
+
+void start_note(int32_t channel, int32_t note, int32_t vel) {
+    int32_t i;
 
 #ifdef WANT_AWE32
-	if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	    && card_info.synth_subtype == SAMPLE_TYPE_AWE32)
-	{
-		SEQ_START_NOTE(synth_dev,channel,note,vel);
-	}
-	else
+    if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        SEQ_START_NOTE(synth_dev, channel, note, vel);
+    } else
 #endif
-	{
-		for (i=0; i<card_info.nr_voices;i++)
-		  if ((voices[i].note == -1) && (voices[i].channel == -1))
-		    break;
-		if (i != card_info.nr_voices)
-		{
-			voices[i].note = note;
-			voices[i].channel = channel;
-			if (((1<<channel) & drumflag))         /* drum note */
-			{
-				SEQ_SET_PATCH(synth_dev, i, note + 128);
-			}
-			else
-			{
-				SEQ_SET_PATCH(synth_dev, i, program[channel]);
-			}
-			SEQ_START_NOTE(synth_dev, i, note, vel);
-		}
-	}
+    {
+        for (i = 0; i < card_info.nr_voices; i++)
+            if ((voices[i].note == -1) && (voices[i].channel == -1))
+                break;
+        if (i != card_info.nr_voices) {
+            voices[i].note = note;
+            voices[i].channel = channel;
+            if (((1 << channel) & drumflag)) /* drum note */
+            {
+                SEQ_SET_PATCH(synth_dev, i, note + 128);
+            } else {
+                SEQ_SET_PATCH(synth_dev, i, program[channel]);
+            }
+            SEQ_START_NOTE(synth_dev, i, note, vel);
+        }
+    }
 }
 
-void stop_note(int32_t channel, int32_t note, int32_t vel)
-{
-	int32_t i;
+void stop_note(int32_t channel, int32_t note, int32_t vel) {
+    int32_t i;
 
 #ifdef WANT_AWE32
-	if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	    && card_info.synth_subtype == SAMPLE_TYPE_AWE32)
-	{
-		SEQ_STOP_NOTE(synth_dev,channel,note,vel);
-	}
-	else
+    if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        SEQ_STOP_NOTE(synth_dev, channel, note, vel);
+    } else
 #endif
-	{      
-		for (i=0; i<card_info.nr_voices;i++)
-		  if ((voices[i].note == note) && (voices[i].channel == channel))
-		    break;
-		if (i != card_info.nr_voices)
-		{
-			voices[i].note = -1;
-			voices[i].channel = -1;
-			SEQ_STOP_NOTE(synth_dev,i,note,vel);
-		}
-	}
+    {
+        for (i = 0; i < card_info.nr_voices; i++)
+            if ((voices[i].note == note) && (voices[i].channel == channel))
+                break;
+        if (i != card_info.nr_voices) {
+            voices[i].note = -1;
+            voices[i].channel = -1;
+            SEQ_STOP_NOTE(synth_dev, i, note, vel);
+        }
+    }
 }
 
-void set_control(int32_t channel,int32_t ctrl,int32_t value)
-{
-	int32_t i;
+void set_control(int32_t channel, int32_t ctrl, int32_t value) {
+    int32_t i;
 
 #ifdef WANT_AWE32
-	if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	    && card_info.synth_subtype == SAMPLE_TYPE_AWE32)
-	{
-		SEQ_CONTROL(synth_dev,channel,ctrl,value);
-	}
-	else
+    if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        SEQ_CONTROL(synth_dev, channel, ctrl, value);
+    } else
 #endif
-	{
-		for (i=0; i<card_info.nr_voices;i++)
-		  if (voices[i].channel == channel)
-		    if (ctrl == CTL_MAIN_VOLUME)
-		      SEQ_MAIN_VOLUME(synth_dev,i,value);
-	}
+    {
+        for (i = 0; i < card_info.nr_voices; i++)
+            if (voices[i].channel == channel)
+                if (ctrl == CTL_MAIN_VOLUME)
+                    SEQ_MAIN_VOLUME(synth_dev, i, value);
+    }
 }
 
-void set_pitchbend(int32_t channel, int32_t bend)
-{
-	int32_t i;
+void set_pitchbend(int32_t channel, int32_t bend) {
+    int32_t i;
 
 #ifdef WANT_AWE32
-	if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	    && card_info.synth_subtype == SAMPLE_TYPE_AWE32)
-	{
-		SEQ_BENDER(synth_dev,channel,bend);
-	}
-	else
+    if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        SEQ_BENDER(synth_dev, channel, bend);
+    } else
 #endif
-	{
-		for (i=0; i<card_info.nr_voices;i++)
-		  if (voices[i].channel == channel)
-		{
-			/*SEQ_BENDER_RANGE(synth_dev, i, 200);*/
-			SEQ_BENDER(synth_dev, i, bend);
-		}    
-	}
+    {
+        for (i = 0; i < card_info.nr_voices; i++)
+            if (voices[i].channel == channel) {
+                /*SEQ_BENDER_RANGE(synth_dev, i, 200);*/
+                SEQ_BENDER(synth_dev, i, bend);
+            }
+    }
 }
 
-void set_key_pressure(int32_t channel, int32_t note, int32_t vel)
-{
-	int32_t i;
+void set_key_pressure(int32_t channel, int32_t note, int32_t vel) {
+    int32_t i;
 
 #ifdef WANT_AWE32
-	if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	    && card_info.synth_subtype == SAMPLE_TYPE_AWE32)
-	{
-		AWE_KEY_PRESSURE(synth_dev,channel,note,vel);
-	}
-	else
+    if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        AWE_KEY_PRESSURE(synth_dev, channel, note, vel);
+    } else
 #endif
-	{
-		for (i=0; i<card_info.nr_voices;i++)
-		  if ((voices[i].note == note) && (voices[i].channel == channel))
-		    SEQ_KEY_PRESSURE(synth_dev,i,note,vel);
-	}
+    {
+        for (i = 0; i < card_info.nr_voices; i++)
+            if ((voices[i].note == note) && (voices[i].channel == channel))
+                SEQ_KEY_PRESSURE(synth_dev, i, note, vel);
+    }
 }
 
-void set_chn_pressure(int32_t channel, int32_t vel)
-{    
-	int32_t i;
+void set_chn_pressure(int32_t channel, int32_t vel) {
+    int32_t i;
 
 #ifdef WANT_AWE32
-	if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	    && card_info.synth_subtype == SAMPLE_TYPE_AWE32)    
-	{
-		AWE_CHN_PRESSURE(synth_dev,channel,vel);
-	}
-	else
+    if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        AWE_CHN_PRESSURE(synth_dev, channel, vel);
+    } else
 #endif
-	{
-		for (i=0; i<card_info.nr_voices;i++)
-		  if (voices[i].channel == channel)
-		    SEQ_CHN_PRESSURE(synth_dev,i,vel);
-	}    
+    {
+        for (i = 0; i < card_info.nr_voices; i++)
+            if (voices[i].channel == channel)
+                SEQ_CHN_PRESSURE(synth_dev, i, vel);
+    }
 }
 
-void stop_all()
-{
-	int32_t i;
+void stop_all() {
+    int32_t i;
 
 #ifdef WANT_AWE32
-	int32_t j;
-	if (card_info.synthType == SYNTH_TYPE_SAMPLE
-	    && card_info.synth_subtype == SAMPLE_TYPE_AWE32)    
-	{
-		for (i=0; i<16;i++)
-		  for (j=0;j<128;j++)
-		    SEQ_STOP_NOTE(synth_dev,i,j,0);
-	}
-	else
+    int32_t j;
+    if (card_info.synthType == SYNTH_TYPE_SAMPLE && card_info.synth_subtype == SAMPLE_TYPE_AWE32) {
+        for (i = 0; i < 16; i++)
+            for (j = 0; j < 128; j++)
+                SEQ_STOP_NOTE(synth_dev, i, j, 0);
+    } else
 #endif
 #ifdef WANT_MPU401
-	  if (card_info.synthType==SYNTH_TYPE_MIDI) {
-	  } else
+        if (card_info.synthType == SYNTH_TYPE_MIDI) {
+    } else
 #endif
-	{
-		for (i=0; i<card_info.nr_voices;i++)
-		  SEQ_STOP_NOTE(synth_dev,i,voices[i].note,0);
-	}    
+    {
+        for (i = 0; i < card_info.nr_voices; i++)
+            SEQ_STOP_NOTE(synth_dev, i, voices[i].note, 0);
+    }
 }
 
-int32_t get_dtime(uint8_t *data, int32_t *coord)
-{
-	char buf;
-	int32_t result;
-	result =0;
+int32_t get_dtime(uint8_t *data, int32_t *coord) {
+    char buf;
+    int32_t result;
+    result = 0;
 
-	buf = data[*coord];
-	*coord +=1;
-	result = (0x7f & buf);
+    buf = data[*coord];
+    *coord += 1;
+    result = (0x7f & buf);
 
-	if (!(buf & 0x80))
-	{
-		buf = data[*coord];
-		*coord +=1;
-		result |=(int32_t) (((int32_t) 0x7f & (int32_t) buf)<<7);
-		if (!(buf & 0x80))
-		{
-			buf = data[*coord];
-			*coord +=1;
-			result |=(int32_t) (((int32_t) 0x7f & (int32_t) buf)<<14);
-			if (!(buf & 0x80))
-			{
-				buf = data[*coord];
-				*coord +=1;
-				result |=(int32_t) (((int32_t) 0x7f & (int32_t) buf)<<21);
-			}
-		}
-	}
+    if (!(buf & 0x80)) {
+        buf = data[*coord];
+        *coord += 1;
+        result |= (int32_t)(((int32_t)0x7f & (int32_t)buf) << 7);
+        if (!(buf & 0x80)) {
+            buf = data[*coord];
+            *coord += 1;
+            result |= (int32_t)(((int32_t)0x7f & (int32_t)buf) << 14);
+            if (!(buf & 0x80)) {
+                buf = data[*coord];
+                *coord += 1;
+                result |= (int32_t)(((int32_t)0x7f & (int32_t)buf) << 21);
+            }
+        }
+    }
 
-	return result;
+    return result;
 }
 
-int32_t do_track_event(uint8_t *data, int32_t *coord)
-{
-	char channel;
-	uint8_t buf[5];
+int32_t do_track_event(uint8_t *data, int32_t *coord) {
+    char channel;
+    uint8_t buf[5];
 
-	buf[0]=data[*coord];
-	*coord +=1;
-	channel = buf[0] & 0xf;
+    buf[0] = data[*coord];
+    *coord += 1;
+    channel = buf[0] & 0xf;
 #ifdef WANT_MPU401
-	if (card_info.synthType==SYNTH_TYPE_MIDI) {
-		switch((buf[0]&0xf0)) {
-		 case 0x80:
-		 case 0x90:
-		 case 0xa0:
-		 case 0xb0:
-		 case 0xe0:
-			buf[1]=data[*coord]; *coord+=1;
-			buf[2]=data[*coord]; *coord+=1;
-			MIDI_MESSAGE3(buf[0],buf[1],buf[2]);
-			break;
-		 case 0xc0:
-		 case 0xd0:
-			buf[1]=data[*coord]; *coord+=1;
-			MIDI_MESSAGE3(buf[0],0,buf[1]);
-			break;
-		 case 0xf0:
-			return 1;
-		 default:
-			return 3;
-		}
-		seqbuf_dump();
-		return 0;
-	}
+    if (card_info.synthType == SYNTH_TYPE_MIDI) {
+        switch ((buf[0] & 0xf0)) {
+        case 0x80:
+        case 0x90:
+        case 0xa0:
+        case 0xb0:
+        case 0xe0:
+            buf[1] = data[*coord];
+            *coord += 1;
+            buf[2] = data[*coord];
+            *coord += 1;
+            MIDI_MESSAGE3(buf[0], buf[1], buf[2]);
+            break;
+        case 0xc0:
+        case 0xd0:
+            buf[1] = data[*coord];
+            *coord += 1;
+            MIDI_MESSAGE3(buf[0], 0, buf[1]);
+            break;
+        case 0xf0:
+            return 1;
+        default:
+            return 3;
+        }
+        seqbuf_dump();
+        return 0;
+    }
 #endif
 
-	switch((buf[0] & 0xf0))
-	{
-	 case 0x80:
-		buf[1]=data[*coord];
-		*coord +=1;
-		buf[2]=data[*coord];
-		*coord +=1;
-		stop_note((int32_t) channel, (int32_t) buf[1], (int32_t) buf[2]);
-		break;
-	 case 0x90:
-		buf[1]=data[*coord];
-		*coord +=1;
-		buf[2]=data[*coord];
-		*coord +=1;
-		if(buf[2] == 0)
-		{
-			stop_note((int32_t) channel, (int32_t) buf[1], (int32_t) buf[2]);
-		}
-		else
-		{
-			start_note((int32_t) channel, (int32_t) buf[1], (int32_t) buf[2]);
-		}
-		break;
-	 case 0xa0:
-		buf[1]=data[*coord];
-		*coord +=1;
-		buf[2]=data[*coord];
-		*coord +=1;
-		set_key_pressure((int32_t) channel, (int32_t) buf[1], (int32_t) buf[2]);
-		break;
-	 case 0xb0:
-		buf[1]=data[*coord];
-		*coord +=1;
-		buf[2]=data[*coord];
-		*coord +=1;
-		set_control((int32_t) channel, (int32_t) buf[1], (int32_t) buf[2]);
-		break;
-	 case 0xe0:
-		buf[1]=data[*coord];
-		*coord +=1;
-		buf[2]=data[*coord];
-		*coord +=1;
-		set_pitchbend((int32_t) channel, (int32_t) ((buf[2] << 7) + buf[1]);
+    switch ((buf[0] & 0xf0)) {
+    case 0x80:
+        buf[1] = data[*coord];
+        *coord += 1;
+        buf[2] = data[*coord];
+        *coord += 1;
+        stop_note((int32_t)channel, (int32_t)buf[1], (int32_t)buf[2]);
+        break;
+    case 0x90:
+        buf[1] = data[*coord];
+        *coord += 1;
+        buf[2] = data[*coord];
+        *coord += 1;
+        if (buf[2] == 0) {
+            stop_note((int32_t)channel, (int32_t)buf[1], (int32_t)buf[2]);
+        } else {
+            start_note((int32_t)channel, (int32_t)buf[1], (int32_t)buf[2]);
+        }
+        break;
+    case 0xa0:
+        buf[1] = data[*coord];
+        *coord += 1;
+        buf[2] = data[*coord];
+        *coord += 1;
+        set_key_pressure((int32_t)channel, (int32_t)buf[1], (int32_t)buf[2]);
+        break;
+    case 0xb0:
+        buf[1] = data[*coord];
+        *coord += 1;
+        buf[2] = data[*coord];
+        *coord += 1;
+        set_control((int32_t)channel, (int32_t)buf[1], (int32_t)buf[2]);
+        break;
+    case 0xe0:
+        buf[1] = data[*coord];
+        *coord += 1;
+        buf[2] = data[*coord];
+        *coord += 1;
+        set_pitchbend((int32_t) channel, (int32_t) ((buf[2] << 7) + buf[1]);
 		break;
 	 case 0xc0:
 		buf[1]=data[*coord];
@@ -523,173 +458,157 @@ int32_t do_track_event(uint8_t *data, int32_t *coord)
 		return 1;
 	 default:
 		return 3;
-	}
-	seqbuf_dump();
-	return 0;
+    }
+    seqbuf_dump();
+    return 0;
 }
 
-void send_ipc(char *message)
-{
-	//printf ("sendipc %s\n", message);//##########3
-	if (ipc_queue_id<0)
-	{
-		ipc_queue_id=msgget ((key_t) ('l'<<24) | ('d'<<16) | ('e'<<8) | 's', 
-				     IPC_CREAT | 0660);
-		snd= reinterpret_cast<struct msgbuf*> (new uint8_t [sizeof(long) + 32]);
-		snd->mType=1;
-		player_thread=SDL_CreateThread(play_hmi, NULL);
-//		player_pid = play_hmi();
-	}    
-	if (strlen(message) < 16)
-	{
-		sprintf(snd->mtext,"%s",message);
-		msgsnd(ipc_queue_id,snd,16,0);
-	}
+void send_ipc(char *message) {
+    // printf ("sendipc %s\n", message);//##########3
+    if (ipc_queue_id < 0) {
+        ipc_queue_id = msgget((key_t)('l' << 24) | ('d' << 16) | ('e' << 8) | 's', IPC_CREAT | 0660);
+        snd = reinterpret_cast<struct msgbuf *>(new uint8_t[sizeof(long) + 32]);
+        snd->mType = 1;
+        player_thread = SDL_CreateThread(play_hmi, NULL);
+        //		player_pid = play_hmi();
+    }
+    if (strlen(message) < 16) {
+        sprintf(snd->mtext, "%s", message);
+        msgsnd(ipc_queue_id, snd, 16, 0);
+    }
 }
 
-void kill_ipc()
-{
-//	send_ipc("q");
-//	kill(player_pid,SIGTERM);
-	msgctl( ipc_queue_id, IPC_RMID, 0);
-	delete[] snd;
-	snd = NULL;
-	ipc_queue_id = -1;
-//	player_pid = 0;
+void kill_ipc() {
+    //	send_ipc("q");
+    //	kill(player_pid,SIGTERM);
+    msgctl(ipc_queue_id, IPC_RMID, 0);
+    delete[] snd;
+    snd = NULL;
+    ipc_queue_id = -1;
+    //	player_pid = 0;
 }
 
-int32_t do_ipc(int32_t qid, struct msgbuf *buf, int32_t flags)
-{
-	int32_t ipc_read;
-	CFile cf;
-	int32_t l=0;
+int32_t do_ipc(int32_t qid, struct msgbuf *buf, int32_t flags) {
+    int32_t ipc_read;
+    CFile cf;
+    int32_t l = 0;
 
-	ipc_read = msgrcv(qid,buf,16,0,flags | MSG_NOERROR);
+    ipc_read = msgrcv(qid, buf, 16, 0, flags | MSG_NOERROR);
 
-	switch (ipc_read)
-	{
-	 case -1:
-		if (errno == ENOMSG)
-		  break;
-		perror("IPC trouble");
-		break;
-	 case 0:
-		break;
-	 default:
-		//printf ("do_ipc %s\n", buf->mtext);//##########3
-		switch (buf->mtext[0])
-		{
-		 case 'v':
-			volume=(double) ((double) buf->mtext[0]/127.0);
-			break;
-		 case 'p':
-			if (cf.Open(&cf, (buf->mtext+1), gameFolders.szDataDir,"rb", 0)) {
-				l = cf.Length(&cf);
-				data=realloc(data,(size_t) l);
-				cf.Read(data, l, 1);
-				cf.Close ();
-				//printf ("good. fpr=%p l=%i data=%p\n", fptr, l, data);//##########3
-			}
-			stop = 0;
-			break;
-		 case 's':
-			stop = 2;
-			break;
-		 case 'q':
-//			SDL_KillThread(player_thread);
-			break;  
-		}
-	}
+    switch (ipc_read) {
+    case -1:
+        if (errno == ENOMSG)
+            break;
+        perror("IPC trouble");
+        break;
+    case 0:
+        break;
+    default:
+        // printf ("do_ipc %s\n", buf->mtext);//##########3
+        switch (buf->mtext[0]) {
+        case 'v':
+            volume = (double)((double)buf->mtext[0] / 127.0);
+            break;
+        case 'p':
+            if (cf.Open(&cf, (buf->mtext + 1), gameFolders.szDataDir, "rb", 0)) {
+                l = cf.Length(&cf);
+                data = realloc(data, (size_t)l);
+                cf.Read(data, l, 1);
+                cf.Close();
+                // printf ("good. fpr=%p l=%i data=%p\n", fptr, l, data);//##########3
+            }
+            stop = 0;
+            break;
+        case 's':
+            stop = 2;
+            break;
+        case 'q':
+            //			SDL_KillThread(player_thread);
+            break;
+        }
+    }
 
-	return ipc_read;
+    return ipc_read;
 }
 
-void play_hmi (void * arg)
-{
-	int32_t i;
-	int32_t coord = 0x308;
-	int32_t n_chunks = 0;
-	int32_t low_dtime;
-	int32_t low_chunk;
-	int32_t csec;
-//	pid_t loc_pid;
-	int32_t qid;
-	int32_t ipc_read = 0;
-	int32_t k=0;
+void play_hmi(void *arg) {
+    int32_t i;
+    int32_t coord = 0x308;
+    int32_t n_chunks = 0;
+    int32_t low_dtime;
+    int32_t low_chunk;
+    int32_t csec;
+    //	pid_t loc_pid;
+    int32_t qid;
+    int32_t ipc_read = 0;
+    int32_t k = 0;
 
-	struct msgbuf *rcv;
+    struct msgbuf *rcv;
 
-	Track_info *t_info;
+    Track_info *t_info;
 
-	//printf ("play_hmi\n");//#########
+    // printf ("play_hmi\n");//#########
 
-	stop = 0;
-	ipc_read=0;
-//	loc_pid=fork();
-    
-/*	switch (loc_pid)
-	{
-	 case 0:
-		break;
-	 case -1:
-		return -1;
-	 default:
-		atexit(kill_ipc);
-		return loc_pid;
-	}*/
+    stop = 0;
+    ipc_read = 0;
+    //	loc_pid=fork();
 
-//	signal(SIGTERM, my_quit);
-	rcv = reinterpret_cast<struct msgbuf*> (new uint8_t [sizeof(long) + 16]);
+    /*	switch (loc_pid)
+        {
+         case 0:
+            break;
+         case -1:
+            return -1;
+         default:
+            atexit(kill_ipc);
+            return loc_pid;
+        }*/
 
-	rcv->mType=1;
-	rcv->mtext[0]='0';
+    //	signal(SIGTERM, my_quit);
+    rcv = reinterpret_cast<struct msgbuf *>(new uint8_t[sizeof(long) + 16]);
 
-	sleep(2);
+    rcv->mType = 1;
+    rcv->mtext[0] = '0';
 
-	qid=msgget ((key_t) ('l'<<24) | ('d'<<16) | ('e'<<8) | 's', 0660);
-	if(qid == -1)
-	{
-		return;
-	}
+    sleep(2);
 
-	do
-	{
-		ipc_read=do_ipc(qid,rcv,0);
-	}
-	while(rcv->mtext[0] != 'p');
+    qid = msgget((key_t)('l' << 24) | ('d' << 16) | ('e' << 8) | 's', 0660);
+    if (qid == -1) {
+        return;
+    }
 
-	stop=0;
-	rcv->mtext[0] = '0';
+    do {
+        ipc_read = do_ipc(qid, rcv, 0);
+    } while (rcv->mtext[0] != 'p');
 
-	seq_init();
+    stop = 0;
+    rcv->mtext[0] = '0';
 
-	n_chunks=data[0x30];
+    seq_init();
 
-	t_info = new Track_info [n_chunks];
+    n_chunks = data[0x30];
 
-	while(1)
-	{
-	
-		for(i=0;i<n_chunks;i++)
-		{
-			t_info[i].info.position.vPosition = coord + 12;
-			t_info[i].status = PLAYING;
-			t_info[i].time = get_dtime(data,&t_info[i].info.position.vPosition);
-			coord += (( (0xff & data[coord + 5]) << 8 ) + (0xff & data[coord + 4]);
-		}
-	
-		SEQ_START_TIMER();
-		do
-		{
-			low_chunk = -1;
-			k++;
-			i=0;
-			do
-			{
-				if (t_info[i].status == PLAYING)
-				  low_chunk = i;
-				i++;
-			}
+    t_info = new Track_info[n_chunks];
+
+    while (1) {
+
+        for (i = 0; i < n_chunks; i++) {
+            t_info[i].info.position.vPosition = coord + 12;
+            t_info[i].status = PLAYING;
+            t_info[i].time = get_dtime(data, &t_info[i].info.position.vPosition);
+            coord += (( (0xff & data[coord + 5]) << 8 ) + (0xff & data[coord + 4]);
+        }
+
+        SEQ_START_TIMER();
+        do {
+            low_chunk = -1;
+            k++;
+            i = 0;
+            do {
+                if (t_info[i].status == PLAYING)
+                    low_chunk = i;
+                i++;
+            }
 			while((low_chunk <=0) && (i<n_chunks);
 		
 			if (low_chunk == -1)
@@ -699,12 +618,10 @@ void play_hmi (void * arg)
 		
 			for(i=1;i<n_chunks;i++)
 			{
-				if ((t_info[i].time < low_dtime) && 
-				    (t_info[i].status == PLAYING))
-				{
-					low_dtime = t_info[i].time;
-					low_chunk = i;
-				}
+                if ((t_info[i].time < low_dtime) && (t_info[i].status == PLAYING)) {
+                    low_dtime = t_info[i].time;
+                    low_chunk = i;
+                }
 			}
 		
 			//if (low_dtime < 0)
@@ -715,8 +632,8 @@ void play_hmi (void * arg)
 			//flush sequencer buffer after 20 events
 			if (k == 20)
 			{
-				ioctl(seqfd, SNDCTL_SEQ_SYNC);
-				k = 0;
+                ioctl(seqfd, SNDCTL_SEQ_SYNC);
+                k = 0;
 			}
 		
 			SEQ_WAIT_TIME(csec);
@@ -725,8 +642,8 @@ void play_hmi (void * arg)
 		
 			if (t_info[low_chunk].status == 3)
 			{
-				//printf("Error playing data in chunk %d\n",low_chunk);
-				t_info[low_chunk].status = STOPPED;
+                // printf("Error playing data in chunk %d\n",low_chunk);
+                t_info[low_chunk].status = STOPPED;
 			}
 		
 			if (t_info[low_chunk].status == PLAYING)
@@ -739,51 +656,46 @@ void play_hmi (void * arg)
 		
 			if((do_ipc(qid,rcv,IPC_NOWAIT) > 0) && (rcv->mtext[0]=='p'))
 			{
-				n_chunks=data[0x30];
-				t_info = realloc(t_info,sizeof(Track_info)*n_chunks);
-				stop = 1;
-				rcv->mtext[0] = '0';  
-				stop_all();
+                n_chunks = data[0x30];
+                t_info = realloc(t_info, sizeof(Track_info) * n_chunks);
+                stop = 1;
+                rcv->mtext[0] = '0';
+                stop_all();
 			}
-		}
-		while(!stop);
-		SEQ_STOP_TIMER();
-		if( stop == 2)
-		{
-			stop_all();	    
-			do
-			{
-				ipc_read=do_ipc(qid,rcv,0);
-			}
-			while(rcv->mtext[0] != 'p');
-			rcv->mtext[0] = '0';
-			n_chunks=data[0x30];
-			t_info = realloc(t_info,sizeof(Track_info)*n_chunks);
-			stop = 0;
-		}
-		coord=0x308;
-	}
-	delete[] data;
-	delete[] t_info;
-	delete[] rcv;
-	data = NULL;
-	t_info = NULL;
-	rcv = NULL;
-
+        } while (!stop);
+        SEQ_STOP_TIMER();
+        if (stop == 2) {
+            stop_all();
+            do {
+                ipc_read = do_ipc(qid, rcv, 0);
+            } while (rcv->mtext[0] != 'p');
+            rcv->mtext[0] = '0';
+            n_chunks = data[0x30];
+            t_info = realloc(t_info, sizeof(Track_info) * n_chunks);
+            stop = 0;
+        }
+        coord = 0x308;
+    }
+    delete[] data;
+    delete[] t_info;
+    delete[] rcv;
+    data = NULL;
+    t_info = NULL;
+    rcv = NULL;
 }
 
-int32_t DigiPlayMidiSong( char * filename, char * melodic_bank, char * drum_bank, int32_t loop ) {
+int32_t DigiPlayMidiSong(char *filename, char *melodic_bank, char *drum_bank, int32_t loop) {
     char buf[128];
 
-    sprintf(buf,"p%s",filename);
+    sprintf(buf, "p%s", filename);
     send_ipc(buf);
     return 0;
 }
-void DigiSetMidiVolume( int32_t mvolume ) { 
+void DigiSetMidiVolume(int32_t mvolume) {
     char buf[128];
 
-    sprintf(buf,"v%i",mvolume);
+    sprintf(buf, "v%i", mvolume);
     send_ipc(buf);
 }
 
-#endif //!USE_SDL_MIXER
+#endif //! USE_SDL_MIXER

@@ -18,14 +18,14 @@
  *
  *	Change History:
  *			2013_12_04_itaylo	Standard format.
- *	
+ *
  ******************************************************************************/
 
 #ifndef FOLDERDETECTOR_H_INCLUDED
 #define FOLDERDETECTOR_H_INCLUDED
 
 char *GetMacOSXCacheFolder();
-void GetOSXAppFolder(char* szDataRootDir, char* szGameDir); 
+void GetOSXAppFolder(char *szDataRootDir, char *szGameDir);
 
 #endif // FOLDERDETECTOR_H_INCLUDED
 

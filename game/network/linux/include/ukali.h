@@ -45,18 +45,18 @@
 
 typedef struct kaliaddr_ipx_tag {
     short sa_family;
-    char  sa_netnum[4];
-    char  sa_nodenum[6];
+    char sa_netnum[4];
+    char sa_nodenum[6];
     ushort sa_socket;
 } kaliaddr_ipx;
 
 // Process name that shows up in /whois and /games list.
 // Maximum of 8 characters.
-//edited on 10/04/98 by Matt Mueller to show correct ver in kali
+// edited on 10/04/98 by Matt Mueller to show correct ver in kali
 #define KALI_PROCESS_NAME "D2X" VERSION
-//end edit -MM
+// end edit -MM
 #ifndef MAX_PACKET_SIZE
-#	define MAX_PACKET_SIZE 1500
+#define MAX_PACKET_SIZE 1500
 #endif
 
 // struct ipx_helper ipx_kali = {

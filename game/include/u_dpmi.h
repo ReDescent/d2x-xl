@@ -26,33 +26,31 @@ typedef struct dpmi_real_regs {
     uint32_t ecx;
     uint32_t eax;
     uint16_t flags;
-    uint16_t es,ds,fs,gs,ip,cs,sp,ss;
+    uint16_t es, ds, fs, gs, ip, cs, sp, ss;
 } dpmi_real_regs;
-
 
 // Initializes dpmi. Returns zero if failed.
 extern int32_t dpmi_init(int32_t verbose);
 // Returns a pointer to a temporary dos memory block. Size must be < 1024 bytes.
-extern void *dpmi_get_temp_low_buffer( int32_t size );
-extern void *dpmi_real_malloc( int32_t size, uint16_t *selector );
-extern void dpmi_real_free( uint16_t selector );
-extern void dpmi_real_int386x( uint8_t intno, dpmi_real_regs * rregs );
-extern void dpmi_real_call(dpmi_real_regs * rregs);
+extern void *dpmi_get_temp_low_buffer(int32_t size);
+extern void *dpmi_real_malloc(int32_t size, uint16_t *selector);
+extern void dpmi_real_free(uint16_t selector);
+extern void dpmi_real_int386x(uint8_t intno, dpmi_real_regs *rregs);
+extern void dpmi_real_call(dpmi_real_regs *rregs);
 extern int32_t dpmi_lock_region(void *address, uint32_t length);
 extern int32_t dpmi_unlock_region(void *address, uint32_t length);
 // returns 0 if failed...
-extern int32_t dpmi_allocate_selector( void * address, int32_t size, uint16_t * selector );
-extern int32_t dpmi_modify_selector_base( uint16_t selector, void * address );
-extern int32_t dpmi_modify_selector_limit( uint16_t selector, int32_t size  );
-
+extern int32_t dpmi_allocate_selector(void *address, int32_t size, uint16_t *selector);
+extern int32_t dpmi_modify_selector_base(uint16_t selector, void *address);
+extern int32_t dpmi_modify_selector_limit(uint16_t selector, int32_t size);
 
 #if defined(__GNUC__) || defined(_WIN32)
-# define _far
+#define _far
 #else
-# define _far far
+#define _far far
 #endif
 // Sets the PM handler. Returns 0 if succssful
-extern int32_t dpmi_set_pm_handler(uint32_t intnum, void _far * isr );
+extern int32_t dpmi_set_pm_handler(uint32_t intnum, void _far *isr);
 
 extern uint32_t dpmi_virtual_memory;
 extern uint32_t dpmi_available_memory;

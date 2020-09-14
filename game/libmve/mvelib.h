@@ -16,13 +16,12 @@ extern mve_cb_SetPalette mve_setpalette;
 /*
  * structure for maintaining info on a MVEFILE stream
  */
-typedef struct MVEFILE
-{
-    void    *stream;
-    uint8_t	*cur_chunk;
-    int32_t  buf_size;
-    int32_t  cur_fill;
-    int32_t  next_segment;
+typedef struct MVEFILE {
+    void *stream;
+    uint8_t *cur_chunk;
+    int32_t buf_size;
+    int32_t cur_fill;
+    int32_t next_segment;
 } MVEFILE;
 
 /*
@@ -74,12 +73,11 @@ typedef int32_t (*MVESEGMENTHANDLER)(uint8_t major, uint8_t minor, uint8_t *data
 /*
  * structure for maintaining an MVE stream
  */
-typedef struct MVESTREAM
-{
-    MVEFILE             *movie;
-    void                *context;
-    MVESEGMENTHANDLER   handlers[32];
-	 int32_t					bLittleEndian;
+typedef struct MVESTREAM {
+    MVEFILE *movie;
+    void *context;
+    MVESEGMENTHANDLER handlers[32];
+    int32_t bLittleEndian;
 } MVESTREAM;
 
 /*
@@ -112,7 +110,7 @@ void mve_set_handler_context(MVESTREAM *movie, void *context);
  */
 int32_t mve_play_next_chunk(MVESTREAM *movie);
 
-void* MVE_Alloc (uint32_t size);
-void MVE_Free(void* ptr);
+void *MVE_Alloc(uint32_t size);
+void MVE_Free(void *ptr);
 
 #endif /* INCLUDED_MVELIB_H */

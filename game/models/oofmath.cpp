@@ -18,41 +18,36 @@
 
 //------------------------------------------------------------------------------
 
-inline float fsqr (float x)
-{
-return x * x;
-}
+inline float fsqr(float x) { return x * x; }
 
 //------------------------------------------------------------------------------
 
-float OOF_Centroid (CFloatVector *pvCentroid, CFloatVector *pvSrc, int32_t nv)
-{
-	CFloatVector	vNormal, vCenter;
-	float			fArea, fTotalArea;
-	int32_t			i;
+float OOF_Centroid(CFloatVector *pvCentroid, CFloatVector *pvSrc, int32_t nv) {
+    CFloatVector vNormal, vCenter;
+    float fArea, fTotalArea;
+    int32_t i;
 
-pvCentroid->SetZero ();
+    pvCentroid->SetZero();
 
-// First figure out the total area of this polygon
-fTotalArea = CFloatVector::Perp (vNormal, pvSrc [0], pvSrc [1], pvSrc [2]).Mag () / 2;
-for (i = 2; i < nv - 1; i++) {
-	fArea = CFloatVector::Perp (vNormal, pvSrc [0], pvSrc [i], pvSrc [i + 1]).Mag () / 2;
-	fTotalArea += fArea;
-	}
-// Now figure out how much weight each triangle represents to the overall polygon
-fArea = CFloatVector::Perp (vNormal, pvSrc [0], pvSrc [1], pvSrc [2]).Mag () / 2;
-// Get the center of the first polygon
-vCenter = pvSrc [0] + pvSrc [1] + pvSrc [2];
-*pvCentroid += vCenter / (3.0f * (fTotalArea / fArea));
-// Now do the same for the rest
-for (i = 2; i < nv - 1; i++) {
-	fArea = CFloatVector::Perp (vNormal, pvSrc [0], pvSrc [i], pvSrc [i + 1]).Mag () / 2;
-	vCenter = pvSrc [0] + pvSrc [i] + pvSrc [i + 1];
-	*pvCentroid +=  vCenter / (3.0f * (fTotalArea / fArea));
-	}
-return fTotalArea;
+    // First figure out the total area of this polygon
+    fTotalArea = CFloatVector::Perp(vNormal, pvSrc[0], pvSrc[1], pvSrc[2]).Mag() / 2;
+    for (i = 2; i < nv - 1; i++) {
+        fArea = CFloatVector::Perp(vNormal, pvSrc[0], pvSrc[i], pvSrc[i + 1]).Mag() / 2;
+        fTotalArea += fArea;
+    }
+    // Now figure out how much weight each triangle represents to the overall polygon
+    fArea = CFloatVector::Perp(vNormal, pvSrc[0], pvSrc[1], pvSrc[2]).Mag() / 2;
+    // Get the center of the first polygon
+    vCenter = pvSrc[0] + pvSrc[1] + pvSrc[2];
+    *pvCentroid += vCenter / (3.0f * (fTotalArea / fArea));
+    // Now do the same for the rest
+    for (i = 2; i < nv - 1; i++) {
+        fArea = CFloatVector::Perp(vNormal, pvSrc[0], pvSrc[i], pvSrc[i + 1]).Mag() / 2;
+        vCenter = pvSrc[0] + pvSrc[i] + pvSrc[i + 1];
+        *pvCentroid += vCenter / (3.0f * (fTotalArea / fArea));
+    }
+    return fTotalArea;
 }
 
 //------------------------------------------------------------------------------
-//eof
-
+// eof

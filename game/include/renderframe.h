@@ -14,9 +14,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _GAMEREND_H
 #define _GAMEREND_H
 
-void ShrinkWindow ();
-void GrowWindow ();
-void Draw2DFrameElements (void);
-void FlushFrame (fix xStereoSeparation);
+void ShrinkWindow();
+void GrowWindow();
+void Draw2DFrameElements(void);
+void FlushFrame(fix xStereoSeparation);
 
 #endif /* _GAMEREND_H */

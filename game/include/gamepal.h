@@ -18,13 +18,14 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "cfile.h"
 
 #define D2_DEFAULT_PALETTE "default.256"
-#define MENU_PALETTE			"default.256"
+#define MENU_PALETTE "default.256"
 
 // load a palette by name. returns 1 if new palette loaded, else 0
 // if used_forLevel is set, load pig, etc.
 // if no_change_screen is set, the current screen does not get
 // remapped, and the hardware palette does not get changed
-uint8_t *LoadPalette (const char *pszPaletteName, const char *pszLevelName, int nUsedForLevel, int bNoScreenChange, int bForce);
+uint8_t *
+LoadPalette(const char *pszPaletteName, const char *pszLevelName, int nUsedForLevel, int bNoScreenChange, int bForce);
 
 // remap color font & menu background into the current palette
 extern uint8_t *gamePalette;

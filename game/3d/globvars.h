@@ -7,7 +7,7 @@ IN USING, DISPLAYING,  AND CREATING DERIVATIVE WORKS THEREOF, SO LONG AS
 SUCH USE, DISPLAY OR CREATION IS FOR NON-COMMERCIAL, ROYALTY OR REVENUE
 FREE PURPOSES.  IN NO EVENT SHALL THE END-USER USE THE COMPUTER CODE
 CONTAINED HEREIN FOR REVENUE-BEARING PURPOSES.  THE END-USER UNDERSTANDS
-AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.  
+AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
@@ -15,30 +15,33 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _TRANSFORMATION_H
 
 class CTransformation {
-	public:
-		CFixVector		pos;
-		CAngleVector	playerHeadAngles;
-		int32_t				bUsePlayerHeadAngles;
-		CFixMatrix		view [2];
-		CFixVector		scale;
-		CFixVector		windowScale;		//scaling for window aspect
-		CFloatVector	posf;
-		CFloatMatrix	viewf [2];
-		fix				zoom;
-		float				glZoom;
-		float				glPosf [4];
-		float				glViewf [16];
-	public:
-		CTransformation () { Init (); }
-		void Init (void);
+    public:
+    CFixVector pos;
+    CAngleVector playerHeadAngles;
+    int32_t bUsePlayerHeadAngles;
+    CFixMatrix view[2];
+    CFixVector scale;
+    CFixVector windowScale; // scaling for window aspect
+    CFloatVector posf;
+    CFloatMatrix viewf[2];
+    fix zoom;
+    float glZoom;
+    float glPosf[4];
+    float glViewf[16];
 
-		memset (this, 0, sizeof (*this)); }
-	};
+    public:
+    CTransformation() { Init(); }
+    void Init(void);
 
-extern CTransformation	transformation;
+    memset(this, 0, sizeof(*this));
+}
+}
+;
 
-//vertex buffers for polygon drawing and clipping
-//list of 2d coords
+extern CTransformation transformation;
+
+// vertex buffers for polygon drawing and clipping
+// list of 2d coords
 extern fix polyVertList[];
 
 #endif

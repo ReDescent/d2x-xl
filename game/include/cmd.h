@@ -1,8 +1,6 @@
 #ifndef _CMD_H_
 #define _CMD_H_ 1
 
-
-
 /* Maximum length for a single command */
 #define CMD_MAX_LENGTH 2048
 /* Maximum number of tokens per command */

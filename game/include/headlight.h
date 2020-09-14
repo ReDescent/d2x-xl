@@ -14,19 +14,19 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _HEADLIGHT_H
 #define _HEADLIGHT_H
 
-#define	HEADLIGHT_BOOST_SCALE		8		//how much to scale light when have headlight boost
-#define	MAX_HEADLIGHTS					8
-#define	MAX_DIST_LOG					6							//log (MAX_DIST-expressed-as-integer)
-#define	MAX_DIST							(I2X (1) << MAX_DIST_LOG)	//no light beyond this dist
-#define	HEADLIGHT_CONE_DOT			(I2X (9) / 10)
-#define	HEADLIGHT_SCALE				(I2X (10))
-#define	HEADLIGHT_TRANSFORMATION	2
+#define HEADLIGHT_BOOST_SCALE 8 // how much to scale light when have headlight boost
+#define MAX_HEADLIGHTS 8
+#define MAX_DIST_LOG 6 // log (MAX_DIST-expressed-as-integer)
+#define MAX_DIST (I2X(1) << MAX_DIST_LOG) // no light beyond this dist
+#define HEADLIGHT_CONE_DOT (I2X(9) / 10)
+#define HEADLIGHT_SCALE (I2X(10))
+#define HEADLIGHT_TRANSFORMATION 2
 
-extern fix		xBeamBrightness;
+extern fix xBeamBrightness;
 
-void SetDynamicLight (void);
+void SetDynamicLight(void);
 
-int32_t LightingMethod (void);
+int32_t LightingMethod(void);
 
 #if 0
 fix ComputeHeadlight (CFixVector *point, fix xFaceLight);
@@ -39,10 +39,10 @@ void RemoveOglHeadlight (CObject *pObj);
 void UpdateOglHeadlight (void);
 #endif
 
-void InitHeadlightShaders (int32_t nLights);
-void SetPlayerHeadlight (int32_t nPlayer, int32_t bOn);
-int32_t PlayerHasHeadlight (int32_t nPlayer);
-int32_t HeadlightIsOn (int32_t nPlayer);
-void DrainHeadLightPower (void);
+void InitHeadlightShaders(int32_t nLights);
+void SetPlayerHeadlight(int32_t nPlayer, int32_t bOn);
+int32_t PlayerHasHeadlight(int32_t nPlayer);
+int32_t HeadlightIsOn(int32_t nPlayer);
+void DrainHeadLightPower(void);
 
-#endif //_HEADLIGHT_H 
+#endif //_HEADLIGHT_H

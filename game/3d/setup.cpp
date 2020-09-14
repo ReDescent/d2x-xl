@@ -22,24 +22,22 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ogl_lib.h"
 
 //------------------------------------------------------------------------------
-//start the frame
-void G3StartFrame (CTransformation& transformation, int32_t bFlat, int32_t bResetColorBuf, fix xStereoSeparation)
-{
-CCanvas::Current ()->SetWidth ();
-CCanvas::Current ()->SetHeight ();
-transformation.ComputeAspect ();
-ogl.StartFrame (bFlat, bResetColorBuf, xStereoSeparation);
-gameStates.render.bHeadlightOn = 1;
-gameStates.render.bDepthSort = 1;
+// start the frame
+void G3StartFrame(CTransformation &transformation, int32_t bFlat, int32_t bResetColorBuf, fix xStereoSeparation) {
+    CCanvas::Current()->SetWidth();
+    CCanvas::Current()->SetHeight();
+    transformation.ComputeAspect();
+    ogl.StartFrame(bFlat, bResetColorBuf, xStereoSeparation);
+    gameStates.render.bHeadlightOn = 1;
+    gameStates.render.bDepthSort = 1;
 }
 
 //------------------------------------------------------------------------------
-//this doesn't do anything, but is here for completeness
-void G3EndFrame (CTransformation& transformation, int32_t nWindow)
-{
-ogl.EndFrame (nWindow);
-transformation.ComputeAspect ();
+// this doesn't do anything, but is here for completeness
+void G3EndFrame(CTransformation &transformation, int32_t nWindow) {
+    ogl.EndFrame(nWindow);
+    transformation.ComputeAspect();
 }
 
 //------------------------------------------------------------------------------
-//eof
+// eof

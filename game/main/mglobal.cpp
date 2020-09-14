@@ -15,6 +15,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 // Global array of vertices, common to one mine.
 //	This is the global mine which create_new_mine returns.
-//lsegment	Lsegments[MAX_SEGMENTS];
+// lsegment	Lsegments[MAX_SEGMENTS];
 
 // FIXME: empty file

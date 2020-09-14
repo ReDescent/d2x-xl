@@ -18,7 +18,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
-
 #ifndef _H
 #define _H
 
@@ -28,31 +27,31 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #pragma pack(push, 1)
 typedef struct tMorphInfo {
-	CObject			*pObj;                                // CObject which is morphing
-	CFixVector		vecs [MAX_VECS];
-	CFixVector		deltas [MAX_VECS];
-	fix				times [MAX_VECS];
-	int32_t				submodelActive [MAX_SUBMODELS];         // which submodels are active
-	int32_t				nMorphingPoints [MAX_SUBMODELS];       // how many active points in each part
-	int32_t				submodelStartPoints [MAX_SUBMODELS];    // first point for each submodel
-	int32_t				nSubmodelsActive;
-	uint8_t				saveControlType;
-	uint8_t				saveMovementType;
-	tPhysicsInfo	savePhysInfo;
-	int32_t				nSignature;
+    CObject *pObj; // CObject which is morphing
+    CFixVector vecs[MAX_VECS];
+    CFixVector deltas[MAX_VECS];
+    fix times[MAX_VECS];
+    int32_t submodelActive[MAX_SUBMODELS]; // which submodels are active
+    int32_t nMorphingPoints[MAX_SUBMODELS]; // how many active points in each part
+    int32_t submodelStartPoints[MAX_SUBMODELS]; // first point for each submodel
+    int32_t nSubmodelsActive;
+    uint8_t saveControlType;
+    uint8_t saveMovementType;
+    tPhysicsInfo savePhysInfo;
+    int32_t nSignature;
 } tMorphInfo;
 #pragma pack(pop)
 
 #define MAX_MORPH_OBJECTS 250
 
-#define MORPH_RATE (I2X (1)*3)
+#define MORPH_RATE (I2X(1) * 3)
 
-//process the morphing CObject for one frame
+// process the morphing CObject for one frame
 void DoMorphFrame(CObject *obj);
 
-//called at the start of a level
+// called at the start of a level
 void MorphInit();
 
-extern tMorphInfo *MorphFindData (CObject *obj);
+extern tMorphInfo *MorphFindData(CObject *obj);
 
 #endif /* _H */

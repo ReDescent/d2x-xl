@@ -1,5 +1,5 @@
 #ifndef _WIN32
-#	include <unistd.h>
+#include <unistd.h>
 #endif
 
 #include "pstypes.h"
@@ -13,39 +13,36 @@ CSoundThreadInfo tiSound;
 
 //------------------------------------------------------------------------------
 
-int32_t _CDECL_ SoundThread (void *pThreadId)
-{
+int32_t _CDECL_ SoundThread(void *pThreadId) {
     do {
         while (!tiSound.bExec) {
-            G3_SLEEP (1);
+            G3_SLEEP(1);
             if (tiSound.bDone) {
                 tiSound.bDone = 0;
                 return 0;
             }
         }
         if (tiSound.nTask == stOpenAudio) {
-            audio.Setup (tiSound.fSlowDown);
-            audio.SetFxVolume ((gameConfig.nAudioVolume [1] * 32768) / 8, 1);
-            audio.SetVolumes ((gameConfig.nAudioVolume [0] * 32768) / 8, (gameConfig.nMidiVolume * 128) / 8);
-        }
-        else if (tiSound.nTask == stCloseAudio) {
-            audio.Shutdown ();
-        }
-        else if (tiSound.nTask == stReconfigureAudio) {
-            FreeAddonSounds ();
-            audio.Shutdown ();
-            audio.Setup (tiSound.fSlowDown);
-            LoadAddonSounds ();
+            audio.Setup(tiSound.fSlowDown);
+            audio.SetFxVolume((gameConfig.nAudioVolume[1] * 32768) / 8, 1);
+            audio.SetVolumes((gameConfig.nAudioVolume[0] * 32768) / 8, (gameConfig.nMidiVolume * 128) / 8);
+        } else if (tiSound.nTask == stCloseAudio) {
+            audio.Shutdown();
+        } else if (tiSound.nTask == stReconfigureAudio) {
+            FreeAddonSounds();
+            audio.Shutdown();
+            audio.Setup(tiSound.fSlowDown);
+            LoadAddonSounds();
             if (tiSound.fSlowDown == 1.0f) {
-                songManager.SetPos (songManager.SlowDown () - songManager.Start () +
-                                        2 * (SDL_GetTicks () - songManager.SlowDown ()) / gameOpts->gameplay.nSlowMotionSpeedup);
-                songManager.SetSlowDown (0);
+                songManager.SetPos(
+                    songManager.SlowDown() - songManager.Start() +
+                    2 * (SDL_GetTicks() - songManager.SlowDown()) / gameOpts->gameplay.nSlowMotionSpeedup);
+                songManager.SetSlowDown(0);
+            } else {
+                songManager.SetSlowDown(SDL_GetTicks());
+                songManager.SetPos(songManager.SlowDown() - songManager.Start());
             }
-            else {
-                songManager.SetSlowDown (SDL_GetTicks ());
-                songManager.SetPos (songManager.SlowDown () - songManager.Start ());
-            }
-            songManager.PlayLevelSong (missionManager.nCurrentLevel, 1, false);
+            songManager.PlayLevelSong(missionManager.nCurrentLevel, 1, false);
         }
         tiSound.bExec = 0;
     } while (!tiSound.bDone);
@@ -55,42 +52,36 @@ int32_t _CDECL_ SoundThread (void *pThreadId)
 
 //------------------------------------------------------------------------------
 
-void WaitForSoundThread (time_t nTimeout)
-{
-    time_t t0 = (nTimeout < 0) ? 0 : (time_t) SDL_GetTicks ();
-    while (tiSound.pThread && tiSound.bExec && ((nTimeout < 0) || ((time_t) SDL_GetTicks () - t0 < nTimeout)))
-        G3_SLEEP (1);
+void WaitForSoundThread(time_t nTimeout) {
+    time_t t0 = (nTimeout < 0) ? 0 : (time_t)SDL_GetTicks();
+    while (tiSound.pThread && tiSound.bExec && ((nTimeout < 0) || ((time_t)SDL_GetTicks() - t0 < nTimeout)))
+        G3_SLEEP(1);
 }
 
 //------------------------------------------------------------------------------
 
-bool HaveSoundThread (void)
-{
-    return tiSound.pThread != NULL;
-}
+bool HaveSoundThread(void) { return tiSound.pThread != NULL; }
 
 //------------------------------------------------------------------------------
 
-void CreateSoundThread (void)
-{
+void CreateSoundThread(void) {
     if (!tiSound.pThread) {
-        memset (&tiSound, 0, sizeof (tiSound));
+        memset(&tiSound, 0, sizeof(tiSound));
         tiSound.nId = 0;
-        tiSound.pThread = SDL_CreateThread (SoundThread, "Sound", &tiSound.nId);
+        tiSound.pThread = SDL_CreateThread(SoundThread, "Sound", &tiSound.nId);
     }
 }
 
 //------------------------------------------------------------------------------
 
-void DestroySoundThread (void)
-{
+void DestroySoundThread(void) {
     if (tiSound.pThread) {
-        WaitForSoundThread (1000);
+        WaitForSoundThread(1000);
         tiSound.bDone = 1;
-        CTimeout to (1000);
+        CTimeout to(1000);
         do {
-            G3_SLEEP (1);
-        } while (tiSound.bDone && !to.Expired ());
+            G3_SLEEP(1);
+        } while (tiSound.bDone && !to.Expired());
         if (tiSound.bDone) {
             int status;
             SDL_WaitThread(tiSound.pThread, &status);
@@ -101,14 +92,13 @@ void DestroySoundThread (void)
 
 //------------------------------------------------------------------------------
 
-int32_t StartSoundThread (tSoundTask nTask)
-{
+int32_t StartSoundThread(tSoundTask nTask) {
 #if 1
     if (tiSound.pThread) {
 #else
-    if (tiSound.pThread && gameData.appData.bUseMultiThreading [rtSound]) {
+    if (tiSound.pThread && gameData.appData.bUseMultiThreading[rtSound]) {
 #endif
-        WaitForSoundThread ();
+        WaitForSoundThread();
         tiSound.nTask = nTask;
         tiSound.bExec = 1;
 #if 0

@@ -30,28 +30,27 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //------------------------------------------------------------------------------
 
 class CMidi {
-	private:
-		int32_t			m_nVolume;
-		int32_t			m_nPaused;
-		Mix_Music*	m_music;
-		hmp_file*	m_hmp;
+    private:
+    int32_t m_nVolume;
+    int32_t m_nPaused;
+    Mix_Music *m_music;
+    hmp_file *m_hmp;
 
-	public:
-		CMidi () { Init (); }
-		~CMidi () { Shutdown (); }
-		void Init (void);
-		void Shutdown (void);
-		int32_t SetVolume (int32_t nVolume);
-		void FixVolume (int32_t nVolume);
-		int32_t PlaySong (const char* pszSong, char* melodicBank, char* drumBank, int32_t bLoop, int32_t bD1Song);
-		void Pause (void);
-		void Resume (void);
-		void Fadeout (void);
-	};
+    public:
+    CMidi() { Init(); }
+    ~CMidi() { Shutdown(); }
+    void Init(void);
+    void Shutdown(void);
+    int32_t SetVolume(int32_t nVolume);
+    void FixVolume(int32_t nVolume);
+    int32_t PlaySong(const char *pszSong, char *melodicBank, char *drumBank, int32_t bLoop, int32_t bD1Song);
+    void Pause(void);
+    void Resume(void);
+    void Fadeout(void);
+};
 
 extern CMidi midi;
 
 //------------------------------------------------------------------------------
 
 #endif
-

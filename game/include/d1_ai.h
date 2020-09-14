@@ -18,29 +18,31 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "d1_aistruct.h"
 
 #ifndef PLAYER_AWARENESS_INITIAL_TIME
-#define	PLAYER_AWARENESS_INITIAL_TIME		I2X (3)
+#define PLAYER_AWARENESS_INITIAL_TIME I2X(3)
 #endif
-#define	MAX_PATH_LENGTH						30			//	Maximum length of path in ai path following.
-#define	MAX_DEPTH_TO_SEARCH_FOR_PLAYER	10
-#define	BOSS_GATE_PRODUCER_NUM					-1
-#define	BOSS_ECLIP_NUM							53
+#define MAX_PATH_LENGTH 30 //	Maximum length of path in ai path following.
+#define MAX_DEPTH_TO_SEARCH_FOR_PLAYER 10
+#define BOSS_GATE_PRODUCER_NUM -1
+#define BOSS_ECLIP_NUM 53
 
-#define	ROBOT_BRAIN	7
-#define	ROBOT_BOSS1	17
+#define ROBOT_BRAIN 7
+#define ROBOT_BOSS1 17
 
 int32_t Boss_dying;
 
 void move_towards_segment_center(CObject *pObj);
 int32_t gate_in_robot(int32_t type, int32_t segnum);
 void do_ai_movement(CObject *pObj);
-void ai_move_to_new_segment( CObject * obj, int16_t newseg, int32_t first_time );
+void ai_move_to_new_segment(CObject *obj, int16_t newseg, int32_t first_time);
 // void ai_follow_path( CObject * obj, int16_t newseg, int32_t first_time );
 void ai_recover_from_wall_hit(CObject *obj, int32_t segnum);
 void ai_move_one(CObject *pObj);
 void do_ai_frame(CObject *pObj);
 void init_ai_object(int32_t objnum, int32_t initial_mode, int32_t hide_segment);
 void update_player_awareness(CObject *pObj, fix new_awareness);
-void create_awareness_event(CObject *pObj, int32_t type);			// CObject *pObj can create awareness of player, amount based on "type"
+void create_awareness_event(
+    CObject *pObj,
+    int32_t type); // CObject *pObj can create awareness of player, amount based on "type"
 void do_ai_frame_all(void);
 void init_ai_system(void);
 void reset_ai_states(CObject *pObj);
@@ -67,7 +69,7 @@ void do_ai_robot_hit_attack(CObject *robot, CObject *player, CFixVector *collisi
 void ai_open_doors_in_segment(CObject *robot);
 int32_t ai_door_is_openable(CObject *pObj, CSegment *segp, int32_t sidenum);
 int32_t player_is_visible_from_object(CObject *pObj, CFixVector *pos, fix field_of_view, CFixVector *vec_to_player);
-void ai_reset_all_paths(void);	//	Reset all paths.  Call at the start of a level.
+void ai_reset_all_paths(void); //	Reset all paths.  Call at the start of a level.
 int32_t ai_multiplayer_awareness(CObject *pObj, int32_t awareness_level);
 
 #if DBG

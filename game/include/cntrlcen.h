@@ -20,24 +20,24 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "wall.h"
 //#include "switch.h"
 
-#define MAX_CONTROLCEN_GUNS     8
+#define MAX_CONTROLCEN_GUNS 8
 
-#define CONTROLCEN_WEAPON_NUM   6
+#define CONTROLCEN_WEAPON_NUM 6
 
-#define MAX_CONTROLCEN_LINKS    10
+#define MAX_CONTROLCEN_LINKS 10
 
 #pragma pack(push, 1)
 typedef struct tReactorTriggers {
-	short   nLinks;
-	short   nSegment [MAX_CONTROLCEN_LINKS];
-	short   nSide [MAX_CONTROLCEN_LINKS];
+    short nLinks;
+    short nSegment[MAX_CONTROLCEN_LINKS];
+    short nSide[MAX_CONTROLCEN_LINKS];
 } tReactorTriggers;
 
 typedef struct tReactorProps {
-	int nModel;
-	int nGuns;
-	vmsVector gunPoints[MAX_CONTROLCEN_GUNS];
-	vmsVector gun_dirs[MAX_CONTROLCEN_GUNS];
+    int nModel;
+    int nGuns;
+    vmsVector gunPoints[MAX_CONTROLCEN_GUNS];
+    vmsVector gun_dirs[MAX_CONTROLCEN_GUNS];
 } tReactorProps;
 #pragma pack(pop)
 
@@ -54,7 +54,7 @@ void DoReactorFrame(CObject *obj);
 void InitReactorForLevel(int bRestore);
 void DoReactorDestroyedStuff(CObject *objp);
 void DoReactorDeadFrame(void);
-fix ReactorStrength (void);
+fix ReactorStrength(void);
 
 /*
  * reads n reactor structs from a CFILE
@@ -66,7 +66,7 @@ int ReactorReadN(tReactorProps *r, int n, CFILE *fp);
  */
 int ControlCenterTriggersReadN(tReactorTriggers *cct, int n, CFILE *fp);
 
-int FindReactor (CObject *objP);
-void InitCountdown (tTrigger *trigP, int bReactorDestroyed, int nTimer);
+int FindReactor(CObject *objP);
+void InitCountdown(tTrigger *trigP, int bReactorDestroyed, int nTimer);
 
 #endif /* _CNTRLCEN_H */

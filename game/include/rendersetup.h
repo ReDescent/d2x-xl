@@ -18,7 +18,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //------------------------------------------------------------------------------
 
-void ComputeMineLighting (short nStartSeg, fix xStereoSeparation, int nWindow);
+void ComputeMineLighting(short nStartSeg, fix xStereoSeparation, int nWindow);
 
 //------------------------------------------------------------------------------
 

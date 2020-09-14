@@ -18,14 +18,13 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
-
 #ifndef _PAGING_H
 #define _PAGING_H
 
-void LoadLevelTextures (void);
-int32_t PagingGaugeSize (void);
-void LoadPowerupTextures (void);
-void LoadObjectTextures (int32_t nType);
-int32_t LoadModelTextures (CPolyModel* pModel, tBitmapIndex* altTextures);
+void LoadLevelTextures(void);
+int32_t PagingGaugeSize(void);
+void LoadPowerupTextures(void);
+void LoadObjectTextures(int32_t nType);
+int32_t LoadModelTextures(CPolyModel *pModel, tBitmapIndex *altTextures);
 
 #endif /* _PAGING_H */

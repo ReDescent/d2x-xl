@@ -19,7 +19,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
-
 #ifndef _GAMEFONT_H
 #define _GAMEFONT_H
 
@@ -31,24 +30,24 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 // We are interleaving low & high resolution fonts, so to access a
 // font you say fontnum+flag where flag is 0 for lowres, 1 for hires
 
-#define GFONT_BIG_1     0
-#define GFONT_MEDIUM_1  2
-#define GFONT_MEDIUM_2  4
-#define GFONT_MEDIUM_3  6
-#define GFONT_SMALL     8
+#define GFONT_BIG_1 0
+#define GFONT_MEDIUM_1 2
+#define GFONT_MEDIUM_2 4
+#define GFONT_MEDIUM_3 6
+#define GFONT_SMALL 8
 
-#define SMALL_FONT      fontManager.GameFont (GFONT_SMALL + gameStates.render.fonts.bHires)
-#define MEDIUM1_FONT    fontManager.GameFont (GFONT_MEDIUM_1 + gameStates.render.fonts.bHires)
-#define MEDIUM2_FONT    fontManager.GameFont (GFONT_MEDIUM_2 + gameStates.render.fonts.bHires)
-#define MEDIUM3_FONT    fontManager.GameFont (GFONT_MEDIUM_3 + gameStates.render.fonts.bHires)
-#define HUGE_FONT       fontManager.GameFont (GFONT_BIG_1 + gameStates.render.fonts.bHires)
+#define SMALL_FONT fontManager.GameFont(GFONT_SMALL + gameStates.render.fonts.bHires)
+#define MEDIUM1_FONT fontManager.GameFont(GFONT_MEDIUM_1 + gameStates.render.fonts.bHires)
+#define MEDIUM2_FONT fontManager.GameFont(GFONT_MEDIUM_2 + gameStates.render.fonts.bHires)
+#define MEDIUM3_FONT fontManager.GameFont(GFONT_MEDIUM_3 + gameStates.render.fonts.bHires)
+#define HUGE_FONT fontManager.GameFont(GFONT_BIG_1 + gameStates.render.fonts.bHires)
 
-#define GAME_FONT       SMALL_FONT
+#define GAME_FONT SMALL_FONT
 
-#define TITLE_FONT      HUGE_FONT
-#define NORMAL_FONT     MEDIUM1_FONT    //normal, non-highlighted item
-#define SELECTED_FONT   MEDIUM2_FONT    //highlighted item
-#define SUBTITLE_FONT   MEDIUM3_FONT
+#define TITLE_FONT HUGE_FONT
+#define NORMAL_FONT MEDIUM1_FONT // normal, non-highlighted item
+#define SELECTED_FONT MEDIUM2_FONT // highlighted item
+#define SUBTITLE_FONT MEDIUM3_FONT
 
 #define MAX_FONTS 10
 

@@ -16,75 +16,82 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "vclip.h"
 
-#define MAX_EFFECTS	  110
+#define MAX_EFFECTS 110
 #define D1_MAX_EFFECTS 60
 
-//flags for eclips.  If no flags are set, always plays
+// flags for eclips.  If no flags are set, always plays
 
-#define EF_CRITICAL		1   //this doesn't get played directly (only when mine critical)
-#define EF_ONE_SHOT		2   //this is a special that gets played once
-#define EF_STOPPED		4   //this has been stopped
-#define EF_ALTFMT			16
-#define EF_FROMPOG		32
-#define EF_INITIALIZED	64
+#define EF_CRITICAL 1 // this doesn't get played directly (only when mine critical)
+#define EF_ONE_SHOT 2 // this is a special that gets played once
+#define EF_STOPPED 4 // this has been stopped
+#define EF_ALTFMT 16
+#define EF_FROMPOG 32
+#define EF_INITIALIZED 64
 
 #pragma pack(push, 1)
 typedef struct tChangeEffect {
-	int16_t					nWallTexture;		//Which element of Textures array to replace.
-	int16_t					nObjectTexture;  //Which element of ObjBitmapPtrs array to replace.
+    int16_t nWallTexture; // Which element of Textures array to replace.
+    int16_t nObjectTexture; // Which element of ObjBitmapPtrs array to replace.
 } tChangeEffect;
 
 typedef struct tDestructionEffect {
-	int32_t					nTexture;
-	int32_t					nAnimation;
-	int32_t					nEffect;
-	fix						xSize;
+    int32_t nTexture;
+    int32_t nAnimation;
+    int32_t nEffect;
+    fix xSize;
 } tDestroyedEffect;
 
 typedef struct tEffectInfo {
-	tAnimationInfo			animationInfo;				//embedded tAnimationInfo
-	fix						xTimeLeft;					//for sequencing
-	int32_t					nCurFrame;					//for sequencing
-	tChangeEffect			changing;
-	int32_t					flags;						//see above
-	int32_t					nCriticalAnimation;		//use this clip instead of above one when mine critical
-	tDestructionEffect	destroyed;
-	int32_t					nSound;						//what sound this makes
-	int32_t					nSegment, nSide;			//what seg & CSide, for one-shot clips
+    tAnimationInfo animationInfo; // embedded tAnimationInfo
+    fix xTimeLeft; // for sequencing
+    int32_t nCurFrame; // for sequencing
+    tChangeEffect changing;
+    int32_t flags; // see above
+    int32_t nCriticalAnimation; // use this clip instead of above one when mine critical
+    tDestructionEffect destroyed;
+    int32_t nSound; // what sound this makes
+    int32_t nSegment, nSide; // what seg & CSide, for one-shot clips
 } tEffectInfo;
 #pragma pack(pop)
 
 typedef tEffectInfo D1_eclip;
 
 // Set up special effects.
-fix EffectFrameTime (tEffectInfo* pEffectInfo);
+fix EffectFrameTime(tEffectInfo *pEffectInfo);
 
 // Set up special effects.
-void InitSpecialEffects (void);
+void InitSpecialEffects(void);
 
 // Clear any active one-shots
-void ResetSpecialEffects (void);
+void ResetSpecialEffects(void);
 
 // Function called in game loop to do effects.
-void DoSpecialEffects (bool bSetup = false);
+void DoSpecialEffects(bool bSetup = false);
 
 // Restore bitmap
-void RestoreEffectBitmapIcons (void);
+void RestoreEffectBitmapIcons(void);
 
-//stop an effect from animating.  Show first frame.
-void StopEffect (int32_t effect_num);
+// stop an effect from animating.  Show first frame.
+void StopEffect(int32_t effect_num);
 
-//restart a stopped effect
-void RestartEffect (int32_t nEffect);
+// restart a stopped effect
+void RestartEffect(int32_t nEffect);
 
 /*
  * reads n tEffectInfo structs from a CFILE
  */
-void ReadEffectClip (tEffectInfo& effectInfo, CFile& cf);
-int32_t ReadEffectInfo (CArray<tEffectInfo>& effectInfo, int32_t n, CFile& cf);
+void ReadEffectClip(tEffectInfo &effectInfo, CFile &cf);
+int32_t ReadEffectInfo(CArray<tEffectInfo> &effectInfo, int32_t n, CFile &cf);
 
-CBitmap *SetupHiresAnim (int16_t *pFrame, int32_t nFrames, int32_t nBaseTex, int32_t bIndirect, int32_t bObj, int32_t *pnFrames, CBitmap* pBm = NULL);
-void ResetPogEffects (void);
-void CacheObjectEffects (void);
+CBitmap *SetupHiresAnim(
+    int16_t *pFrame,
+    int32_t nFrames,
+    int32_t nBaseTex,
+    int32_t bIndirect,
+    int32_t bObj,
+    int32_t *pnFrames,
+    CBitmap *pBm = NULL);
+void ResetPogEffects(void);
+void CacheObjectEffects(void);
 
 #endif /* _EFFECTS_H */

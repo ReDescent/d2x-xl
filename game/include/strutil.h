@@ -15,28 +15,28 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _STRUTILS_H
 
 #if defined(__unix__) || defined(__macosx__)
-#	include <string.h>
-#	define stricmp(a,b) strcasecmp(a,b)
-#	define strnicmp(a,b,c) strncasecmp(a,b,c)
+#include <string.h>
+#define stricmp(a, b) strcasecmp(a, b)
+#define strnicmp(a, b, c) strncasecmp(a, b, c)
 #else
-#	define stricmp		_stricmp
-#	define strlwr		_strlwr
-#	define strnicmp	_strnicmp
-#	define strlwr 		_strlwr
-#	define strupr 		_strupr
-#	define strdup 		_strdup
-#	define strrev 		_strrev
+#define stricmp _stricmp
+#define strlwr _strlwr
+#define strnicmp _strnicmp
+#define strlwr _strlwr
+#define strupr _strupr
+#define strdup _strdup
+#define strrev _strrev
 #endif
 
 #ifndef _WIN32
-char *strlwr (char *sl);
-char *strupr (char *sl);
-char *strrev (char *s1);
+char *strlwr(char *sl);
+char *strupr(char *sl);
+char *strrev(char *s1);
 #endif
 
-char *strcompress (char *str);
+char *strcompress(char *str);
 
-char* StrDup (const char* source);
+char *StrDup(const char *source);
 
 #if !(defined(_WIN32) && !defined(_WIN32_WCE))
 void _splitpath(char *name, char *drive, char *path, char *base, char *ext);
