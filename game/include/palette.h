@@ -193,8 +193,6 @@ class CPaletteManager {
     void StartEffect(bool bForce = false);
     void StopEffect(void);
     int32_t StopEffect(CPalette *palette);
-    int32_t EnableEffect(bool bReset = false);
-    int32_t DisableEffect(void);
     inline bool FadedOut(void) { return m_data.nSuspended <= 0; }
     void SetPrev(CPalette *palette) { m_data.prev = palette; }
 

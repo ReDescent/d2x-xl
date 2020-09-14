@@ -462,9 +462,7 @@ int32_t HandleSystemKey(int32_t key) {
 
         case KEY_ALTED + KEY_F2:
             if (!gameStates.app.bPlayerIsDead && !(IsMultiGame && !IsCoopGame)) {
-                paletteManager.DisableEffect();
                 saveGameManager.Save(0, 0, 0, NULL);
-                paletteManager.EnableEffect();
             }
             break; // 0 means not between levels.
 

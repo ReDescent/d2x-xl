@@ -127,7 +127,6 @@ void PauseGame(void) {
         gameData.appData.bGamePaused = 1;
         audio.PauseAll();
         StopTime();
-        paletteManager.DisableEffect();
         GameFlushInputs();
 #if defined(FORCE_FEEDBACK)
         if (TactileStick)
@@ -140,7 +139,6 @@ void PauseGame(void) {
 
 void ResumeGame(void) {
     GameFlushInputs();
-    paletteManager.EnableEffect();
     StartTime(0);
     audio.ResumeAll();
     gameStates.render.cockpit.nShieldFlash = 0;

@@ -1331,7 +1331,6 @@ void DoFinalBossFrame(void) {
     nFinalBossCountdownTime -= gameData.timeData.xFrame;
     if (nFinalBossCountdownTime > 0)
         RETURN;
-    paletteManager.DisableEffect();
     StartEndLevelSequence(0); // pretend we hit the exit CTrigger
     RETURN
 }

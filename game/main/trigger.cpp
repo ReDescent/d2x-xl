@@ -935,7 +935,6 @@ bool CTrigger::DoSecretExit(int32_t nPlayer) {
         gameData.demoData.nState = ND_STATE_PAUSED;
     audio.StopAll(); // kill the sounds
     audio.PlaySound(SOUND_SECRET_EXIT);
-    paletteManager.DisableEffect();
     EnterSecretLevel();
     gameData.reactorData.bDestroyed = 0;
     return true;

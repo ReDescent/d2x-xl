@@ -663,7 +663,6 @@ void UnloadLevelData(int32_t bRestore, bool bQuit) {
     ENTER(0, 0);
     PrintLog(1);
 
-    paletteManager.EnableEffect(true);
     if (bQuit)
         DestroyRenderThreads();
     ResetModFolders();
@@ -929,7 +928,6 @@ static void CleanupBeforeGame(int32_t nLevel, int32_t bRestore) {
     SetFreeCam(0);
     StopObserverMode();
     PrintLog(-1);
-    paletteManager.EnableEffect(true);
     RETURN
 }
 
@@ -1274,7 +1272,6 @@ void DoEndLevelScoreGlitz(int32_t network) {
         missionManager.szCurrentLevel,
         TXT_DESTROYED);
     Assert(c <= N_GLITZITEMS);
-    paletteManager.DisableEffect();
     if (network && IsNetworkGame)
         m.Menu(NULL, szTitle, NetworkEndLevelPoll2, NULL, BG_SUBMENU, BG_STARS);
     else
@@ -1907,7 +1904,6 @@ static int32_t PrepareSecretLevel(int32_t nLevel, bool bLoadTextures) {
         NDSetNewLevel(nLevel);
         NDRecordStartFrame(gameData.appData.nFrameCount, gameData.timeData.xFrame);
     } else if (gameData.demoData.nState != ND_STATE_PLAYBACK) {
-        paletteManager.DisableEffect();
         SetScreenMode(SCREEN_MENU); // go into menu mode
         if (gameStates.app.bFirstSecretVisit)
             DoSecretMessage(gameStates.app.bD1Mission ? TXT_ALTERNATE_EXIT : TXT_SECRET_EXIT);

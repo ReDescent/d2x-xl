@@ -780,8 +780,6 @@ int32_t CBriefing::LoadImage(char *szBriefScreen) {
     console.printf(CON_DBG, "Loading new briefing <%s>\n", szBriefScreen);
 #endif
     strcpy(m_info.szCurImage, szBriefScreen);
-    if (paletteManager.DisableEffect())
-        return 0;
     int32_t pcxResult = RenderImage(szBriefScreen);
     if (pcxResult != PCX_ERROR_NONE) {
 #if DBG

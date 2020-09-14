@@ -1415,7 +1415,6 @@ CMenu::Setup(int32_t nType, int32_t width, int32_t height, int32_t bTinyMode, pM
         }
     }
 
-    paletteManager.DisableEffect();
     m_bDone = 0;
     m_nTopChoice = 0;
 
@@ -1606,8 +1605,7 @@ int32_t CMenu::Menu(
         audio.ResumeSounds();
     if (gameStates.menus.nInMenu > 0)
         gameStates.menus.nInMenu--;
-    paletteManager.EnableEffect();
-    // paletteManager.StopEffect ();
+
     // FIXME: SDL2 PORT
     // SDL_EnableKeyRepeat (0, 0);
     if (gameStates.app.bGameRunning && IsMultiGame)

@@ -227,13 +227,8 @@ bool CCreditsRenderer::HandleInput(void) {
         SaveScreenShot(NULL, 0);
     } else if ((k == KEY_ESC) || (m_bDone > uint32_t(NUM_LINES))) {
         Destroy();
-        paletteManager.DisableEffect();
         paletteManager.Load(D2_DEFAULT_PALETTE, NULL);
         songManager.Play(SONG_TITLE, 1);
-#if 0
-	if (creditsOffscreenBuf != gameStates.render.vr.buffers.offscreen)
-		creditsOffscreenBuf->Destroy ();
-#endif
         ogl.SetBlending(false);
         gameStates.menus.nInMenu = 0;
         return false;

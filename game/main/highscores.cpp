@@ -617,7 +617,6 @@ void CScoreTable::Display(void) {
         G3_SLEEP(33);
     }
     // Restore background and exit
-    paletteManager.DisableEffect();
     GameFlushInputs();
     gameData.SetStereoOffsetType(nOffsetSave);
     Cleanup(0);

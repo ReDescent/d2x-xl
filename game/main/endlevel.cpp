@@ -234,7 +234,6 @@ void StartEndLevelSequence(int32_t bSecret) {
         }
     }
     // don't have movie or rendered sequence, fade out
-    paletteManager.DisableEffect();
     if (!bSecret)
         PlayerFinishedLevel(0); // done with level
 }
@@ -363,7 +362,6 @@ int32_t ChaseAngles(CAngleVector *cur_angles, CAngleVector *desired_angles) {
 void StopEndLevelSequence(void) {
     gameStates.render.nInterpolationMethod = 0;
 
-    paletteManager.DisableEffect();
     CGenericCockpit::Restore();
     gameStates.app.bEndLevelSequence = EL_OFF;
     PlayerFinishedLevel(0);

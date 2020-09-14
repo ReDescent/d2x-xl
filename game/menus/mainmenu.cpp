@@ -184,8 +184,6 @@ int32_t MainMenu(void) {
         }
     } while (gameStates.app.nFunctionMode == FMODE_MENU);
     PrintLog(-1);
-    if (gameStates.app.nFunctionMode == FMODE_GAME)
-        paletteManager.DisableEffect();
     controls.FlushInput();
     return nChoice;
 }
@@ -292,20 +290,17 @@ int32_t ExecMainMenuOption(CMenu &m, int32_t nChoice) {
         if (fs.FileSelector(TXT_SELECT_DEMO, demoPath, demoFile, 1))
             NDStartPlayback(demoFile);
     } else if (nChoice == m.IndexOf("view highscores")) {
-        paletteManager.DisableEffect();
         scoreManager.Show(-1);
     } else if (!gameStates.app.bNostalgia && (nChoice == m.IndexOf("play movies")))
         PlayMenuMovie();
     else if (nChoice == m.IndexOf("play songs"))
         PlayMenuSong();
     else if (nChoice == m.IndexOf("view credits")) {
-        paletteManager.DisableEffect();
         songManager.StopAll();
         creditsRenderer.Show(NULL);
     } else if (!gameStates.app.bNostalgia && (nChoice == m.IndexOf("precalc lightmaps"))) {
         PrecomputeMissionLightmaps();
     } else if (nChoice == m.IndexOf("quit")) {
-        paletteManager.DisableEffect();
         SetFunctionMode(FMODE_EXIT);
     } else
         return 0;

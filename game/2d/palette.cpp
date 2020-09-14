@@ -100,15 +100,7 @@ int32_t CPalette::ClosestColor(int32_t r, int32_t g, int32_t b) {
     int32_t nBestValue, nBestIndex, value;
     CComputedColor *pci, *pcj;
 
-#if 0
-    if (!palette)
-        palette = paletteManager.Default ();
-    if (!palette)
-        return -1;
-#endif
     n = m_nComputedColors;
-    // if (!n)
-    //	InitComputedColors (pList);
 
     //	If we've already computed this color, return it!
     pci = m_computedColors;
@@ -232,13 +224,7 @@ void CPaletteManager::Destroy(void) {
 void CPaletteManager::StartEffect(float red, float green, float blue, bool bForce) {
     if (m_data.nSuspended)
         return;
-#if 0
-    if (!gameStates.render.nLightingMethod) // || gameStates.menus.nInMenu || !gameStates.app.bGameRunning) {
-        red += float (m_data.nGamma) / 64.0f;
-        green += float (m_data.nGamma) / 64.0f;
-        blue += float (m_data.nGamma) / 64.0f;
-    }
-#endif
+
     m_data.effect.Red() = Clamp(red, 0.0f, 1.0f);
     m_data.effect.Green() = Clamp(green, 0.0f, 1.0f);
     m_data.effect.Blue() = Clamp(blue, 0.0f, 1.0f);
@@ -270,27 +256,6 @@ int32_t CPaletteManager::StopEffect(CPalette *palette) {
     StopEffect();
     m_data.current = Add(*palette);
     return 1;
-}
-
-//------------------------------------------------------------------------------
-
-int32_t CPaletteManager::DisableEffect(void) {
-#if 0 // obsolete
-    m_data.nSuspended++; obsolete
-#endif
-    return 0;
-}
-
-//------------------------------------------------------------------------------
-
-int32_t CPaletteManager::EnableEffect(bool bReset) {
-#if 0 // obsolete
-    if (bReset)
-        m_data.nSuspended = 0;
-    else if (m_data.nSuspended > 0)
-        m_data.nSuspended--;
-#endif
-    return 0;
 }
 
 //------------------------------------------------------------------------------

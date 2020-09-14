@@ -451,7 +451,6 @@ int32_t SetScreenMode(uint32_t sm) {
     gameStates.video.nScreenMode = sm;
     switch (gameStates.video.nScreenMode) {
     case SCREEN_MENU:
-        paletteManager.DisableEffect();
         gameStates.render.nFlashScale = 0;
         gameStates.render.bRenderIndirect = -1;
         ogl.ChooseDrawBuffer();

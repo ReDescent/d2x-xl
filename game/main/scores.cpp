@@ -315,7 +315,6 @@ void CScoreManager::Render(int32_t nCurItem) {
             fontManager.SetColorRGBi(RGBA_PAL2(c, c, c), 1, 0, 0);
             RenderItem(i, m_scores.stats[i]);
         }
-        paletteManager.EnableEffect();
         if ((nCurItem >= 0) && m_bHilite) {
             int32_t c = 7 + fadeValues[m_nFade];
             fontManager.SetColorRGBi(RGBA_PAL2(c, c, c), 1, 0, 0);
@@ -348,7 +347,6 @@ int32_t CScoreManager::HandleInput(int32_t &nCurItem) {
             // Reset m_scores...
             if (TextBox(NULL, BG_STANDARD, 2, TXT_NO, TXT_YES, TXT_RESET_HIGH_SCORES) == 1) {
                 CFile::Delete(GetFilename(), gameFolders.game.szData[0]);
-                paletteManager.DisableEffect();
                 Load();
             }
         }
@@ -401,7 +399,6 @@ void CScoreManager::Show(int32_t nCurItem) {
         t0 = SDL_GetTicks();
         Render(nCurItem);
     } while (HandleInput(nCurItem));
-    paletteManager.DisableEffect();
     GameFlushInputs();
     gameData.SetStereoOffsetType(nOffsetSave);
 }

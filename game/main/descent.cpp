@@ -414,7 +414,7 @@ void MainLoop(void) {
             GrabMouse(1, 1);
             RunGame();
             GrabMouse(0, 1);
-            paletteManager.EnableEffect(true);
+
             gameStates.app.bD1Mission = 0;
             if (gameData.multiplayer.autoNG.bValid)
                 gameStates.app.nFunctionMode = FMODE_EXIT;
@@ -810,7 +810,7 @@ int32_t SDLCALL main(int32_t argc, char *argv[]) {
     PrintLog(1, "Loading player profile\n");
     DoSelectPlayer();
     CreateSoundThread(); // needs to be repeated here due to dependency on data read in DoSelectPlayer()
-    paletteManager.DisableEffect();
+
     // handle automatic launch of a demo playback
     if (gameData.demoData.bAuto && !gameOpts->demo.bRevertFormat) {
         NDStartPlayback(gameData.demoData.fnAuto);

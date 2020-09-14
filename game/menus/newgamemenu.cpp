@@ -213,7 +213,6 @@ void LegacyNewGameMenu(void) {
     SavePlayerProfile();
     if (!DifficultyMenu())
         return;
-    paletteManager.DisableEffect();
     if (!StartNewGame(nNewLevel))
         SetFunctionMode(FMODE_MENU);
 }
@@ -450,7 +449,6 @@ int32_t NewGameMenu(void) {
         SavePlayerProfile();
     }
 
-    paletteManager.DisableEffect();
     if (!bMsnLoaded)
         missionManager.Load(nMission);
     if (!(gameStates.app.bPrecomputeLightmaps || StartNewGame(nLevel))) {
