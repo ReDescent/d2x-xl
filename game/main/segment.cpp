@@ -1269,11 +1269,7 @@ bool CSegment::IsSolid(int32_t nSide) {
 // For all used segments (number <= gameData.segData.nLastSegment), nSegment field must be != -1.
 
 void SetupSegments(fix xPlaneDistTolerance) {
-#if 0
-PLANE_DIST_TOLERANCE = DEFAULT_PLANE_DIST_TOLERANCE;
-#else
     PLANE_DIST_TOLERANCE = (xPlaneDistTolerance < 0) ? DEFAULT_PLANE_DIST_TOLERANCE : xPlaneDistTolerance;
-#endif
     gameOpts->render.nMathFormat = 0;
     RENDERPOINTS.Clear();
     for (int32_t i = 0; i <= gameData.segData.nLastSegment; i++)

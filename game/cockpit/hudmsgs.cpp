@@ -39,18 +39,6 @@ int32_t nModexHUDMsgs;
 // ----------------------------------------------------------------------------
 
 void ClearBackgroundMessages(void) {
-#if 0 
-	// Obsolete. You cannot shrink the game's output area below the screen or window size anymore in D2X-XL. 
-	// That feature has been removed because today's hardware is powerful enough to render Descent,
-	// and since you can run the program in windowed and fullscreen mode at lower than native screen resolution.
-if (((gameStates.render.cockpit.nType == CM_STATUS_BAR) || (gameStates.render.cockpit.nType == CM_FULL_SCREEN)) && 
-	  (nLastMsgYCrd != -1) && (gameData.renderData.scene.Top () >= 6)) {
-	gameData.renderData.frame.Activate ("ClearBackgroundMessages (frame)");
-	CopyBackgroundRect (0, nLastMsgYCrd, CCanvas::Current ()->Width (), nLastMsgYCrd + nLastMsgHeight - 1);
-	gameData.renderData.frame.Deactivate ();
-	nLastMsgYCrd = -1;
-	}
-#endif
     szDisplayedBackgroundMsg[0][0] = 0;
 }
 
@@ -106,36 +94,9 @@ void HUDRenderMessages(uint8_t nType) {
     }
 
     if (pMsgs->nMessages > 0) {
-        if (pMsgs->nColor == (uint32_t)-1)
+        if (pMsgs->nColor == (uint32_t)-1) {
             pMsgs->nColor = GREEN_RGBA;
-
-#if 0 
-	// Obsolete. You cannot shrink the game's output area below the screen or window size anymore in D2X-XL. 
-	// That feature has been removed because today's hardware is powerful enough to render Descent,
-	// and since you can run the program in windowed and fullscreen mode at lower than native screen resolution.
-	if (((gameStates.render.cockpit.nType == CM_STATUS_BAR) || (gameStates.render.cockpit.nType == CM_FULL_SCREEN)) && (gameData.renderData.scene.Top () >= (gameData.renderData.screen.Height () / 8))) {
-		// Only display the most recent pszMsg in this mode
-		int32_t nMsg = (pMsgs->nFirst + pMsgs->nMessages-1) % HUD_MAX_MSGS;
-		char* pszMsg = pMsgs->szMsgs [nMsg];
-
-		if (strcmp (szDisplayedBackgroundMsg [0], pszMsg)) {
-			int32_t ycrd = /*CCanvas::Current ()->Top () -*/ (SMALL_FONT->Height () + 2);
-			if (ycrd < 0)
-				ycrd = 0;
-			fontManager.SetCurrent (SMALL_FONT);
-			fontManager.Current ()->StringSize (pszMsg, w, h, aw);
-			ClearBackgroundMessages ();
-			if (pMsgs->nColor == (uint32_t) -1)
-				pMsgs->nColor = GREEN_RGBA;
-			fontManager.SetColorRGBi (pMsgs->nColor, 1, 0, 0);
-			pMsgs->nMsgIds [nMsg] = GrPrintF (pMsgs->nMsgIds + nMsg, (CCanvas::Current ()->Width ()-w) / 2, ycrd, pszMsg);
-			strcpy (szDisplayedBackgroundMsg [0], pszMsg);
-			nLastMsgYCrd = ycrd;
-			nLastMsgHeight = h;
-			}
-		} 
-	else
-#endif // obsolete
+        }
         {
             fontManager.SetCurrent(SMALL_FONT);
             if ((gameStates.render.cockpit.nType == CM_FULL_SCREEN) ||
@@ -159,27 +120,12 @@ void HUDRenderMessages(uint8_t nType) {
                 y = yStart + i * (h + 1);
                 if (nType)
                     y += ((2 * HUD_MAX_MSGS - 1) * (h + 1)) / 2;
-#if 1
                 GrString((CCanvas::Current()->Width() - w) / 2, y, pMsgs->szMsgs[n]);
-#else
-                pMsgs->nMsgIds[n] =
-                    GrString((CCanvas::Current()->Width() - w) / 2, y, pMsgs->szMsgs[n], pMsgs->nMsgIds + n);
-#endif
                 if (!gameOpts->render.cockpit.bSplitHUDMsgs)
                     y += h + 1;
             }
         }
     }
-#if 0
-else if (CurrentGameScreen ()->Mode () == BM_MODEX) {
-	if (nModexHUDMsgs) {
-		int32_t temp = nLastMsgYCrd;
-		nModexHUDMsgs--;
-		ClearBackgroundMessages ();			// If in status bar mode and no messages, then erase.
-		nLastMsgYCrd = temp;
-		}
-	}
-#endif
     fontManager.SetCurrent(GAME_FONT);
 }
 
@@ -305,15 +251,8 @@ void PlayerDeadMessage(void) {
             GrString(
                 0x8000,
                 (CCanvas::Current()->Height() - CCanvas::Current()->Font()->Height()) / 2 + h / 8,
-                TXT_GAME_OVER);
-#if 0
-      // Automatically exit death after 10 secs
-      if (gameData.timeData.xGame > gameStates.app.nPlayerTimeOfDeath + I2X (10)) {
-               SetFunctionMode (FMODE_MENU);
-               gameData.appData.SetGameMode (GM_GAME_OVER);
-               __asm int32_t 3; longjmp (gameExitPoint, 1);        // Exit out of game loop
-	      }
-#endif
+                TXT_GAME_OVER
+            );
         }
         fontManager.SetCurrent(GAME_FONT);
         if (pMsgs->nColor == (uint32_t)-1)

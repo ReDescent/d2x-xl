@@ -80,15 +80,6 @@ int32_t EquippedPlayerMissile(CObject *pObj, int32_t *nMissiles) {
 
 //-------------------------------------------------------------------------
 
-#if 0
-static inline int32_t WIFireTicks (int32_t nWeapon)
-{
-return 1000 * WI_FireWait (nWeapon) / I2X (1);
-}
-#endif
-
-//-------------------------------------------------------------------------
-
 void UpdateFiringSounds(void) {
     CWeaponState *pWeaponStates = gameData.multiplayer.weaponStates;
     tFiringData *pFiringData;

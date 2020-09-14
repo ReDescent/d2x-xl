@@ -222,26 +222,6 @@ void UpdateSpin(CObject *pObj) {
     case POW_QUADLASER:
         a.Set(I2X(1) / 12, 0, int16_t((xRotAngle + I2X(1) / 2) % I2X(1)));
         break;
-#if 0
-	case POW_LASER:
-	case POW_VULCAN:
-	case POW_SPREADFIRE:
-	case POW_PLASMA:
-	case POW_FUSION:
-	case POW_SUPERLASER:
-	case POW_HELIX:
-	case POW_PHOENIX:
-	case POW_OMEGA:
-	case POW_PROXMINE:
-	case POW_SMARTMINE:
-	case POW_BLUEFLAG:
-	case POW_REDFLAG:
-	case POW_FULL_MAP:
-	case POW_CONVERTER:
-	case POW_SLOWMOTION:
-	case POW_BULLETTIME:
-	case POW_QUADLASER:
-#endif
     default:
         a.Set(I2X(1) / 6, 0, xRotAngle);
         break;
@@ -293,14 +273,7 @@ int32_t CObject::PowerupToDevice(void) {
     if (!bHasModel && !IsMissile() && !(nModel && HaveReplacementModel(nModel)))
         RETVAL(0)
 
-#if 0 // DBG
-Orientation () = gameData.objData.pConsole->Orientation ();
-mType.physInfo.rotVel.v.coord.x =
-mType.physInfo.rotVel.v.coord.y =
-mType.physInfo.rotVel.v.coord.z = 0;
-#else
     SetupSpin(this, true);
-#endif
 #if DBG
     if (Index() == nDbgObj)
         BRP;
@@ -472,9 +445,6 @@ void DrawObjectBitmap(CObject *pObj, int32_t bmi0, int32_t bmi, int32_t iFrame, 
     CBitmap *pBm;
     CFloatVector color;
     int32_t nId = pObj->info.nId;
-#if 0
-	int32_t			bMuzzleFlash = 0;
-#endif
     int32_t bAdditive = 0, bEnergy = 0;
     fix xSize;
 
@@ -489,9 +459,6 @@ void DrawObjectBitmap(CObject *pObj, int32_t bmi0, int32_t bmi, int32_t iFrame, 
             bAdditive = ((nType == OBJ_FIREBALL) || (nType == OBJ_EXPLOSION))
                             ? /*glowRenderer.Available (GLOW_SPRITES) ? 2 :*/ 1
                             : ((nType == OBJ_WEAPON) && (pObj->info.nId == OMEGA_ID)) ? 2 : 0;
-#if 0
-		bMuzzleFlash = (nType == OBJ_FIREBALL) && ((nId == 11) || (nId == 12) || (nId == 15) || (nId == 22) || (nId == 86));
-#endif
         } else {
             if (nType == OBJ_POWERUP) {
                 if (IsEnergyPowerup(nId)) {
@@ -765,10 +732,6 @@ int32_t DrawHiresObject(CObject *pObj, fix xLight, fix *xEngineGlow) {
     int16_t nModel = 0;
     OOF::CModel *po;
 
-#if 0
-if (gameStates.render.bLoResShadows && (gameStates.render.nShadowPass == 2))
-	RETVAL (0)
-#endif
     if (pObj->info.nType == OBJ_DEBRIS)
         RETVAL(0)
     else if ((pObj->info.nType == OBJ_POWERUP) || (pObj->info.nType == OBJ_WEAPON)) {
@@ -1052,22 +1015,14 @@ static int32_t RenderWeaponModel(CObject *pObj, int32_t bSpectate) {
             // DoObjectSmoke (pObj);
             if (DrawPolygonObject(pObj, 0)) {
 #if RENDER_HITBOX
-#if 0
-			DrawShieldSphere (pObj, 0.66f, 0.2f, 0.0f, 0.4f, 0);
-#else
                 RenderHitbox(pObj, 0.5f, 0.0f, 0.6f, 0.4f);
-#endif
 #endif
                 thrusterFlames.Render(pObj);
             }
             gameData.modelData.vScale.SetZero();
         } else {
 #if RENDER_HITBOX
-#if 0
-		DrawShieldSphere (pObj, 0.66f, 0.2f, 0.0f, 0.4f, 0);
-#else
             RenderHitbox(pObj, 0.5f, 0.0f, 0.6f, 0.4f);
-#endif
 #endif
             if (pObj->info.nType != OBJ_WEAPON) {
                 if (!DrawPolygonObject(pObj, 0))
@@ -1294,13 +1249,6 @@ int32_t RenderObject(CObject *pObj, int32_t nWindow, int32_t bForce) {
             (gameStates.render.nShadowPass != 2) && !gameStates.app.bPlayerIsDead &&
             (nWindow || ((IsMultiGame && !IsCoopGame && (!EGI_FLAG(bEnableCheats, 0, 0, 0) || COMPETITION)) ||
                          (!gameStates.render.bChaseCam && (gameStates.app.bEndLevelSequence < EL_LOOKBACK))))) {
-#endif
-#if 0
-		if (gameOpts->render.particles.bPlayers) {
-			SEM_ENTER (SEM_SMOKE)
-			DoPlayerSmoke (pObj, -1);
-			SEM_LEAVE (SEM_SMOKE)
-			}
 #endif
             RETVAL(0)
         }

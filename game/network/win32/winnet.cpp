@@ -274,16 +274,8 @@ int32_t IpxGetPacketData(uint8_t *data) {
             reinterpret_cast<ipx_socket_t *>(&ipxSocketData),
             buf,
             sizeof(buf),
-            &networkData.packetSource);
-#if 0 // DBG
-	HUDMessage (0, "received %d bytes from %d.%d.%d.%d:%u", 
-					size,
-					networkData.packetSource.src_node [0],
-					networkData.packetSource.src_node [1],
-					networkData.packetSource.src_node [2],
-					networkData.packetSource.src_node [3],
-					*(reinterpret_cast<uint16_t*> (networkData.packetSource.src_node + 4)));
-#endif
+            &networkData.packetSource
+        );
         if (dataSize < 0)
             break;
         if (dataSize < 6)

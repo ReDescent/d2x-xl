@@ -189,11 +189,6 @@ int32_t RenderWeaponCorona(
 
 // -----------------------------------------------------------------------------
 
-#if 0
-static CFloatVector vTrailOffs [2][4] = {{{{0,0,0}},{{0,-10,-5}},{{0,-10,-50}},{{0,0,-50}}},
-											 {{{0,0,0}},{{0,10,-5}},{{0,10,-50}},{{0,0,-50}}}};
-#endif
-
 void RenderLightTrail(CObject *pObj) {
     ENTER(1, 0);
     CFloatVector color, *pColor;

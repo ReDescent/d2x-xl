@@ -66,23 +66,6 @@ static void WaitWithUpdate(CFaceColor *pColor) {
 
 static int32_t UpdateColor(CFaceColor *pColor) {
     int32_t bUpdate;
-
-#if 0
-
-#pragma omp critical(UpdateColor)
-{
-bUpdate = (pColor->index >= 0) && (pColor->index != gameStates.render.nFrameFlipFlop + 1);
-}
-if (bUpdate) { // another thread is already updating this vertex
-	pColor->index = -1;
-	return 1;
-	}
-while (pColor->index < 0) // wait until that thread is done
-	G3_SLEEP (0);
-return 0;
-
-#else
-
 #pragma omp critical(UpdateColor)
     {
         bUpdate = (pColor->index >= 0) && (pColor->index != gameStates.render.nFrameFlipFlop + 1);
@@ -90,8 +73,6 @@ return 0;
             pColor->index = -1; // this thread is the first to light this vertex this frame
     }
     return bUpdate;
-
-#endif
 }
 
 // -----------------------------------------------------------------------------------
@@ -109,9 +90,6 @@ int32_t SegmentIsVisible(CSegment *pSeg) {
     for (int32_t i = 0; i < 8; i++) {
         if (vertices[i] == 0xFFFF)
             continue;
-#if 0 // DBG
-	RENDERPOINTS [vertices [i]].m_flags = 0;
-#endif
         code &= RENDERPOINTS[vertices[i]].ProjectAndEncode(transformation, vertices[i]);
         if (!code)
             return 1;
@@ -137,9 +115,6 @@ int32_t SegmentIsVisible(CSegment *pSeg, CTransformation &transformation, int32_
     for (int32_t i = 0; i < 8; i++) {
         if (vertices[i] == 0xFFFF)
             continue;
-#if 0 // DBG
-	RENDERPOINTS [vertices [i]].m_flags = 0;
-#endif
         if (vertices[i] < gameData.segData.nVertices)
             code &= points[vertices[i]].ProjectAndEncode(transformation, vertices[i]);
         if (!code)
@@ -245,9 +220,6 @@ void ComputeDynamicFaceLight(int32_t nStart, int32_t nEnd, int32_t nThread) {
     CSegFace *pFace;
     CFloatVector *pColor;
     CFaceColor faceColor[3];
-#if 0
-	uint8_t			nThreadFlags [3] = {1 << nThread, 1 << !nThread, ~(1 << nThread)};
-#endif
     int32_t nVertex, nSegment, nSide;
     float fAlpha;
     int32_t h, i, nColor, nLights = 0;
@@ -410,21 +382,11 @@ void FixTriangleFan(CSegment *pSeg, CSegFace *pFace) {
 
 void ComputeDynamicQuadLight(int32_t nStart, int32_t nEnd, int32_t nThread) {
     ENTER(1, nThread);
-#if 0
-	static int32_t bSemaphore [2] = {0, 0};
-
-while (bSemaphore [nThread])
-	G3_SLEEP (0);
-bSemaphore [nThread] = 1;
-#endif
     CSegment *pSeg;
     tSegFaces *pSegFace;
     CSegFace *pFace;
     CFloatVector *pColor;
     CFaceColor faceColor[3];
-#if 0
-	uint8_t			nThreadFlags [3] = {1 << nThread, 1 << !nThread, ~(1 << nThread)};
-#endif
     int32_t nVertex, nSegment, nSide;
     float fAlpha;
     int32_t h, i, j, nColor, nLights = 0, bVertexLight = gameStates.render.bPerPixelLighting != 2;
@@ -541,9 +503,6 @@ bSemaphore [nThread] = 1;
         gpgpuLighting.Compute(-1, 2, NULL);
 #endif
     ogl.SetTransform(0);
-#if 0
-bSemaphore [nThread] = 0;
-#endif
     RETURN
 }
 
@@ -557,9 +516,6 @@ void ComputeDynamicTriangleLight(int32_t nStart, int32_t nEnd, int32_t nThread) 
     tFaceTriangle *pTriangle;
     CFloatVector *pColor;
     CFaceColor faceColor[3];
-#if 0
-	uint8_t			nThreadFlags [3] = {1 << nThread, 1 << !nThread, ~(1 << nThread)};
-#endif
     int32_t nVertex, nSegment, nSide;
     float fAlpha;
     int32_t h, i, j, k, nIndex, nColor, nLights = 0;
@@ -733,9 +689,6 @@ void ComputeStaticFaceLight(int32_t nStart, int32_t nEnd, int32_t nThread) {
     CSegFace *pFace;
     CFloatVector *pColor;
     CFaceColor c, faceColor[3];
-#if 0
-	uint8_t			nThreadFlags [3] = {1 << nThread, 1 << !nThread, ~(1 << nThread)};
-#endif
     int32_t nVertex, nSegment, nSide;
     fix xLight;
     float fAlpha;

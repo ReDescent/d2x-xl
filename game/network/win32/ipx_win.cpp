@@ -30,9 +30,9 @@ static int32_t ipx_win_GetMyAddress(void) {
 	char buf[256];
 	uint8_t *qhbuf;
 
-if (gethostname(buf,sizeof(buf))) 
+if (gethostname(buf,sizeof(buf)))
 	FAIL("Error getting my hostname");
-if (!(qhbuf = QueryHost(buf))) 
+if (!(qhbuf = QueryHost(buf)))
 	FAIL("Querying my own hostname \"%s\"",buf);
 	ipx_MyAddress.SetServer (0);
 	ipx_MyAddress.SetNode (qhbuf);

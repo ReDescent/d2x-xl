@@ -324,34 +324,16 @@ int32_t BeginRenderFaces(int32_t nType) {
     ogl.SetDepthWrite(1);
     ogl.SetFaceCulling(true);
     CTexture::Wrap(GL_REPEAT);
-#if 0
-if (nType == RENDER_TYPE_ZCULL) {
-	ogl.ColorMask (0,0,0,0,1);
-	glDepthMask (1);
-	ogl.SetDepthMode (GL_LEQUAL); 
-	}
-else
-#endif
     {
         ogl.ColorMask(1, 1, 1, 1, 1);
-#if 0
-	glDepthMask (0);
-#endif
         if (nType == RENDER_TYPE_CORONAS) {
             if (glareRenderer.Style())
                 glareRenderer.LoadShader(10, 1);
             ogl.EnableClientStates(1, 0, 0, GL_TEXTURE0);
             ogl.SetBlendMode(OGL_BLEND_ADD);
-#if 0
-		ogl.SetDepthMode (GL_LEQUAL);
-#endif
             RETVAL(0)
         }
-#if 0
-	ogl.SetDepthMode (GL_EQUAL);
-#else
         ogl.SetDepthMode(GL_LEQUAL);
-#endif
     }
 
 #if GEOMETRY_VBOS
@@ -451,9 +433,6 @@ RETVAL(1)
 
 void EndRenderFaces(void) {
     ENTER(0, 0);
-#if 0
-G3FlushFaceBuffer (1);
-#endif
     ogl.ResetClientStates();
     shaderManager.Deploy(-1);
     ogl.DisableLighting();
@@ -625,20 +604,12 @@ void RenderCoronaFaceList(CFaceListIndex &flx, int32_t nPass) {
 #if DBG
                 if ((nSegment == nDbgSeg) && ((nDbgSide < 0) || (pFace->m_info.nSide == nDbgSide)))
                     BRP;
-#if 0
-			else if (nDbgSeg >= 0)
-				continue;
-#endif
 #endif
                 glareRenderer.Visibility(pFace->m_info.nCorona);
             } else if (nPass == 2) {
 #if DBG
                 if ((nSegment == nDbgSeg) && ((nDbgSide < 0) || (pFace->m_info.nSide == nDbgSide)))
                     BRP;
-#if 0
-			else if (nDbgSeg >= 0)
-				continue;
-#endif
 #endif
                 glBeginQuery(
                     GL_SAMPLES_PASSED_ARB,
@@ -650,10 +621,6 @@ void RenderCoronaFaceList(CFaceListIndex &flx, int32_t nPass) {
 #if DBG
                 if ((nSegment == nDbgSeg) && ((nDbgSide < 0) || (pFace->m_info.nSide == nDbgSide)))
                     BRP;
-#if 0
-			else if (nDbgSeg >= 0)
-				continue;
-#endif
 #endif
                 glBeginQuery(
                     GL_SAMPLES_PASSED_ARB,

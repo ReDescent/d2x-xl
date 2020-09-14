@@ -121,10 +121,7 @@ void CRadar::RenderBackground(void) {
     glScalef(m_radius * 1.2f, m_radius * 1.2f, m_radius * 1.2f);
     glColor4f(0.0f, 0.0f, 0.0f, 0.5f);
     ogl.FlushBuffers(GL_POLYGON, RADAR_SLICES, 3);
-#if 0
-glColor4f (0.125f, 0.125f, 0.125f, 0.5f);
-ogl.FlushBuffers (GL_LINE_LOOP, RADAR_SLICES, 3);
-#endif
+
     transformation.End(__FILE__, __LINE__);
     ogl.SetTransform(0);
     // glPopMatrix ();
@@ -198,34 +195,6 @@ void CRadar::RenderDevice(void) {
     glScalef(0.5f, 0.5f, 0.5f);
     ogl.FlushBuffers(GL_LINE_LOOP, RADAR_SLICES, 3);
 
-#if 0
-CFloatVector	vAxis [8], vOffset;
-
-// render 4 int16_t lines pointing from the outer ring of the radar dish to its center
-// disabled as it makes the radar look too cluttered
-pv = &ogl.VertexBuffer () [0];
-
-vAxis [0] = pv [RADAR_SLICES / 8];
-vAxis [1] = pv [3 * RADAR_SLICES / 8];
-vAxis [2] = pv [5 * RADAR_SLICES / 8];
-vAxis [3] = pv [7 * RADAR_SLICES / 8];
-
-vOffset = (vAxis [2] - vAxis [0]) * 0.1625f;
-pv [0] = vAxis [0];
-pv [1] = vAxis [0] + vOffset;
-pv [2] = vAxis [2];
-pv [3] = vAxis [2] - vOffset;
-vOffset = (vAxis [3] - vAxis [1]) * 0.1625f;
-pv [4] = vAxis [1];
-pv [5] = vAxis [1] + vOffset;
-pv [6] = vAxis [3];
-pv [7] = vAxis [3] - vOffset;
-
-glScalef (3.0f, 3.0f, 3.0f);
-glColor4f (0.0f, 0.6f, 0.0f, 0.5f);
-ogl.FlushBuffers (GL_LINES, 8, 3);
-#endif
-
     transformation.End(__FILE__, __LINE__);
     // glPopMatrix ();
 
@@ -277,11 +246,7 @@ void CRadar::RenderBlip(CObject *pObj, float r, float g, float b, float a, int32
     v[1].v.coord.x = v[0].v.coord.x;
     v[1].v.coord.y = m_offset.v.coord.y;
     v[1].v.coord.z = v[0].v.coord.z;
-#if 0 // increase distance from radar plane
-CFloatVector hv = v [0] - v [1];
-hv *= 0.5f;
-v [0] += hv;
-#endif
+
     s = 1.0f - fabs(m) / RADAR_RANGE;
     h = 3 * s;
     a += a * h;
@@ -386,54 +351,6 @@ void CRadar::Render(void) {
     ogl.SetLineSmooth(true);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glLineWidth(m_lineWidth);
-#if 0
-// render the radar to a texture and render that texture to the HUD (unfinished)
-if (ogl.m_features.bRenderToTexture.Available ()) {
-	//static tTexCoord2f texCoord [4] = {{{0.3f, 0.3f}}, {{0.3f, 0.7f}}, {{0.7f, 0.7f}}, {{0.7f, 0.3f}}};
-	static float texCoord [4][2] = {{0,0},{0,1},{1,1},{1,0}};
-	static float verts [4][2] = {{0.2f, 1.0f}, {0.2f, 0.8f}, {0.4f, 0.8f}, {0.4f, 1.0f}};
-
-	ogl.SelectGlowBuffer ();
-	glClearColor (0,0,0,0);
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	ogl.SetDepthTest (false);
-	RenderObjects (1);
-	RenderDevice ();
-	RenderObjects (0);
-	ogl.SetDepthTest (true);
-
-	glMatrixMode (GL_MODELVIEW);
-	// glPushMatrix ();
-	glLoadIdentity ();//clear matrix
-	glMatrixMode (GL_PROJECTION);
-	// glPushMatrix ();
-	glLoadIdentity ();//clear matrix
-	glOrtho (0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
-	ogl.SetViewport (0, 0, gameData.renderData.screen.Width (), gameData.renderData.screen.Height ());
-
-	ogl.ChooseDrawBuffer ();
-#if 0
-	ogl.RenderScreenQuad (ogl.DrawBuffer (2)->ColorBuffer ());
-#else
-	ogl.EnableClientStates (1, 0, 0, GL_TEXTURE0);
-	ogl.BindTexture (ogl.DrawBuffer (2)->ColorBuffer ());
-	OglTexCoordPointer (2, GL_FLOAT, 0, texCoord);
-	OglVertexPointer (2, GL_FLOAT, 0, verts);
-
-	ogl.SetDepthMode (GL_ALWAYS);
-	glColor3f (1,1,1);
-	OglDrawArrays (GL_QUADS, 0, 4);
-	ogl.SetDepthMode (GL_LEQUAL);
-
-	glMatrixMode (GL_PROJECTION);
-	// glPopMatrix ();
-	glMatrixMode (GL_MODELVIEW);
-	// glPopMatrix ();
-
-#endif
-	}
-else
-#endif
     {
         ogl.SetDepthTest(false);
         ComputeCenter();

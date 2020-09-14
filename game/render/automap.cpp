@@ -372,21 +372,6 @@ void CAutomap::DrawLevelId(void) {
     int32_t w, h, aw, offs = m_data.bHires ? 10 : 5;
     char szInfo[3][200];
 
-#if 0
-if (gameOpts->app.bExpertMode) {
-	if (CCanvas::Current ()->Width () >= 1024) {
-		*szInfo [2] = '\0';
-		strcpy (szInfo [1], "ALT+A: Sparks   ALT+B: Bright   ALT+C: Coronas   ALT+G: Grayout ALT+L: Lightnings");
-		strcpy (szInfo [0], "ALT+P: Powerups   ALT+R: Robots   ALT+S: Smoke   ALT+T: Textures/Wireframe   CTRL+T: Teleport");
-		}
-	else {
-		strcpy (szInfo [2], "ALT+A: Sparks   ALT+B: Bright   ALT+C: Coronas   ALT+G: Grayout");
-		strcpy (szInfo [1], "ALT+L: Lightnings   ALT+P: Powerups   ALT+R: Robots");
-		strcpy (szInfo [0], "ALT+S: Smoke   ALT+T: Textures/wireframe   CTRL+T: Teleport");
-		}
-	}
-else
-#endif
     {
         if (CCanvas::Current()->Width() >= 1024) {
             *szInfo[2] = *szInfo[1] = '\0';
@@ -930,41 +915,6 @@ int32_t CAutomap::ReadControls(int32_t nLeaveMode, int32_t bDone, int32_t &bPaus
             break;
 #endif
 
-#if 0
-		case KEY_ALTED + KEY_A:
-			gameOpts->render.automap.bSparks = !gameOpts->render.automap.bSparks;
-			break;
-
-		case KEY_ALTED + KEY_B:
-			if (Texturing () & 1)
-				gameOpts->render.automap.bBright = !gameOpts->render.automap.bBright;
-			break;
-
-		case KEY_ALTED + KEY_C:
-			gameOpts->render.automap.bCoronas = !gameOpts->render.automap.bCoronas;
-			break;
-
-		case KEY_ALTED + KEY_G:
-			gameOpts->render.automap.bGrayOut = !gameOpts->render.automap.bGrayOut;
-			break;
-
-		case KEY_ALTED + KEY_L:
-			gameOpts->render.automap.bLightning = !gameOpts->render.automap.bLightning;
-			break;
-
-		case KEY_ALTED + KEY_P:
-			extraGameInfo [IsMultiGame].bPowerupsOnRadar = !extraGameInfo [IsMultiGame].bPowerupsOnRadar;
-			break;
-
-		case KEY_ALTED + KEY_R:
-			extraGameInfo [IsMultiGame].bRobotsOnRadar = !extraGameInfo [IsMultiGame].bRobotsOnRadar;
-			break;
-
-		case KEY_ALTED + KEY_S:
-			gameOpts->render.automap.bParticles = !gameOpts->render.automap.bParticles;
-			break;
-#endif
-
         case KEY_ALTED + KEY_ENTER:
         case KEY_ALTED + KEY_PADENTER:
             GrToggleFullScreenGame();
@@ -1054,12 +1004,6 @@ void CAutomap::DoFrame(int32_t nKeyCode, int32_t bRadar) {
         t1 = t2;
         PROF_END(ptFrame)
     } while (!bDone);
-#if 0
-GrFreeCanvas (levelNumCanv);
-levelNumCanv = NULL;
-GrFreeCanvas (levelNameCanv);
-levelNameCanv = NULL;
-#endif
 
     if (!gameStates.menus.nInMenu) {
         GameFlushInputs();

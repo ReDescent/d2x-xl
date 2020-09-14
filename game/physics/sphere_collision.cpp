@@ -46,19 +46,6 @@ int32_t ijTable[3][2] = {
 // return 0 if point inside triangle, otherwise sides point is behind as bit code
 
 uint8_t PointIsOutsideFace(CFixVector *vRef, CFixVector *vertices, int16_t nVerts) {
-#if 0
-
-CFixVector n1 = CFixVector::Normal (vertices [0], vertices [1], *vRef);
-CFixVector n2 = CFixVector::Normal (vertices [1], vertices [2], *vRef);
-if (CFixVector::Dot (n1, n2) < PLANE_DIST_TOLERANCE)
-	return true;
-CFixVector n3 = CFixVector::Normal (vertices [2], vertices [0], *vRef);
-if (CFixVector::Dot (n2, n3) < PLANE_DIST_TOLERANCE)
-	return true;
-return false;
-
-#else
-
     CFixVector v0 = vertices[2] - vertices[0];
     CFixVector v1 = vertices[1] - vertices[0];
     CFixVector v2 = *vRef - vertices[0];
@@ -70,27 +57,12 @@ return false;
     fix v = FixMul(dot12 - FixMul(dot01, dot02), invDenom);
     // Check if point is in triangle
     return int32_t(u < 0) + (int32_t(v < 0) << 1) + (int32_t(u + v > I2X(1)) << 2);
-
-#endif
 }
 
 // -----------------------------------------------------------------------------
 // see if a point (pRef) is inside a triangle using barycentric method
 
 uint8_t PointIsOutsideFace(CFixVector *vRef, uint16_t *nVertIndex, int16_t nVerts) {
-#if 0
-
-CFixVector n1 = CFixVector::Normal (VERTICES [nVertIndex [0]], VERTICES [nVertIndex [1]], *vRef);
-CFixVector n2 = CFixVector::Normal (VERTICES [nVertIndex [1]], VERTICES [nVertIndex [2]], *vRef);
-if (CFixVector::Dot (n1, n2) < PLANE_DIST_TOLERANCE)
-	return true;
-CFixVector n3 = CFixVector::Normal (VERTICES [nVertIndex [2]], VERTICES [nVertIndex [0]], *vRef);
-if (CFixVector::Dot (n2, n3) < PLANE_DIST_TOLERANCE)
-	return true;
-return false;
-
-#else
-
     CFixVector v0 = VERTICES[nVertIndex[2]] - VERTICES[nVertIndex[0]];
     CFixVector v1 = VERTICES[nVertIndex[1]] - VERTICES[nVertIndex[0]];
     CFixVector v2 = *vRef - FVERTICES[nVertIndex[0]];
@@ -105,29 +77,12 @@ return false;
     // Check if point is in triangle
     return int32_t(u < -PLANE_DIST_TOLERANCE) + (int32_t(v < -PLANE_DIST_TOLERANCE) << 1) +
            (int32_t(u + v > I2X(1) + PLANE_DIST_TOLERANCE) << 2); // compensate for numerical errors
-
-#endif
 }
 
 // -----------------------------------------------------------------------------
 // see if a point (pRef) is inside a triangle using barycentric method
 
 uint8_t PointIsOutsideFace(CFloatVector *vRef, uint16_t *nVertIndex, int16_t nVerts) {
-#if 1
-#if 0
-
-
-CFloatVector n1 = CFloatVector::Normal (FVERTICES [nVertIndex [0]], FVERTICES [nVertIndex [1]], *vRef);
-CFloatVector n2 = CFloatVector::Normal (FVERTICES [nVertIndex [1]], FVERTICES [nVertIndex [2]], *vRef);
-if (CFloatVector::Dot (n1, n2) < 0.999999)
-	return true;
-CFloatVector n3 = CFloatVector::Normal (FVERTICES [nVertIndex [2]], FVERTICES [nVertIndex [0]], *vRef);
-if (CFloatVector::Dot (n2, n3) < 0.999999)
-	return true;
-return false;
-
-#else
-
     CFloatVector v0 = FVERTICES[nVertIndex[2]] - FVERTICES[nVertIndex[0]];
     CFloatVector v1 = FVERTICES[nVertIndex[1]] - FVERTICES[nVertIndex[0]];
     CFloatVector v2 = *vRef - FVERTICES[nVertIndex[0]];
@@ -139,66 +94,11 @@ return false;
     float invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);
     float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
     float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-// Check if point is in triangle
-#if 0 // DBG
-CFloatVector p = FVERTICES [nVertIndex [0]];
-p += v0 * u;
-p += v1 * v;
-p -= *vRef;
-float l = p.Mag ();
-#endif
+    // Check if point is in triangle
+
+    // compensate for numerical errors
     return (int32_t(u < -0.00001f)) + ((int32_t(v < -0.00001f)) << 1) +
-           ((int32_t(u + v > 1.00001f)) << 2); // compensate for numerical errors
-
-#endif
-
-#else
-
-    CFloatVector t, *v0, *v1;
-    int32_t i, j, nEdge, biggest;
-    float check_i, check_j;
-    CFloatVector2 vEdge, vCheck;
-
-    // now do 2d check to see if vRef is in side
-    // project polygon onto plane by finding largest component of Normal
-    t.v.coord.x = float(fabs(vNormal.v.coord.x));
-    t.v.coord.y = float(fabs(vNormal.v.coord.y));
-    t.v.coord.z = float(fabs(vNormal.v.coord.z));
-    if (t.v.coord.x > t.v.coord.y) {
-        if (t.v.coord.x > t.v.coord.z)
-            biggest = 0;
-        else
-            biggest = 2;
-    } else {
-        if (t.v.coord.y > t.v.coord.z)
-            biggest = 1;
-        else
-            biggest = 2;
-    }
-    if (vNormal.v.vec[biggest] > 0) {
-        i = ijTable[biggest][0];
-        j = ijTable[biggest][1];
-    } else {
-        i = ijTable[biggest][1];
-        j = ijTable[biggest][0];
-    }
-    // now do the 2d problem in the i, j plane
-    check_i = vRef->v.vec[i];
-    check_j = vRef->v.vec[j];
-    v1 = FVERTICES + nVertIndex[0];
-    for (nEdge = 1; nEdge <= nVerts; nEdge++) {
-        v0 = v1; // FVERTICES + nVertIndex [nEdge];
-        v1 = FVERTICES + nVertIndex[nEdge % nVerts];
-        vEdge.x = v1->v.vec[i] - v0->v.vec[i];
-        vEdge.y = v1->v.vec[j] - v0->v.vec[j];
-        vCheck.x = check_i - v0->v.vec[i];
-        vCheck.y = check_j - v0->v.vec[j];
-        if (vCheck.x * vEdge.y - vCheck.y * vEdge.x < -X2F(PLANE_DIST_TOLERANCE))
-            return false;
-    }
-    return true;
-
-#endif
+           ((int32_t(u + v > 1.00001f)) << 2);
 }
 
 // -----------------------------------------------------------------------------
@@ -304,69 +204,22 @@ int32_t FindPlaneLineIntersection(
     CFixVector *vNormal,
     CFixVector *p0,
     CFixVector *p1,
-    fix rad) {
-#if 0 // FLOAT_COLLISION_MATH
-// for some reason I haven't been able to figure, the following code is not equivalent to the fix point arithmetic code below it
-	CFloatVector n, u, w;
-
-n.Assign (*vNormal);
-u.Assign (*p1 - *p0);
-float den = -CFloatVector::Dot (n, u) - X2F (rad);
-if (fabs (den) < FLOAT_DIST_TOLERANCE) // ~ parallel
-	return 0;
-w.Assign (*p0 - *vPlane);
-float num = CFloatVector::Dot (n, w);
-float s = num / den;
-#if 1
-if (s > 1.0f) // compensate small numerical errors
-#else
-if ((s < -FLOAT_DIST_TOLERANCE) || (s > 1.0f + FLOAT_DIST_TOLERANCE)) // compensate small numerical errors
-#endif
-	return 0;
-u *= s;
-vIntersection.Assign (u);
-vIntersection += *p0;
-return 1;
-
-#else
-
+    fix rad
+) {
     CFixVector u = *p1 - *p0;
     fix den = -CFixVector::Dot(*vNormal, u);
     if (!den) // moving parallel to face's plane
         return 0;
     CFixVector w = *p0 - *vPlane;
     fix num = CFixVector::Dot(*vNormal, w) - rad; // distance of p0 to plane
-// do check for potential overflow
-#if 0
-if (den > 0) {
-	if (num > den) { //frac greater than one
-		return 0;
-		}
-	}
-else {
-	if (num < den) {
-		return 0;
-		}
-	}
-#if 0
-if (labs (num) >> 15 >= labs (den)) 
-	return 0;
-#endif
-u *= FixDiv (num, den);
-#else
+
+    // do check for potential overflow
     fix s = FixDiv(num, den);
-#if 1
     if (s > I2X(1))
-#else
-    if ((s < PLANE_DIST_TOLERANCE) || (s > I2X(1) + PLANE_DIST_TOLERANCE))
-#endif
         return 0;
     u *= s;
-#endif
     vIntersection = *p0 + u;
     return 1;
-
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -917,16 +770,8 @@ fix CheckVectorObjectCollision(
     }
     hitData.vPoint = vHit;
     hitData.vNormal = vNormal;
-#if 0 // DBG
-CreatePowerup (POW_SHIELD_BOOST, pThisObj->Index (), pOtherObj->info.nSegment, vHit, 1, 1);
-#endif
-    if (!bCheckVisibility && (pOtherObj->info.nType != OBJ_POWERUP)
-#if 0 // well, the Guidebot should actually cause critical damage when ramming the player, shouldn't it?
-	 && ((pOtherObj->info.nType != OBJ_ROBOT) || !ROBOTINFO (pOtherObj->info.nId)->companion)
-#endif
-    ) {
+    if (!bCheckVisibility && (pOtherObj->info.nType != OBJ_POWERUP)) {
         vHit = pThisObj->RegisterHit(vHit, nModel);
-        // vHit = pOtherObj->RegisterHit (vHit, nModel);
     }
     RETVAL(dist);
 }
@@ -1194,10 +1039,6 @@ int32_t ComputeHitpoint(
         // for each face we are on the back of, check if intersected
         for (nSide = 0, bit = 1; (nSide < 6) && (endMask >= bit); nSide++) {
             int32_t nChildSeg = pSeg->m_children[nSide];
-#if 0
-		if (bCheckVisibility && (0 > nChildSeg))	// poking through a wall into the void around the level?
-			continue;
-#endif
             int32_t nFaces = pSeg->Side(nSide)->m_nFaces;
             for (iFace = 0; iFace < 2; iFace++, bit <<= 1) {
                 if (nChildSeg == nEntrySeg) // must be executed here to have bit shifted
@@ -1308,14 +1149,6 @@ int32_t ComputeHitpoint(
                             if (pSeg->Masks(curHit.vPoint, hitQuery.radP1).m_center)
                                 gameData.collisionData.hitResult.nAltSegment = hitQuery.nSegment;
                             else {
-#if 0
-							CFixVector vMoved = *hitQuery.p1 - *hitQuery.p0;
-							CFixVector::Normalize (vMoved);
-							if (CFixVector::Dot (curHit.vNormal, vMoved) > 0) { // both points on same side of face and moving away from face
-								nFaceHitType = 0;
-								continue; 
-								}
-#endif
                                 bestHit.nSegment = hitQuery.nSegment;
                             }
                             dMin = d;
@@ -1593,12 +1426,6 @@ int32_t PointSeesPoint(
 {
     ENTER(1, nThread);
 
-#if 0
-
-return gameData.segData.faceGrid.PointSeesPoint (*p0, *p1, nDestSeg, nDestSide);
-
-#else
-
     static uint32_t segVisList[MAX_THREADS][MAX_SEGMENTS_D2X];
     static uint32_t segVisFlags[MAX_THREADS] =
         {0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF};
@@ -1609,9 +1436,6 @@ return gameData.segData.faceGrid.PointSeesPoint (*p0, *p1, nDestSeg, nDestSide);
     uint32_t *bVisited = segVisList[nThread];
 
     if (!nDepth) {
-#if 0
-	memset (bVisited, 0, gameData.segData.nSegments * sizeof (*bVisited));
-#else
 #if DBG
         if ((nDbgSeg >= 0) && (nStartSeg == nDbgSeg))
             BRP;
@@ -1620,7 +1444,6 @@ return gameData.segData.faceGrid.PointSeesPoint (*p0, *p1, nDestSeg, nDestSide);
             ++segVisFlags[nThread];
             memset(bVisited, 0, gameData.segData.nSegments * sizeof(*bVisited));
         }
-#endif
     }
 
     uint32_t bFlag = segVisFlags[nThread];
@@ -1733,8 +1556,6 @@ return gameData.segData.faceGrid.PointSeesPoint (*p0, *p1, nDestSeg, nDestSide);
             (nDestSeg < 0) ||
             (nStartSeg == nDestSeg)) // line doesn't intersect any side of this segment -> p1 must be inside segment
     }
-
-#endif
 }
 
 // -----------------------------------------------------------------------------

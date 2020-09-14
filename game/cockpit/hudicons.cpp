@@ -354,13 +354,7 @@ void CHUDIcons::DrawWeapons(void) {
     int32_t nMaxAutoSelect;
     int32_t nDmgIconWidth = 0;
     int32_t nOffsetSave = gameData.SetStereoOffsetType(STEREO_OFFSET_NONE);
-#if 0
-								((nWeaponIcons == 2) 
-								 && ((gameStates.app.nSDLTicks [0] - LOCALOBJECT->TimeLastRepaired () > 3000) || 
-								     gameData.objData.pConsole->CriticalDamage ()))) ? 32 : 0;
-#endif
     int32_t ox = 6, oy = 6, x = 0, dx = 0, y = 0, dy = 0;
-    // float	fLineWidth = (gameData.renderData.scene.Width () >= 1200) ? 2.0f : 1.0f;
     float fLineWidth = float(gameData.renderData.scene.Width()) / 640.0f;
     uint8_t alpha = gameOpts->render.weaponIcons.alpha;
     uint32_t nAmmoColor;
@@ -569,11 +563,7 @@ void CHUDIcons::DrawInventory(void) {
     int32_t wIcon = (int32_t)((w + nIconScale - 1) / nIconScale * m_xScale),
             hIcon = (int32_t)((h + nIconScale - 1) / nIconScale * m_yScale);
     int32_t nDmgIconWidth = 0;
-#if 0
-									(nIconPos
-									 && ((gameStates.app.nSDLTicks [0] - LOCALOBJECT->TimeLastRepaired () > 3000) || 
-									     gameData.objData.pConsole->CriticalDamage ()))) ? 80 : 0;
-#endif
+
     float fLineWidth = float(gameData.renderData.scene.Width()) / 640.0f;
     uint8_t alpha = gameOpts->render.weaponIcons.alpha;
 

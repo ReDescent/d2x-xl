@@ -574,11 +574,6 @@ void CMovieManager::InitLib(const char *pszFilename, int32_t nLibrary, int32_t b
         }
     }
 
-#if 0 // DBG
-if ((nTries == 4) && bRequired)
-	Warning (TXT_MOVIE_FILE, filename);
-#endif
-
     if (bRobotMovie && m_libs[nLibrary].m_nMovies)
         m_nRobots = bHires ? 2 : 1;
 }

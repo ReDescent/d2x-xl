@@ -56,11 +56,6 @@ bool GuidedMissileActive(void);
 
 uint32_t nClearWindowColor = 0;
 
-#if 0
-extern tTexCoord2f quadTexCoord [3][4];
-extern float quadVerts [3][4][2];
-#endif
-
 //------------------------------------------------------------------------------
 
 int32_t RenderMissileView(void) {
@@ -191,52 +186,6 @@ void Draw2DFrameElements(void) {
             CMenu::Active()->Render();
     }
     ogl.SetStereoSeparation(xStereoSeparation);
-
-#if 0
-if (ogl.IsSideBySideDevice ()) {
-	SetupCanvasses ();
-	//ogl.StartFrame (0, 0, xStereoSeparation);
-	ogl.ChooseDrawBuffer ();
-	SetupRenderView (xStereoSeparation, NULL, 1);
-	transformation.ComputeFrustum ();
-
-	CFloatMatrix	view;
-	view.Assign (*gameData.objData.pViewer->View ());
-	CFloatVector3	vPos;
-	vPos.Assign (gameData.objData.pViewer->Position ());
-
-	CFloatVector3 quadVerts [4];
-
-	for (int32_t i = 0; i < 4; i++) {
-		CFloatVector3 v;
-		v.Assign (transformation.Frustum ().m_corners [7 - i]);
-		v.v.coord.x *= 7.0f / ZFAR;
-		v.v.coord.y *= 7.0f / ZFAR;
-		v.v.coord.z *= 10.0f / ZFAR;
-		quadVerts [(i + 1) % 4] = view * v;
-		quadVerts [(i + 1) % 4] += vPos;
-		}
-
-	ogl.EnableClientStates (1, 0, 0, GL_TEXTURE0);
-	ogl.BindTexture (ogl.BlurBuffer (0)->ColorBuffer ()); // set source for subsequent rendering step
-	OglTexCoordPointer (2, GL_FLOAT, 0, quadTexCoord [1]);
-	OglVertexPointer (3, GL_FLOAT, 0, quadVerts);
-	ogl.SetupTransform (1);
-	ogl.SetBlending (true);
-	ogl.SetBlendMode (OGL_BLEND_ALPHA);
-	//ogl.SetDepthMode (GL_ALWAYS); 
-	ogl.SetDepthTest (false);
-	ogl.SetFaceCulling (false);
-	ogl.SetAlphaTest (true);
-	glAlphaFunc (GL_GEQUAL, (float) 0.005);
-	//ogl.SetTexturing (false);
-	//glColor4f (0.0f, 0.5f, 1.0f, 0.5f);
-	OglDrawArrays (GL_QUADS, 0, 4);
-	ogl.SetFaceCulling (true);
-	ogl.ResetTransform (1);
-	ogl.EndFrame (0);
-	}
-#endif
     RETURN
 }
 
@@ -392,14 +341,6 @@ void RenderFrame(fix xStereoSeparation, int32_t nWindow) {
         PROF_END(ptAux)
     }
 
-#if 0 // DBG
-if (gameStates.render.nShadowMap) {
-	G3EndFrame (transformation, nWindow);
-	gameStates.render.xStereoSeparation [0] = nEyeOffsetSave;
-	RETURN
-	}
-#endif
-
     if (0 > (gameStates.render.nStartSeg = nStartSeg)) {
         G3EndFrame(transformation, nWindow);
         gameStates.render.xStereoSeparation[0] = nEyeOffsetSave;
@@ -475,10 +416,6 @@ if (gameStates.render.nShadowMap) {
     if (!(nWindow || gameStates.render.cameras.bActive || gameStates.app.bEndLevelSequence || GuidedInMainView())) {
         radar.Render();
     }
-#if 0
-if (transformation.m_info.bUsePlayerHeadAngles)
-	Draw3DReticle (xStereoSeparation);
-#endif
     gameStates.render.nShadowPass = 0;
 
     {

@@ -149,14 +149,6 @@ int32_t DrawPolyModel(
     CPolyModel *pModel;
     int32_t bHires = 0, bCustomModel = 0;
 
-#if 0 // DBG
-if (!gameStates.render.bBuildModels) {
-	glColor3f (0,0,0);
-	ogl.RenderScreenQuad (0);
-	RETVAL (0)
-	}
-#endif
-
     if (nModel < 0)
         RETVAL(1)
 #if !MAX_SHADOWMAPS

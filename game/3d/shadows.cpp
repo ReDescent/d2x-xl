@@ -249,30 +249,6 @@ inline void CModel::AddTriangle(CFace *pf, uint16_t v0, uint16_t v1, uint16_t v2
 
 //------------------------------------------------------------------------------
 
-#if 0
-
-int16_t G3FindPolyModelFace (CModel* po, CFace* pf)
-{
-	int32_t			h, i, j, k, l;
-	CFace	*pfh;
-
-for (h = pf->m_nVerts, i = po->m_iFace, pfh = po->m_faces; i; i--, pfh++)
-	if (pfh->nVerts == h) {
-		for (k = h, j = 0; j < h; j++)
-			for (l = 0; l < h; l++)
-				if (pf->m_vertices [j] == pfh->verts [l]) {
-					k--;
-					break;
-					}
-		if (!k)
-			return i;
-		}
-return -1;
-}
-
-#else
-//------------------------------------------------------------------------------
-
 int32_t CModel::FindFace(uint16_t *p, int32_t nVerts) {
     CFace *pf;
     uint16_t *pfv;
@@ -306,7 +282,7 @@ int32_t CModel::FindFace(uint16_t *p, int32_t nVerts) {
     }
     return 0;
 }
-#endif
+
 //------------------------------------------------------------------------------
 
 CFace *CModel::AddFace(CSubModel *pso, CFace *pf, CFixVector *pn, uint8_t *p, int32_t bShadowData) {
@@ -374,16 +350,6 @@ CFace *CModel::AddFace(CSubModel *pso, CFace *pf, CFixVector *pn, uint8_t *p, in
             memcpy(pfv, WORDPTR(p + 30), nVerts * sizeof(uint16_t));
             pf->m_bGlow = (nGlow >= 0);
             pf->CalcNormal(this);
-#if 0
-		if (memcmp (&pf->m_vCenter, m_vertices + *pv, sizeof (CFixVector))) //make sure we have a vertex from the face
-			pf->m_vCenter = m_vertices [*pv];
-		VmVecNormal (&n, m_vertices + pv [0], m_vertices + pv [1], m_vertices + pv [2]); //check the precomputed Normal
-		if (memcmp (&pf->m_vNorm, &n, sizeof (CFixVector)))
-			pf->m_vNorm = n;
-#endif
-#if 0
-		if (G3FindPolyModelFace (po, pf) < 0) //check for duplicate faces
-#endif
             {
                 m_iFaceVert += nVerts;
                 pf++;
@@ -391,31 +357,6 @@ CFace *CModel::AddFace(CSubModel *pso, CFace *pf, CFixVector *pn, uint8_t *p, in
                 pso->m_nFaces++;
             }
         }
-#if 0
-	else {
-		uint16_t h = (nVerts + 1) / 2;
-		pfv = pf->m_vertices = m_faceVerts + m_iFaceVert;
-		pf->m_nVerts = h;
-		memcpy (pfv, WORDPTR (p+30), h * sizeof (uint16_t));
-		pf->m_bGlow = (nGlow >= 0);
-		G3CalcFaceNormal (po, pf);
-		m_iFaceVert += h;
-		pf->m_bTest = 1;
-		pf++;
-		m_iFace++;
-		pso->m_nFaces++;
-		pfv = pf->m_vertices = m_faceVerts + m_iFaceVert;
-		pf->m_nVerts = h;
-		memcpy (pfv, WORDPTR (p + 30) + nVerts / 2, h * sizeof (uint16_t));
-		pf->m_bGlow = (nGlow >= 0);
-		G3CalcFaceNormal (po, pf);
-		pf->m_bTest = 1;
-		m_iFaceVert += h;
-		pf++;
-		m_iFace++;
-		pso->m_nFaces++;
-		}
-#endif
     } else {
         CFloatVector nf;
         CRenderNormal *pvn;
@@ -501,9 +442,6 @@ int32_t CSubModel::CalcFacing(CModel *po) {
     RotateNormals();
     for (i = 0; i < m_nFaces; i++) {
         m_faces[i].IsLit();
-#if 0
-	pf->IsFront ();
-#endif
     }
     return m_nFaces;
 }
@@ -791,11 +729,6 @@ void RenderFarShadowCapFace(CFloatVector *pv, int32_t nVerts) {
         glColor4fv(reinterpret_cast<GLfloat *>(shadowColor));
     else if (bShadowTest > 1)
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-#if 0
-if (bShadowTest)
-	glBegin (GL_LINE_LOOP);
-else
-#endif
 #endif
     if (!ogl.SizeVertexBuffer(nVerts))
         return;
@@ -894,16 +827,10 @@ int32_t CSubModel::RenderShadowVolume(CModel *po, int32_t bCullFront) {
                     dir[3] *= fClipDist;
                     dir[2] *= fClipDist;
 #endif
-#if 0
-					dir [2] += dir [1];
-					dir [3] += dir [0];
-					OglDrawArrays (GL_QUADS, 0, 4);
-#else
                     ogl.VertexBuffer()[nVerts++] = v[0];
                     ogl.VertexBuffer()[nVerts++] = v[1];
                     ogl.VertexBuffer()[nVerts++] = v[2] + v[1];
                     ogl.VertexBuffer()[nVerts++] = v[3] + v[0];
-#endif
 #if DBG_SHADOWS
                     } else {
                         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1221,11 +1148,6 @@ float CSubModel::ClipDist(CObject *pObj, CModel *po) {
 
     if (gameOpts->render.shadows.nClip < 2)
         return fInf;
-#if 0
-if (!m_bCalcClipDist)
-	return m_fClipDist;	//only recompute every 2nd frame
-m_bCalcClipDist = 0;
-#endif
 #if MULTI_THREADED_SHADOWS
     if (gameStates.app.bMultiThreaded) {
         gameData.threadData.clipDist.data.BRP;
@@ -1322,11 +1244,6 @@ int32_t CSubModel::RenderShadow(CObject *pObj, CModel *po) {
     for (i = 0; i < po->m_nSubModels; i++)
         if (po->m_subModels[i].m_nParent == h)
             po->m_subModels[i].RenderShadow(pObj, po);
-#if DBG
-#if 0
-if (pso - po->m_subModels == 8)
-#endif
-#endif
     {
         GatherLitFaces(po);
         if ((m_nRenderFlipFlop = !m_nRenderFlipFlop))
@@ -1378,87 +1295,6 @@ POFGatherPolyModelItems(CObject *pObj, void *modelDataP, CAngleVector *animAngle
     }
     return 1;
 }
-
-// -----------------------------------------------------------------------------
-
-#if 0
-
-int32_t G3DrawPolyModelShadow (CObject *pObj, void *modelDataP, CAngleVector *animAngleP, int32_t nModel)
-{
-	CFixVector	v, vLightDir;
-	int16_t*		nearestLightP;
-	int32_t			h, i, j;
-	CModel*		po = gameData.modelData.pofData [gameStates.app.bD1Mission][1] + nModel;
-
-Assert (pObj->info.nId < MAX_ROBOT_TYPES);
-if (!gameStates.render.nShadowMap) {
-	if (!POFGatherPolyModelItems (pObj, modelDataP, animAngleP, po, 1))
-		return 0;
-	}
-ogl.SelectTMU (GL_TEXTURE0);
-ogl.SetTexturing (false);
-ogl.EnableClientState (GL_VERTEX_ARRAY);
-nearestLightP = lightManager.NearestSegLights () + pObj->info.nSegment * MAX_NEAREST_LIGHTS;
-gameData.renderData.shadows.nLight = 0;
-if (FAST_SHADOWS) {
-	for (i = 0; (gameData.renderData.shadows.nLight < gameOpts->render.shadows.nLights) && (*nearestLightP >= 0); i++, nearestLightP++) {
-		gameData.renderData.shadows.pLight = lightManager.RenderLights (*nearestLightP);
-		if (!gameData.renderData.shadows.pLight->info.bState)
-			continue;
-		if (!CanSeePoint (pObj, &pObj->info.position.vPos, &gameData.renderData.shadows.pLight->info.vPos, pObj->info.nSegment, 0, -1.0f, 0))
-			continue;
-		vLightDir = pObj->info.position.vPos - gameData.renderData.shadows.pLight->info.vPos;
-		CFixVector::Normalize (vLightDir);
-		if (gameData.renderData.shadows.nLight) {
-			for (j = 0; j < gameData.renderData.shadows.nLight; j++)
-				if (abs (CFixVector::Dot (vLightDir, gameData.renderData.shadows.vLightDir [j])) > I2X (2) / 3) // 60 deg
-					break;
-			if (j < gameData.renderData.shadows.nLight)
-				continue;
-			}
-		gameData.renderData.shadows.vLightDir [gameData.renderData.shadows.nLight++] = vLightDir;
-		gameStates.render.bRendering = 1;
-		transformation.Transform (vLightPos, gameData.renderData.shadows.pLight->info.vPos, 0);
-		vLightPosf.Assign (vLightPos);
-		if (gameOpts->render.shadows.nClip) {
-			// get a default clipping distance using the model position as fall back
-			transformation.Transform (v, pObj->info.position.vPos, 0);
-			fInf = NearestShadowedWallDist (pObj->Index (), pObj->info.nSegment, &v, 0);
-			}
-		else
-			fInf = G3_INFINITY;
-		po->VertsToFloat ();
-		transformation.Begin (pObj->info.position.vPos, pObj->info.position.mOrient, __FILE__, __LINE__);
-		po->m_litFaces.Reset ();
-		if (gameOpts->render.shadows.nClip >= 2)
-			po->m_fClipDist.Clear ();
-		po->m_subModels [0].RenderShadow (pObj, po);
-		transformation.End (__FILE__, __LINE__);
-		gameStates.render.bRendering = 0;
-		}
-	}
-else {
-	h = pObj->Index ();
-	j = int32_t (gameData.renderData.shadows.pLight - lightManager.Lights ());
-	nearestLightP = gameData.renderData.shadows.objLights + h * MAX_SHADOW_LIGHTS;
-	for (i = 0; i < gameOpts->render.shadows.nLights; i++, nearestLightP++) {
-		if (*nearestLightP < 0)
-			break;
-		if (*nearestLightP == j) {
-			vLightPosf = gameData.renderData.shadows.vLightPos;
-			po->VertsToFloat ();
-			transformation.Begin (pObj->info.position.vPos, pObj->info.position.mOrient, __FILE__, __LINE__);
-			po->m_litFaces.Reset ();
-			po->m_subModels [0].RenderShadow (pObj, po);
-			transformation.End (__FILE__, __LINE__);
-			}
-		}
-	}
-ogl.DisableClientState (GL_VERTEX_ARRAY);
-return 1;
-}
-
-#else //-------------------------------------------------------------------------
 
 int32_t G3DrawPolyModelShadow(CObject *pObj, void *modelDataP, CAngleVector *animAngleP, int32_t nModel) {
     if (pObj->IsStatic())
@@ -1543,10 +1379,9 @@ int32_t G3DrawPolyModelShadow(CObject *pObj, void *modelDataP, CAngleVector *ani
                     } else
                         fInf = G3_INFINITY;
                     po->VertsToFloat();
+
                     // remove z-fighting
-#if 0
-				vShadowOffset.SetZero ();
-#else
+
                     transformation.Transform(vShadowOffset, pObj->Position());
                     vShadowOffset -= vLightPos;
                     CFixVector::Normalize(vShadowOffset);
@@ -1554,7 +1389,7 @@ int32_t G3DrawPolyModelShadow(CObject *pObj, void *modelDataP, CAngleVector *ani
                     if (dist > 400.0)
                         dist = 400.0;
                     vShadowOffset *= F2X(sqrt(dist / 400.0));
-#endif
+
                     transformation.Begin(pObj->Position(), pObj->info.position.mOrient, __FILE__, __LINE__);
                     po->m_litFaces.Reset();
                     if (gameOpts->render.shadows.nClip >= 2)
@@ -1587,8 +1422,3 @@ int32_t G3DrawPolyModelShadow(CObject *pObj, void *modelDataP, CAngleVector *ani
     ogl.DisableClientState(GL_VERTEX_ARRAY);
     return 1;
 }
-
-#endif
-
-//------------------------------------------------------------------------------
-// eof

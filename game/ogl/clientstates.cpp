@@ -132,12 +132,6 @@ void COGL::TexCoordPointer(
 //------------------------------------------------------------------------------
 
 void COGL::SelectTMU(int32_t nTMU, bool bClient) {
-#if 0 // DBG
-	int32_t	i = nTMU - GL_TEXTURE0;
-
-if ((i < 0) || (i > 3))
-	return;
-#endif
     // SDL_mutexP (semaphore);
     // if (m_data.nTMU [0] != nTMU)
     {

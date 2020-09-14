@@ -37,17 +37,10 @@ int32_t PixelTranspType(int16_t nTexture, int16_t nOrient, int16_t nFrame, fix u
     CBitmap *pBm;
     int32_t bmx, bmy, w, h, offs;
     uint8_t c;
-#if 0
-	tBitmapIndex *pBmIndex;
 
-pBmIndex = gameData.pigData.tex.pBmIndex + (nTexture);
-LoadTexture (*pBmIndex, 0, gameStates.app.bD1Data);
-pBm = BmOverride (gameData.pigData.tex.pBitmap + pBmIndex->index);
-#else
     pBm = LoadFaceBitmap(nTexture, nFrame);
     if (!pBm->Buffer())
         RETVAL(0)
-#endif
     if (pBm->Flags() & BM_FLAG_RLE)
         pBm = rle_expand_texture(pBm);
     w = pBm->Width();
@@ -206,9 +199,6 @@ int32_t ObjectToObjectVisibility(CObject *pViewer, CObject *pTarget, int32_t tra
 // -----------------------------------------------------------------------------
 
 int32_t TargetInLineOfFire(void) {
-#if 0 // DBG
-return 0;
-#else
     ENTER(0, 0);
     int32_t nType;
     CHitResult hitResult;
@@ -244,7 +234,6 @@ return 0;
     if (!IsTeamGame)
         RETVAL(1)
     RETVAL(GetTeam(gameData.objData.pConsole->info.nId) != GetTeam(pObj->info.nId))
-#endif
 }
 
 // -----------------------------------------------------------------------------

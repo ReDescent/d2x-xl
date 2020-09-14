@@ -160,17 +160,11 @@ int32_t CGPGPULighting::Render(void) {
     static float texCoord[4][2] = {{0, 0}, {0, 1}, {1, 1}, {1, 0}};
 #endif
 
-#if 0
-ComputeFragLight (ogl.m_states.fLightRange);
-#else
     if (!m_vld.nLights)
         return 1;
     for (i = 0; i < VL_SHADER_BUFFERS; i++) {
         if (!(hBuffer[i] = CreateBuffer(i)))
             return 0;
-#if 0 // DBG
-	memset (m_vld.buffers [i] + m_vld.nLights, 0, (GPGPU_LIGHT_BUF_SIZE - m_vld.nLights) * sizeof (m_vld.buffers [i][0]));
-#endif
     }
 #if GPGPU_LIGHT_DRAWARRAYS
     OglDrawArrays(GL_QUADS, 0, 4);
@@ -186,17 +180,10 @@ ComputeFragLight (ogl.m_states.fLightRange);
 #if DBG
     memset(m_vld.colors, 0, sizeof(m_vld.colors));
 #endif
-#if 0
-for (i = 0; i < VL_SHADER_BUFFERS; i++) {
-	ogl.SelectTMU (GL_TEXTURE0 + i, true);
-	ogl.BindTexture (0);
-	}
-#endif
     ogl.DeleteTextures(VL_SHADER_BUFFERS, hBuffer);
     memset(hBuffer, 0, sizeof(hBuffer));
     ogl.SetReadBuffer(GL_COLOR_ATTACHMENT0_EXT, 1);
     glReadPixels(0, 0, GPGPU_LIGHT_BUF_WIDTH, GPGPU_LIGHT_BUF_WIDTH, GL_RGBA, GL_FLOAT, m_vld.colors);
-#endif
 
     for (i = 0, pColor = m_vld.colors; i < m_vld.nVertices; i++) {
         nVertex = m_vld.index[i].nVertex;
@@ -251,9 +238,6 @@ int32_t CGPGPULighting::Compute(int32_t nVertex, int32_t nState, CFaceColor *pCo
         {GPGPU_LIGHT_BUF_WIDTH, 0}};
     static float texCoord[4][2] = {{0, 0}, {0, 1}, {1, 1}, {1, 0}};
     static const char *szTexNames[GPGPU_LIGHT_BUFFERS] = {"vertPosTex", "vertNormTex", "pLightosTex", "lightColorTex"};
-#if 0
-	static CFloatVector3	matSpecular = {{1.0f, 1.0f, 1.0f}};
-#endif
 
     if (!ogl.m_states.bVertexLighting)
         return 0;
@@ -281,12 +265,6 @@ int32_t CGPGPULighting::Compute(int32_t nVertex, int32_t nState, CFaceColor *pCo
             }
         }
         glUniform1f(glGetUniformLocation(shaderProg, "lightRange"), ogl.m_states.fLightRange);
-#endif
-#if 0
-	glUniform1f (glGetUniformLocation (shaderProg, "shininess"), 64.0f);
-	glUniform3fv (glGetUniformLocation (shaderProg, "matAmbient"), 1, reinterpret_cast<GLfloat*> (&gameData.renderData.vertColor.matAmbient));
-	glUniform3fv (glGetUniformLocation (shaderProg, "matDiffuse"), 1, reinterpret_cast<GLfloat*> (&gameData.renderData.vertColor.matDiffuse));
-	glUniform3fv (glGetUniformLocation (shaderProg, "matSpecular"), 1, reinterpret_cast<GLfloat*> (&matSpecular));
 #endif
         ogl.SetDrawBuffer(GL_COLOR_ATTACHMENT0_EXT, 0);
         ogl.SetReadBuffer(GL_COLOR_ATTACHMENT0_EXT, 0);

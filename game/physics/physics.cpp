@@ -175,10 +175,6 @@ void DoPhysicsAlignObject(CObject *pObj) {
             new_pm = pObj->info.position.mOrient * mRotate;
             pObj->info.position.mOrient = new_pm;
         }
-#if 0
-	else
-		gameOpts->gameplay.nAutoLeveling = 0;
-#endif
     }
     RETURN
 }
@@ -326,16 +322,12 @@ void CObject::DoBumpHack(void) {
 
 int32_t CObject::Bounce(CHitResult hitResult, float fOffs, fix *pxSideDists) {
     ENTER(0, 0);
-#if 1
     CFloatVector3 pos;
     pos.Assign(Position());
     float intrusion = X2F(ModelRadius(0)) - DistToFace(pos, hitResult.nSideSegment, (uint8_t)hitResult.nSide);
     if (intrusion < 0)
         RETVAL(0)
-#if 0 // slow down
-	if (intrusion > 1.0f)
-		intrusion = 1.0f;
-#endif
+
     Position() += hitResult.vNormal * F2X(intrusion);
     int16_t nSegment = FindSegByPos(Position(), info.nSegment, 1, 0);
     if ((nSegment < 0) || (nSegment > gameData.segData.nSegments)) {
@@ -346,34 +338,6 @@ int32_t CObject::Bounce(CHitResult hitResult, float fOffs, fix *pxSideDists) {
         RETVAL(0)
     RelinkToSeg(nSegment);
     RETVAL(1)
-
-#else
-    fix xSideDist, xSideDists[6];
-
-    if (!pxSideDists) {
-        SEGMENT(hitResult.nSideSegment)->GetSideDists(info.position.vPos, xSideDists, 1);
-        pxSideDists = xSideDists;
-    }
-    xSideDist = pxSideDists[hitResult.nSide];
-    if (xSideDist < info.xSize - info.xSize / 100) {
-        float r;
-        xSideDist = info.xSize - xSideDist;
-        r = ((float)xSideDist / (float)info.xSize) * X2F(info.xSize);
-        info.position.vPos.v.coord.x += (fix)((float)hitResult.vNormal.v.coord.x * fOffs);
-        info.position.vPos.v.coord.y += (fix)((float)hitResult.vNormal.v.coord.y * fOffs);
-        info.position.vPos.v.coord.z += (fix)((float)hitResult.vNormal.v.coord.z * fOffs);
-        int16_t nSegment = FindSegByPos(info.position.vPos, info.nSegment, 1, 0);
-        if ((nSegment < 0) || (nSegment > gameData.segData.nSegments)) {
-            info.position.vPos = info.vLastPos;
-            nSegment = FindSegByPos(info.position.vPos, info.nSegment, 1, 0);
-        }
-        if ((nSegment < 0) || (nSegment > gameData.segData.nSegments) || (nSegment == info.nSegment))
-            RETVAL(0)
-        RelinkToSeg(nSegment);
-        RETVAL(1)
-    }
-#endif
-    RETVAL(0)
 }
 
 // -----------------------------------------------------------------------------
@@ -396,16 +360,7 @@ void CObject::Unstick(void) {
     CHitResult hitResult;
     int32_t fviResult = FindHitpoint(hitQuery, hitResult, -1);
     if (fviResult == HIT_WALL)
-#if 1
-#if 0
-	DoBumpHack ();
-#else
         Bounce(hitResult, 0.1f, NULL);
-#endif
-#else
-        Bounce(hi, X2F(info.xSize - VmVecDist(&info.position.vPos, &hi.vPoint)) /*0.25f*/, NULL);
-#endif
-        RETURN
 }
 
 // -----------------------------------------------------------------------------
@@ -1065,9 +1020,6 @@ int32_t CObject::UpdateSimTime(CPhysSimData &simData) {
             simData.bUpdateOffset = 0;
             RETVAL(0)
         }
-#if 0 // DBG // unstick object from wall
-	UnstickFromWall (simData, Velocity () /*simData.velocity*/);
-#endif
         simData.xMovedTime = 0;
     } else {
         simData.xAttemptedDist = simData.vOffset.Mag();
@@ -1138,23 +1090,6 @@ void CObject::DoPhysicsSim(void) {
             info.position.mOrient = mSaveOrient;
     }
 
-#if 0 // DBG
-// allow tracking object movement back two frames
-static CPhysSimData simData3(0);
-static CFixVector vLastLastPos;
-static CFixVector vLastVel, vLastLastVel;
-static int32_t nLastSeg = -1, nLastLastSeg = -1;
-if (Index () == nDbgObj) {
-	BRP;
-	memcpy (&simData3, &simData2, sizeof (simData));
-	vLastLastPos = info.vLastPos;
-	SetLastPos (Position ());
-	vLastLastVel = vLastVel;
-	vLastVel = Velocity ();
-	nLastLastSeg = nLastSeg;
-	nLastSeg = info.nSegment;
-	}
-#endif
 #if DBG
     if (IsWeapon())
         BRP;
@@ -1205,10 +1140,6 @@ if (Index () == nDbgObj) {
 #if DBG
     if ((nDbgSeg >= 0) && (info.nSegment == nDbgSeg))
         BRP;
-#endif
-
-#if 0 // DBG
-redoPhysSim:
 #endif
 
     simData.nTries = 0;
@@ -1312,24 +1243,6 @@ redoPhysSim:
     if (CriticalHit())
         RandomBump(I2X(1), I2X(8), true);
 
-#if 0 // DBG
-if (Index () == nDbgObj) {
-	static int factor = 2;
-	static int bSound = 1;
-	fix d = CFixVector::Dist (info.vLastPos, Position ());
-	if (info.xSize / factor  < d) {
-		if (bSound)
-			audio.PlaySound (SOUND_HUD_MESSAGE);
-		else {
-			Position () = vLastLastPos;
-			Velocity () = vLastLastVel;
-			RelinkToSeg (nLastLastSeg);
-			memcpy (&simData, &simData3, sizeof (simData));
-			goto redoPhysSim;
-			}
-		}
-	}
-#endif
     PROF_END(ptPhysics)
     RETURN
 }

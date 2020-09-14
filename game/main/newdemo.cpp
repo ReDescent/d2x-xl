@@ -900,10 +900,6 @@ int32_t NDWriteObject(CObject *pObj) {
             NDWriteInt(o.rType.polyObjInfo.nSubObjFlags);
         }
         if ((o.info.nType != OBJ_PLAYER) && (o.info.nType != OBJ_DEBRIS))
-#if 0
-			for (i = 0; i < MAX_SUBMODELS; i++)
-				NDWriteAngVec (o.polyObjInfo.animAngles + i);
-#endif
             for (i = 0; i < gameData.modelData.polyModels[0][o.ModelId()].ModelCount(); i++)
                 NDWriteAngVec(o.rType.polyObjInfo.animAngles[i]);
         NDWriteInt(o.rType.polyObjInfo.nTexOverride);
@@ -1887,19 +1883,10 @@ int32_t NDReadFrameInfo(void) {
 
     bDone = 0;
     nTag = 255;
-#if 0
-for (int32_t nObject = 1; nObject < gameData.objData.nLastObject [0]; nObject++)
-	if ((OBJECT (nObject)->info.nType != OBJ_NONE) && (OBJECT (nObject)->info.nType != OBJ_EFFECT))
-		ReleaseObject (nObject);
-#else
     if (gameData.demoData.nVcrState != ND_STATE_PAUSED)
         ResetSegObjLists();
     ResetObjects(1);
-#endif
-    /*
-    cameraManager.Destroy ();
-    cameraManager.Create ();
-    */
+
     LOCALPLAYER.homingObjectDist = -I2X(1);
     pPrevObj = NULL;
     while (!bDone) {

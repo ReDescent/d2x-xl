@@ -50,11 +50,7 @@ CGenericCockpit::CGenericCockpit() { m_save.Create(10, "CGenericCockpit::m_save"
 // -----------------------------------------------------------------------------
 
 int32_t CGenericCockpit::X(int32_t x, bool bForce) {
-#if 0
-return x;
-#else
     return gameData.X(x, bForce);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -164,12 +160,8 @@ void CCockpit::DrawShieldText(void) {
 
     char szShield[20];
 
-#if 0
-CBitmap* pBm = BitBlt (GAUGE_NUMERICAL, NUMERICAL_GAUGE_X, NUMERICAL_GAUGE_Y);
-#else
     PageInGauge(GAUGE_NUMERICAL);
     CBitmap *pBm = gameData.pigData.tex.bitmaps[0] + GaugeIndex(GAUGE_NUMERICAL);
-#endif
     fontManager.SetColorRGBi(RGBA_PAL2(14, 14, 23), 1, 0, 0);
     sprintf(szShield, "%d", (int32_t)FRound(m_info.nShield * LOCALPLAYER.ShieldScale()));
     int32_t w, h, aw;
@@ -190,12 +182,8 @@ void CCockpit::DrawEnergyText(void) {
 
     char szEnergy[20];
 
-#if 0
-CBitmap* pBm = BitBlt (GAUGE_NUMERICAL, NUMERICAL_GAUGE_X, NUMERICAL_GAUGE_Y);
-#else
     PageInGauge(GAUGE_NUMERICAL);
     CBitmap *pBm = gameData.pigData.tex.bitmaps[0] + GaugeIndex(GAUGE_NUMERICAL);
-#endif
     fontManager.SetColorRGBi(RGBA_PAL2(25, 18, 6), 1, 0, 0);
     sprintf(szEnergy, "%d", (int32_t)FRound(m_info.nEnergy * LOCALPLAYER.EnergyScale()));
     int32_t w, h, aw;
@@ -239,14 +227,6 @@ void CCockpit::DrawEnergyBar(void) {
                     y[i] = ScaleY(LEFT_ENERGY_GAUGE_Y + y[i]);
                 }
                 OglDrawFilledPoly(x, y, 4, gaugeFadeColors[0], 1);
-#if 0
-			x [0] = x [1];
-			x [3] = x [2];
-			x [1] += (ScaleX (LEFT_ENERGY_GAUGE_X + LEFT_ENERGY_GAUGE_W) - x [1]) / 2;
-			x [2] += (ScaleX (LEFT_ENERGY_GAUGE_X + ENERGY_GAUGE_BOT_LEFT + ENERGY_GAUGE_BOT_WIDTH) - x [2]) / 2;
-			ogl.SetBlending (true);
-			OglDrawFilledPoly (x, y, 4, gaugeFadeColors [0], 4);
-#endif
             }
 
             {
@@ -264,16 +244,6 @@ void CCockpit::DrawEnergyBar(void) {
                     y[i] = ScaleY(RIGHT_ENERGY_GAUGE_Y + y[i]);
                 }
                 OglDrawFilledPoly(x, y, 4, gaugeFadeColors[0], 1);
-#if 0
-			x [1] = x [0];
-			x [2] = x [3];
-			x [0] = ScaleX (RIGHT_ENERGY_GAUGE_X);
-			x [0] += (x [1] - x [0]) / 2;
-			x [3] = ScaleX (RIGHT_ENERGY_GAUGE_X + LEFT_ENERGY_GAUGE_W - ENERGY_GAUGE_BOT_WIDTH);
-			x [3] += (x [2] - x [3]) / 2;
-			ogl.SetBlending (true);
-			OglDrawFilledPoly (x, y, 4, gaugeFadeColors [1], 4);
-#endif
             }
             ogl.SetBlending(false);
         }
@@ -289,18 +259,13 @@ uint8_t afterburnerBarTable[AFTERBURNER_GAUGE_H_L * 2] = {
 
 uint8_t afterburnerBarTableHires[AFTERBURNER_GAUGE_H_H * 2] = {
     5, 20, 5, 20, 5,  19, 5,  19, 5,  19, 5, 19, 4, 19, 4, 19, 4, 19, 4, 19,
-
     4, 19, 4, 18, 4,  18, 4,  18, 4,  18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18,
-
     3, 18, 3, 17, 3,  17, 2,  17, 2,  17, 2, 17, 2, 17, 2, 17, 2, 17, 2, 17,
-
     2, 17, 2, 16, 2,  16, 1,  16, 1,  16, 1, 16, 1, 16, 1, 16, 1, 16, 1, 16,
-
     1, 16, 1, 15, 1,  15, 1,  15, 0,  15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15,
-
     0, 14, 0, 14, 0,  14, 1,  14, 2,  14, 3, 14, 4, 14, 5, 14, 6, 13, 7, 13,
-
-    8, 13, 9, 13, 10, 13, 11, 13, 12, 13};
+    8, 13, 9, 13, 10, 13, 11, 13, 12, 13
+};
 
 // -----------------------------------------------------------------------------
 

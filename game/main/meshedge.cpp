@@ -222,22 +222,6 @@ int32_t CMeshEdge::Prepare(CFloatVector vViewer, int32_t nFilter, float fDistanc
     if (nType > nFilter)
         return -1;
 
-#if 0 // DBG
-if (gameStates.render.nType == RENDER_TYPE_OBJECTS) {
-	if (nType)
-		return;
-#if 0
-	gameData.segData.edgeVertices [nVertices [0]++] = m_faces [0].m_vCenter [1];
-	gameData.segData.edgeVertices [nVertices [0]++] = m_faces [0].m_vCenter [1] + m_faces [0].m_vNormal [1] * 0.5f;
-	gameData.segData.edgeVertices [nVertices [0]++] = m_faces [1].m_vCenter [1];
-	gameData.segData.edgeVertices [nVertices [0]++] = m_faces [1].m_vCenter [1] + m_faces [1].m_vNormal [1] * 0.5f;
-#endif
-#if 0
-	return;
-#endif
-	}
-#endif
-
     CFloatVector vertices[2];
 
     int32_t bPartial = nType == 2;

@@ -238,12 +238,10 @@ void _CDECL_ PickupEffect(int32_t redAdd, int32_t greenAdd, int32_t blueAdd, int
     va_start(args, format);
     vsprintf(text, format, args);
     va_end(args);
-#if 0
-paletteManager.BumpEffect (redAdd, greenAdd, blueAdd);
-#else
+
     float h = 48.0f / float(Max(redAdd, Max(greenAdd, blueAdd)));
     paletteManager.BumpEffect(int32_t(float(redAdd) * h), int32_t(float(greenAdd) * h), int32_t(float(blueAdd) * h));
-#endif
+
     HUDInitMessage(text);
     // mprintf_gameData.objs.pwrUp.Info ();
     cockpit->AddPointsToScore(score);
@@ -1082,13 +1080,11 @@ int16_t PowerupsOnShips(int32_t nPowerup) {
         // continue;
         if (pPlayer->Shield() < 0)
             continue;
-#if 0 // DBG
-	if (!pPlayer->connected && (gameStates.app.nSDLTicks [0] - pPlayer->m_tDisconnect > 600))
-#else
+
+        // wait up to three minutes for a player to reconnect before dropping him and allowing to respawn his stuff
         if (!pPlayer->connected && (gameStates.app.nSDLTicks[0] - pPlayer->m_tDisconnect > TIMEOUT_KICK))
-#endif
-        continue; // wait up to three minutes for a player to reconnect before dropping him and allowing to respawn his
-                  // stuff
+            continue;
+
         if (nClass == 5) {
             if ((PLAYER(i).flags & PLAYER_FLAGS_FLAG) && ((nPowerup == POW_REDFLAG) != (GetTeam(i) == TEAM_RED)))
                 nPowerups++;

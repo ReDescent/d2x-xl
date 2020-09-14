@@ -1519,10 +1519,6 @@ void CControlConfig::Run(int32_t nType, const char *pszTitle) {
         Edit(kcJoystick, NUM_JOY_CONTROLS);
     else if (nType == 2)
         Edit(kcMouse, NUM_MOUSE_CONTROLS);
-#if 0
-else if (nType == 3)
-	Edit (kcSuperJoy, NUM_JOY_CONTROLS);
-#endif
     else if (nType == 4)
         Edit(kcHotkeys, NUM_HOTKEY_CONTROLS);
     // end this section addition - VR
@@ -1575,44 +1571,6 @@ fix Last_angles_h = 0;
 uint8_t Last_angles_read = 0;
 
 int32_t VR_sense_range[3] = {25, 50, 75};
-
-#if 0
-read_head_tracker ()
-{
-	fix yaw, pitch, roll;
-	int32_t buttons;
-
-//------ read vfx1 helmet --------
-	if (vfx1_installed) {
-		vfx_get_data (&yaw,&pitch,&roll,&buttons);
-	} else if (iglasses_headset_installed) {
-		iglasses_read_headset (&yaw, &pitch, &roll);
-	} else if (Victor_headset_installed)   {
-		victor_read_headset_filtered (&yaw, &pitch, &roll);
-	} else {
-		return;
-	}
-
-	transformation.m_info.bUsePlayerHeadAngles = 0;
-	if (Last_angles_read) {
-		fix yaw1 = yaw;
-
-		yaw1 = yaw;
-		if ((Last_angles_h < (I2X (1)/4)) && (yaw > ((I2X (3))/4)))
-			yaw1 -= I2X (1);
-		else if ((yaw < (I2X (1)/4)) && (Last_angles_h > ((I2X (3))/4)))
-			yaw1 += I2X (1);
-
-		controls [0].pitchTime	+= FixMul ((pitch- Last_angles_p)*VR_sense_range [gameStates.render.vr.nSensitivity],gameData.timeData.xFrame);
-		controls [0].headingTime+= FixMul ((yaw1 -  Last_angles_h)*VR_sense_range [gameStates.render.vr.nSensitivity],gameData.timeData.xFrame);
-		controls [0].bankTime	+= FixMul ((roll - Last_angles_b)*VR_sense_range [gameStates.render.vr.nSensitivity],gameData.timeData.xFrame);
-	}
-	Last_angles_read = 1;
-	Last_angles_p = pitch;
-	Last_angles_h = yaw;
-	Last_angles_b = roll;
-}
-#endif
 
 //------------------------------------------------------------------------------
 

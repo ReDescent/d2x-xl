@@ -148,12 +148,9 @@ int32_t CAudio::Distance(
     fix maxDistance,
     int32_t nDecay,
     CFixVector &vecToSound,
-    int32_t nThread) {
+    int32_t nThread
+) {
     ENTER(0, 0);
-#if 0 // DBG
-	static float fCorrFactor = 1.0f;
-	static uint32_t  nRouteCount = 1;
-#endif
 
     if (nDecay)
         maxDistance *= 2;
@@ -169,14 +166,16 @@ int32_t CAudio::Distance(
         int32_t nSearchSegs = X2I(maxDistance / 10);
         if (nSearchSegs < 3)
             nSearchSegs = 3;
-        RETVAL(uniDacsRouter[nThread].PathLength(
-            vListenerPos,
-            nListenerSeg,
-            vSoundPos,
-            nSoundSeg,
-            nSearchSegs,
-            WID_TRANSPARENT_FLAG | WID_PASSABLE_FLAG,
-            0))
+        return
+            uniDacsRouter[nThread].PathLength(
+                vListenerPos,
+                nListenerSeg,
+                vSoundPos,
+                nSoundSeg,
+                nSearchSegs,
+                WID_TRANSPARENT_FLAG | WID_PASSABLE_FLAG,
+                0
+            );
     }
 
     if (m_nListenerSeg != nListenerSeg)
@@ -191,29 +190,8 @@ int32_t CAudio::Distance(
             -1,
             /*I2X (5 * 256 / 4)*/ maxDistance,
             WID_TRANSPARENT_FLAG | WID_PASSABLE_FLAG,
-            -1);
-#if 0 // DBG
-	for (int32_t i = 0; i < gameData.segData.nSegments; i++) {
-		fix pathDistance = m_router [nThread].Distance (i);
-		if (pathDistance <= 0)
-			continue;
-		int16_t l = m_router [nThread].RouteLength (nSoundSeg);
-		if (l < 3)
-			continue;
-		CSegment* pSeg = SEGMENT (nListenerSeg);
-		int16_t nChild = m_router [nThread].Route (1)->nNode;
-		fix corrStart = CFixVector::Dist (vListenerPos, SEGMENT (nChild)->Center ()) - pSeg->m_childDists [0][pSeg->ChildIndex (nChild)];
-		pSeg = SEGMENT (nSoundSeg);
-		nChild = m_router [nThread].Route (l - 2)->nNode;
-		fix corrEnd = CFixVector::Dist (vSoundPos, SEGMENT (nChild)->Center ()) - pSeg->m_childDists [0][pSeg->ChildIndex (nChild)];
-		if (corrStart + corrEnd < pathDistance)
-		pathDistance += corrStart + corrEnd;
-		if (pathDistance <= 0)
-			continue;
-		fCorrFactor += float (pathDistance) / float (distance);
-		++nRouteCount;
-		}
-#endif
+            -1
+        );
     }
 
     fix pathDistance = m_router[nThread].Distance(nSoundSeg);
@@ -301,12 +279,9 @@ int32_t CAudio::PlaySound(
     int32_t bNoDups,
     int32_t nLoops,
     const char *pszWAV,
-    CFixVector *vPos) {
+    CFixVector *vPos
+) {
     ENTER(0, 0);
-#if 0
-if (vPos && (nVolume < 10))
-	RETURN
-#endif
     if (!nVolume)
         RETVAL(-1)
     if (!pszWAV) {
@@ -319,11 +294,6 @@ if (vPos && (nVolume < 10))
         nSound = (nSound < 0) ? -nSound : CAudio::XlatSound(nSound);
         if (nSound < 0)
             RETVAL(-1)
-#if 0
-	int32_t nChannel = FindChannel (nSound);
-	if (nChannel > -1)
-		StopSound (nChannel);
-#endif
     }
     // start the sample playing
     RETVAL(
@@ -973,12 +943,6 @@ void CAudio::SyncSounds(void) {
                             soundObj.Stop();
                         }
                     } else {
-#if 0 // DBG
-					if (*soundObj.m_szSound)
-						pSoundObj = pSoundObj;
-					if (strstr (soundObj.m_szSound, "dripping-water"))
-						pSoundObj = pSoundObj;
-#endif
                         if (soundObj.m_channel < 0)
                             soundObj.Start();
                         else
@@ -1273,10 +1237,6 @@ void SetSoundSources(void) {
     FORALL_EFFECT_OBJS(pObj)
     if (pObj->info.nId == SOUND_ID) {
         char fn[FILENAME_LEN];
-#if 0 // DBG
-		if (strcmp (pObj->rType.soundInfo.szFilename, "steam"))
-			continue;
-#endif
         sprintf(fn, "%s.wav", pObj->rType.soundInfo.szFilename);
         audio.CreateObjectSound(
             -1,

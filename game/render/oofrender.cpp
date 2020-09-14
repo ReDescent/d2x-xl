@@ -98,13 +98,9 @@ int32_t OOF_LitFace(CSubModel *pso, CFace *pFace) {
 //------------------------------------------------------------------------------
 
 int32_t OOF_FrontFace(CSubModel *pso, CFace *pFace) {
-#if 0
-return OOF_FacingViewer (&pFace->m_vRotCenter, &pFace->m_vRotNormal);
-#else
     return OOF_FacingViewer(
         pso->m_rotVerts + pFace->m_vertices->m_nIndex,
         &pFace->m_vRotNormal); // OOF_CalcFacePerp (pso, pFace));
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -115,10 +111,6 @@ int32_t OOF_GetLitFaces(CSubModel *pso) {
 
     for (i = pso->m_faces.m_nFaces, pFace = pso->m_faces.m_list.Buffer(); i; i--, pFace++) {
         pFace->m_bFacingLight = OOF_LitFace(pso, pFace);
-#if 0
-	if (bSWCulling)
-		pFace->m_bFacingViewer = OOF_FrontFace (pso, pFace);
-#endif
     }
     return pso->m_faces.m_nFaces;
 }
@@ -135,12 +127,8 @@ int32_t OOF_GetSilhouette(CSubModel *pso) {
             if ((pe->m_bContour = (pe->m_faces[0]->m_bFacingLight != pe->m_faces[1]->m_bFacingLight)))
                 h++;
         } else {
-#if 0
-		pe->m_bContour = 0;
-#else
             pe->m_bContour = 1;
             h++;
-#endif
             j++;
         }
     }

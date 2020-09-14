@@ -49,18 +49,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define SHOW_PLAYER_IP 0
 
-#if 0
-CCanvas *Canv_LeftEnergyGauge;
-CCanvas *Canv_AfterburnerGauge;
-CCanvas *Canv_RightEnergyGauge;
-CCanvas *numericalGaugeCanv;
-
-#define COCKPIT_PRIMARY_BOX (!gameStates.video.nDisplayMode ? 0 : 4)
-#define COCKPIT_SECONDARY_BOX (!gameStates.video.nDisplayMode ? 1 : 5)
-#define SB_PRIMARY_BOX (!gameStates.video.nDisplayMode ? 2 : 6)
-#define SB_SECONDARY_BOX (!gameStates.video.nDisplayMode ? 3 : 7)
-#endif
-
 CHUD hudCockpit;
 CWideHUD letterboxCockpit;
 CCockpit fullCockpit;
@@ -246,29 +234,6 @@ void CGenericCockpit::RenderWindow(
         glLineWidth(float(gameData.renderData.screen.Width()) / 640.0f);
         OglDrawEmptyRect(0, 0, CCanvas::Current()->Width() - 1, CCanvas::Current()->Height());
         glLineWidth(1);
-#if 0
-	static int32_t y, x;
-
-	int32_t smallWindowBottom, bigWindowBottom, extraPartHeight;
-
-	//if the window only partially overlaps the big 3d window, copy
-	//the extra part to the visible screen
-	bigWindowBottom = gameData.renderData.scene.Top () + gameData.renderData.scene.Height () - 1;
-	if (x > bigWindowBottom) {
-		//the small window is completely outside the big 3d window, so
-		//copy it to the visible screen
-		gameData.renderData.scene.BlitClipped (y, x);
-		bOverlapDirty [nWindow] = 1;
-		}
-	else {
-		smallWindowBottom = x + gameData.renderData.scene.Height () - 1;
-		if (0 < (extraPartHeight = smallWindowBottom - bigWindowBottom)) {
-			gameData.renderData.scene.SetupPane (&overlapCanv, 0, gameData.renderData.scene.Height ()-extraPartHeight, gameData.renderData.scene.Width (), extraPartHeight);
-			overlapCanv.BlitClipped (y, bigWindowBottom + 1);
-			bOverlapDirty [nWindow] = 1;
-			}
-		}
-#endif
     }
     // force redraw when done
     m_history[0].weapon[nWindow] = m_history[0].ammo[nWindow] = -1;
@@ -423,12 +388,6 @@ void CGenericCockpit::SetupSceneCenter(CCanvas *refCanv, int32_t &w, int32_t &h)
             .Setup(refCanv, (ogl.StereoSeparation() < 0) ? 2 * d : d, 0, w, refCanv->Height(false));
         gameData.renderData.window.Activate(refCanv->Id(), refCanv);
     }
-#if 0 // DBG
-CCanvas::Current ()->SetColorRGBi (gameStates.app.bNostalgia ? RGB_PAL (0, 0, 32) : RGB_PAL (47, 31, 0));
-glLineWidth (float (gameData.renderData.screen.Width ()) / 640.0f);
-OglDrawEmptyRect (0, 0, CCanvas::Current ()->Width (), CCanvas::Current ()->Height ());
-glLineWidth (1);
-#endif
     RETURN
 }
 
@@ -467,23 +426,11 @@ void CGenericCockpit::Render(int32_t bExtraInfo, fix xStereoSeparation) {
     m_info.fontWidth = CCanvas::Current()->Font()->Width();
     m_info.fontHeight = CCanvas::Current()->Font()->Height();
     m_info.xStereoSeparation = xStereoSeparation;
-#if 0
-m_info.xScale = gameData.renderData.scene.XScale ();
-m_info.yScale = gameData.renderData.scene.YScale ();
-#else
     m_info.xScale = Canvas()->XScale();
     m_info.yScale = Canvas()->YScale();
-#endif
-#if 1
     m_info.nLineSpacing = int32_t(GAME_FONT->Height() + GAME_FONT->Height() * fontManager.Scale() * 0.25f);
     m_info.heightPad = 0;
-#else
-    fontManager.PushScale();
-    fontManager.SetScale(floor(float(CCanvas::Current()->Width()) / 640.0f));
-    m_info.nLineSpacing = int32_t(GAME_FONT->Height() + FRound(GAME_FONT->Height() * fontManager.Scale() * 0.25f));
-    fontManager.PopScale();
-    m_info.heightPad = (ScaleY(m_info.fontHeight) - m_info.fontHeight) / 2;
-#endif
+
     m_info.nDamage[0] = gameData.objData.pConsole->AimDamage();
     m_info.nDamage[1] = gameData.objData.pConsole->DriveDamage();
     m_info.nDamage[2] = gameData.objData.pConsole->GunDamage();
