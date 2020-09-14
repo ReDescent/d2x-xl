@@ -51,7 +51,7 @@ extern uint8_t Reticle_on;
 #define WBU_RADAR_TOPDOWN 8
 #define WBU_RADAR_HEADSUP 9
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define HUD_SCALE(v, s) (int32_t(float(v) * (s)))
 #define HUD_SCALE_X(v) HUD_SCALE(v, m_info.xScale)
@@ -64,7 +64,7 @@ extern uint8_t Reticle_on;
 #define X_GAUGE_OFFSET(_pos) (20 + (_pos)*20)
 #define Y_GAUGE_OFFSET(_pos) (30 + (_pos)*60)
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 typedef struct tSpan {
     int8_t l, r;
@@ -76,7 +76,7 @@ typedef struct tGaugeBox {
     tSpan *spanlist; // list of left, right spans for copy
 } tGaugeBox;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CCockpitHistory {
     public:
@@ -138,7 +138,7 @@ class CCockpitInfo {
     void Init(void);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CGenericCockpit {
     protected:
@@ -331,7 +331,7 @@ class CGenericCockpit {
     void SetupSceneCenter(CCanvas *refCanv, int32_t &w, int32_t &h);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CHUD : public CGenericCockpit {
     public:
@@ -395,7 +395,7 @@ class CHUD : public CGenericCockpit {
     int32_t DrawAmmoCount(char *szLabel, int32_t x, int32_t y, int32_t j, int32_t k, int32_t *nState);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CWideHUD : public CHUD {
     public:
@@ -405,7 +405,7 @@ class CWideHUD : public CHUD {
     virtual void SetupWindow(int32_t nWindow);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CStatusBar : public CGenericCockpit {
     public:
@@ -453,7 +453,7 @@ class CStatusBar : public CGenericCockpit {
     virtual bool Setup(bool bScene, bool bRebuild);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CCockpit : public CGenericCockpit {
     public:
@@ -492,7 +492,7 @@ class CCockpit : public CGenericCockpit {
     virtual bool Setup(bool bScene, bool bRebuild);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CRearView : public CGenericCockpit {
     public:
@@ -536,7 +536,7 @@ class CRearView : public CGenericCockpit {
     virtual bool Setup(bool bScene, bool bRebuild);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 extern CRGBColor playerColors[];
 
@@ -548,6 +548,6 @@ extern CRearView rearViewCockpit;
 
 extern CGenericCockpit *cockpit;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #endif // _COCKPIT_H

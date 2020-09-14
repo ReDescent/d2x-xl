@@ -408,7 +408,7 @@ void RestoreEffectBitmapIcons(void) {
                 gameData.pigData.tex.objBmIndex[pEffectInfo->changing.nObjectTexture] = bmi;
         }
     // if (gameData.effectData.pEffect [i].bm_ptr != -1)
-    //	*gameData.effectData.pEffect [i].bm_ptr = &gameData.pigData.tex.bitmaps [gameData.effectData.pEffect
+    // *gameData.effectData.pEffect [i].bm_ptr = &gameData.pigData.tex.bitmaps [gameData.effectData.pEffect
     //[i].animationInfo.frames [0].index];
 }
 

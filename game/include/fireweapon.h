@@ -199,7 +199,7 @@ extern int32_t nOmegaDuration[7];
 
 // NOTE: OMEGA_CHARGE_SCALE moved to laser.c to avoid long rebuilds if changed
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline int32_t LaserPlayerFireSpread(
     CObject *pObj,
@@ -213,7 +213,7 @@ static inline int32_t LaserPlayerFireSpread(
     return FireWeaponDelayedWithSpread(pObj, laserType, nGun, spreadr, spreadu, 0, makeSound, harmless, nLightObj);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static int32_t inline LaserPlayerFire(
     CObject *pObj,
@@ -230,7 +230,7 @@ static int32_t inline LaserPlayerFire(
 #define MAX_OMEGA_CHARGE \
     (gameStates.app.bHaveExtraGameInfo[IsMultiGame] ? gameData.omegaData.xMaxCharge : DEFAULT_MAX_OMEGA_CHARGE)
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #define HOMING_WEAPON_FPS gameData.physicsData.nHomingWeaponFPS[extraGameInfo[IsMultiGame].nWeaponTurnSpeed]
 #define HOMING_WEAPON_FRAMETIME I2X(1) / HOMING_WEAPON_FPS

@@ -31,7 +31,7 @@ CObject *pSlewObj = NULL; // what CObject is slewing, or NULL if none
 
 int16_t old_joy_x, old_joy_y; // position last time around
 
-//	Function Prototypes
+// Function Prototypes
 int32_t slew_stop(void);
 
 // -------------------------------------------------------------------
@@ -146,7 +146,7 @@ int32_t do_slew_movement(CObject *pObj, int32_t check_keys, int32_t check_joy) {
     svel *= gameData.timeData.xFrame; // movement in this frame
     movement = new_pm * svel;
 
-    //	pObj->info.vLastPos = pObj->info.position.vPos;
+    // pObj->info.vLastPos = pObj->info.position.vPos;
     pObj->info.position.vPos += movement;
 
     moved |= (movement.v.coord.x || movement.v.coord.y || movement.v.coord.z);

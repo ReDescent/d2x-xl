@@ -365,7 +365,7 @@ fix CalcObjectLight(CObject *pObj, fix *xEngineGlow) {
     if (!pObj)
         RETVAL(0)
     if (IsMultiGame && netGameInfo.m_info.BrightPlayers && (pObj->info.nType == OBJ_PLAYER)) {
-        xLight = I2X(1); //	If option set for bright players in netgame, brighten them
+        xLight = I2X(1); // If option set for bright players in netgame, brighten them
         gameOpts->ogl.bLightObjects = 0;
     } else
         xLight = ComputeObjectLight(pObj, NULL);
@@ -891,7 +891,7 @@ int32_t DrawPolygonObject(CObject *pObj, int32_t bForce) {
                                           ? mpTextureIndex[pObj->rType.polyObjInfo.nAltTextures - 1]
                                           : NULL;
 
-            //	Snipers get bright when they fire.
+            // Snipers get bright when they fire.
             if (!gameStates.render.bBuildModels) {
                 if ((pObj->info.nType == OBJ_ROBOT) &&
                     (gameData.aiData.localInfo[pObj->Index()].pNextrimaryFire < I2X(1) / 8) &&

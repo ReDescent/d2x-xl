@@ -242,11 +242,11 @@ bool CParticleBuffer::Flush(float fBrightness, bool bForce) {
         HUDMessage(0, "%1.2f particles/flush", float(p) / float(f));
 
 // if (m_nType % PARTICLE_TYPES == FIRE_PARTICLES)
-//	m_nType = m_nType;
+// m_nType = m_nType;
 // else {
-//	Reset ();
-//	return false;
-//	}
+// Reset ();
+// return false;
+// }
 #endif
 #if ENABLE_FLUSH
     PROF_START
@@ -275,7 +275,7 @@ bool CParticleBuffer::Flush(float fBrightness, bool bForce) {
         } else
 #endif
         // if (gameStates.render.cameras.bActive /*|| !gameOpts->SoftBlend (SOFT_BLEND_PARTICLES)*/)
-        //	shaderManager.Deploy (-1);
+        // shaderManager.Deploy (-1);
         // else
 #if HAVE_PARTICLE_SHADER
             if (0 <= (nShader = UseParticleShader())) {

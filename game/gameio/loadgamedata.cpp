@@ -2990,7 +2990,7 @@ void BMReadGameDataD1(CFile &cf) {
             pr->clawSound = i;
     }
     cf.Read(tmpSounds, sizeof(uint8_t), D1_MAX_SOUNDS);
-    //	for (i = 0, pr = &gameData.botData.info [1][0]; i < gameData.botData.nTypes [1]; i++, pr++) {
+    // for (i = 0, pr = &gameData.botData.info [1][0]; i < gameData.botData.nTypes [1]; i++, pr++) {
     pr = gameData.botData.info[1] + 17;
     for (i = 0; i < D1_MAX_SOUNDS; i++) {
         if (AltSounds[1][i] == tmpSounds[pr->seeSound])

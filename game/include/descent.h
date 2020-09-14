@@ -2062,7 +2062,7 @@ class CSkyBox : public CStack<int16_t> {
     }
 };
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #define LEVEL_SEGMENTS gameData.segData.nSegments
 #define LEVEL_OBJECTS (gameData.objData.nMaxObjects)
@@ -2485,7 +2485,7 @@ class CTriggerData {
     public:
     CArray<CTrigger> triggers[2]; // [MAX_TRIGGERS];
     CArray<tObjTriggerRef> objTriggerRefs; // [MAX_OBJ_TRIGGERS];
-    //		CArray<int16_t>				firstObjTrigger; // [MAX_OBJECTS_D2X];
+    // 	CArray<int16_t>				firstObjTrigger; // [MAX_OBJECTS_D2X];
     CArray<int32_t> delay; // [MAX_TRIGGERS];
     int32_t m_nTriggers[2];
 
@@ -3245,7 +3245,7 @@ class CTimeData {
     fix xFrame; //  since last frame, in seconds
     float fFrame;
     fix xRealFrame;
-    fix xGame; //	 in game, in seconds
+    fix xGame; //  in game, in seconds
     fix xGameStart;
     fix xGameTotal;
     fix xMaxOnline;
@@ -4168,7 +4168,7 @@ static inline int16_t ObjIdx(CObject *pObj) {
 #endif
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #define NO_WALL (gameStates.app.bD2XLevel ? 2047 : 255)
 #define IS_WALL(_wallnum) ((uint16_t(_wallnum) != NO_WALL) && (uint16_t(_wallnum) < gameFileInfo.walls.count))
@@ -4183,13 +4183,13 @@ static inline int16_t ObjIdx(CObject *pObj) {
 void GrabMouse(int32_t bGrab, int32_t bForce);
 void SetDataVersion(int32_t v);
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline void OglVertex3x(fix x, fix y, fix z) {
     glVertex3f((float)x / 65536.0f, (float)y / 65536.0f, (float)z / 65536.0f);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline void OglVertex3f(CRenderPoint *p, CFloatVector *v = NULL) {
     int32_t i = p->Index();
@@ -4206,7 +4206,7 @@ static inline void OglVertex3f(CRenderPoint *p, CFloatVector *v = NULL) {
     }
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline float GrAlpha(uint8_t alpha) {
     if (alpha >= FADE_LEVELS)
@@ -4214,7 +4214,7 @@ static inline float GrAlpha(uint8_t alpha) {
     return 1.0f - float(alpha) / float(FADE_LEVELS);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #define CLAMP(_val, _minVal, _maxVal) \
     { \
@@ -4243,7 +4243,7 @@ static inline float GrAlpha(uint8_t alpha) {
 #define MAX_LIGHT_RANGE \
     I2X(222) // light cast by the brightest possible light will have faded to black past this distance
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 extern float fInfinity[];
 extern fix nDebrisLife[];
@@ -4301,7 +4301,7 @@ extern fix nDebrisLife[];
 #define OBJPOS(_objP) (SPECTATOR(_objP) ? &gameStates.app.playerPos : &(_objP)->info.position)
 #define OBJSEG(_objP) (SPECTATOR(_objP) ? gameStates.app.nPlayerSegment : (_objP)->info.nSegment)
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline CFixVector *PolyObjPos(CObject *pObj, CFixVector *vPosP) {
     CFixVector vPos = OBJPOS(pObj)->vPos;
@@ -4314,7 +4314,7 @@ static inline CFixVector *PolyObjPos(CObject *pObj, CFixVector *vPosP) {
     return vPosP;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline void CObject::RequestEffects(uint16_t nEffects) {
     int32_t nObject = OBJ_IDX(this);
@@ -4322,7 +4322,7 @@ inline void CObject::RequestEffects(uint16_t nEffects) {
         gameData.objData.bWantEffect[nObject] |= nEffects;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #ifdef RELEASE
 #define FAST_SHADOWS 1
@@ -4332,7 +4332,7 @@ inline void CObject::RequestEffects(uint16_t nEffects) {
 
 void PrintVersionInfo(void);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct fVector3D {
@@ -4454,7 +4454,7 @@ static inline void SemLeave(uint32_t sem) {
 
 #endif
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #ifndef min
 #define min(_a, _b) ((_a) <= (_b) ? (_a) : (_b))
@@ -4466,7 +4466,7 @@ static inline void SemLeave(uint32_t sem) {
 
 void CheckEndian(void);
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #if !DBG
 
@@ -4682,11 +4682,11 @@ fix WI_Speed(int32_t nId, int32_t nDifficulty);
 
 fix WI_DamageRadius(int32_t nId);
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #define EX_OUT_OF_MEMORY 1
 #define EX_IO_ERROR 2
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #endif

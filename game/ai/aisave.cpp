@@ -32,7 +32,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define DBG(_expr)
 #endif
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 int32_t CSaveGameManager::LoadAIBinFormat(void) {
     int32_t h, i, j;
@@ -112,7 +112,7 @@ int32_t CSaveGameManager::LoadAIBinFormat(void) {
     }
     return 1;
 }
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 void CSaveGameManager::SaveAILocalInfo(tAILocalInfo *pLocalInfo) {
     int32_t i;
@@ -140,14 +140,14 @@ void CSaveGameManager::SaveAILocalInfo(tAILocalInfo *pLocalInfo) {
     m_cf.Write(pLocalInfo->achievedState, sizeof(pLocalInfo->achievedState[0]), 1);
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 void CSaveGameManager::SaveAIPointSeg(tPointSeg *pSeg) {
     m_cf.WriteInt(pSeg->nSegment);
     m_cf.WriteVector(pSeg->point);
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 void CSaveGameManager::SaveAICloakInfo(tAICloakInfo *pCloakInfo) {
     m_cf.WriteFix(pCloakInfo->lastTime);
@@ -155,7 +155,7 @@ void CSaveGameManager::SaveAICloakInfo(tAICloakInfo *pCloakInfo) {
     m_cf.WriteVector(pCloakInfo->vLastPos);
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 int32_t CSaveGameManager::SaveAI(void) {
     int32_t h, i;
@@ -188,7 +188,7 @@ int32_t CSaveGameManager::SaveAI(void) {
     return 1;
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 void CSaveGameManager::LoadAILocalInfo(tAILocalInfo *pLocalInfo) {
     int32_t i;
@@ -216,14 +216,14 @@ void CSaveGameManager::LoadAILocalInfo(tAILocalInfo *pLocalInfo) {
     m_cf.Read(pLocalInfo->achievedState, sizeof(pLocalInfo->achievedState[0]), 1);
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 void CSaveGameManager::LoadAIPointSeg(tPointSeg *pSeg) {
     pSeg->nSegment = m_cf.ReadInt();
     m_cf.ReadVector(pSeg->point);
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 void CSaveGameManager::LoadAICloakInfo(tAICloakInfo *pCloakInfo) {
     pCloakInfo->lastTime = m_cf.ReadFix();
@@ -231,7 +231,7 @@ void CSaveGameManager::LoadAICloakInfo(tAICloakInfo *pCloakInfo) {
     m_cf.ReadVector(pCloakInfo->vLastPos);
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 int32_t CSaveGameManager::LoadAIUniFormat(void) {
     int32_t h, i, j, fPos;
@@ -314,4 +314,4 @@ int32_t CSaveGameManager::LoadAIUniFormat(void) {
     return 1;
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------

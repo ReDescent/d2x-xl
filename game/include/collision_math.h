@@ -18,7 +18,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "segment.h"
 #include "object.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // return values for FindHitpoint() - what did we hit?
 #define HIT_NONE 0 // we hit nothing
@@ -49,7 +49,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define FLOAT_COLLISION_MATH 1
 #define FLOAT_DIST_TOLERANCE 1e-6f
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CFixVector2 {
     public:
@@ -62,7 +62,7 @@ class CFixVector2 {
     }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CFloatVector2 {
     public:
@@ -79,7 +79,7 @@ class CFloatVector2 {
     }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CHitData {
     public:
@@ -101,7 +101,7 @@ class CHitData {
     }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CHitInfo : public CHitData {
     public:
@@ -116,7 +116,7 @@ class CHitInfo : public CHitData {
     CHitInfo() : nAltSegment(-1), nSide(0), nFace(0), nSideSegment(-1), nNormals(0), nNestCount(0) {}
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // this data structure gets filled in by FindHitpoint()
 
 class CHitResult : public CHitInfo {
@@ -128,7 +128,7 @@ class CHitResult : public CHitInfo {
     CHitResult() : nSegments(0) {}
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // this data contains the parms to fvi()
 class CHitQuery {
@@ -173,7 +173,7 @@ typedef struct tSpeedBoostData {
     CFixVector vDest;
 } tSpeedBoostData;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CPhysSimData {
     public:
@@ -221,7 +221,7 @@ class CPhysSimData {
     void GetPhysSegs(void);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // Find out if a vector intersects with anything.
 // Fills in hitResult, a CHitResult structure (see above).
@@ -321,7 +321,7 @@ int32_t PointSeesPoint(
     int32_t nDepth,
     int32_t nThread);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline fix RegisterHit(CFixVector *vBestHit, CFixVector *vCurHit, CFixVector *vRef, fix &dMin) {
     fix d = CFixVector::Dist(*vRef, *vCurHit);
@@ -333,7 +333,7 @@ static inline fix RegisterHit(CFixVector *vBestHit, CFixVector *vCurHit, CFixVec
     return dMin;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline fix RegisterHit(
     CFixVector *vBestHit,
@@ -352,12 +352,12 @@ static inline fix RegisterHit(
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t UseHitbox(CObject *pObj);
 int32_t UseSphere(CObject *pObj);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 extern int32_t ijTable[3][2];
 

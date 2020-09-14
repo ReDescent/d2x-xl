@@ -81,22 +81,22 @@ CObject *FindInitObject(CObject *pObj) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Return true if there is a door here and it is openable
-//	It is assumed that the player has all keys.
+// Return true if there is a door here and it is openable
+// It is assumed that the player has all keys.
 int32_t PlayerCanOpenDoor(CSegment *pSeg, int16_t nSide) {
     CWall *pWall = pSeg->Wall(nSide);
     if (!pWall)
-        return 0; //	no CWall here.
+        return 0; // no CWall here.
     int16_t wallType = pWall->nType;
-    //	Can't open locked doors.
+    // Can't open locked doors.
     if (((wallType == WALL_DOOR) && (pWall->flags & WALL_DOOR_LOCKED)) || (wallType == WALL_CLOSED))
         return 0;
     return 1;
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Return a CSegment %i segments away from initial CSegment.
-//	Returns -1 if can't find a CSegment that distance away.
+// Return a CSegment %i segments away from initial CSegment.
+// Returns -1 if can't find a CSegment that distance away.
 
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ int32_t PickConnectedSegment(CObject *pObj, int32_t nMaxDepth, int32_t *nDepthP)
         }
         pSeg = SEGMENT(segQueue[nTail++]);
 
-        //	select sides randomly
+        // select sides randomly
         for (i = 0, nSideCount = 0; i < SEGMENT_SIDE_COUNT; i++)
             if (pSeg->Side(i)->FaceCount())
                 sideList[nSideCount++] = i;
@@ -160,11 +160,11 @@ int32_t PickConnectedSegment(CObject *pObj, int32_t nMaxDepth, int32_t *nDepthP)
     RETVAL(segQueue[nTail + Rand(nHead - nTail)])
 }
 
-//	------------------------------------------------------------------------------------------------------
-//	Choose CSegment to drop a powerup in.
-//	For all active net players, try to create a N CSegment path from the player.  If possible, return that
-//	CSegment.  If not possible, try another player.  After a few tries, use a Random CSegment.
-//	Don't drop if control center in CSegment.
+// ------------------------------------------------------------------------------------------------------
+// Choose CSegment to drop a powerup in.
+// For all active net players, try to create a N CSegment path from the player.  If possible, return that
+// CSegment.  If not possible, try another player.  After a few tries, use a Random CSegment.
+// Don't drop if control center in CSegment.
 int32_t ChooseDropSegment(CObject *pObj, int32_t *pbFixedPos, int32_t nDropState) {
     ENTER(0, 0);
     int32_t nPlayer = 0;
@@ -263,7 +263,7 @@ int32_t ChooseDropSegment(CObject *pObj, int32_t *pbFixedPos, int32_t nDropState
     RETVAL(nSegment)
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 void DropPowerups(void) {
     ENTER(0, 0);
@@ -280,7 +280,7 @@ void DropPowerups(void) {
     RETURN
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 void RespawnDestroyedWeapon(int16_t nObject) {
     ENTER(0, 0);
@@ -297,7 +297,7 @@ void RespawnDestroyedWeapon(int16_t nObject) {
     RETURN
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 int32_t AddDropInfo(int16_t nObject, int16_t nPowerupType, int32_t nDropTime) {
     ENTER(0, 0);
@@ -324,7 +324,7 @@ int32_t AddDropInfo(int16_t nObject, int16_t nPowerupType, int32_t nDropTime) {
     RETVAL(h)
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 void DelDropInfo(int32_t h) {
     ENTER(0, 0);
@@ -349,7 +349,7 @@ void DelDropInfo(int32_t h) {
     RETURN
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 int32_t FindDropInfo(int32_t nSignature) {
     ENTER(0, 0);
@@ -363,8 +363,8 @@ int32_t FindDropInfo(int32_t nSignature) {
     RETVAL(-1)
 }
 
-//	------------------------------------------------------------------------------------------------------
-//	Drop cloak powerup if in a network game.
+// ------------------------------------------------------------------------------------------------------
+// Drop cloak powerup if in a network game.
 // nObject will contain a drop list index if MaybeDropNetPowerup is called with state CHECK_DROP
 
 int32_t MaybeDropNetPowerup(int16_t nObject, int32_t nPowerupType, int32_t nDropState) {
@@ -435,8 +435,8 @@ int32_t MaybeDropNetPowerup(int16_t nObject, int32_t nPowerupType, int32_t nDrop
     RETVAL(0)
 }
 
-//	------------------------------------------------------------------------------------------------------
-//	Return true if current CSegment contains some CObject.
+// ------------------------------------------------------------------------------------------------------
+// Return true if current CSegment contains some CObject.
 int32_t SegmentContainsObject(int32_t objType, int32_t obj_id, int32_t nSegment) {
     ENTER(0, 0);
     if (nSegment == -1)
@@ -454,7 +454,7 @@ int32_t SegmentContainsObject(int32_t objType, int32_t obj_id, int32_t nSegment)
     RETVAL(0)
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 int32_t ObjectNearbyAux(int32_t nSegment, int32_t objectType, int32_t object_id, int32_t depth) {
     ENTER(0, 0);
@@ -473,13 +473,13 @@ int32_t ObjectNearbyAux(int32_t nSegment, int32_t objectType, int32_t object_id,
     RETVAL(0)
 }
 
-//	------------------------------------------------------------------------------------------------------
-//	Return true if some powerup is nearby (within 3 segments).
+// ------------------------------------------------------------------------------------------------------
+// Return true if some powerup is nearby (within 3 segments).
 int32_t WeaponNearby(CObject *pObj, int32_t weapon_id) {
     return ObjectNearbyAux(pObj->info.nSegment, OBJ_POWERUP, weapon_id, 3);
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 void MaybeReplacePowerupWithEnergy(CObject *pDelObj) {
     ENTER(0, 0);
@@ -524,7 +524,7 @@ void MaybeReplacePowerupWithEnergy(CObject *pDelObj) {
         break;
     }
 
-    //	Don't drop vulcan ammo if player maxed out.
+    // Don't drop vulcan ammo if player maxed out.
     if (((nWeapon == VULCAN_INDEX) || (pDelObj->info.contains.nId == POW_VULCAN_AMMO)) &&
         (LOCALPLAYER.primaryAmmo[VULCAN_INDEX] >= VULCAN_AMMO_MAX))
         pDelObj->info.contains.nCount = 0;
@@ -560,8 +560,8 @@ void MaybeReplacePowerupWithEnergy(CObject *pDelObj) {
             }
         }
 
-    //	If this robot was gated in by the boss and it now contains energy, make it contain nothing,
-    //	else the room gets full of energy.
+    // If this robot was gated in by the boss and it now contains energy, make it contain nothing,
+    // else the room gets full of energy.
     if ((pDelObj->info.nCreator == BOSS_GATE_PRODUCER_NUM) && (pDelObj->info.contains.nId == POW_ENERGY) &&
         (pDelObj->info.contains.nType == OBJ_POWERUP)) {
 #if TRACE
@@ -607,10 +607,10 @@ int32_t DropPowerup(
         vNewVel = vInitVel;
         xOldMag = vInitVel.Mag();
 
-        //	We want powerups to move more in network mode.
+        // We want powerups to move more in network mode.
         if (IsMultiGame && !gameData.appData.GameMode(GM_MULTI_ROBOTS)) {
             nRandScale = 4;
-            //	extra life powerups are converted to invulnerability in multiplayer, for what is an extra life, anyway?
+            // extra life powerups are converted to invulnerability in multiplayer, for what is an extra life, anyway?
             if (nId == POW_EXTRA_LIFE)
                 nId = POW_INVUL;
         } else
@@ -658,13 +658,13 @@ int32_t DropPowerup(
         case POW_SHIELD_BOOST:
         case POW_ENERGY:
             pObj->SetLife(
-                (RandShort() + I2X(3)) * 64); //	Lives for 3 to 3.5 binary minutes (a binary minute is 64 seconds)
+                (RandShort() + I2X(3)) * 64); // Lives for 3 to 3.5 binary minutes (a binary minute is 64 seconds)
             if (IsMultiGame)
                 pObj->SetLife(pObj->LifeLeft() / 2);
             break;
         default:
-            //						if (IsMultiGame)
-            //							pObj->SetLife ((RandShort () + I2X (3)) * 64);		//	Lives for 5 to 5.5 binary minutes
+            // 					if (IsMultiGame)
+            // 						pObj->SetLife ((RandShort () + I2X (3)) * 64);		// Lives for 5 to 5.5 binary minutes
             //(a binary minute is 64 seconds)
             break;
         }
@@ -785,9 +785,9 @@ int32_t CObject::CreateEgg(bool bLocal, bool bUpdateLimits) {
 
 // -- extern int32_t Items_destroyed;
 
-//	-------------------------------------------------------------------------------------------------------
-//	Put count OBJECTS of nType nType (eg, powerup), id = id (eg, energy) into *pObj, then drop them! Yippee!
-//	Returns created CObject number.
+// -------------------------------------------------------------------------------------------------------
+// Put count OBJECTS of nType nType (eg, powerup), id = id (eg, energy) into *pObj, then drop them! Yippee!
+// Returns created CObject number.
 int32_t
 PrepareObjectCreateEgg(CObject *pObj, int32_t nCount, int32_t nType, int32_t nId, bool bLocal, bool bUpdateLimits) {
     ENTER(0, 0);
@@ -836,7 +836,7 @@ void DropAfterburnerBlobs(
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t MaybeDropPrimaryWeaponEgg(CObject *pPlayerObj, int32_t nWeapon) {
     ENTER(0, 0);
@@ -851,7 +851,7 @@ int32_t MaybeDropPrimaryWeaponEgg(CObject *pPlayerObj, int32_t nWeapon) {
     RETVAL(PrepareObjectCreateEgg(pPlayerObj, 1, OBJ_POWERUP, primaryWeaponToPowerup[nWeapon]))
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void MaybeDropSecondaryWeaponEgg(CObject *pPlayerObj, int32_t nWeapon, int32_t count) {
     ENTER(0, 0);
@@ -867,7 +867,7 @@ void MaybeDropSecondaryWeaponEgg(CObject *pPlayerObj, int32_t nWeapon, int32_t c
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void MaybeDropDeviceEgg(CPlayerInfo *pPlayer, CObject *pPlayerObj, int32_t nDeviceFlag, int32_t nPowerupId) {
     ENTER(0, 0);
@@ -877,7 +877,7 @@ void MaybeDropDeviceEgg(CPlayerInfo *pPlayer, CObject *pPlayerObj, int32_t nDevi
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DropMissile1or4(CObject *pPlayerObj, int32_t nMissileIndex) {
     ENTER(0, 0);
@@ -904,8 +904,8 @@ void DropMissile1or4(CObject *pPlayerObj, int32_t nMissileIndex) {
 
 // -- int32_t	Items_destroyed = 0;
 
-//	-----------------------------------------------------------------------------
-//	If the player had mines, maybe arm up to 3 of them.
+// -----------------------------------------------------------------------------
+// If the player had mines, maybe arm up to 3 of them.
 
 static void MaybeArmMines(CObject *pPlayerObj, CPlayerInfo *pPlayer, int32_t nType, int32_t nId) {
     ENTER(0, 0);
@@ -950,7 +950,7 @@ static void MaybeArmMines(CObject *pPlayerObj, CPlayerInfo *pPlayer, int32_t nTy
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DropPlayerEggs(CObject *pPlayerObj) {
     ENTER(0, 0);
@@ -971,7 +971,7 @@ void DropPlayerEggs(CObject *pPlayerObj) {
         if (IsMultiGame && !(IsHoardGame || IsEntropyGame))
             MaybeArmMines(pPlayerObj, pPlayer, PROXMINE_INDEX, PROXMINE_ID);
 
-        //	If the player dies and he has powerful lasers, create the powerups here.
+        // If the player dies and he has powerful lasers, create the powerups here.
         if (pPlayer->LaserLevel(1)) {
             if (!IsBuiltinWeapon(SUPER_LASER_INDEX)) {
                 PrepareObjectCreateEgg(pPlayerObj, pPlayer->LaserLevel(1), OBJ_POWERUP, POW_SUPERLASER);
@@ -992,7 +992,7 @@ void DropPlayerEggs(CObject *pPlayerObj) {
             }
         }
 
-        //	Drop quad laser if appropos
+        // Drop quad laser if appropos
         MaybeDropDeviceEgg(pPlayer, pPlayerObj, PLAYER_FLAGS_QUAD_LASERS, POW_QUADLASER);
         MaybeDropDeviceEgg(pPlayer, pPlayerObj, PLAYER_FLAGS_CLOAKED, POW_CLOAK);
         while (pPlayer->nInvuls--)
@@ -1067,7 +1067,7 @@ void DropPlayerEggs(CObject *pPlayerObj) {
                     OBJECT(nGunObjs[i])->cType.powerupInfo.nCount = nVulcanAmmo;
             }
         }
-        //	Drop the rest of the primary weapons
+        // Drop the rest of the primary weapons
         MaybeDropPrimaryWeaponEgg(pPlayerObj, SPREADFIRE_INDEX);
         MaybeDropPrimaryWeaponEgg(pPlayerObj, PLASMA_INDEX);
         if (gameData.weaponData.bTripleFusion)
@@ -1080,8 +1080,8 @@ void DropPlayerEggs(CObject *pPlayerObj) {
             OBJECT(nObject)->cType.powerupInfo.nCount = (pPlayerObj->info.nId == N_LOCALPLAYER)
                                                             ? gameData.omegaData.xCharge[IsMultiGame]
                                                             : DEFAULT_MAX_OMEGA_CHARGE;
-        //	Drop the secondary weapons
-        //	Note, proximity weapon only comes in packets of 4.  So drop n/2, but a max of 3 (handled inside
+        // Drop the secondary weapons
+        // Note, proximity weapon only comes in packets of 4.  So drop n/2, but a max of 3 (handled inside
         // maybe_drop..)  Make sense?
         if (!(gameData.appData.GameMode(GM_HOARD | GM_ENTROPY)))
             MaybeDropSecondaryWeaponEgg(pPlayerObj, PROXMINE_INDEX, (pPlayer->secondaryAmmo[PROXMINE_INDEX]) / 4);
@@ -1090,14 +1090,14 @@ void DropPlayerEggs(CObject *pPlayerObj) {
         if (!IsEntropyGame)
             MaybeDropSecondaryWeaponEgg(pPlayerObj, SMARTMINE_INDEX, (pPlayer->secondaryAmmo[SMARTMINE_INDEX]) / 4);
         MaybeDropSecondaryWeaponEgg(pPlayerObj, EARTHSHAKER_INDEX, pPlayer->secondaryAmmo[EARTHSHAKER_INDEX]);
-        //	Drop the player's missiles in packs of 1 and/or 4
+        // Drop the player's missiles in packs of 1 and/or 4
         DropMissile1or4(pPlayerObj, HOMING_INDEX);
         DropMissile1or4(pPlayerObj, GUIDED_INDEX);
         DropMissile1or4(pPlayerObj, CONCUSSION_INDEX);
         DropMissile1or4(pPlayerObj, FLASHMSL_INDEX);
         DropMissile1or4(pPlayerObj, MERCURY_INDEX);
 
-        //	Always drop a shield and energy powerup.
+        // Always drop a shield and energy powerup.
         if (IsMultiGame && !gameStates.app.bChangingShip) {
             PrepareObjectCreateEgg(pPlayerObj, 1, OBJ_POWERUP, POW_SHIELD_BOOST);
             PrepareObjectCreateEgg(pPlayerObj, 1, OBJ_POWERUP, POW_ENERGY);
@@ -1107,7 +1107,7 @@ void DropPlayerEggs(CObject *pPlayerObj) {
     RETURN
 }
 
-//	----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Drop excess ammo when the ammo rack is stolen from the player
 
 void DropExcessAmmo(void) {
@@ -1131,7 +1131,7 @@ void DropExcessAmmo(void) {
     RETURN
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 int32_t ReturnFlagHome(CObject *pObj) {
     ENTER(0, 0);

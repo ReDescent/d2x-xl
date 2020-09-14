@@ -83,7 +83,7 @@ void HUDShowIcons(void);
 extern double cmScaleX, cmScaleY;
 extern int nHUDLineSpacing;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define HUD_SCALE(v, s) (int(float(v) * (s) /*+ 0.5*/))
 #define HUD_SCALE_X(v) HUD_SCALE(v, m_info.xScale)
@@ -92,7 +92,7 @@ extern int nHUDLineSpacing;
 #define HUD_LHY(y) (gameStates.menus.bHires ? (24 * (y)) / 10 : y)
 #define HUD_ASPECT ((double)screen.Height() / (double)screen.Width() / 0.75)
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CBitmap *HUDBitBlt(
     int nGauge,
@@ -104,7 +104,7 @@ CBitmap *HUDBitBlt(
     int orient = 0,
     CBitmap *bmP = NULL);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 typedef struct tCockpitHistory {
     int score;
@@ -155,7 +155,7 @@ class CCockpitInfo {
     void Init(void);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CGenericCockpit {
     protected:
@@ -244,7 +244,7 @@ class CGenericCockpit {
     inline void SetMode(int mode) { m_info.mode = mode; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CHUD : public CGenericCockpit {
     public:
@@ -285,7 +285,7 @@ class CHUD : public CGenericCockpit {
     int FlashGauge(int h, int *bFlash, int tToggle);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CStatusBar : public CGenericCockpit {
     public:
@@ -324,7 +324,7 @@ class CStatusBar : public CGenericCockpit {
     virtual bool Setup(void);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CCockpit : public CGenericCockpit {
     public:
@@ -361,7 +361,7 @@ class CCockpit : public CGenericCockpit {
     virtual bool Setup(void);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CRearView : public CGenericCockpit {
     public:
@@ -404,6 +404,6 @@ class CRearView : public CGenericCockpit {
     int FlashGauge(int h, int *bFlash, int tToggle);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #endif /* _GENERICCOCKPIT_H */

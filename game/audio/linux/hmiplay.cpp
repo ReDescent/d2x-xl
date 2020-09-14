@@ -85,8 +85,8 @@ void seqbuf_dump() {
 }
 
 void my_quit() {
-    //	//printf("goodbye\n");//#####
-    //	exit(0);
+    // //printf("goodbye\n");//#####
+    // exit(0);
 }
 
 int32_t seq_init() {
@@ -470,7 +470,7 @@ void send_ipc(char *message) {
         snd = reinterpret_cast<struct msgbuf *>(new uint8_t[sizeof(long) + 32]);
         snd->mType = 1;
         player_thread = SDL_CreateThread(play_hmi, NULL);
-        //		player_pid = play_hmi();
+        // 	player_pid = play_hmi();
     }
     if (strlen(message) < 16) {
         sprintf(snd->mtext, "%s", message);
@@ -479,13 +479,13 @@ void send_ipc(char *message) {
 }
 
 void kill_ipc() {
-    //	send_ipc("q");
-    //	kill(player_pid,SIGTERM);
+    // send_ipc("q");
+    // kill(player_pid,SIGTERM);
     msgctl(ipc_queue_id, IPC_RMID, 0);
     delete[] snd;
     snd = NULL;
     ipc_queue_id = -1;
-    //	player_pid = 0;
+    // player_pid = 0;
 }
 
 int32_t do_ipc(int32_t qid, struct msgbuf *buf, int32_t flags) {
@@ -523,7 +523,7 @@ int32_t do_ipc(int32_t qid, struct msgbuf *buf, int32_t flags) {
             stop = 2;
             break;
         case 'q':
-            //			SDL_KillThread(player_thread);
+            // 		SDL_KillThread(player_thread);
             break;
         }
     }
@@ -538,7 +538,7 @@ void play_hmi(void *arg) {
     int32_t low_dtime;
     int32_t low_chunk;
     int32_t csec;
-    //	pid_t loc_pid;
+    // pid_t loc_pid;
     int32_t qid;
     int32_t ipc_read = 0;
     int32_t k = 0;
@@ -551,7 +551,7 @@ void play_hmi(void *arg) {
 
     stop = 0;
     ipc_read = 0;
-    //	loc_pid=fork();
+    // loc_pid=fork();
 
     /*	switch (loc_pid)
         {
@@ -564,7 +564,7 @@ void play_hmi(void *arg) {
             return loc_pid;
         }*/
 
-    //	signal(SIGTERM, my_quit);
+    // signal(SIGTERM, my_quit);
     rcv = reinterpret_cast<struct msgbuf *>(new uint8_t[sizeof(long) + 16]);
 
     rcv->mType = 1;

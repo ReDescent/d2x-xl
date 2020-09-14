@@ -38,7 +38,7 @@ inline int32_t CurFrame(CObject *pObj, int32_t nClip, fix timeToLive, int32_t nF
     tAnimationInfo *pAnimInfo = gameData.effectData.animations[0] + nClip;
     if (nFrames < 0)
         nFrames = pAnimInfo->nFrameCount;
-    //	iFrame = (nFrames - X2I (FixDiv ((nFrames - 1) * timeToLive, pAnimInfo->xTotalTime))) - 1;
+    // iFrame = (nFrames - X2I (FixDiv ((nFrames - 1) * timeToLive, pAnimInfo->xTotalTime))) - 1;
     if (timeToLive > pAnimInfo->xTotalTime)
         timeToLive = timeToLive % pAnimInfo->xTotalTime;
     int32_t iFrame = ((nClip == ANIM_AFTERBURNER_BLOB) && pObj->rType.animationInfo.xFrameTime)
@@ -376,10 +376,10 @@ void DrawWeaponVClip(CObject *pObj) {
     fix playTime = gameData.effectData.vClipP[nVClip].xTotalTime;
     if (!playTime)
         return;
-    //	Special values for modTime were causing enormous slowdown for omega blobs.
+    // Special values for modTime were causing enormous slowdown for omega blobs.
     if (modTime == IMMORTAL_TIME)
         modTime = playTime;
-    //	Should cause Omega blobs (which live for one frame) to not always be the same.
+    // Should cause Omega blobs (which live for one frame) to not always be the same.
     if (modTime == ONE_FRAME_TIME)
         modTime = RandShort();
     if (pObj->info.nId == PROXMINE_ID) { // make prox bombs spin out of sync

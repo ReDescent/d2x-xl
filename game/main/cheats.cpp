@@ -39,7 +39,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "crypt.h"
 #include "slowmotion.h"
 
-//	Cheat functions ------------------------------------------------------------
+// Cheat functions ------------------------------------------------------------
 
 char nInterpolationMethodSave;
 char bOldHomingStates[20];
@@ -174,12 +174,12 @@ void KillAllBossRobots(int32_t bVerbose) {
         HUDInitMessage(TXT_BOTS_TOASTED, nKilled);
 }
 
-//	--------------------------------------------------------------------------
-//	Detonate reactor.
-//	Award player all powerups in mine.
-//	Place palyer just outside exit.
-//	Kill all bots in mine.
-//	Yippee!!
+// --------------------------------------------------------------------------
+// Detonate reactor.
+// Award player all powerups in mine.
+// Place palyer just outside exit.
+// Kill all bots in mine.
+// Yippee!!
 void KillEverything(int32_t bVerbose) {
     int32_t i, j;
     CObject *pObj;
@@ -248,7 +248,7 @@ void KillAllSnipers(int32_t bVerbose) {
     CObject *pObj;
     int32_t nKilled = 0;
 
-    //	Kill all snipers.
+    // Kill all snipers.
     FORALL_ROBOT_OBJS(pObj)
     if ((pObj->info.nType == OBJ_ROBOT) && (pObj->cType.aiInfo.behavior == AIB_SNIPE)) {
         nKilled++;
@@ -265,7 +265,7 @@ void KillAllSnipers(int32_t bVerbose) {
 void KillBuddy(int32_t bVerbose) {
     CObject *pObj;
 
-    //	Kill buddy.
+    // Kill buddy.
     FORALL_ROBOT_OBJS(pObj)
     if (pObj->IsGuideBot()) {
         pObj->info.nFlags |= OF_EXPLODING | OF_SHOULD_BE_DEAD;
@@ -934,7 +934,7 @@ tCheat cheats[] = {
     {"cKc[KUWo", NULL, 1, 1, 0}, // wh-ammazoom
     {NULL, NULL, 0, 0, 0}};
 
-//	Main Cheat function
+// Main Cheat function
 
 //------------------------------------------------------------------------------
 

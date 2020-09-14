@@ -84,7 +84,7 @@ void StopPlayerMovement(void) {
                               gameData.objData.speedBoost[OBJ_IDX(gameData.objData.pConsole)].bBoosted)) {
         StopObjectMovement(OBJECT(LOCALPLAYER.nObject));
         memset(&gameData.physicsData.playerThrust, 0, sizeof(gameData.physicsData.playerThrust));
-        //	gameData.timeData.SetTime (I2X (1));
+        // gameData.timeData.SetTime (I2X (1));
         gameData.objData.speedBoost[OBJ_IDX(gameData.objData.pConsole)].bBoosted = 0;
     }
     RETURN
@@ -372,7 +372,7 @@ if (nSpeed < 0)
 	nSpeed = 0;
 #endif
     // if (gameData.multiplayer.bMoving == nSpeed)
-    //	RETURN;
+    // RETURN;
 
     if (gameData.multiplayer.bMoving < 0)
         audio.CreateObjectSound(
@@ -484,7 +484,7 @@ void CObject::CheckAfterburnerBlobDrop(void) {
     ENTER(0, 0);
     if (gameStates.render.bDropAfterburnerBlob) {
         Assert(this == gameData.objData.pConsole);
-        DropAfterburnerBlobs(this, 2, I2X(5) / 2, -1, NULL, 0); //	-1 means use default lifetime
+        DropAfterburnerBlobs(this, 2, I2X(5) / 2, -1, NULL, 0); // -1 means use default lifetime
         if (IsMultiGame)
             MultiSendDropBlobs(N_LOCALPLAYER);
         gameStates.render.bDropAfterburnerBlob = 0;
@@ -658,7 +658,7 @@ int32_t UpdateAllObjects(void) {
     CObject *pObj;
 
     if (gameData.objData.nLastObject[0] > gameData.objData.nMaxUsedObjects)
-        FreeObjectSlots(gameData.objData.nMaxUsedObjects); //	Free all possible CObject slots.
+        FreeObjectSlots(gameData.objData.nMaxUsedObjects); // Free all possible CObject slots.
     CleanupObjects();
     if (gameOpts->gameplay.nAutoLeveling)
         gameData.objData.pConsole->mType.physInfo.flags |= PF_LEVELLING;
@@ -708,11 +708,11 @@ int32_t UpdateAllObjects(void) {
 
 //----------------------------------------------------------------------------------------
 
-//	*pViewer is a pViewer, probably a missile.
-//	wake up all robots that were rendered last frame subject to some constraints.
+// *pViewer is a pViewer, probably a missile.
+// wake up all robots that were rendered last frame subject to some constraints.
 void WakeupRenderedObjects(CObject *pViewer, int32_t nWindow) {
     ENTER(0, 0);
-    //	Make sure that we are processing current data.
+    // Make sure that we are processing current data.
     if (gameData.appData.nFrameCount != windowRenderedData[nWindow].nFrame) {
 #if TRACE
         console.printf(1, "Warning: Called WakeupRenderedObjects with a bogus window.\n");
@@ -774,7 +774,7 @@ void CleanupObjects(void) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #if DBG
 
@@ -788,5 +788,5 @@ void CObject::SetLife(fix xLife) { UpdateLife(m_xTotalLife = xLife); }
 
 #endif
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // eof

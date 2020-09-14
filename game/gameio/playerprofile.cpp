@@ -1868,7 +1868,7 @@ int32_t GetHighestLevel(void) {
 #ifndef SATURN
     if (strlen(missionManager[missionManager.nCurrentMission].filename) == 0) {
         for (i = 0; i < nHighestLevels; i++)
-            if (!stricmp(highestLevels[i].shortname, "DESTSAT")) //	Destination Saturn.
+            if (!stricmp(highestLevels[i].shortname, "DESTSAT")) // Destination Saturn.
                 nHighestSaturnLevel = highestLevels[i].nLevel;
     }
 #endif

@@ -46,9 +46,9 @@ int32_t FusionBump(void) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
-//	Fire Laser:  Registers a laser fire, and performs special stuff for the fusion
-//				    cannon.
+// -----------------------------------------------------------------------------
+// Fire Laser:  Registers a laser fire, and performs special stuff for the fusion
+// 			    cannon.
 void ChargeFusion(void) {
     if ((LOCALPLAYER.Energy() < I2X(2)) && (gameData.fusionData.xAutoFireTime == 0)) {
         gameData.laserData.nGlobalFiringCount = 0;
@@ -64,7 +64,7 @@ void ChargeFusion(void) {
             gameData.fusionData.xAutoFireTime = gameData.timeData.xGame + gameData.fusionData.xFrameTime / 2 + 1;
         else {
             LOCALPLAYER.SetEnergy(0);
-            gameData.fusionData.xAutoFireTime = gameData.timeData.xGame - 1; //	Fire now!
+            gameData.fusionData.xAutoFireTime = gameData.timeData.xGame - 1; // Fire now!
         }
         if (gameStates.limitFPS.bFusion && !gameStates.app.tick40fps.bTick)
             return;

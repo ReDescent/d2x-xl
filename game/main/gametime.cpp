@@ -368,8 +368,8 @@ void CalcFrameTime(int32_t fps) {
 #if Arcade_mode
     gameData.timeData.xFrame /= 2;
 #endif
-//	Set value to determine whether homing missile can see target.
-//	The lower frametime is, the more likely that it can see its target.
+// Set value to determine whether homing missile can see target.
+// The lower frametime is, the more likely that it can see its target.
 #if 0
 if (gameStates.limitFPS.bHomers)
 	gameData.weaponData.xMinTrackableDot = MIN_TRACKABLE_DOT;

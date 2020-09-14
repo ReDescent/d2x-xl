@@ -47,9 +47,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "addon_bitmaps.h"
 #include "marker.h"
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 
@@ -75,7 +75,7 @@ char *CGenericCockpit::Convert1s(char *s) {
     return s;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::PlayHomingWarning(void) {
     fix xBeepDelay;
@@ -97,7 +97,7 @@ void CGenericCockpit::PlayHomingWarning(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::CheckForExtraLife(int32_t nPrevScore) {
     if (LOCALPLAYER.score / EXTRA_SHIP_SCORE != nPrevScore / EXTRA_SHIP_SCORE) {
@@ -109,7 +109,7 @@ void CGenericCockpit::CheckForExtraLife(int32_t nPrevScore) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::AddPointsToScore(int32_t points) {
     int32_t nPrevScore;
@@ -133,7 +133,7 @@ void CGenericCockpit::AddPointsToScore(int32_t points) {
         CheckForExtraLife(nPrevScore);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::AddBonusPointsToScore(int32_t points) {
     int32_t nPrevScore;
@@ -148,7 +148,7 @@ void CGenericCockpit::AddBonusPointsToScore(int32_t points) {
         CheckForExtraLife(nPrevScore);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if DBG
 extern int32_t bSavingMovieFrames;
@@ -156,13 +156,13 @@ extern int32_t bSavingMovieFrames;
 #define bSavingMovieFrames 0
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CGenericCockpit::ShowTextGauges(void) {
     return gameOpts->render.cockpit.bTextGauges || gameOpts->render.cockpit.nShipStateLayout || ogl.IsOculusRift();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // returns true if pViewer can see CObject
 
 int32_t CGenericCockpit::CanSeeObject(int32_t nObject, int32_t bCheckObjs) {
@@ -185,7 +185,7 @@ int32_t CGenericCockpit::CanSeeObject(int32_t nObject, int32_t bCheckObjs) {
     return bCheckObjs ? (nHitType == HIT_OBJECT) && (hitResult.nObject == nObject) : (nHitType != HIT_WALL);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DemoRecording(void) {
     if (gameData.demoData.nState == ND_STATE_RECORDING) {
@@ -217,9 +217,9 @@ void CGenericCockpit::DemoRecording(void) {
     }
 }
 
-//	---------------------------------------------------------------------------------------------------------
-//	Call when picked up a laser powerup.
-//	If laser is active, set previous weapon [0] to -1 to force redraw.
+// ---------------------------------------------------------------------------------------------------------
+// Call when picked up a laser powerup.
+// If laser is active, set previous weapon [0] to -1 to force redraw.
 
 void CGenericCockpit::UpdateLaserWeaponInfo(void) {
 #if 0
@@ -251,4 +251,4 @@ int32_t CGenericCockpit::WidthPad(int32_t nValue) {
     return WidthPad(szValue);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

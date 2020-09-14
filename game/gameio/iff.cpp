@@ -63,10 +63,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #if DBG
 // void printsig(int32_t s)
 //{
-//	char *t=reinterpret_cast<char*> (&s);
+// char *t=reinterpret_cast<char*> (&s);
 //
 ///*  //printf("%c%c%c%c", *(&s+3), *(&s+2), *(&s+1), s);*/
-//	//printf("%c%c%c%c", t[3], t[2], t[1], t[0]);
+// //printf("%c%c%c%c", t[3], t[2], t[1], t[0]);
 //}
 #endif
 

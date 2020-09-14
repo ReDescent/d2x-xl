@@ -180,7 +180,7 @@ int32_t SetupLightmapShader(CSegFace *pFace, int32_t nType, bool bHeadlight) {
         }
     }
     // if (!nType)
-    //	glUniform4fv (glGetUniformLocation (shaderProg, "matColor"), 1, reinterpret_cast<GLfloat*>
+    // glUniform4fv (glGetUniformLocation (shaderProg, "matColor"), 1, reinterpret_cast<GLfloat*>
     //(&pFace->m_info.color));
     ogl.ClearError(0);
     PROF_END(ptShaderStates)

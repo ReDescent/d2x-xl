@@ -83,7 +83,7 @@ void AIDoRandomPatrol(CObject *pObj, tAILocalInfo *pLocalInfo) {
 }
 
 // ------------------------------------------------------------------------------------------------------------------
-//	Return 1 if animates, else return 0
+// Return 1 if animates, else return 0
 
 int32_t nFlinchScale = 4;
 int32_t nAttackScale = 24;
@@ -162,11 +162,11 @@ int32_t DoSillyAnimation(CObject *pObj) {
     RETVAL(1)
 }
 
-//	------------------------------------------------------------------------------------------
-//	Move all sub-OBJECTS in an CObject towards their goals.
-//	Current orientation of CObject is at:	polyObjInfo.animAngles
-//	Goal orientation of CObject is at:		aiInfo.goalAngles
-//	Delta orientation of CObject is at:		aiInfo.deltaAngles
+// ------------------------------------------------------------------------------------------
+// Move all sub-OBJECTS in an CObject towards their goals.
+// Current orientation of CObject is at:	polyObjInfo.animAngles
+// Goal orientation of CObject is at:		aiInfo.goalAngles
+// Delta orientation of CObject is at:		aiInfo.deltaAngles
 void AIFrameAnimation(CObject *pObj) {
     ENTER(1, 0);
     int32_t nObject = pObj->Index();
@@ -199,10 +199,10 @@ void AIFrameAnimation(CObject *pObj) {
     RETURN
 }
 
-//	----------------------------------------------------------------------
-//	General purpose robot-dies-with-death-roll-and-groan code.
-//	Return true if CObject just died.
-//	scale: I2X (4) for boss, much smaller for much smaller guys
+// ----------------------------------------------------------------------
+// General purpose robot-dies-with-death-roll-and-groan code.
+// Return true if CObject just died.
+// scale: I2X (4) for boss, much smaller for much smaller guys
 int32_t DoRobotDyingFrame(
     CObject *pObj,
     fix StartTime,
@@ -249,7 +249,7 @@ int32_t DoRobotDyingFrame(
                 pObj->Index(),
                 0,
                 xSoundScale,
-                xSoundScale * 256); //	I2X (5)12 means play twice as loud
+                xSoundScale * 256); // I2X (5)12 means play twice as loud
         } else if (RandShort() < gameData.timeData.xFrame * 16) {
             CreateSmallFireballOnObject(
                 pObj,
@@ -265,7 +265,7 @@ int32_t DoRobotDyingFrame(
     RETVAL(StartTime + xRollDuration < gameData.timeData.xGame)
 }
 
-//	----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 void StartRobotDeathSequence(CObject *pObj) {
     ENTER(1, 0);
@@ -277,7 +277,7 @@ void StartRobotDeathSequence(CObject *pObj) {
     RETURN
 }
 
-//	----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 int32_t DoAnyRobotDyingFrame(CObject *pObj) {
     ENTER(1, 0);
@@ -303,5 +303,5 @@ int32_t DoAnyRobotDyingFrame(CObject *pObj) {
     RETVAL(0)
 }
 
-//	---------------------------------------------------------------
+// ---------------------------------------------------------------
 // eof

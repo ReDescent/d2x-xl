@@ -29,7 +29,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "renderlib.h"
 #include "visibility.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PixelTranspType(int16_t nTexture, int16_t nOrient, int16_t nFrame, fix u, fix v) {
     ENTER(2, 0);
@@ -92,7 +92,7 @@ pBm = BmOverride (gameData.pigData.tex.pBitmap + pBmIndex->index);
     RETVAL(0)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // check if a particular pRef on a CWall is a transparent pixel
 // returns 1 if can pass though the CWall, else 0
 int32_t CSide::CheckForTranspPixel(CFixVector &intersection, int16_t iFace) {
@@ -100,7 +100,7 @@ int32_t CSide::CheckForTranspPixel(CFixVector &intersection, int16_t iFace) {
     fix u, v;
     int32_t nTranspType;
 
-    HitPointUV(&u, &v, NULL, intersection, iFace); //	Don't compute light value.
+    HitPointUV(&u, &v, NULL, intersection, iFace); // Don't compute light value.
     if (m_nOvlTex) {
         nTranspType = PixelTranspType(m_nOvlTex, m_nOvlOrient, m_nFrame, u, v);
         if (nTranspType < 0)
@@ -147,7 +147,7 @@ int32_t CanSeePoint(
     RETVAL(nHitType != HIT_WALL)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // returns true if pViewer can see CObject
 
 int32_t CanSeeObject(int32_t nObject, int32_t bCheckObjs, int32_t nThread) {
@@ -167,9 +167,9 @@ int32_t CanSeeObject(int32_t nObject, int32_t bCheckObjs, int32_t nThread) {
     RETVAL(bCheckObjs ? (nHitType == HIT_OBJECT) && (hitResult.nObject == nObject) : (nHitType != HIT_WALL))
 }
 
-//	-----------------------------------------------------------------------------------------------------------
-//	Determine if two OBJECTS are on a line of sight.  If so, return true, else return false.
-//	Calls fvi.
+// -----------------------------------------------------------------------------------------------------------
+// Determine if two OBJECTS are on a line of sight.  If so, return true, else return false.
+// Calls fvi.
 int32_t ObjectToObjectVisibility(CObject *pViewer, CObject *pTarget, int32_t transType, float fov, int32_t nThread) {
     ENTER(0, nThread);
     CHitQuery hitQuery;
@@ -203,7 +203,7 @@ int32_t ObjectToObjectVisibility(CObject *pViewer, CObject *pTarget, int32_t tra
         (fate == HIT_NONE) || (fate == HIT_BAD_P0) || ((fate == HIT_OBJECT) && (hitResult.nObject == pTarget->Index())))
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t TargetInLineOfFire(void) {
 #if 0 // DBG
@@ -247,5 +247,5 @@ return 0;
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

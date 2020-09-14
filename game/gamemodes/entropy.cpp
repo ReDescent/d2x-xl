@@ -3,7 +3,7 @@
 #include "network.h"
 #include "entropy.h"
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 int32_t FindProducer(int32_t nSegment) {
     for (int32_t i = 0; i < gameData.producerData.nProducers; i++)
@@ -121,7 +121,7 @@ void ConquerRoom(int32_t newOwner, int32_t oldOwner, int32_t roomId) {
     pSeg->ChangeTexture(newOwner);
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 void StartConquerWarning(void) {
     if (extraGameInfo[1].entropy.bDoCaptureWarning) {
@@ -132,7 +132,7 @@ void StartConquerWarning(void) {
     }
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 void StopConquerWarning(void) {
     if (gameStates.entropy.bConquerWarning) {
@@ -143,7 +143,7 @@ void StopConquerWarning(void) {
     }
 }
 
-//	------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 int32_t CSegment::ConquerCheck(void) {
     CPlayerData *pPlayer = gameData.multiplayer.players + N_LOCALPLAYER;

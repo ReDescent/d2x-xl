@@ -23,14 +23,14 @@ COPYRIGHT 1993	999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "cockpit.h"
 #include "scores.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static void DuplicateWeaponMsg(int32_t nWeaponIndex, int32_t nPlayer) {
     if (ISLOCALPLAYER(nPlayer))
         HUDInitMessage("%s %s!", TXT_ALREADY_HAVE_THE, PRIMARY_WEAPON_NAMES(nWeaponIndex));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // called when a primary weapon is picked up
 // returns true if actually picked up
@@ -85,7 +85,7 @@ int32_t PickupPrimary(int32_t nWeaponIndex, int32_t nPlayer) {
     RETVAL(1)
 }
 
-//	---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 int32_t MaxSecondaryAmmo(int32_t nWeapon) {
     int32_t nMaxAmount = nMaxSecondaryAmmo[nWeapon];
@@ -110,10 +110,10 @@ int32_t MaxSecondaryAmmo(int32_t nWeapon) {
     return nMaxAmount;
 }
 
-//	---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 // called when one of these weapons is picked up
 // when you pick up a secondary, you always get the weapon & ammo for it
-//	Returns true if powerup picked up, else returns false.
+// Returns true if powerup picked up, else returns false.
 int32_t PickupSecondary(CObject *pObj, int32_t nWeaponIndex, int32_t nAmount, int32_t nPlayer) {
     ENTER(0, 0);
     int32_t nMaxAmount;
@@ -189,10 +189,10 @@ int32_t PickupSecondary(CObject *pObj, int32_t nWeaponIndex, int32_t nAmount, in
     RETVAL(1)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // called when ammo (for the vulcan cannon) is picked up
-//	Returns the amount picked up
+// Returns the amount picked up
 int32_t PickupAmmo(int32_t classFlag, int32_t nWeaponIndex, int32_t ammoCount, const char *pszMsg, int32_t nPlayer) {
     ENTER(0, 0);
     int32_t nMaxAmmo, nCutPoint, nSupposedWeapon = gameData.weaponData.nPrimary;
@@ -337,7 +337,7 @@ int32_t PickupGun(CObject *pObj, int32_t nId, int32_t nPlayer) {
     RETVAL(PickupEnergyBoost(NULL, nPlayer))
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupGatlingGun(CObject *pObj, int32_t nId, int32_t nPlayer) {
     ENTER(0, 0);
@@ -363,5 +363,5 @@ int32_t PickupGatlingGun(CObject *pObj, int32_t nId, int32_t nPlayer) {
     RETVAL(bPickedUp)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

@@ -483,7 +483,7 @@ bSemaphore [nThread] = 1;
             pFace->m_info.color.Assign(faceColor[nColor]);
             if (gameStates.render.bPerPixelLighting && (nColor == 1))
                 nColor = -1;
-            //			SetDynLightMaterial (nSegment, pFace->m_info.nSide, -1);
+            // 		SetDynLightMaterial (nSegment, pFace->m_info.nSide, -1);
             pColor = FACES.color + pFace->m_info.nIndex;
             for (h = 0; h < pFace->m_info.nVerts; h++, pColor++) {
                 if (gameStates.render.bFullBright)
@@ -625,7 +625,7 @@ void ComputeDynamicTriangleLight(int32_t nStart, int32_t nEnd, int32_t nThread) 
                 bComputeLight = false;
             }
             // if (gameStates.render.bPerPixelLighting && (nColor == 1))
-            //	nColor = -1;
+            // nColor = -1;
             pFace->m_info.bHasColor = 1;
             for (k = pFace->m_info.nTris, pTriangle = FACES.tris + pFace->m_info.nTriIndex; k; k--, pTriangle++) {
                 nIndex = pTriangle->nIndex;

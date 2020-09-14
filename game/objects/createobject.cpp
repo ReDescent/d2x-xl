@@ -669,7 +669,7 @@ CreateWeapon(uint8_t nId, int16_t nCreator, int16_t nSegment, const CFixVector &
             rType = RT_LASER; // Render as a laser even if blob (see render code above for explanation)
             break;
         case WEAPON_RENDER_POLYMODEL:
-            xSize = 0; //	Filled in below.
+            xSize = 0; // Filled in below.
             rType = RT_POLYOBJ;
             break;
         case WEAPON_RENDER_NONE:
@@ -824,7 +824,7 @@ int32_t DropMarkerObject(CFixVector &vPos, int16_t nSegment, CFixMatrix &orient,
         RETVAL(-1)
     pObj->rType.polyObjInfo.nModel = gameData.modelData.nMarkerModel;
     pObj->mType.spinRate = pObj->info.position.mOrient.m.dir.u * (I2X(1) / 2);
-    //	MK, 10/16/95: Using lifeleft to make it flash, thus able to trim lightlevel from all OBJECTS.
+    // MK, 10/16/95: Using lifeleft to make it flash, thus able to trim lightlevel from all OBJECTS.
     pObj->SetLife(IMMORTAL_TIME);
     RETVAL(nObject)
 }

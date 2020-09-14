@@ -143,50 +143,14 @@ void COGL::FlushShadowMaps(int32_t nEffects) {
 
 //------------------------------------------------------------------------------
 
-const char *shadowMapVS = "void main() {\r\n"
-                          "gl_TexCoord[0] = gl_MultiTexCoord0;\r\n"
-                          "gl_Position = ftransform();\r\n"
-                          "gl_FrontColor = gl_Color;\r\n"
-                          "}\r\n";
+const char *shadowMapVS =
+    "void main() {\r\n"
+    "gl_TexCoord[0] = gl_MultiTexCoord0;\r\n"
+    "gl_Position = ftransform();\r\n"
+    "gl_FrontColor = gl_Color;\r\n"
+    "}\r\n";
 
 const char *shadowMapFS =
-#if 0
-
-	"uniform sampler2D sceneColor;\r\n" \
-	"uniform sampler2D sceneDepth;\r\n" \
-	"uniform sampler2DShadow shadowMap;\r\n" \
-	"uniform mat4 modelpViewrojInverse;\r\n" \
-	"uniform vec3 lightPos;\r\n" \
-	"uniform float lightRange;\r\n" \
-	"#define ZNEAR 1.0\r\n" \
-	"#define ZFAR 5000.0\r\n" \
-	"#define A (ZNEAR + ZFAR)\r\n" \
-	"#define B (ZNEAR - ZFAR)\r\n" \
-	"#define C (2.0 * ZNEAR * ZFAR)\r\n" \
-	"#define D (cameraNDC.z * B)\r\n" \
-	"#define ZEYE -(C / (A + D))\r\n" \
-	"void main() {\r\n" \
-	"float fragDepth = texture2D (sceneDepth, gl_TexCoord [0].xy).r;\r\n" \
-	"vec3 cameraNDC = (vec3 (gl_TexCoord [0].xy, fragDepth) - 0.5) * 2.0;\r\n" \
-	"vec4 cameraClipPos;\r\n" \
-	"cameraClipPos.w = -ZEYE;\r\n" \
-	"cameraClipPos.xyz = cameraNDC * cameraClipPos.w;\r\n" \
-	"vec4 lightWinPos = gl_TextureMatrix [2] * cameraClipPos;\r\n" \
-	"float w = abs (lightWinPos.w);\r\n" \
-	"float lit = ((w < 0.00001) || (abs (lightWinPos.x) > w) || (abs (lightWinPos.y) > w)) ? 1.0 : shadow2DProj (shadowMap, lightWinPos));\r\n" \
-	"float light;\r\n" \
-	"if (lit == 1)\r\n" \
-	"   light = 1.0;\r\n" \
-	"else {\r\n" \
-	"   vec4 worldPos = modelpViewrojInverse * cameraClipPos;\r\n" \
-	"   float lightDist = length (lightPos - worldPos.xyz);\r\n" \
-	"   light = 0.25 + 0.75 * sqrt ((lightRange - min (lightRange, lightDist)) / lightRange);\r\n" \
-	"   }\r\n" \
-	"gl_FragColor = vec4 (texture2D (sceneColor, gl_TexCoord [0].xy).rgb * light, 1.0);\r\n" \
-	"}\r\n";
-
-#else
-
     "uniform sampler2D sceneColor;\r\n"
     "uniform sampler2D sceneDepth;\r\n"
     "uniform sampler2DShadow shadowMap;\r\n"
@@ -226,8 +190,6 @@ const char *shadowMapFS =
     "light = 1.0 - 0.75 * sqrt ((lightRange - min (lightRange, lightDist)) / lightRange) * (1.0 - light / SAMPLE_COUNT);\r\n"
     "gl_FragColor = vec4 (texture2D (sceneColor, gl_TexCoord [0].xy).rgb * light, 1.0);\r\n"
     "}\r\n";
-
-#endif
 
     //-------------------------------------------------------------------------
 

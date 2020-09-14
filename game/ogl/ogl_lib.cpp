@@ -394,7 +394,7 @@ void COGL::Initialize(void) {
     // m_states.Initialize ();
     // m_data.Initialize ();
     // if (!semaphore)
-    //	semaphore = SDL_CreateMutex ();
+    // semaphore = SDL_CreateMutex ();
 }
 
 //------------------------------------------------------------------------------
@@ -468,17 +468,11 @@ void COGL::SetupProjection(CTransformation &transformation) {
             ZNEAR,
             ZFAR);
     else if (IsOculusRift()) {
-#if 0
-	glLoadMatrixf ((GLfloat*) gameData.renderData.rift.m_eyes [StereoSeparation () > 0].Projection.M);
-#elif 0
-        SetupFrustum(2 * StereoSeparation());
-#else
         gluPerspective(
             gameStates.render.glFOV * X2D(transformation.m_info.zoom) / RIFT_DEFAULT_ZOOM,
             gameData.renderData.scene.AspectRatio(),
             ZNEAR,
             ZFAR);
-#endif
     } else if (gameOpts->render.stereo.nMethod == STEREO_PARALLEL)
         SetupFrustum(StereoSeparation());
     else
@@ -798,13 +792,8 @@ void COGL::EndFrame(int32_t nWindow) {
 void COGL::EnableLighting(int32_t bSpecular) {
     if (gameOpts->ogl.bObjLighting || (gameStates.render.bPerPixelLighting == 2)) {
         static GLfloat fBlack[] = {0.0f, 0.0f, 0.0f, 1.0f};
-#if 0
-            static GLfloat fWhite [] = {1.0f, 1.0f, 1.0f, 1.0f};
-#endif
-#if 1
         static GLfloat fAmbient[] = {0.1f, 0.1f, 0.1f, 1.0f};
         static GLfloat fDiffuse[] = {0.9f, 0.9f, 0.9f, 1.0f};
-#endif
         static GLfloat fSpecular[] = {0.5f, 0.5f, 0.5f, 1.0f};
 
         SetLighting(true);
@@ -862,24 +851,6 @@ void COGL::ResetTransform(int32_t bForce) {
 //------------------------------------------------------------------------------
 
 void COGL::DrawArrays(GLenum mode, GLint first, GLsizei count) {
-#if 0 // DBG
-    if (count < 1)
-        PrintLog (0, "glDrawArrays: invalid count\n");
-    else if (count > 100000)
-        PrintLog (0, "glDrawArrays: suspiciously high count\n");
-    else if (mode > GL_POLYGON)
-        PrintLog (0, "glDrawArrays: invalid mode\n");
-#if TRACK_STATES || DBG_OGL
-    else if (m_data.bUseTextures [m_data.nTMU [0]] && !m_data.clientStates [m_data.nTMU [0]][0])
-        PrintLog (0, "glDrawArrays: client data not enabled\n");
-#endif
-    else
-#endif
-#if 0 // DBG_OGL
-    if (!m_data.clientBuffers [/*m_data.nTMU [0]*/0][0].buffer)
-        PrintLog (0, "glDrawArrays: client data not enabled\n");
-    else
-#endif
     glDrawArrays(mode, first, count);
 }
 
@@ -891,10 +862,6 @@ void COGL::RebuildContext(int32_t bGame) {
     m_data.Initialize();
     SetupExtensions();
     backgroundManager.Rebuild();
-#if 0
-    if (!gameStates.app.bGameRunning)
-        messageBox.Show (TXT_PREPARE_FOR_DESCENT);
-#endif
     ResetClientStates();
     ResetTextures(1, bGame);
     if (bGame) {

@@ -31,7 +31,7 @@ static int16_t start_points[MAX_SCANLINES][MAX_HOLES];
 static int16_t hole_length[MAX_SCANLINES][MAX_HOLES];
 static double *scanline = NULL;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void gr_ibitblt(CBitmap *src_bmp, CBitmap *dest_bmp, uint8_t pixel_double) {
     int32_t x, y, sw, sh, srowSize, drowSize, dstart, sy, dy;
@@ -101,7 +101,7 @@ void gr_ibitblt(CBitmap *src_bmp, CBitmap *dest_bmp, uint8_t pixel_double) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void gr_ibitblt_create_mask(CBitmap *mask_bmp, int32_t sx, int32_t sy, int32_t sw, int32_t sh, int32_t srowSize) {
     int32_t x, y;
@@ -138,7 +138,7 @@ void gr_ibitblt_create_mask(CBitmap *mask_bmp, int32_t sx, int32_t sy, int32_t s
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void gr_ibitblt_find_hole_size(CBitmap *mask_bmp, int32_t *minx, int32_t *miny, int32_t *maxx, int32_t *maxy) {
     uint8_t c;
@@ -174,5 +174,5 @@ void gr_ibitblt_find_hole_size(CBitmap *mask_bmp, int32_t *minx, int32_t *miny, 
     Assert(count);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

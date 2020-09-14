@@ -140,11 +140,6 @@ GLuint COGL::CopyDepthTexture(int32_t nId, int32_t nTMU, int32_t bForce) {
     if (m_states.hDepthBuffer[nId] || (m_states.hDepthBuffer[nId] = CreateDepthTexture(-1, nId, nId))) {
         BindTexture(m_states.hDepthBuffer[nId]);
         if (bForce || !m_states.bDepthBuffer[nId]) {
-#if 0
-		if (ogl.StereoDevice () == -GLASSES_SHUTTER_NVIDIA)
-			ogl.SetReadBuffer ((ogl.StereoSeparation () < 0) ? GL_BACK_LEFT : GL_BACK_RIGHT, 0);
-		else
-#endif
             ogl.SetReadBuffer(
                 GL_BACK,
                 (gameStates.render.bRenderIndirect > 0) ||
@@ -272,36 +267,3 @@ GLuint COGL::CopyColorTexture(void) {
     }
     return m_states.hColorBuffer;
 }
-
-// -----------------------------------------------------------------------------------
-
-#if 0
-
-GLuint COGL::CreateStencilTexture (int32_t nTMU, int32_t bFBO)
-{
-	GLuint	hBuffer;
-
-if (nTMU > 0)
-	SelectTMU (nTMU);
-ogl.SetTexturing (true);
-GenTextures (1, &hBuffer);
-if (glGetError ())
-	return hDepthBuffer = 0;
-ogl.BindTexture (hBuffer);
-glTexParameteri (GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-glTexImage2D (GL_TEXTURE_2D, 0, GL_STENCIL_COMPONENT8, DrawBufferWidth (), DrawBufferHeight (),
-				  0, GL_STENCIL_COMPONENT, GL_UNSIGNED_BYTE, NULL);
-glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-if (glGetError ()) {
-	DeleteTextures (1, &hBuffer);
-	return hBuffer = 0;
-	}
-return hBuffer;
-}
-
-#endif
-
-//------------------------------------------------------------------------------

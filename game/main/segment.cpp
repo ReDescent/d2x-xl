@@ -10,10 +10,10 @@
 #include "text.h"
 
 // Number of vertices in current mine (ie, gameData.segData.vertices, pointed to by Vp)
-//	Translate table to get opposite CSide of a face on a CSegment.
+// Translate table to get opposite CSide of a face on a CSegment.
 char oppSideTable[SEGMENT_SIDE_COUNT] = {WRIGHT, WBOTTOM, WLEFT, WTOP, WFRONT, WBACK};
 
-//	Note, this MUST be the same as sideVertIndex, it is an int32_t for speed reasons.
+// Note, this MUST be the same as sideVertIndex, it is an int32_t for speed reasons.
 uint16_t sideVertIndex[SEGMENT_SIDE_COUNT][4] = {
     {7, 6, 2, 3}, // left
     {0, 4, 7, 3}, // top
@@ -319,7 +319,7 @@ void CSegment::ComputeRads(fix xMinDist) {
 }
 
 // -----------------------------------------------------------------------------
-//	Given two segments, return the side index in the connecting segment which connects to the base segment
+// Given two segments, return the side index in the connecting segment which connects to the base segment
 
 int32_t CSegment::ConnectedSide(CSegment *other) {
     int16_t nSegment = SEG_IDX(this);
@@ -366,9 +366,9 @@ CSegMasks CSegment::SideMasks(int32_t nSide, const CFixVector &pRef, fix xRad, b
 }
 
 // -------------------------------------------------------------------------------
-//	Make a just-modified CSegment valid.
-//		check all sides to see how many faces they each should have (0, 1, 2)
-//		create new vector normals
+// Make a just-modified CSegment valid.
+// 	check all sides to see how many faces they each should have (0, 1, 2)
+// 	create new vector normals
 void CSegment::Setup(void) {
     ComputeCenter();
     for (int32_t i = 0; i < SEGMENT_SIDE_COUNT; i++) {
@@ -385,9 +385,9 @@ void CSegment::Setup(void) {
     }
 }
 
-//	--------------------------------------------------------------------------------
-//	Picks a Random point in a CSegment like so:
-//		From center, go up to 50% of way towards any of the 8 vertices.
+// --------------------------------------------------------------------------------
+// Picks a Random point in a CSegment like so:
+// 	From center, go up to 50% of way towards any of the 8 vertices.
 CFixVector CSegment::RandomPoint(void) {
     int32_t nVertex;
     do {
@@ -521,7 +521,7 @@ void CSegment::SetTexture(int32_t nSide, CSegment *pConnSeg, int16_t nConnSide, 
     int32_t nFrames;
 
     // if (gameData.demoData.nState == ND_STATE_PLAYBACK)
-    //	RETURN
+    // RETURN
     if (nConnSide < 0)
         pConnSeg = NULL;
     if (pAnim->flags & WCF_ALTFMT) {
@@ -1008,8 +1008,8 @@ int32_t CSegment::ProcessWallHit(int32_t nSide, fix damage, int32_t nPlayer, COb
 
     Assert(nPlayer > -1);
 
-    //	Determine whether player is moving forward.  If not, don't say negative
-    //	messages because he probably didn't intentionally hit the door.
+    // Determine whether player is moving forward.  If not, don't say negative
+    // messages because he probably didn't intentionally hit the door.
     RETVAL(pWall->ProcessHit(nPlayer, pObj))
 }
 
@@ -1034,7 +1034,7 @@ void CSegment::OperateTrigger(int32_t nSide, CObject *pObj, int32_t bShot) {
         MultiSendTrigger(Index(), pObj->Index());
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // if an effect is hit, and it can blow up, then blow it up
 // returns true if it blew up
 int32_t CSegment::TextureIsDestructable(int32_t nSide, tDestructableTextureProps *pTexProps) {
@@ -1067,7 +1067,7 @@ int32_t CSegment::TextureIsDestructable(int32_t nSide, tDestructableTextureProps
     RETVAL(1)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // if an effect is hit, and it can blow up, then blow it up
 // returns true if it blew up
 
@@ -1084,7 +1084,7 @@ int32_t CSegment::BlowupTexture(int32_t nSide, CFixVector &vHit, CObject *pBlowe
     CObject *pParent = (!pBlower || (pBlower->cType.laserInfo.parent.nObject < 0))
                            ? NULL
                            : OBJECT(pBlower->cType.laserInfo.parent.nObject);
-    //	If this CWall has a CTrigger and the pBlower-upper is not the player or the buddy, abort!
+    // If this CWall has a CTrigger and the pBlower-upper is not the player or the buddy, abort!
 
     if (pParent) {
         // only the player and the guidebot may blow a texture up if a trigger is attached to it
@@ -1223,7 +1223,7 @@ CSide *CSegment::OppositeSide(int32_t nSide) {
     return SEGMENT(m_children[nSide])->AdjacentSide(Index());
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Check whether side nSide in segment nSegment can be seen from this side.
 
 int32_t CSegment::SeesConnectedSide(int16_t nSide, int16_t nChildSeg, int16_t nChildSide) {
@@ -1264,9 +1264,9 @@ bool CSegment::IsSolid(int32_t nSide) {
 }
 
 // -------------------------------------------------------------------------------
-//	Set up all segments.
-//	gameData.segData.nLastSegment must be set.
-//	For all used segments (number <= gameData.segData.nLastSegment), nSegment field must be != -1.
+// Set up all segments.
+// gameData.segData.nLastSegment must be set.
+// For all used segments (number <= gameData.segData.nLastSegment), nSegment field must be != -1.
 
 void SetupSegments(fix xPlaneDistTolerance) {
 #if 0

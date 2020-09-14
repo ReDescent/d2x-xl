@@ -95,7 +95,7 @@ extern CGenericCockpit *cockpit;
 extern double cmScaleX, cmScaleY;
 extern int nHUDLineSpacing;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define HUD_SCALE(v, s) (int(float(v) * (s) /*+ 0.5*/))
 #define HUD_SCALE_X(v) HUD_SCALE(v, m_info.xScale)
@@ -104,6 +104,6 @@ extern int nHUDLineSpacing;
 #define HUD_LHY(y) (gameStates.menus.bHires ? (24 * (y)) / 10 : y)
 #define HUD_ASPECT ((double)screen.Height() / (double)screen.Width() / 0.75)
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #endif /* _GAUGES_H */

@@ -207,7 +207,7 @@ void StartEndLevelSequence(int32_t bSecret) {
     }
     if (gameStates.app.bPlayerIsDead || (gameData.objData.pConsole->info.nFlags & OF_SHOULD_BE_DEAD))
         return; // don't start if dead!
-    //	Dematerialize Buddy!
+    // Dematerialize Buddy!
     FORALL_ROBOT_OBJS(pObj)
     if (pObj->IsGuideBot()) {
         CreateExplosion(pObj->info.nSegment, pObj->info.position.vPos, I2X(7) / 2, ANIM_POWERUP_DISAPPEARANCE);

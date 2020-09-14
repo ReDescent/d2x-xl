@@ -103,11 +103,6 @@ void RenderHitbox(CObject *pObj, float red, float green, float blue, float alpha
     tHitbox *hb = TransformHitboxes(pObj, &pObj->info.position.vPos);
 
     for (; iBox <= nBoxes; iBox++) {
-#if 0
-	if (iBox)
-		transformation.Begin (pmhb [iBox].vOffset, CAngleVector::ZERO, __FILE__, __LINE__);
-	TransformHitboxf (pObj, vertList, iBox);
-#endif
         if ((pObj->info.nType == OBJ_PLAYER) && (iBox == nDbgBox))
             glColor4f(1.0f, 0, 0, alpha);
         else
@@ -155,20 +150,6 @@ void RenderHitbox(CObject *pObj, float red, float green, float blue, float alpha
         glLineWidth(1);
     }
     float r = X2F(CFixVector::Dist(pmhb->vMin, pmhb->vMax) / 2);
-#if 0 // DBG //display collision point
-if (gameStates.app.nSDLTicks [0] - gameData.modelData.hitboxes [pObj->ModelId ()].tHit < 500) {
-	CObject	o;
-
-	o.info.position.vPos = gameData.modelData.hitboxes [pObj->ModelId ()].vHit;
-	o.info.position.mOrient = pObj->info.position.mOrient;
-	o.SetSize (I2X (2));
-	int32_t nModel = pObj->rType.polyObjInfo.nModel;
-	pObj->rType.polyObjInfo.nModel = -1;
-	pObj->rType.polyObjInfo.nModel = nModel;
-	//SetupRenderView (0, NULL);
-	DrawShieldSphere (&o, 1, 0, 0, 0.33f, 1);
-	}
-#endif
     ogl.SetDepthWrite(true);
     ogl.SetDepthMode(GL_LESS);
 }

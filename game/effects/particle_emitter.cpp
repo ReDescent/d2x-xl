@@ -35,7 +35,7 @@
 #include "renderthreads.h"
 #include "automap.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 char CParticleEmitter::ObjectClass(int32_t nObject) {
     if ((nObject >= 0) && (nObject < 0x70000000)) {

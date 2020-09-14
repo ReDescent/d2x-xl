@@ -70,7 +70,7 @@ uint8_t john_cheats_1[JOHN_CHEATS_SIZE_1] = {
     KEY_Y ^ 0x40 ^ 0x34,
     KEY_S ^ 0x50 ^ 0x34};
 
-#define PARALLAX 0 //	If !0, then special debugging info for Parallax eyes only enabled.
+#define PARALLAX 0 // If !0, then special debugging info for Parallax eyes only enabled.
 
 #define MIN_D 0x100
 
@@ -85,10 +85,10 @@ int32_t nAttackScaleD1 = 24;
 
 static uint8_t xlatD1Animation[] = {AS_REST, AS_REST, AS_ALERT, AS_ALERT, AS_FLINCH, AS_FIRE, AS_RECOIL, AS_REST};
 
-int32_t john_cheats_index_1; //	POBOYS		detonate reactor
-int32_t john_cheats_index_2; //	PORGYS		high speed weapon firing
-int32_t john_cheats_index_3; //	LUNACY		lunacy (insane behavior, rookie firing)
-int32_t john_cheats_index_4; //	PLETCHnnn	paint robots
+int32_t john_cheats_index_1; // POBOYS		detonate reactor
+int32_t john_cheats_index_2; // PORGYS		high speed weapon firing
+int32_t john_cheats_index_3; // LUNACY		lunacy (insane behavior, rookie firing)
+int32_t john_cheats_index_4; // PLETCHnnn	paint robots
 
 extern int32_t nRobotSoundVolume;
 
@@ -96,7 +96,7 @@ extern int32_t nRobotSoundVolume;
 
 #define OVERALL_AGITATION_MAX 100
 
-#define D1_MAX_AI_CLOAK_INFO 8 //	Must be a power of 2!
+#define D1_MAX_AI_CLOAK_INFO 8 // Must be a power of 2!
 
 #ifndef BOSS_CLOAK_DURATION
 #define BOSS_CLOAK_DURATION (I2X(7))
@@ -104,39 +104,39 @@ extern int32_t nRobotSoundVolume;
 #ifndef BOSS_DEATH_DURATION
 #define BOSS_DEATH_DURATION (I2X(6))
 #endif
-#define BOSS_DEATH_SOUND_DURATION 0x2ae14 //	2.68 seconds
+#define BOSS_DEATH_SOUND_DURATION 0x2ae14 // 2.68 seconds
 
-//	Amount of time since the current pRobot was last processed for things such as movement.
-//	It is not valid to use gameData.timeData.xFrame because robots do not get moved every frame.
+// Amount of time since the current pRobot was last processed for things such as movement.
+// It is not valid to use gameData.timeData.xFrame because robots do not get moved every frame.
 // fix	D1_AI_proc_time;
 
-//	---------- John: End of variables which must be saved as part of gamesave. ----------
+// ---------- John: End of variables which must be saved as part of gamesave. ----------
 
 int32_t D1_AI_evaded = 0;
 
-//	0	mech
-//	1	green claw
-//	2	spider
-//	3	josh
-//	4	violet
-//	5	cloak vulcan
-//	6	cloak mech
-//	7	brain
-//	8	onearm
-//	9	plasma
-//	10	toaster
-//	11	bird
-//	12	missile bird
-//	13	polyhedron
-//	14	baby spider
-//	15	mini boss
-//	16	super mech
-//	17	shareware boss
-//	18	cloak-green	; note, gating in this guy benefits pPlayer, cloak objects
-//	19	vulcan
-//	20	toad
-//	21	4-claw
-//	22	quad-laser
+// 0	mech
+// 1	green claw
+// 2	spider
+// 3	josh
+// 4	violet
+// 5	cloak vulcan
+// 6	cloak mech
+// 7	brain
+// 8	onearm
+// 9	plasma
+// 10	toaster
+// 11	bird
+// 12	missile bird
+// 13	polyhedron
+// 14	baby spider
+// 15	mini boss
+// 16	super mech
+// 17	shareware boss
+// 18	cloak-green	; note, gating in this guy benefits pPlayer, cloak objects
+// 19	vulcan
+// 20	toad
+// 21	4-claw
+// 22	quad-laser
 // 23 super boss
 
 // uint8_t	super_boss_gate_list [] = {0, 1, 2, 9, 11, 16, 18, 19, 21, 22, 0, 9, 9, 16, 16, 18, 19, 19, 22, 22};
@@ -158,21 +158,21 @@ typedef struct awareness_event {
     CFixVector pos; // absolute 3 space location of event
 } awareness_event;
 
-//	These globals are set by a call to FindHitpoint, which is a slow routine,
-//	so we don't want to call it again (for this CObject) unless we have to.
+// These globals are set by a call to FindHitpoint, which is a slow routine,
+// so we don't want to call it again (for this CObject) unless we have to.
 
 #define D1_AIS_MAX 8
 #define D1_AIE_MAX 4
 
 //--unused-- int32_t	Processed_this_frame, LastFrameCount;
 #if DBG
-//	Index into this array with pLocalInfo->mode
+// Index into this array with pLocalInfo->mode
 char mode_text[8][9] = {"STILL   ", "WANDER  ", "FOL_PATH", "CHASE_OB", "RUN_FROM", "HIDE    ", "FOL_PAT2", "OPENDOR2"};
 
-//	Index into this array with pStaticInfo->behavior
+// Index into this array with pStaticInfo->behavior
 char behavior_text[6][9] = {"STILL   ", "NORMAL  ", "HIDE    ", "RUN_FROM", "FOLPATH ", "STATION "};
 
-//	Index into this array with pStaticInfo->GOAL_STATE or pStaticInfo->CURRENT_STATE
+// Index into this array with pStaticInfo->GOAL_STATE or pStaticInfo->CURRENT_STATE
 char state_text[8][5] = {
     "NONE",
     "REST",
@@ -188,27 +188,27 @@ int32_t D1_AI_animation_test = 0;
 #endif
 
 // Current state indicates where the pRobot current is, or has just done.
-//	Transition table between states for an AI CObject.
-//	 First dimension is trigger event.
-//	Second dimension is current state.
-//	 Third dimension is goal state.
-//	Result is new goal state.
-//	ERR_ means something impossible has happened.
+// Transition table between states for an AI CObject.
+//  First dimension is trigger event.
+// Second dimension is current state.
+//  Third dimension is goal state.
+// Result is new goal state.
+// ERR_ means something impossible has happened.
 uint8_t D1_AI_transition_table[D1_AI_MAX_EVENT][D1_AI_MAX_STATE][D1_AI_MAX_STATE] = {
     {
-        //	Event = AIE_FIRE, a nearby CObject fired
-        //	none			rest			srch			lock			flin			fire			reco				// CURRENT is rows, GOAL
+        // Event = AIE_FIRE, a nearby CObject fired
+        // none			rest			srch			lock			flin			fire			reco				// CURRENT is rows, GOAL
         //is columns
-        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, //	none
-        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, //	rest
-        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, //	search
-        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, //	lock
-        {D1_AIS_ERR_, D1_AIS_REST, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FIRE, D1_AIS_RECO}, //	flinch
-        {D1_AIS_ERR_, D1_AIS_FIRE, D1_AIS_FIRE, D1_AIS_FIRE, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, //	fire
-        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_FIRE} //	recoil
+        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, // none
+        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, // rest
+        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, // search
+        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, // lock
+        {D1_AIS_ERR_, D1_AIS_REST, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FIRE, D1_AIS_RECO}, // flinch
+        {D1_AIS_ERR_, D1_AIS_FIRE, D1_AIS_FIRE, D1_AIS_FIRE, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO}, // fire
+        {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_FIRE} // recoil
     },
 
-    //	Event = AIE_HITT, a nearby CObject was hit (or a wall was hit)
+    // Event = AIE_HITT, a nearby CObject was hit (or a wall was hit)
     {{D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO},
      {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO},
      {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO},
@@ -217,7 +217,7 @@ uint8_t D1_AI_transition_table[D1_AI_MAX_EVENT][D1_AI_MAX_STATE][D1_AI_MAX_STATE
      {D1_AIS_ERR_, D1_AIS_REST, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FIRE, D1_AIS_RECO},
      {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_FIRE}},
 
-    //	Event = AIE_COLL, pPlayer collided with pRobot
+    // Event = AIE_COLL, pPlayer collided with pRobot
     {{D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO},
      {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO},
      {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_RECO},
@@ -226,8 +226,8 @@ uint8_t D1_AI_transition_table[D1_AI_MAX_EVENT][D1_AI_MAX_STATE][D1_AI_MAX_STATE
      {D1_AIS_ERR_, D1_AIS_REST, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FIRE, D1_AIS_RECO},
      {D1_AIS_ERR_, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_LOCK, D1_AIS_FLIN, D1_AIS_FIRE, D1_AIS_FIRE}},
 
-    //	Event = AIE_HURT, pPlayer hurt pRobot (by firing at and hitting it)
-    //	Note, this doesn't necessarily mean the pRobot JUST got hit, only that that is the most recent thing that
+    // Event = AIE_HURT, pPlayer hurt pRobot (by firing at and hitting it)
+    // Note, this doesn't necessarily mean the pRobot JUST got hit, only that that is the most recent thing that
     // happened.
     {{D1_AIS_ERR_, D1_AIS_FLIN, D1_AIS_FLIN, D1_AIS_FLIN, D1_AIS_FLIN, D1_AIS_FLIN, D1_AIS_FLIN},
      {D1_AIS_ERR_, D1_AIS_FLIN, D1_AIS_FLIN, D1_AIS_FLIN, D1_AIS_FLIN, D1_AIS_FLIN, D1_AIS_FLIN},
@@ -253,8 +253,8 @@ uint8_t john_cheats_2[2 * JOHN_CHEATS_SIZE_2] = {
 static CHitResult aiHitResult;
 
 // ---------------------------------------------------------
-//	On entry, gameData.botData.nTypes [1] had darn sure better be set.
-//	Mallocs gameData.botData.nTypes [1] tRobotInfo structs into global tRobotInfo.
+// On entry, gameData.botData.nTypes [1] had darn sure better be set.
+// Mallocs gameData.botData.nTypes [1] tRobotInfo structs into global tRobotInfo.
 void john_cheat_func_1(int32_t key) {
     if (!gameStates.app.cheats.bEnabled)
         return;
@@ -271,7 +271,7 @@ void john_cheat_func_1(int32_t key) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-//	Given a behavior, set initial mode.
+// Given a behavior, set initial mode.
 int32_t D1_AI_behavior_to_mode(int32_t behavior) {
     switch (behavior) {
     case D1_AIB_STILL:
@@ -287,7 +287,7 @@ int32_t D1_AI_behavior_to_mode(int32_t behavior) {
     case D1_AIB_STATION:
         return D1_AIM_STILL;
     default:
-        Int3(); //	Contact Mike: Error, illegal behavior type
+        Int3(); // Contact Mike: Error, illegal behavior type
     }
 
     return D1_AIM_STILL;
@@ -355,10 +355,10 @@ void john_cheat_func_3(int32_t key) {
         john_cheats_index_3 = 0;
 }
 
-//	----------------------------------------------------------------
-//	Do *dest = *delta unless:
-//				*delta is pretty small
-//		and	they are of different signs.
+// ----------------------------------------------------------------
+// Do *dest = *delta unless:
+// 			*delta is pretty small
+// 	and	they are of different signs.
 void set_rotvel_and_saturate(fix *dest, fix delta) {
     if ((delta ^ *dest) < 0) {
         if (abs(delta) < I2X(1) / 8) {
@@ -399,7 +399,7 @@ void ai_turn_towards_vector(CFixVector *vGoal, CObject *pObj, fix rate) {
         new_fVec += pObj->info.position.mOrient.m.dir.f;
         mag = CFixVector::Normalize(new_fVec);
         if (mag < I2X(1) / 256) {
-            new_fVec = *vGoal; //	if degenerate vector, go right to goal
+            new_fVec = *vGoal; // if degenerate vector, go right to goal
         }
     }
     pObj->info.position.mOrient = CFixMatrix::CreateFR(new_fVec, pObj->info.position.mOrient.m.dir.r);
@@ -409,7 +409,7 @@ void ai_turn_towards_vector(CFixVector *vGoal, CObject *pObj, fix rate) {
 void ai_turn_randomly(CFixVector *vec_to_player, CObject *pObj, fix rate, int32_t nPrevVisibility) {
     CFixVector curVec;
 
-    //	Random turning looks too stupid, so 1/4 of time, cheat.
+    // Random turning looks too stupid, so 1/4 of time, cheat.
     if (nPrevVisibility)
         if (RandShort() > 0x7400) {
             ai_turn_towards_vector(vec_to_player, pObj, rate);
@@ -436,10 +436,10 @@ void ai_turn_randomly(CFixVector *vec_to_player, CObject *pObj, fix rate, int32_
     pObj->mType.physInfo.rotVel = curVec;
 }
 
-//	gameData.aiData.nOverallAgitation affects:
-//		Widens field of view.  Field of view is in range 0..1 (specified in bitmaps.tbl as N/360 degrees).
-//			gameData.aiData.nOverallAgitation/128 subtracted from field of view, making robots see wider.
-//		Increases distance to which pRobot will search to create path to pPlayer by gameData.aiData.nOverallAgitation/8
+// gameData.aiData.nOverallAgitation affects:
+// 	Widens field of view.  Field of view is in range 0..1 (specified in bitmaps.tbl as N/360 degrees).
+// 		gameData.aiData.nOverallAgitation/128 subtracted from field of view, making robots see wider.
+// 	Increases distance to which pRobot will search to create path to pPlayer by gameData.aiData.nOverallAgitation/8
 // segments. 		Decreases wait between fire times by gameData.aiData.nOverallAgitation/64 seconds.
 
 void john_cheat_func_4(int32_t key) {
@@ -516,12 +516,12 @@ void john_cheat_func_4(int32_t key) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Returns:
-//		0		Player is not visible from CObject, obstruction or something.
-//		1		Player is visible, but not in field of view.
-//		2		Player is visible and in field of view.
-//	Note: Uses gameData.aiData.target.vBelievedPos as pPlayer's position for cloak effect.
-//	NOTE: Will destructively modify *pos if *pos is outside the mine.
+// Returns:
+// 	0		Player is not visible from CObject, obstruction or something.
+// 	1		Player is visible, but not in field of view.
+// 	2		Player is visible and in field of view.
+// Note: Uses gameData.aiData.target.vBelievedPos as pPlayer's position for cloak effect.
+// NOTE: Will destructively modify *pos if *pos is outside the mine.
 int32_t player_is_visible_from_object(CObject *pObj, CFixVector *pos, fix fieldOfView, CFixVector *vec_to_player) {
     fix dot;
 
@@ -566,7 +566,7 @@ int32_t player_is_visible_from_object(CObject *pObj, CFixVector *pos, fix fieldO
 }
 
 // ------------------------------------------------------------------------------------------------------------------
-//	Return 1 if animates, else return 0
+// Return 1 if animates, else return 0
 int32_t do_silly_animation(CObject *pObj) {
     int32_t nObject = pObj->Index();
     tJointPos *jointPositions;
@@ -635,11 +635,11 @@ int32_t do_silly_animation(CObject *pObj) {
     return 1;
 }
 
-//	------------------------------------------------------------------------------------------
-//	Move all sub-objects in an CObject towards their goals.
-//	Current orientation of CObject is at:	polyObjInfo.anim_angles
-//	Goal orientation of CObject is at:		aiInfo.goalAngles
-//	Delta orientation of CObject is at:		aiInfo.deltaAngles
+// ------------------------------------------------------------------------------------------
+// Move all sub-objects in an CObject towards their goals.
+// Current orientation of CObject is at:	polyObjInfo.anim_angles
+// Goal orientation of CObject is at:		aiInfo.goalAngles
+// Delta orientation of CObject is at:		aiInfo.deltaAngles
 void ai_frame_animation(CObject *pObj) {
     int32_t nObject = pObj->Index();
     int32_t nJointCount;
@@ -684,8 +684,8 @@ void SetNextPrimaryFireTime(tAILocalInfo *pLocalInfo, tRobotInfo *pRobotInfo) {
 }
 
 // ----------------------------------------------------------------------------------
-//	When some robots collide with the pPlayer, they attack.
-//	If pPlayer is cloaked, then pRobot probably didn't actually collide, deal with that here.
+// When some robots collide with the pPlayer, they attack.
+// If pPlayer is cloaked, then pRobot probably didn't actually collide, deal with that here.
 void DoD1AIRobotHitAttack(CObject *pRobot, CObject *pPlayer, CFixVector *vCollision) {
     tAILocalInfo *pLocalInfo = &gameData.aiData.localInfo[OBJECTS.Index(pRobot)];
     tRobotInfo *pRobotInfo = &gameData.botData.info[1][pRobot->info.nId];
@@ -695,7 +695,7 @@ void DoD1AIRobotHitAttack(CObject *pRobot, CObject *pPlayer, CFixVector *vCollis
         return;
     //#endif
 
-    //	If pPlayer is dead, stop firing.
+    // If pPlayer is dead, stop firing.
     if (LOCALOBJECT->info.nType == OBJ_GHOST)
         return;
 
@@ -720,8 +720,8 @@ void ai_multi_send_robot_position(int32_t nObject, int32_t force) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Note: Parameter vec_to_player is only passed now because guns which aren't on the forward vector from the
-//	center of the pRobot will not fire right at the pPlayer.  We need to aim the guns at the pPlayer.  Barring that, we
+// Note: Parameter vec_to_player is only passed now because guns which aren't on the forward vector from the
+// center of the pRobot will not fire right at the pPlayer.  We need to aim the guns at the pPlayer.  Barring that, we
 // cheat. 	When this routine is complete, the parameter vec_to_player should not be necessary.
 void ai_fire_laser_at_player(CObject *pObj, CFixVector *fire_point) {
     int32_t nObject = pObj->Index();
@@ -734,7 +734,7 @@ void ai_fire_laser_at_player(CObject *pObj, CFixVector *fire_point) {
         return;
 
 #if DBG
-    //	We should never be coming here for the green guy, as he has no laser!
+    // We should never be coming here for the green guy, as he has no laser!
     if (pRobotInfo->attackType == 1)
         Int3(); // Contact Mike: This is impossible.
 #endif
@@ -742,11 +742,11 @@ void ai_fire_laser_at_player(CObject *pObj, CFixVector *fire_point) {
     if (pObj->info.controlType == CT_MORPH)
         return;
 
-    //	If pPlayer is exploded, stop firing.
+    // If pPlayer is exploded, stop firing.
     if (LOCALPLAYER.m_bExploded)
         return;
 
-    //	If pPlayer is cloaked, maybe don't fire based on how long cloaked and randomness.
+    // If pPlayer is cloaked, maybe don't fire based on how long cloaked and randomness.
     if (LOCALPLAYER.flags & PLAYER_FLAGS_CLOAKED) {
         fix cloak_time = gameData.aiData.cloakInfo[nObject % D1_MAX_AI_CLOAK_INFO].lastTime;
 
@@ -757,7 +757,7 @@ void ai_fire_laser_at_player(CObject *pObj, CFixVector *fire_point) {
             }
     }
 
-    //	Set position to fire at based on difficulty level.
+    // Set position to fire at based on difficulty level.
     bpp_diff.v.coord.x = gameData.aiData.target.vBelievedPos.v.coord.x +
                          SRandShort() * (DIFFICULTY_LEVEL_COUNT - gameStates.app.nDifficultyLevel - 1) * 4;
     bpp_diff.v.coord.y = gameData.aiData.target.vBelievedPos.v.coord.y +
@@ -765,7 +765,7 @@ void ai_fire_laser_at_player(CObject *pObj, CFixVector *fire_point) {
     bpp_diff.v.coord.z = gameData.aiData.target.vBelievedPos.v.coord.z +
                          SRandShort() * (DIFFICULTY_LEVEL_COUNT - gameStates.app.nDifficultyLevel - 1) * 4;
 
-    //	Half the time fire at the pPlayer, half the time lead the pPlayer.
+    // Half the time fire at the pPlayer, half the time lead the pPlayer.
     if (RandShort() > 16384) {
 
         CFixVector::NormalizedDir(vFire, bpp_diff, *fire_point);
@@ -774,9 +774,9 @@ void ai_fire_laser_at_player(CObject *pObj, CFixVector *fire_point) {
         CFixVector vPlayerDirection = bpp_diff - bpp_diff;
 
         // If pPlayer is not moving, fire right at him!
-        //	Note: If the pRobot fires in the direction of its forward vector, this is bad because the weapon does not
-        //	come out from the center of the pRobot; it comes out from the side.  So it is common for the weapon to miss
-        //	its target.  Ideally, we want to point the guns at the pPlayer.  For now, just fire right at the pPlayer.
+        // Note: If the pRobot fires in the direction of its forward vector, this is bad because the weapon does not
+        // come out from the center of the pRobot; it comes out from the side.  So it is common for the weapon to miss
+        // its target.  Ideally, we want to point the guns at the pPlayer.  For now, just fire right at the pPlayer.
         if ((abs(vPlayerDirection.v.coord.x < 0x10000)) && (abs(vPlayerDirection.v.coord.y < 0x10000)) &&
             (abs(vPlayerDirection.v.coord.z < 0x10000))) {
 
@@ -784,7 +784,7 @@ void ai_fire_laser_at_player(CObject *pObj, CFixVector *fire_point) {
 
             // Player is moving.  Determine where the pPlayer will be at the end of the next frame if he doesn't change
             // his
-            //	behavior.  Fire at exactly that point.  This isn't exactly what you want because it will probably take
+            // behavior.  Fire at exactly that point.  This isn't exactly what you want because it will probably take
             // the laser 	a different amount of time to get there, since it will probably be a different distance from
             // the pPlayer. 	So, that's why we write games, instead of guiding missiles...
         } else {
@@ -807,28 +807,28 @@ void ai_fire_laser_at_player(CObject *pObj, CFixVector *fire_point) {
 
     SetNextPrimaryFireTime(pLocalInfo, pRobotInfo);
 
-    //	If the boss fired, allow him to teleport very soon (right after firing, cool!), pending other factors.
+    // If the boss fired, allow him to teleport very soon (right after firing, cool!), pending other factors.
     if (pObj->IsBoss())
         gameData.bossData[0].m_nLastTeleportTime -= gameData.bossData[0].m_nTeleportInterval / 2;
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	vec_goal must be normalized, or close to it.
+// vec_goal must be normalized, or close to it.
 void move_towards_vector(CObject *pObj, CFixVector *vec_goal) {
     tRobotInfo *pRobotInfo = &gameData.botData.info[1][pObj->info.nId];
     if (!pRobotInfo)
         return;
 
-    //	Trying to move towards pPlayer.  If forward vector much different than velocity vector,
-    //	bash velocity vector twice as much towards pPlayer as usual.
+    // Trying to move towards pPlayer.  If forward vector much different than velocity vector,
+    // bash velocity vector twice as much towards pPlayer as usual.
     tPhysicsInfo &pi = pObj->mType.physInfo;
     CFixVector vel = pi.velocity;
     CFixVector::Normalize(vel);
     fix dot = CFixVector::Dot(vel, pObj->info.position.mOrient.m.dir.f);
 
     if (dot < I2X(3) / 4) {
-        //	This funny code is supposed to slow down the pRobot and move his velocity towards his direction
-        //	more quickly than the general code
+        // This funny code is supposed to slow down the pRobot and move his velocity towards his direction
+        // more quickly than the general code
         pi.velocity.v.coord.x =
             pi.velocity.v.coord.x / 2 + FixMul((*vec_goal).v.coord.x, gameData.timeData.xFrame * 32);
         pi.velocity.v.coord.y =
@@ -847,7 +847,7 @@ void move_towards_vector(CObject *pObj, CFixVector *vec_goal) {
     fix speed = pi.velocity.Mag();
     fix xMaxSpeed = pObj->MaxSpeed();
 
-    //	Green guy attacks twice as fast as he moves away.
+    // Green guy attacks twice as fast as he moves away.
     if (pRobotInfo->attackType == 1)
         xMaxSpeed *= 2;
 
@@ -860,13 +860,13 @@ void move_towards_vector(CObject *pObj, CFixVector *vec_goal) {
 
 // --------------------------------------------------------------------------------------------------------------------
 void move_towards_player(CObject *pObj, CFixVector *vec_to_player)
-//	vec_to_player must be normalized, or close to it.
+// vec_to_player must be normalized, or close to it.
 {
     move_towards_vector(pObj, vec_to_player);
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	I am ashamed of this: fast_flag == -1 means Normal slide about.  fast_flag = 0 means no evasion.
+// I am ashamed of this: fast_flag == -1 means Normal slide about.  fast_flag = 0 means no evasion.
 void move_around_player(CObject *pObj, CFixVector *vec_to_player, int32_t fast_flag) {
     tPhysicsInfo &pi = pObj->mType.physInfo;
     fix speed;
@@ -920,10 +920,10 @@ void move_around_player(CObject *pObj, CFixVector *vec_to_player, int32_t fast_f
         break;
     }
 
-    //	Note: -1 means Normal circling about the pPlayer.  > 0 means fast evasion.
+    // Note: -1 means Normal circling about the pPlayer.  > 0 means fast evasion.
     if (fast_flag > 0) {
-        //	Only take evasive action if looking at pPlayer.
-        //	Evasion speed is scaled by percentage of shield left so wounded robots evade less effectively.
+        // Only take evasive action if looking at pPlayer.
+        // Evasion speed is scaled by percentage of shield left so wounded robots evade less effectively.
         fix dot = CFixVector::Dot(*vec_to_player, pObj->info.position.mOrient.m.dir.f);
         if ((dot > pRobotInfo->fieldOfView[gameStates.app.nDifficultyLevel]) &&
             !(gameData.objData.pConsole->info.nFlags & PLAYER_FLAGS_CLOAKED)) {
@@ -931,9 +931,9 @@ void move_around_player(CObject *pObj, CFixVector *vec_to_player, int32_t fast_f
 
             damage_scale = FixDiv(pObj->info.xShield, pRobotInfo->strength);
             if (damage_scale > I2X(1))
-                damage_scale = I2X(1); //	Just in case...
+                damage_scale = I2X(1); // Just in case...
             else if (damage_scale < 0)
-                damage_scale = 0; //	Just in case...
+                damage_scale = 0; // Just in case...
 
             vEvade *= (I2X(fast_flag) + damage_scale);
         }
@@ -958,7 +958,7 @@ void move_away_from_player(CObject *pObj, CFixVector *vec_to_player, int32_t att
     pi.velocity -= *vec_to_player * (gameData.timeData.xFrame * 16);
 
     if (attackType) {
-        //	Get value in 0..3 to choose evasion direction.
+        // Get value in 0..3 to choose evasion direction.
         objref = (pObj->Index() ^ ((gameData.appData.nFrameCount + 3 * pObj->Index()) >> 5)) & 3;
         switch (objref) {
         case 0:
@@ -974,7 +974,7 @@ void move_away_from_player(CObject *pObj, CFixVector *vec_to_player, int32_t att
             pi.velocity += pObj->info.position.mOrient.m.dir.r * (-gameData.timeData.xFrame << 5);
             break;
         default:
-            BRP; //	Impossible, bogus value on objref, must be in 0..3
+            BRP; // Impossible, bogus value on objref, must be in 0..3
         }
     }
 
@@ -987,9 +987,9 @@ void move_away_from_player(CObject *pObj, CFixVector *vec_to_player, int32_t att
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Move towards, away_from or around pPlayer.
-//	Also deals with evasion.
-//	If the flag evade_only is set, then only allowed to evade, not allowed to move otherwise (must have mode ==
+// Move towards, away_from or around pPlayer.
+// Also deals with evasion.
+// If the flag evade_only is set, then only allowed to evade, not allowed to move otherwise (must have mode ==
 // D1_AIM_STILL).
 void ai_move_relative_to_player(
     CObject *pObj,
@@ -1000,7 +1000,7 @@ void ai_move_relative_to_player(
     int32_t evade_only) {
     tRobotInfo *pRobotInfo = &gameData.botData.info[1][pObj->info.nId];
 
-    //	See if should take avoidance.
+    // See if should take avoidance.
 
     // New way, green guys don't evade:	if ((pRobotInfo->attackType == 0) && (pObj->cType.aiInfo.nDangerLaser != -1)) {
     if (pObj->cType.aiInfo.nDangerLaser != -1) {
@@ -1023,11 +1023,11 @@ void ai_move_relative_to_player(
                 fix laser_robot_dot;
                 CFixVector laser_vec_to_robot;
 
-                //	The laser is seen by the pRobot, see if it might hit the pRobot.
-                //	Get the laser's direction.  If it's a polyobj, it can be gotten cheaply from the orientation matrix.
+                // The laser is seen by the pRobot, see if it might hit the pRobot.
+                // Get the laser's direction.  If it's a polyobj, it can be gotten cheaply from the orientation matrix.
                 if (pThreat->info.renderType == RT_POLYOBJ)
                     laser_fVec = pThreat->info.position.mOrient.m.dir.f;
-                else { //	Not a polyobj, get velocity and Normalize.
+                else { // Not a polyobj, get velocity and Normalize.
                     laser_fVec = pThreat->mType.physInfo.velocity; // pThreat->info.position.mOrient.m.v.f;
                     CFixVector::Normalize(laser_fVec);
                 }
@@ -1048,20 +1048,20 @@ void ai_move_relative_to_player(
         }
     }
 
-    //	If only allowed to do evade code, then done.
-    //	Hmm, perhaps brilliant insight.  If want claw-type guys to keep coming, don't return here after evasion.
+    // If only allowed to do evade code, then done.
+    // Hmm, perhaps brilliant insight.  If want claw-type guys to keep coming, don't return here after evasion.
     if ((!pRobotInfo->attackType) && evade_only)
         return;
 
-    //	If we fall out of above, then no CObject to be avoided.
+    // If we fall out of above, then no CObject to be avoided.
     pObj->cType.aiInfo.nDangerLaser = -1;
 
-    //	Green guy selects move around/towards/away based on firing time, not distance.
+    // Green guy selects move around/towards/away based on firing time, not distance.
     if (pRobotInfo->attackType == 1) {
         if (((pLocalInfo->pNextrimaryFire > pRobotInfo->primaryFiringWait[gameStates.app.nDifficultyLevel] / 4) &&
              (dist_to_player < I2X(30))) ||
             gameStates.app.bPlayerIsDead) {
-            //	1/4 of time, move around pPlayer, 3/4 of time, move away from pPlayer
+            // 1/4 of time, move around pPlayer, 3/4 of time, move away from pPlayer
             if (RandShort() < 8192)
                 move_around_player(pObj, vec_to_player, -1);
             else
@@ -1079,12 +1079,12 @@ void ai_move_relative_to_player(
     }
 }
 
-//	-------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------
 int32_t Break_on_object = -1;
 
 void do_firing_stuff(CObject *pObj, int32_t player_visibility, CFixVector *vec_to_player) {
     if (player_visibility >= 1) {
-        //	Now, if in pRobot's field of view, lock onto pPlayer
+        // Now, if in pRobot's field of view, lock onto pPlayer
         fix dot = CFixVector::Dot(pObj->info.position.mOrient.m.dir.f, *vec_to_player);
         if ((dot >= I2X(7) / 8) || (LOCALPLAYER.flags & PLAYER_FLAGS_CLOAKED)) {
             tAIStaticInfo *pStaticInfo = &pObj->cType.aiInfo;
@@ -1116,7 +1116,7 @@ void do_firing_stuff(CObject *pObj, int32_t player_visibility, CFixVector *vec_t
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	If a hiding pRobot gets bumped or hit, he decides to find another hiding place.
+// If a hiding pRobot gets bumped or hit, he decides to find another hiding place.
 void DoD1AIRobotHit(CObject *pObj, int32_t type) {
     if (pObj->info.controlType == CT_AI) {
         if ((type == D1_PA_WEAPON_ROBOT_COLLISION) || (type == D1_PA_PLAYER_COLLISION))
@@ -1137,15 +1137,15 @@ int32_t Do_ai_flag = 1;
 #define CHASE_TIME_LENGTH (I2X(8))
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Note: This function could be optimized.  Surely player_is_visible_from_object would benefit from the
-//	information of a normalized vec_to_player.
-//	Return pPlayer visibility:
-//		0		not visible
-//		1		visible, but pRobot not looking at pPlayer (ie, on an unobstructed vector)
-//		2		visible and in pRobot's field of view
-//		-1		pPlayer is cloaked
-//	If the pPlayer is cloaked, set vec_to_player based on time pPlayer cloaked and last uncloaked position.
-//	Updates pLocalInfo->nPrevVisibility if pPlayer is not cloaked, in which case the previous visibility is left
+// Note: This function could be optimized.  Surely player_is_visible_from_object would benefit from the
+// information of a normalized vec_to_player.
+// Return pPlayer visibility:
+// 	0		not visible
+// 	1		visible, but pRobot not looking at pPlayer (ie, on an unobstructed vector)
+// 	2		visible and in pRobot's field of view
+// 	-1		pPlayer is cloaked
+// If the pPlayer is cloaked, set vec_to_player based on time pPlayer cloaked and last uncloaked position.
+// Updates pLocalInfo->nPrevVisibility if pPlayer is not cloaked, in which case the previous visibility is left
 // unchanged 	and is copied to player_visibility
 void compute_vis_and_vec(
     CObject *pObj,
@@ -1182,7 +1182,7 @@ void compute_vis_and_vec(
                 audio.CreateSegmentSound(pRobotInfo->seeSound, pObj->info.nSegment, 0, *pos, 0, nRobotSoundVolume);
             }
         } else {
-            //	Compute expensive stuff -- vec_to_player and player_visibility
+            // Compute expensive stuff -- vec_to_player and player_visibility
             CFixVector::NormalizedDir(*vec_to_player, gameData.aiData.target.vBelievedPos, *pos);
             if (vec_to_player->IsZero()) {
                 (*vec_to_player).v.coord.x = I2X(1);
@@ -1193,8 +1193,8 @@ void compute_vis_and_vec(
                 pRobotInfo->fieldOfView[gameStates.app.nDifficultyLevel],
                 vec_to_player);
 
-            //	This horrible code added by MK in desperation on 12/13/94 to make robots wake up as soon as they
-            //	see you without killing frame rate.
+            // This horrible code added by MK in desperation on 12/13/94 to make robots wake up as soon as they
+            // see you without killing frame rate.
             tAIStaticInfo *pStaticInfo = &pObj->cType.aiInfo;
             if ((*player_visibility == 2) && (pLocalInfo->nPrevVisibility != 2))
                 if ((pStaticInfo->GOAL_STATE == D1_AIS_REST) || (pStaticInfo->CURRENT_STATE == D1_AIS_REST)) {
@@ -1242,8 +1242,8 @@ void compute_vis_and_vec(
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Move the CObject pObj to a spot in which it doesn't intersect a wall.
-//	It might mean moving it outside its current CSegment.
+// Move the CObject pObj to a spot in which it doesn't intersect a wall.
+// It might mean moving it outside its current CSegment.
 void move_object_to_legal_spot(CObject *pObj) {
     CFixVector original_pos = pObj->info.position.vPos;
     int32_t i;
@@ -1269,13 +1269,13 @@ void move_object_to_legal_spot(CObject *pObj) {
         }
     }
 
-    // Int3();		//	Darn you John, you done it again!  (But contact Mike)
+    // Int3();		// Darn you John, you done it again!  (But contact Mike)
     pObj->ApplyDamageToRobot(pObj->info.xShield * 2, pObj->Index());
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Move CObject one CObject radii from current position towards CSegment center.
-//	If CSegment center is nearer than 2 radii, move it to center.
+// Move CObject one CObject radii from current position towards CSegment center.
+// If CSegment center is nearer than 2 radii, move it to center.
 void move_towards_segment_center(CObject *pObj) {
     fix dist_to_center;
     CFixVector vSegCenter, goal_dir;
@@ -1284,14 +1284,14 @@ void move_towards_segment_center(CObject *pObj) {
     goal_dir = vSegCenter - pObj->info.position.vPos;
     dist_to_center = CFixVector::Normalize(goal_dir);
     if (dist_to_center < pObj->info.xSize) {
-        //	Center is nearer than the distance we want to move, so move to center.
+        // Center is nearer than the distance we want to move, so move to center.
         pObj->info.position.vPos = vSegCenter;
         if (ObjectIntersectsWall(pObj)) {
             move_object_to_legal_spot(pObj);
         }
     } else {
         int32_t nNewSeg;
-        //	Move one radii towards center.
+        // Move one radii towards center.
         goal_dir *= pObj->info.xSize;
         pObj->info.position.vPos += goal_dir;
         nNewSeg = FindSegByPos(pObj->info.position.vPos, pObj->info.nSegment, 1, 0);
@@ -1302,13 +1302,13 @@ void move_towards_segment_center(CObject *pObj) {
     }
 }
 
-//	-----------------------------------------------------------------------------------------------------------
-//	Return true if door can be flown through by a suitable type pRobot.
-//	Only brains and avoid robots can open doors.
+// -----------------------------------------------------------------------------------------------------------
+// Return true if door can be flown through by a suitable type pRobot.
+// Only brains and avoid robots can open doors.
 int32_t ai_door_is_openable(CObject *pObj, CSegment *pSeg, int32_t sidenum) {
     int32_t nWall;
 
-    //	The mighty console CObject can open all doors (for purposes of determining paths).
+    // The mighty console CObject can open all doors (for purposes of determining paths).
     if (pObj == gameData.objData.pConsole) {
         int32_t nWall = pSeg->m_sides[sidenum].m_nWall;
 
@@ -1328,8 +1328,8 @@ int32_t ai_door_is_openable(CObject *pObj, CSegment *pSeg, int32_t sidenum) {
     return 0;
 }
 
-//--//	-----------------------------------------------------------------------------------------------------------
-//--//	Return true if CObject *pObj is allowed to open door at nWall
+//--// -----------------------------------------------------------------------------------------------------------
+//--// Return true if CObject *pObj is allowed to open door at nWall
 //--int32_t door_openable_by_robot(CObject *pObj, int32_t nWall)
 //--{
 //--	if (pObj->info.nId == ROBOT_BRAIN)
@@ -1340,7 +1340,7 @@ int32_t ai_door_is_openable(CObject *pObj, CSegment *pSeg, int32_t sidenum) {
 //--}
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Return true if a special CObject (pPlayer or control center) is in this CSegment.
+// Return true if a special CObject (pPlayer or control center) is in this CSegment.
 int32_t special_object_in_seg(int32_t nSegment) {
     int32_t nObject = SEGMENT(nSegment)->m_objects;
 
@@ -1353,7 +1353,7 @@ int32_t special_object_in_seg(int32_t nSegment) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Randomly select a CSegment attached to *pSeg, reachable by flying.
+// Randomly select a CSegment attached to *pSeg, reachable by flying.
 int32_t get_random_child(int32_t nSegment) {
     CSegment *pSeg = SEGMENT(nSegment);
     int32_t sidenum = (RandShort() * 6) >> 15;
@@ -1363,7 +1363,7 @@ int32_t get_random_child(int32_t nSegment) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Return true if CObject created, else return false.
+// Return true if CObject created, else return false.
 int32_t CreateGatedRobot(int32_t nSegment, int32_t nObjId) {
     int32_t nObject;
     CObject *pObj;
@@ -1383,7 +1383,7 @@ int32_t CreateGatedRobot(int32_t nSegment, int32_t nObjId) {
         return 0;
     }
     vObjPos = pSeg->RandomPoint();
-    //	See if legal to place CObject here.  If not, move about in CSegment and try again.
+    // See if legal to place CObject here.  If not, move about in CSegment and try again.
     if (CheckObjectObjectIntersection(&vObjPos, objsize, pSeg)) {
         gameData.bossData[0].m_nLastGateTime = gameData.timeData.xGame - 3 * gameData.bossData[0].m_nGateInterval / 4;
         return 0;
@@ -1403,14 +1403,14 @@ int32_t CreateGatedRobot(int32_t nSegment, int32_t nObjId) {
     pObj->mType.physInfo.drag = pRobotInfo->drag;
     pObj->mType.physInfo.flags |= (PF_LEVELLING);
     pObj->SetShield(pRobotInfo->strength);
-    pObj->info.nCreator = BOSS_GATE_PRODUCER_NUM; //	flag this pRobot as having been created by the boss.
+    pObj->info.nCreator = BOSS_GATE_PRODUCER_NUM; // flag this pRobot as having been created by the boss.
     default_behavior = D1_AIB_NORMAL;
-    if (nObjId == 10) //	This is a toaster guy!
+    if (nObjId == 10) // This is a toaster guy!
         default_behavior = D1_AIB_RUN_FROM;
     InitAIObject(
         pObj->Index(),
         default_behavior,
-        -1); //	Note, -1 = CSegment this pRobot goes to to hide, should probably be something useful
+        -1); // Note, -1 = CSegment this pRobot goes to to hide, should probably be something useful
     CreateExplosion(nSegment, vObjPos, I2X(10), ANIM_MORPHING_ROBOT);
     audio.CreateSegmentSound(
         gameData.effectData.animations[0][ANIM_MORPHING_ROBOT].nSound,
@@ -1428,10 +1428,10 @@ int32_t CreateGatedRobot(int32_t nSegment, int32_t nObjId) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Make CObject pObj gate in a pRobot.
-//	The process of him bringing in a pRobot takes one second.
-//	Then a pRobot appears somewhere near the pPlayer.
-//	Return true if pRobot successfully created, else return false
+// Make CObject pObj gate in a pRobot.
+// The process of him bringing in a pRobot takes one second.
+// Then a pRobot appears somewhere near the pPlayer.
+// Return true if pRobot successfully created, else return false
 int32_t gate_in_robot(int32_t type, int32_t nSegment) {
     if (!gameData.bossData.ToS())
         return -1;
@@ -1471,10 +1471,10 @@ int32_t boss_fits_in_seg(CObject *pBossObj, int32_t nSegment) {
 #define QUEUE_SIZE 256
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Called for an AI CObject if it is fairly aware of the pPlayer.
-//	awareness_level is in 0..100.  Larger numbers indicate greater awareness (eg, 99 if firing at pPlayer).
-//	In a given frame, might not get called for an CObject, or might be called more than once.
-//	The fact that this routine is not called for a given CObject does not mean that CObject is not interested in the
+// Called for an AI CObject if it is fairly aware of the pPlayer.
+// awareness_level is in 0..100.  Larger numbers indicate greater awareness (eg, 99 if firing at pPlayer).
+// In a given frame, might not get called for an CObject, or might be called more than once.
+// The fact that this routine is not called for a given CObject does not mean that CObject is not interested in the
 // pPlayer. 	OBJECTS are moved by physics, so they can move even if not interested in a pPlayer.  However, if their
 // velocity or 	orientation is changing, this routine will be called. 	Return value: 		0	this pPlayer IS NOT allowed to
 // move this pRobot. 		1	this pPlayer IS allowed to move this pRobot.
@@ -1490,7 +1490,7 @@ fix Prev_boss_shield = -1;
 #endif
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Do special stuff for a boss.
+// Do special stuff for a boss.
 void do_boss_stuff(CObject *pObj) {
     //  New code, fixes stupid bug which meant boss never gated in robots if > 32767 seconds played.
     if (gameData.bossData[0].m_nLastTeleportTime > gameData.timeData.xGame)
@@ -1535,7 +1535,7 @@ void do_boss_stuff(CObject *pObj) {
 #define BOSS_TO_PLAYER_GATE_DISTANCE (I2X(150))
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Do special stuff for a boss.
+// Do special stuff for a boss.
 void do_super_boss_stuff(CObject *pObj, fix dist_to_player, int32_t player_visibility) {
     static int32_t eclipState = 0;
     do_boss_stuff(pObj);
@@ -1578,7 +1578,7 @@ void do_super_boss_stuff(CObject *pObj, fix dist_to_player, int32_t player_visib
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Returns true if this CObject should be allowed to fire at the pPlayer.
+// Returns true if this CObject should be allowed to fire at the pPlayer.
 int32_t maybe_ai_do_actual_firing_stuff(CObject *pObj, tAIStaticInfo *pStaticInfo) {
     if (IsMultiGame)
         if ((pStaticInfo->GOAL_STATE != D1_AIS_FLIN) && (pObj->info.nId != ROBOT_BRAIN))
@@ -1602,7 +1602,7 @@ void ai_do_actual_firing_stuff(
     fix dot;
 
     if (player_visibility == 2) {
-        //	Changed by mk, 01/04/94, onearm would take about 9 seconds until he can fire at you.
+        // Changed by mk, 01/04/94, onearm would take about 9 seconds until he can fire at you.
         // if (((!object_animates) || (pLocalInfo->achievedState [pStaticInfo->CURRENT_GUN] == D1_AIS_FIRE)) &&
         // (pLocalInfo->pNextrimaryFire <= 0)) {
         if (!object_animates || (pLocalInfo->pNextrimaryFire <= 0)) {
@@ -1632,7 +1632,7 @@ void ai_do_actual_firing_stuff(
                         }
                     }
 
-                    //	Wants to fire, so should go into chase mode, probably.
+                    // Wants to fire, so should go into chase mode, probably.
                     if ((pStaticInfo->behavior != D1_AIB_RUN_FROM) && (pStaticInfo->behavior != D1_AIB_STILL) &&
                         (pStaticInfo->behavior != D1_AIB_FOLLOW_PATH) &&
                         ((pLocalInfo->mode == D1_AIM_FOLLOW_PATH) || (pLocalInfo->mode == D1_AIM_STILL)))
@@ -1649,7 +1649,7 @@ void ai_do_actual_firing_stuff(
             }
         }
     } else if (WI_HomingFlag(pObj->info.nId) == 1) {
-        //	Robots which fire homing weapons might fire even if they don't have a bead on the pPlayer.
+        // Robots which fire homing weapons might fire even if they don't have a bead on the pPlayer.
         if (((!object_animates) || (pLocalInfo->achievedState[pStaticInfo->CURRENT_GUN] == D1_AIS_FIRE)) &&
             (pLocalInfo->pNextrimaryFire <= 0) &&
             (CFixVector::Dist(aiHitResult.vPoint, pObj->info.position.vPos) > I2X(40))) {
@@ -1716,9 +1716,9 @@ void DoD1AIFrame(CObject *pObj) {
     if (DoAnyRobotDyingFrame(pObj))
         return;
 
-    //	Kind of a hack.  If a pRobot is flinching, but it is time for it to fire, unflinch it.
-    //	Else, you can turn a big nasty pRobot into a wimp by firing flares at it.
-    //	This also allows the pPlayer to see the cool flinch effect for mechs without unbalancing the game.
+    // Kind of a hack.  If a pRobot is flinching, but it is time for it to fire, unflinch it.
+    // Else, you can turn a big nasty pRobot into a wimp by firing flares at it.
+    // This also allows the pPlayer to see the cool flinch effect for mechs without unbalancing the game.
     if ((pStaticInfo->GOAL_STATE == D1_AIS_FLIN) && (pLocalInfo->pNextrimaryFire < 0)) {
         pStaticInfo->GOAL_STATE = D1_AIS_FIRE;
     }
@@ -1741,9 +1741,9 @@ void DoD1AIFrame(CObject *pObj) {
         pLocalInfo->pNextrimaryFire -= gameData.timeData.xFrame;
     if (pLocalInfo->timeSinceProcessed < I2X(256))
         pLocalInfo->timeSinceProcessed += gameData.timeData.xFrame;
-    nPrevVisibility = pLocalInfo->nPrevVisibility; //	Must get this before we toast the master copy!
+    nPrevVisibility = pLocalInfo->nPrevVisibility; // Must get this before we toast the master copy!
 
-    //	Deal with cloaking for robots which are cloaked except just before firing.
+    // Deal with cloaking for robots which are cloaked except just before firing.
     if (pRobotInfo->cloakType == RI_CLOAKED_EXCEPT_FIRING) {
         if (pLocalInfo->pNextrimaryFire < I2X(1) / 2)
             pStaticInfo->CLOAKED = 1;
@@ -1754,8 +1754,8 @@ void DoD1AIFrame(CObject *pObj) {
         gameData.aiData.target.vBelievedPos = OBJPOS(gameData.objData.pConsole)->vPos;
 
     dist_to_player = CFixVector::Dist(gameData.aiData.target.vBelievedPos, pObj->info.position.vPos);
-    //	If this pRobot can fire, compute visibility from gun position.
-    //	Don't want to compute visibility twice, as it is expensive.  (So is call to calc_vGunPoint).
+    // If this pRobot can fire, compute visibility from gun position.
+    // Don't want to compute visibility twice, as it is expensive.  (So is call to calc_vGunPoint).
     if ((pLocalInfo->pNextrimaryFire <= 0) && (dist_to_player < I2X(200)) && pRobotInfo->nGuns &&
         !pRobotInfo->attackType) {
         bHaveGunPos = CalcGunPoint(&vGunPoint, pObj, pStaticInfo->CURRENT_GUN) != 0;
@@ -1765,8 +1765,8 @@ void DoD1AIFrame(CObject *pObj) {
         vGunPoint.SetZero();
     }
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	Occasionally make non-still robots make a path to the pPlayer.  Based on agitation and distance from pPlayer.
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // Occasionally make non-still robots make a path to the pPlayer.  Based on agitation and distance from pPlayer.
     if ((pStaticInfo->behavior != D1_AIB_RUN_FROM) && (pStaticInfo->behavior != D1_AIB_STILL) && !(IsMultiGame))
         if (gameData.aiData.nOverallAgitation > 70) {
             if ((dist_to_player < I2X(200)) && (RandShort() < gameData.timeData.xFrame / 4)) {
@@ -1781,11 +1781,11 @@ void DoD1AIFrame(CObject *pObj) {
             }
         }
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	If retry count not 0, then add it into nConsecutiveRetries.
-    //	If it is 0, cut down nConsecutiveRetries.
-    //	This is largely a hack to speed up physics and deal with stupid AI.  This is low level
-    //	communication between systems of a sort that should not be done.
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // If retry count not 0, then add it into nConsecutiveRetries.
+    // If it is 0, cut down nConsecutiveRetries.
+    // This is largely a hack to speed up physics and deal with stupid AI.  This is low level
+    // communication between systems of a sort that should not be done.
     if ((pLocalInfo->nRetryCount) && !(IsMultiGame)) {
         pLocalInfo->nConsecutiveRetries += pLocalInfo->nRetryCount;
         pLocalInfo->nRetryCount = 0;
@@ -1799,7 +1799,7 @@ void DoD1AIFrame(CObject *pObj) {
                 break;
             case D1_AIM_STILL:
                 if (!((pStaticInfo->behavior == D1_AIB_STILL) ||
-                      (pStaticInfo->behavior == D1_AIB_STATION))) //	Behavior is still, so don't follow path.
+                      (pStaticInfo->behavior == D1_AIB_STATION))) // Behavior is still, so don't follow path.
                     AttemptToResumePath(pObj);
                 break;
             case D1_AIM_FOLLOW_PATH:
@@ -1832,7 +1832,7 @@ void DoD1AIFrame(CObject *pObj) {
                 break;
 #if DBG
             case D1_AIM_FOLLOW_PATH_2:
-                Int3(); //	Should never happen!
+                Int3(); // Should never happen!
                 break;
 #endif
             }
@@ -1841,17 +1841,17 @@ void DoD1AIFrame(CObject *pObj) {
     } else
         pLocalInfo->nConsecutiveRetries /= 2;
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	If in materialization center, exit
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // If in materialization center, exit
     if (!(IsMultiGame) && (SEGMENT(pObj->info.nSegment)->m_function == SEGMENT_FUNC_ROBOTMAKER)) {
         AIFollowPath(pObj, 1, 1, NULL); // 1 = pPlayer is visible, which might be a lie, but it works.
         return;
     }
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	Decrease pPlayer awareness due to the passage of time.
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	Decrease pPlayer awareness due to the passage of time.
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // Decrease pPlayer awareness due to the passage of time.
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // Decrease pPlayer awareness due to the passage of time.
     if (pLocalInfo->targetAwarenessType) {
         if (pLocalInfo->targetAwarenessTime > 0) {
             pLocalInfo->targetAwarenessTime -= gameData.timeData.xFrame;
@@ -1884,7 +1884,7 @@ void DoD1AIFrame(CObject *pObj) {
             }
         }
 
-    //	Make sure that if this guy got hit or bumped, then he's chasing pPlayer.
+    // Make sure that if this guy got hit or bumped, then he's chasing pPlayer.
     if ((pLocalInfo->targetAwarenessType == D1_PA_WEAPON_ROBOT_COLLISION) ||
         (pLocalInfo->targetAwarenessType >= D1_PA_PLAYER_COLLISION)) {
         if ((pStaticInfo->behavior != D1_AIB_STILL) && (pStaticInfo->behavior != D1_AIB_FOLLOW_PATH) &&
@@ -1892,21 +1892,21 @@ void DoD1AIFrame(CObject *pObj) {
             pLocalInfo->mode = D1_AIM_CHASE_OBJECT;
     }
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
     if ((pStaticInfo->GOAL_STATE == D1_AIS_FLIN) && (pStaticInfo->CURRENT_STATE == D1_AIS_FLIN))
         pStaticInfo->GOAL_STATE = D1_AIS_LOCK;
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	Note: Should only do these two function calls for objects which animate
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // Note: Should only do these two function calls for objects which animate
     if ((dist_to_player < I2X(100))) { // && !(IsMultiGame)) {
         object_animates = do_silly_animation(pObj);
         if (object_animates)
             ai_frame_animation(pObj);
     } else {
-        //	If Object is supposed to animate, but we don't let it animate due to distance, then
-        //	we must change its state, else it will never update.
+        // If Object is supposed to animate, but we don't let it animate due to distance, then
+        // we must change its state, else it will never update.
         pStaticInfo->CURRENT_STATE = pStaticInfo->GOAL_STATE;
-        object_animates = 0; //	If we're not doing the animation, then should pretend it doesn't animate.
+        object_animates = 0; // If we're not doing the animation, then should pretend it doesn't animate.
     }
 
     switch (gameData.botData.info[1][pObj->info.nId].bossFlag) {
@@ -1941,7 +1941,7 @@ void DoD1AIFrame(CObject *pObj) {
             int32_t pv = player_visibility;
             fix dtp = dist_to_player / 4;
 
-            //	If pPlayer cloaked, visibility is screwed up and superboss will gate in robots when not supposed to.
+            // If pPlayer cloaked, visibility is screwed up and superboss will gate in robots when not supposed to.
             if (LOCALPLAYER.flags & PLAYER_FLAGS_CLOAKED) {
                 pv = 0;
                 dtp = CFixVector::Dist(OBJPOS(gameData.objData.pConsole)->vPos, pObj->info.position.vPos) / 4;
@@ -1952,16 +1952,16 @@ void DoD1AIFrame(CObject *pObj) {
         break;
 #endif
     default:
-        Int3(); //	Bogus boss flag value.
+        Int3(); // Bogus boss flag value.
     }
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	Time-slice, don't process all the time, purely an efficiency hack.
-    //	Guys whose behavior is station and are not at their hide CSegment get processed anyway.
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // Time-slice, don't process all the time, purely an efficiency hack.
+    // Guys whose behavior is station and are not at their hide CSegment get processed anyway.
     if (pLocalInfo->targetAwarenessType <
         D1_PA_WEAPON_ROBOT_COLLISION - 1) { // If pRobot got hit, he gets to attack pPlayer always!
 #if DBG
-        if (Break_on_object != nObject) { //	don't time slice if we're interested in this CObject.
+        if (Break_on_object != nObject) { // don't time slice if we're interested in this CObject.
 #endif
             if ((dist_to_player > I2X(250)) && (pLocalInfo->timeSinceProcessed <= I2X(2)))
                 return;
@@ -1978,17 +1978,17 @@ void DoD1AIFrame(CObject *pObj) {
 #endif
     }
 
-    //	Reset time since processed, but skew objects so not everything processed synchronously, else
-    //	we get fast frames with the occasional very slow frame.
+    // Reset time since processed, but skew objects so not everything processed synchronously, else
+    // we get fast frames with the occasional very slow frame.
     // D1_AI_proc_time = pLocalInfo->timeSinceProcessed;
     pLocalInfo->timeSinceProcessed = -((nObject & 0x03) * gameData.timeData.xFrame) / 2;
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	Perform special ability
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // Perform special ability
     switch (pObj->info.nId) {
     case ROBOT_BRAIN:
-        //	Robots function nicely if behavior is Station.  This means they won't move until they
-        //	can see the pPlayer, at which time they will start wandering about opening doors.
+        // Robots function nicely if behavior is Station.  This means they won't move until they
+        // can see the pPlayer, at which time they will start wandering about opening doors.
         if (gameData.objData.pConsole->info.nSegment == pObj->info.nSegment) {
             if (!ai_multiplayer_awareness(pObj, 97))
                 return;
@@ -2015,7 +2015,7 @@ void DoD1AIFrame(CObject *pObj) {
                 CreateNSegmentPathToDoor(
                     pObj,
                     8 + gameStates.app.nDifficultyLevel,
-                    -1); //	third parameter is avoid_seg, -1 means avoid nothing.
+                    -1); // third parameter is avoid_seg, -1 means avoid nothing.
                 ai_multi_send_robot_position(nObject, -1);
             }
         } else {
@@ -2033,7 +2033,7 @@ void DoD1AIFrame(CObject *pObj) {
                 CreateNSegmentPathToDoor(
                     pObj,
                     8 + gameStates.app.nDifficultyLevel,
-                    -1); //	third parameter is avoid_seg, -1 means avoid nothing.
+                    -1); // third parameter is avoid_seg, -1 means avoid nothing.
                 ai_multi_send_robot_position(nObject, -1);
             }
         }
@@ -2042,14 +2042,14 @@ void DoD1AIFrame(CObject *pObj) {
         break;
     }
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
     switch (pLocalInfo->mode) {
     case D1_AIM_CHASE_OBJECT: { // chasing pPlayer, sort of, chase if far, back off if close, circle in between
         fix circle_distance;
 
         circle_distance =
             pRobotInfo->circleDistance[gameStates.app.nDifficultyLevel] + gameData.objData.pConsole->info.xSize;
-        //	Green guy doesn't get his circle distance boosted, else he might never attack.
+        // Green guy doesn't get his circle distance boosted, else he might never attack.
         if (pRobotInfo->attackType != 1)
             circle_distance += I2X(nObject & 0xf) / 2;
         compute_vis_and_vec(
@@ -2080,7 +2080,7 @@ void DoD1AIFrame(CObject *pObj) {
             CreatePathToTarget(pObj, 8, 1);
             ai_multi_send_robot_position(nObject, -1);
         } else if ((player_visibility == 0) && (dist_to_player > I2X(80)) && (!(IsMultiGame))) {
-            //	If pretty far from the pPlayer, pPlayer cannot be seen (obstructed) and in chase mode, switch to follow
+            // If pretty far from the pPlayer, pPlayer cannot be seen (obstructed) and in chase mode, switch to follow
             // path mode. 	This has one desirable benefit of avoiding physics retries.
             if (pStaticInfo->behavior == D1_AIB_STATION) {
                 pLocalInfo->nGoalSegment = pStaticInfo->nHideSegment;
@@ -2177,7 +2177,7 @@ void DoD1AIFrame(CObject *pObj) {
                 pLocalInfo->targetAwarenessType = D1_PA_WEAPON_ROBOT_COLLISION;
         }
 
-        //	If in multiplayer, only do if pPlayer visible.  If not multiplayer, do always.
+        // If in multiplayer, only do if pPlayer visible.  If not multiplayer, do always.
         if (!(IsMultiGame) || player_visibility)
             if (ai_multiplayer_awareness(pObj, 75)) {
                 AIFollowPath(pObj, player_visibility, nPrevVisibility, &vec_to_player);
@@ -2189,12 +2189,12 @@ void DoD1AIFrame(CObject *pObj) {
         else if (pStaticInfo->CURRENT_STATE == D1_AIS_FLIN)
             pStaticInfo->GOAL_STATE = D1_AIS_LOCK;
 
-        //	Bad to let run_from pRobot fire at pPlayer because it will cause a war in which it turns towards the
-        //	pPlayer to fire and then towards its goal to move.
+        // Bad to let run_from pRobot fire at pPlayer because it will cause a war in which it turns towards the
+        // pPlayer to fire and then towards its goal to move.
         // do_firing_stuff(pObj, player_visibility, &vec_to_player);
-        //	Instead, do this:
-        //	(Note, only drop if pPlayer is visible.  This prevents the bombs from being a giveaway, and
-        //	also ensures that the pRobot is moving while it is dropping.  Also means fewer will be dropped.)
+        // Instead, do this:
+        // (Note, only drop if pPlayer is visible.  This prevents the bombs from being a giveaway, and
+        // also ensures that the pRobot is moving while it is dropping.  Also means fewer will be dropped.)
         if ((pLocalInfo->pNextrimaryFire <= 0) && (player_visibility)) {
             CFixVector vFire, fire_pos;
 
@@ -2206,7 +2206,7 @@ void DoD1AIFrame(CObject *pObj) {
             fire_pos = pObj->info.position.vPos + vFire;
 
             CreateNewWeaponSimple(&vFire, &fire_pos, pObj->Index(), PROXMINE_ID, 1);
-            pLocalInfo->pNextrimaryFire = I2X(5); //	Drop a proximity bomb every 5 seconds.
+            pLocalInfo->pNextrimaryFire = I2X(5); // Drop a proximity bomb every 5 seconds.
 
             if (IsMultiGame) {
                 ai_multi_send_robot_position(pObj->Index(), -1);
@@ -2238,12 +2238,6 @@ void DoD1AIFrame(CObject *pObj) {
                 return;
             }
         if (!ai_multiplayer_awareness(pObj, anger_level) && maybe_ai_do_actual_firing_stuff(pObj, pStaticInfo)) {
-#if 0
-				if (!bHaveGunPos) {
-					bHaveGunPos = CalcGunPoint (&vGunPoint, pObj, pStaticInfo->CURRENT_GUN) != 0;
-					vVisVecPos = vGunPoint;
-					}
-#endif
             compute_vis_and_vec(
                 pObj,
                 &vVisVecPos,
@@ -2348,7 +2342,7 @@ void DoD1AIFrame(CObject *pObj) {
                 pRobotInfo,
                 &bVisAndVecComputed);
 
-            //	turn towards vector if visible this time or last time, or RandShort
+            // turn towards vector if visible this time or last time, or RandShort
             // new!
             if ((player_visibility) || (nPrevVisibility) || ((RandShort() > 0x4000) && !(IsMultiGame))) {
                 if (!ai_multiplayer_awareness(pObj, 71) && maybe_ai_do_actual_firing_stuff(pObj, pStaticInfo)) {
@@ -2370,9 +2364,9 @@ void DoD1AIFrame(CObject *pObj) {
             }
 
             do_firing_stuff(pObj, player_visibility, &vec_to_player);
-            //	This is debugging code!  Remove it!  It's to make the green guy attack without doing other kinds of
+            // This is debugging code!  Remove it!  It's to make the green guy attack without doing other kinds of
             // movement.
-            if (player_visibility) { //	Change, MK, 01/03/94 for Multiplayer reasons.  If robots can't see you (even
+            if (player_visibility) { // Change, MK, 01/03/94 for Multiplayer reasons.  If robots can't see you (even
                                      // with eyes on back of head), then don't do evasion.
                 if (pRobotInfo->attackType == 1) {
                     pStaticInfo->behavior = D1_AIB_NORMAL;
@@ -2397,7 +2391,7 @@ void DoD1AIFrame(CObject *pObj) {
                     } else
                         ai_multi_send_robot_position(nObject, -1);
                 } else {
-                    //	Robots in hover mode are allowed to evade at half Normal speed.
+                    // Robots in hover mode are allowed to evade at half Normal speed.
                     if (!ai_multiplayer_awareness(pObj, 81) && maybe_ai_do_actual_firing_stuff(pObj, pStaticInfo)) {
                         if (bHaveGunPos /*|| CalcGunPoint (&vGunPoint, pObj, pStaticInfo->CURRENT_GUN)*/)
                             ai_do_actual_firing_stuff(
@@ -2421,7 +2415,7 @@ void DoD1AIFrame(CObject *pObj) {
                 }
             } else if (
                 (pObj->info.nSegment != pStaticInfo->nHideSegment) && (dist_to_player > I2X(80)) && (!(IsMultiGame))) {
-                //	If pretty far from the pPlayer, pPlayer cannot be seen (obstructed) and in chase mode, switch to
+                // If pretty far from the pPlayer, pPlayer cannot be seen (obstructed) and in chase mode, switch to
                 // follow path mode. 	This has one desirable benefit of avoiding physics retries.
                 if (pStaticInfo->behavior == D1_AIB_STATION) {
                     pLocalInfo->nGoalSegment = pStaticInfo->nHideSegment;
@@ -2435,7 +2429,7 @@ void DoD1AIFrame(CObject *pObj) {
         break;
     case D1_AIM_OPEN_DOOR: { // trying to open a door.
         CFixVector vCenter, vGoal;
-        Assert(pObj->info.nId == ROBOT_BRAIN); //	Make sure this guy is allowed to be in this mode.
+        Assert(pObj->info.nId == ROBOT_BRAIN); // Make sure this guy is allowed to be in this mode.
 
         if (!ai_multiplayer_awareness(pObj, 62))
             return;
@@ -2454,10 +2448,10 @@ void DoD1AIFrame(CObject *pObj) {
         break;
     } // end:	switch (pLocalInfo->mode) {
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	If the pRobot can see you, increase his awareness of you.
-    //	This prevents the problem of a pRobot looking right at you but doing nothing.
-    // Assert(player_visibility != -1);	//	Means it didn't get initialized!
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // If the pRobot can see you, increase his awareness of you.
+    // This prevents the problem of a pRobot looking right at you but doing nothing.
+    // Assert(player_visibility != -1);	// Means it didn't get initialized!
     compute_vis_and_vec(
         pObj,
         &vVisVecPos,
@@ -2470,7 +2464,7 @@ void DoD1AIFrame(CObject *pObj) {
         if (pLocalInfo->targetAwarenessType == 0)
             pLocalInfo->targetAwarenessType = D1_PA_PLAYER_COLLISION;
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
     if (!object_animates) {
         pStaticInfo->CURRENT_STATE = pStaticInfo->GOAL_STATE;
     }
@@ -2479,12 +2473,12 @@ void DoD1AIFrame(CObject *pObj) {
     Assert(pStaticInfo->CURRENT_STATE < D1_AIS_MAX);
     Assert(pStaticInfo->GOAL_STATE < D1_AIS_MAX);
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
     if (pLocalInfo->targetAwarenessType) {
         new_goalState = D1_AI_transition_table[pLocalInfo->targetAwarenessType - 1][pStaticInfo->CURRENT_STATE]
                                               [pStaticInfo->GOAL_STATE];
         if (pLocalInfo->targetAwarenessType == D1_PA_WEAPON_ROBOT_COLLISION) {
-            //	Decrease awareness, else this pRobot will flinch every frame.
+            // Decrease awareness, else this pRobot will flinch every frame.
             pLocalInfo->targetAwarenessType--;
             pLocalInfo->targetAwarenessTime = I2X(3);
         }
@@ -2498,8 +2492,8 @@ void DoD1AIFrame(CObject *pObj) {
         pStaticInfo->GOAL_STATE = new_goalState;
     }
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	If new state = fire, then set all gun states to fire.
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // If new state = fire, then set all gun states to fire.
     if ((pStaticInfo->GOAL_STATE == D1_AIS_FIRE)) {
         int32_t i, nGunCount;
         nGunCount = gameData.botData.info[1][pObj->info.nId].nGuns;
@@ -2507,8 +2501,8 @@ void DoD1AIFrame(CObject *pObj) {
             pLocalInfo->goalState[i] = D1_AIS_FIRE;
     }
 
-    //	- -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
-    //	Hack by mk on 01/04/94, if a guy hasn't animated to the firing state, but his pNextrimaryFire says ok to fire,
+    // - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -
+    // Hack by mk on 01/04/94, if a guy hasn't animated to the firing state, but his pNextrimaryFire says ok to fire,
     // bash him there
     if ((pLocalInfo->pNextrimaryFire < 0) && (pStaticInfo->GOAL_STATE == D1_AIS_FIRE))
         pStaticInfo->CURRENT_STATE = D1_AIS_FIRE;
@@ -2592,12 +2586,6 @@ void DoD1AIFrame(CObject *pObj) {
             break;
 
         case D1_AIS_FIRE:
-#if 0
-				if (!bHaveGunPos) {
-					bHaveGunPos = CalcGunPoint (&vGunPoint, pObj, pStaticInfo->CURRENT_GUN) != 0;
-					vVisVecPos = vGunPoint;
-					}
-#endif
             compute_vis_and_vec(
                 pObj,
                 &vVisVecPos,
@@ -2630,7 +2618,7 @@ void DoD1AIFrame(CObject *pObj) {
                     pRobotInfo->turnTime[gameStates.app.nDifficultyLevel],
                     nPrevVisibility);
             }
-            //	Fire at pPlayer, if appropriate.
+            // Fire at pPlayer, if appropriate.
             if (bHaveGunPos)
                 ai_do_actual_firing_stuff(
                     pObj,
@@ -2697,7 +2685,7 @@ void DoD1AIFrame(CObject *pObj) {
 //--mk, 121094 --
 //--mk, 121094 -- }
 
-//	-----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 void ai_do_cloak_stuff(void) {
     int32_t i;
 
@@ -2706,14 +2694,14 @@ void ai_do_cloak_stuff(void) {
         gameData.aiData.cloakInfo[i].lastTime = gameData.timeData.xGame;
     }
 
-    //	Make work for control centers.
+    // Make work for control centers.
     gameData.aiData.target.vBelievedPos = gameData.aiData.cloakInfo[0].vLastPos;
 }
 
-//	-----------------------------------------------------------------------------------
-//	Returns false if awareness is considered too puny to add, else returns true.
+// -----------------------------------------------------------------------------------
+// Returns false if awareness is considered too puny to add, else returns true.
 int32_t add_awareness_event(CObject *pObj, int32_t type) {
-    //	If pPlayer cloaked and hit a pRobot, then increase awareness
+    // If pPlayer cloaked and hit a pRobot, then increase awareness
     if ((type == D1_PA_WEAPON_ROBOT_COLLISION) || (type == D1_PA_WEAPON_WALL_COLLISION) ||
         (type == D1_PA_PLAYER_COLLISION))
         ai_do_cloak_stuff();
@@ -2722,7 +2710,7 @@ int32_t add_awareness_event(CObject *pObj, int32_t type) {
         if ((type == D1_PA_WEAPON_WALL_COLLISION) || (type == D1_PA_WEAPON_ROBOT_COLLISION))
             if (pObj->info.nId == VULCAN_ID)
                 if (RandShort() > 3276)
-                    return 0; //	For vulcan cannon, only about 1/10 actually cause awareness
+                    return 0; // For vulcan cannon, only about 1/10 actually cause awareness
 
         gameData.aiData.awarenessEvents[gameData.aiData.nAwarenessEvents].nSegment = pObj->info.nSegment;
         gameData.aiData.awarenessEvents[gameData.aiData.nAwarenessEvents].pos = pObj->info.position.vPos;

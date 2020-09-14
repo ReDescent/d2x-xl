@@ -170,9 +170,9 @@ extern char szObjectTypeNames[MAX_OBJECT_TYPES][10];
 // time, used by homing missiles in laser.c
 #define MAX_RENDERED_OBJECTS 100
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 /*
  * STRUCTURES
  */
@@ -211,7 +211,7 @@ class CShortPos {
     inline void SetVel(int16_t vel, int32_t i) { m_pos.vel[i] = vel; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // This is specific to the tShortPos extraction routines in gameseg.c.
 #define RELPOS_PRECISION 10
 #define MATRIX_PRECISION 9
@@ -236,7 +236,7 @@ class RenderSmokeInfo : public RenderInfo { };
 class RenderLightningInfo : public RenderInfo { };
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // information for physics sim for an CObject
 #pragma pack(push, 1)
 typedef struct tPhysicsInfo {
@@ -278,7 +278,7 @@ class CPhysicsInfo {
     inline void SetFlags(uint16_t flags) { m_info.flags = flags; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // stuctures for different kinds of simulation
 
 #pragma pack(push, 1)
@@ -319,7 +319,7 @@ class CLaserInfo {
     inline void SetScale(fix xScale) { m_info.xScale = xScale; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tAttachedObjInfo {
@@ -343,7 +343,7 @@ class CAttachedInfo {
     inline void SetNextAttached(int16_t nNext) { m_info.nNext = nNext; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tExplosionInfo {
@@ -368,7 +368,7 @@ class CExplosionInfo : public CAttachedInfo {
     inline void SetDeleteObj(int16_t nDestroyedObj) { m_info.nDestroyedObj = nDestroyedObj; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tObjLightInfo {
@@ -395,7 +395,7 @@ class CObjLightInfo {
     inline void SetColor(CFloatVector *color) { m_info.color = *color; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tPowerupInfo {
@@ -419,7 +419,7 @@ class CPowerupInfo {
     inline void SetFlags(int32_t nFlags) { m_info.nFlags = nFlags; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tAnimationState {
@@ -443,7 +443,7 @@ class CAnimationInfo {
     inline int8_t GetCurFrame(void) { return m_state.nCurFrame; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define SMOKE_TYPE_SMOKE 0
 #define SMOKE_TYPE_SPRAY 1
@@ -485,7 +485,7 @@ class CSmokeInfo {
     inline char GetSide(void) { return m_info.nSide; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tLightningInfo {
@@ -585,7 +585,7 @@ class CWayPointInfo {
     inline void SetPredecessor(int32_t nPredecessor) { m_info.nSuccessor[1] = nPredecessor; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // structures for different kinds of rendering
 
 #pragma pack(push, 1)
@@ -617,7 +617,7 @@ class CPolyObjInfo {
     inline void SetAltTextures(int32_t nAltTextures) { m_info.nAltTextures = nAltTextures; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tObjTransformation {
@@ -643,7 +643,7 @@ class CObjTransformation {
     inline void SetOrient(const CFixMatrix *mOrient) { m_t.mOrient = *mOrient; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tObjContainerInfo {
@@ -667,7 +667,7 @@ class CObjContainerInfo {
     inline void SetContainsCount(int8_t nCount) { m_info.nCount = nCount; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #pragma pack(push, 1)
 typedef struct tObjectInfo {
@@ -728,7 +728,7 @@ typedef struct tBaseObject {
 } tBaseObject;
 #pragma pack(pop)
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CObjectInfo : public CObjTransformation, public CObjContainerInfo, public tBaseObject {
     public:
@@ -779,7 +779,7 @@ class CObjectInfo : public CObjTransformation, public CObjContainerInfo, public 
     inline void SetLastPos(const CFixVector &vLastPos) { info.vLastPos = vLastPos; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 struct tObject;
 
@@ -1354,7 +1354,7 @@ inline int32_t operator-(CObject *o, CArray<CObject> &a) { return a.Index(o); }
 
 #if 0
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CRobotObject : public CObject, public CPhysicsInfo, public CAIStaticInfo, public CPolyObjInfo {
 	public:
@@ -1364,7 +1364,7 @@ class CRobotObject : public CObject, public CPhysicsInfo, public CAIStaticInfo, 
 		void ToBaseObject (tBaseObject *pObj);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CPowerupObject : public CObject, public CPhysicsInfo, public CPolyObjInfo {
 	public:
@@ -1374,7 +1374,7 @@ class CPowerupObject : public CObject, public CPhysicsInfo, public CPolyObjInfo 
 		void ToBaseObject (tBaseObject *pObj);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CWeaponObject : public CObject, public CPhysicsInfo, public CPolyObjInfo {
 	public:
@@ -1384,7 +1384,7 @@ class CWeaponObject : public CObject, public CPhysicsInfo, public CPolyObjInfo {
 		void ToBaseObject (tBaseObject *pObj);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CLightObject : public CObject, public CObjLightInfo {
 	public:
@@ -1394,7 +1394,7 @@ class CLightObject : public CObject, public CObjLightInfo {
 		void ToBaseObject (tBaseObject *pObj);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CLightningObject : public CObject, public CLightningInfo {
 	public:
@@ -1414,7 +1414,7 @@ class CParticleObject : public CObject, public CSmokeInfo {
 
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 typedef struct tObjPosition {
     tObjTransformation position;
@@ -1432,7 +1432,7 @@ class CObjPosition : public CObjTransformation {
     inline int16_t &SegType() { return m_nSegType; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 typedef struct tWindowRenderedData {
     int32_t nFrame;
@@ -1456,7 +1456,7 @@ class WIndowRenderedData {
     inline CObject *Viewer() { return m_data.pViewer; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 typedef struct tObjDropInfo {
     time_t nDropTime;
@@ -1479,7 +1479,7 @@ class CObjDropInfo {
     inline int16_t &Object() { return m_info.nObject; }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class tObjectRef {
     public:
@@ -1487,7 +1487,7 @@ class tObjectRef {
     int16_t nextObj;
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define MAX_RENDERED_WINDOWS 3
 
@@ -1503,15 +1503,15 @@ extern char *robot_names[]; // name of each robot
 
 extern CObject Follow;
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define OBJ_ITERATOR_TYPE 1 && OBJ_LIST_TYPE
 
 #if OBJ_ITERATOR_TYPE
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CObjectIterator {
     public:
@@ -1535,7 +1535,7 @@ class CObjectIterator {
     CObject *Current(void) { return (m_pObj); }
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CPlayerIterator : public CObjectIterator {
     public:
@@ -1622,7 +1622,7 @@ class CObjectIterator {
     virtual bool Match(void);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CPlayerIterator : public CObjectIterator {
     public:
@@ -1694,9 +1694,9 @@ class CStaticObjectIterator : public CObjectIterator {
 #define FORALL_OBJSi(_objP, _i) \
     for ((_objP) = OBJECTS.Buffer(), (_i) = 0; (_i) <= gameData.objData.nLastObject[0]; (_i)++, (_objP)++)
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 /*
  * FUNCTIONS
@@ -1904,9 +1904,9 @@ void InitMultiPlayerObject(int32_t nStage);
 
 bool FixWeaponObject(CObject *pObj, bool bFixType = false);
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define OBJ_CLOAKED(_objP) ((_objP)->ctype.aiInfo.flags[6])
 
@@ -1928,11 +1928,11 @@ extern CObject *dbgObjP;
 
 #define OBJECT_EXISTS(_objP) ((_objP) && !((_objP)->Flags() & (OF_EXPLODING | OF_SHOULD_BE_DEAD | OF_DESTROYED)))
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 int32_t SetupHiresVClip(tAnimationInfo *pAnimInfo, tAnimationState *vciP, CBitmap *pBm = NULL);
 void UpdatePowerupClip(tAnimationInfo *pAnimInfo, tAnimationState *vciP, int32_t nObject);
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #endif

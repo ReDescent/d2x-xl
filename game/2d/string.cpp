@@ -45,9 +45,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define LHX(x) (gameStates.menus.bHires ? 2 * (x) : x)
 
-// int32_t GrInternalStringClipped (int32_t x, int32_t y, const char *s);
-// int32_t GrInternalStringClippedM (int32_t x, int32_t y, const char *s);
-
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -167,114 +164,6 @@ int32_t grMsgColorLevel = 1;
 
 //------------------------------------------------------------------------------
 
-#if 0
-
-int32_t GrInternalString0 (int32_t x, int32_t y, const char *s)
-{
-	uint8_t*		fp;
-	const char*	pText, *nextRowP, *text_ptr1;
-	int32_t			r, mask, i, bits, width, spacing, letter, underline;
-	int32_t			skip_lines = 0;
-	uint32_t			videoOffset, videoOffset1;
-	CPalette*	palette = paletteManager.Game ();
-	uint8_t*		videoBuffer = CCanvas::Current ()->Buffer ();
-	int32_t			rowSize = CCanvas::Current ()->RowSize ();
-	tFont			font;
-	char			c;
-	
-if (CCanvas::Current ()->FontColor (0).rgb) {
-	CCanvas::Current ()->FontColor (0).rgb = 0;
-	CCanvas::Current ()->FontColor (0).index = palette->ClosestColor (CCanvas::Current ()->FontColor (0).Red (), 
-																							CCanvas::Current ()->FontColor (0).Green (), 
-																							CCanvas::Current ()->FontColor (0).Blue ());
-	}
-if (CCanvas::Current ()->FontColor (1).rgb) {
-	CCanvas::Current ()->FontColor (1).rgb = 0;
-	CCanvas::Current ()->FontColor (1).index = palette->ClosestColor (CCanvas::Current ()->FontColor (1).Red (), 
-																							CCanvas::Current ()->FontColor (1).Green (), 
-																							CCanvas::Current ()->FontColor (1).Blue ());
-	}
-bits = 0;
-videoOffset1 = y * rowSize + x;
-nextRowP = s;
-fontManager.Current ()->GetInfo (font);
-while (nextRowP != NULL) {
-	text_ptr1 = nextRowP;
-	nextRowP = NULL;
-	if (x == 0x8000) {			//centered
-		int32_t xx = fontManager.Current ()->GetCenteredX (text_ptr1);
-		videoOffset1 = y * rowSize + xx;
-		}
-	for (r = 0; r < font.height; r++) {
-		pText = text_ptr1;
-		videoOffset = videoOffset1;
-		while ((c = *pText)) {
-			if (c == '\n') {
-				nextRowP = pText + 1;
-				break;
-				}
-			if (c == CC_COLOR) {
-				CCanvas::Current ()->FontColor (0).index = *(++pText);
-				CCanvas::Current ()->FontColor (0).rgb = 0;
-				pText++;
-				continue;
-				}
-			if (c == CC_LSPACING) {
-				skip_lines = *(++pText) - '0';
-				pText++;
-				continue;
-				}
-			underline = 0;
-			if (c == CC_UNDERLINE) {
-				if ((r == font.baseLine + 2) || (r == font.baseLine + 3))
-					underline = 1;
-				pText++;
-				}
-			fontManager.Current ()->GetCharWidth (pText[0], pText[1], width, spacing);
-			letter = c - font.minChar;
-			if (!fontManager.Current ()->InFont (letter)) {	//not in font, draw as space
-				videoOffset += spacing;
-				pText++;
-				continue;
-				}
-			if (font.flags & FT_PROPORTIONAL)
-				fp = font.chars [letter];
-			else
-				fp = font.data + letter * BITS_TO_BYTES (width) * font.height;
-			if (underline)
-				for (i = 0; i < width; i++)
-					videoBuffer [videoOffset++] = (uint8_t) CCanvas::Current ()->FontColor (0).index;
-				else {
-					fp += BITS_TO_BYTES (width)*r;
-					mask = 0;
-					for (i = 0; i < width; i++) {
-						if (mask == 0) {
-							bits = *fp++;
-							mask = 0x80;
-							}
-						if (bits & mask)
-							videoBuffer [videoOffset++] = (uint8_t) CCanvas::Current ()->FontColor (0).index;
-						else
-							videoBuffer [videoOffset++] = (uint8_t) CCanvas::Current ()->FontColor (1).index;
-						mask >>= 1;
-						}
-					}
-			videoOffset += spacing-width;		//for kerning
-			pText++;
-			}
-		videoOffset1 += rowSize; y++;
-		}
-	y += skip_lines;
-	videoOffset1 += rowSize * skip_lines;
-	skip_lines = 0;
-	}
-return 0;
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 static inline const char *
 ScanEmbeddedColors(char c, const char *pText, int32_t origColor, int32_t nOffset, int32_t nScale) {
     if ((c >= 1) && (c <= 3)) {
@@ -298,120 +187,6 @@ ScanEmbeddedColors(char c, const char *pText, int32_t origColor, int32_t nOffset
     }
     return pText + 1;
 }
-
-//------------------------------------------------------------------------------
-
-#if 0
-
-int32_t GrInternalString0m (int32_t x, int32_t y, const char *s)
-{
-	uint8_t*			fp;
-	const char*		pText, * nextRowP, * text_ptr1;
-	int32_t				r, mask, i, bits, width, spacing, letter, underline;
-	int32_t				skip_lines = 0;
-	char				c;
-	int32_t				origColor;
-	uint32_t				videoOffset, videoOffset1;
-	uint8_t*			videoBuffer = CCanvas::Current ()->Buffer ();
-	int32_t				rowSize = CCanvas::Current ()->RowSize ();
-	tFont				font;
-
-if (CCanvas::Current ()->FontColor (0).rgb) {
-	CCanvas::Current ()->FontColor (0).rgb = 0;
-	CCanvas::Current ()->FontColor (0).index = fontManager.Current ()->ParentBitmap ().Palette ()->ClosestColor (CCanvas::Current ()->FontColor (0).Red (), CCanvas::Current ()->FontColor (0).Green (), CCanvas::Current ()->FontColor (0).Blue ());
-	}
-if (CCanvas::Current ()->FontColor (1).rgb) {
-	CCanvas::Current ()->FontColor (1).rgb = 0;
-	CCanvas::Current ()->FontColor (1).index = fontManager.Current ()->ParentBitmap ().Palette ()->ClosestColor (CCanvas::Current ()->FontColor (1).Red (), CCanvas::Current ()->FontColor (1).Green (), CCanvas::Current ()->FontColor (1).Blue ());
-	}
-origColor = CCanvas::Current ()->FontColor (0).index;//to allow easy reseting to default string color with colored strings -MPM
-bits=0;
-videoOffset1 = y * rowSize + x;
-fontManager.Current ()->GetInfo (font);
-nextRowP = s;
-CCanvas::Current ()->FontColor (0).rgb = 0;
-while (nextRowP != NULL) {
-	text_ptr1 = nextRowP;
-	nextRowP = NULL;
-
-	if (x==0x8000) {			//centered
-		int32_t xx = fontManager.Current ()->GetCenteredX (text_ptr1);
-		videoOffset1 = y * rowSize + xx;
-		}
-
-	for (r = 0; r < font.height; r++) {
-		pText = text_ptr1;
-		videoOffset = videoOffset1;
-		while ((c = *pText)) {
-			if (c == '\n') {
-				nextRowP = pText + 1;
-				break;
-				}
-			if (c == CC_COLOR) {
-				CCanvas::Current ()->FontColor (0).index = * (++pText);
-				pText++;
-				continue;
-				}
-			if (c == CC_LSPACING) {
-				skip_lines = * (++pText) - '0';
-				pText++;
-				continue;
-				}
-			underline = 0;
-			if (c == CC_UNDERLINE) {
-				if ((r==font.baseLine+2) || (r==font.baseLine+3))
-					underline = 1;
-				c = * (++pText);
-				}
-			fontManager.Current ()->GetCharWidth (c, pText[1], width, spacing);
-			letter = c - font.minChar;
-			if (c <= 0x06) {	//not in font, draw as space
-				pText = ScanEmbeddedColors (c, pText, origColor, 0, 1);
-				continue;
-				}
-
-			if (!fontManager.Current ()->InFont (letter)) {
-				videoOffset += spacing;
-				pText++;
-				}
-
-			if (font.flags & FT_PROPORTIONAL)
-				fp = font.chars [letter];
-			else
-				fp = font.data + letter * BITS_TO_BYTES (width) * font.height;
-
-			if (underline)
-				for (i = 0; i < width; i++)
-					videoBuffer [videoOffset++] = (uint32_t) CCanvas::Current ()->FontColor (0).index;
-			else {
-				fp += BITS_TO_BYTES (width) * r;
-				mask = 0;
-				for (i = 0; i < width; i++) {
-					if (mask == 0) {
-						bits = *fp++;
-						mask = 0x80;
-						}
-					if (bits & mask)
-						videoBuffer [videoOffset++] = (uint32_t) CCanvas::Current ()->FontColor (0).index;
-					else
-						videoOffset++;
-					mask >>= 1;
-					}
-				}
-			pText++;
-			videoOffset += spacing-width;
-			}
-		videoOffset1 += rowSize;
-		y++;
-		}
-	y += skip_lines;
-	videoOffset1 += rowSize * skip_lines;
-	skip_lines = 0;
-	}
-return 0;
-}
-
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -511,9 +286,9 @@ static bool FillStringBitmap(
     int32_t &w,
     int32_t &h) {
 
-    int32_t origColor = CCanvas::Current()
-                            ->FontColor(0)
-                            .index; // to allow easy reseting to default string color with colored strings -MPM
+    // to allow easy reseting to default string color with colored strings -MPM
+    int32_t origColor = CCanvas::Current()->FontColor(0).index;
+
     int32_t x, y, cw, spacing, nTab, nChars, bHotKey;
     CBitmap *pBmf;
     CRGBAColor hc, kc;
@@ -532,18 +307,8 @@ static bool FillStringBitmap(
         text_ptr1 = nextRowP;
         nextRowP = NULL;
         pText = text_ptr1;
-#if 0
-#if DBG
-	if (bCentered)
-		x = (w - fontManager.Current ()->GetLineWidth (pText)) / 2;
-	else
-		x = 0;
-#else
-	x = bCentered ? (w - fontManager.Current ()->GetLineWidth (pText)) / 2 : 0;
-#endif
-#else
         x = 0;
-#endif
+
         while ((c = *pText)) {
             if (c == '\n') {
                 nextRowP = pText + 1;
@@ -658,10 +423,6 @@ CBitmap *CreateStringBitmap(
     CBitmap *pBm;
     int32_t w, h, aw;
 
-#if 0
-if (!(bForce || (gameOpts->menus.nStyle && gameOpts->menus.bFastMenus)))
-	return NULL;
-#endif
     fontManager.SetScale(1.0f / (gameStates.app.bDemoData + 1));
     int32_t nLineCount = pFont->StringSizeTabbed(s, w, h, aw, nTabs, nMaxWidth);
     if (!(w && h)) {
@@ -809,205 +570,6 @@ int32_t _CDECL_ GrPrintF(int32_t *idP, int32_t x, int32_t y, const char *format,
     vsprintf(buffer, format, args);
     return GrString(x, y, buffer, idP);
 }
-
-//------------------------------------------------------------------------------
-
-#if 0
-
-int32_t GrInternalStringClipped (int32_t x, int32_t y, const char *s)
-{
-	uint8_t * fp;
-	const char * pText, * nextRowP, * text_ptr1;
-	int32_t r, mask, i, bits, width, spacing, letter, underline;
-	int32_t x1 = x, last_x;
-	tFont font;
-
-fontManager.Current ()->GetInfo (font);
-bits = 0;
-nextRowP = s;
-CCanvas::Current ()->FontColor (0).rgb = 0;
-while (nextRowP != NULL) {
-	text_ptr1 = nextRowP;
-	nextRowP = NULL;
-	x = x1;
-	if (x == 0x8000)			//centered
-		x = fontManager.Current ()->GetCenteredX (text_ptr1);
-	last_x = x;
-
-	for (r = 0; r < font.height; r++) {
-		pText = text_ptr1;
-		x = last_x;
-
-		while (*pText) {
-			if (*pText == '\n') {
-				nextRowP = &pText[1];
-				break;
-				}
-
-			if (*pText == CC_COLOR) {
-				CCanvas::Current ()->FontColor (0).index = * (pText+1);
-				pText += 2;
-				continue;
-				}
-
-			if (*pText == CC_LSPACING) {
-				Int3 ();	//	Warning: skip lines not supported for clipped strings.
-				pText += 2;
-				continue;
-				}
-
-			underline = 0;
-			if (*pText == CC_UNDERLINE) {
-				if ((r==font.baseLine+2) || (r==font.baseLine+3))
-					underline = 1;
-				pText++;
-				}
-
-			fontManager.Current ()->GetCharWidth (pText [0], pText [1], width, spacing);
-			letter = *pText - font.minChar;
-			if (!fontManager.Current ()->InFont (letter)) {	//not in font, draw as space
-				x += spacing;
-				pText++;
-				continue;
-				}
-
-			if (font.flags & FT_PROPORTIONAL)
-				fp = font.chars [letter];
-			else
-				fp = font.data + letter * BITS_TO_BYTES (width)*font.height;
-
-			if (underline) {
-				for (i = 0; i < width; i++) {
-					CCanvas::Current ()->SetColor (CCanvas::Current ()->FontColor (0).index);
-					DrawPixelClipped (x++, y);
-					}
-				} 
-			else {
-				fp += BITS_TO_BYTES (width)*r;
-				mask = 0;
-				for (i = 0; i < width; i++) {
-					if (mask == 0) {
-						bits = *fp++;
-						mask = 0x80;
-						}
-					if (bits & mask)
-						CCanvas::Current ()->SetColor (CCanvas::Current ()->FontColor (0).index);
-					else
-						CCanvas::Current ()->SetColor (CCanvas::Current ()->FontColor (1).index);
-					DrawPixelClipped (x++, y);
-					mask >>= 1;
-					}
-				}
-			x += spacing-width;		//for kerning
-			pText++;
-			}
-		y++;
-		}
-	}
-font.parentBitmap.SetBuffer (NULL);	//beware of the destructor!
-return 0;
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
-#if 0
-
-int32_t GrInternalStringClippedM (int32_t x, int32_t y, const char *s)
-{
-	uint8_t * fp;
-	const char * pText, * nextRowP, * text_ptr1;
-	int32_t r, mask, i, bits, width, spacing, letter, underline;
-	int32_t x1 = x, last_x;
-	tFont font;
-
-fontManager.Current ()->GetInfo (font);
-bits = 0;
-nextRowP = s;
-CCanvas::Current ()->FontColor (0).rgb = 0;
-while (nextRowP != NULL) {
-	text_ptr1 = nextRowP;
-	nextRowP = NULL;
-	x = x1;
-	if (x==0x8000)			//centered
-		x = fontManager.Current ()->GetCenteredX (text_ptr1);
-	last_x = x;
-	for (r = 0; r < font.height; r++) {
-		x = last_x;
-		pText = text_ptr1;
-		while (*pText) {
-			if (*pText == '\n') {
-				nextRowP = &pText[1];
-				break;
-				}
-	
-			if (*pText == CC_COLOR) {
-				CCanvas::Current ()->FontColor (0).index = * (pText+1);
-				pText += 2;
-				continue;
-				}
-
-			if (*pText == CC_LSPACING) {
-				Int3 ();	//	Warning: skip lines not supported for clipped strings.
-				pText += 2;
-				continue;
-				}
-
-			underline = 0;
-			if (*pText == CC_UNDERLINE) {
-				if ((r == font.baseLine + 2) || (r == font.baseLine + 3))
-					underline = 1;
-				pText++;
-				}
-			fontManager.Current ()->GetCharWidth (pText[0], pText[1], width, spacing);
-			letter = *pText-font.minChar;
-			if (!fontManager.Current ()->InFont (letter)) {	//not in font, draw as space
-				x += spacing;
-				pText++;
-				continue;
-				}
-
-			if (font.flags & FT_PROPORTIONAL)
-				fp = font.chars[letter];
-			else
-				fp = font.data + letter * BITS_TO_BYTES (width)*font.height;
-
-			if (underline) {
-				for (i = 0; i < width; i++) {
-					CCanvas::Current ()->SetColor (CCanvas::Current ()->FontColor (0).index);
-					DrawPixelClipped (x++, y);
-					}
-				}
-			else {
-				fp += BITS_TO_BYTES (width)*r;
-				mask = 0;
-				for (i = 0; i< width; i++) {
-					if (mask==0) {
-						bits = *fp++;
-						mask = 0x80;
-						}
-					if (bits & mask) {
-						CCanvas::Current ()->SetColor (CCanvas::Current ()->FontColor (0).index);
-						DrawPixelClipped (x++, y);
-						} 
-					else {
-						x++;
-						}
-					mask >>= 1;
-					}
-				}
-			x += spacing-width;		//for kerning
-			pText++;
-			}
-		y++;
-		}
-	}
-font.parentBitmap.SetBuffer (NULL);	//beware of the destructor!
-return 0;
-}
-
-#endif
 
 //------------------------------------------------------------------------------
 // Returns the length of the first 'n' characters of a string.

@@ -24,7 +24,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MAX_COMPUTED_COLORS 64
 #define MAX_FADE_LEVELS 34
 #define FADE_LEVELS 31
-#define FADE_RATE 16 //	gots to be a power of 2, else change the code in DiminishPaletteTowardsNormal
+#define FADE_RATE 16 // gots to be a power of 2, else change the code in DiminishPaletteTowardsNormal
 
 #pragma pack(push, 1)
 typedef struct tBGR {

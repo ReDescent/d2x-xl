@@ -25,7 +25,7 @@ void CFlightPath::Update(CObject *pObj) {
 
     if (m_nSize && ((m_tUpdate < 0) || (t >= m_tRefresh))) {
         m_tUpdate = t;
-        //	h = m_nEnd;
+        // h = m_nEnd;
         m_nEnd = (m_nEnd + 1) % m_nSize;
         tPathPoint &p = m_path[m_nEnd];
         p.vOrgPos = pObj->info.position.vPos;
@@ -34,9 +34,9 @@ void CFlightPath::Update(CObject *pObj) {
         p.vPos += pObj->info.position.mOrient.m.dir.f * 0;
         p.vPos += pObj->info.position.mOrient.m.dir.u * 0;
         p.bFlipped = false;
-        //	if (!memcmp (m_path + h, m_path + m_nEnd, sizeof (tMovementPath)))
-        //		m_nEnd = h;
-        //	else
+        // if (!memcmp (m_path + h, m_path + m_nEnd, sizeof (tMovementPath)))
+        // 	m_nEnd = h;
+        // else
         if (m_nEnd == m_nStart)
             m_nStart = (m_nStart + 1) % m_nSize;
     }

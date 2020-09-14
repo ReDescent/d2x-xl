@@ -422,8 +422,8 @@ int32_t CSaveGameManager::GetLoadFile(int32_t bMulti) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------------
-//	Save file we're going to save over in last slot and call " [autosave backup]"
+// -----------------------------------------------------------------------------------
+// Save file we're going to save over in last slot and call " [autosave backup]"
 
 static char szBackup[DESC_LENGTH] = " [autosave backup]";
 
@@ -447,10 +447,10 @@ void CSaveGameManager::Backup(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------------
-//	If not in multiplayer, do special secret level stuff.
-//	If secret.sgc exists, then copy it to Nsecret.sgc (where N = nSaveSlot).
-//	If it doesn't exist, then delete Nsecret.sgc
+// -----------------------------------------------------------------------------------
+// If not in multiplayer, do special secret level stuff.
+// If secret.sgc exists, then copy it to Nsecret.sgc (where N = nSaveSlot).
+// If it doesn't exist, then delete Nsecret.sgc
 
 void CSaveGameManager::PushSecretSave(int32_t nSaveSlot) {
     if ((nSaveSlot != -1) && !(m_bSecret || IsMultiGame)) {
@@ -466,8 +466,8 @@ void CSaveGameManager::PushSecretSave(int32_t nSaveSlot) {
     }
 }
 
-//	-----------------------------------------------------------------------------------
-//	blind_save means don't prompt user for any info.
+// -----------------------------------------------------------------------------------
+// blind_save means don't prompt user for any info.
 
 int32_t
 CSaveGameManager::Save(int32_t bBetweenLevels, int32_t bSecret, int32_t bQuick, const char *pszFilenameOverride) {
@@ -497,8 +497,8 @@ CSaveGameManager::Save(int32_t bBetweenLevels, int32_t bSecret, int32_t bQuick, 
     }
     if (gameStates.gameplay.bFinalBossIsDead) // don't allow save while final boss is dying
         return 0;
-    //	If this is a secret save and the control center has been destroyed, don't allow
-    //	return to the base level.
+    // If this is a secret save and the control center has been destroyed, don't allow
+    // return to the base level.
     if ((m_bSecret > 0) && gameData.reactorData.bDestroyed) {
         CFile::Delete(SECRETB_FILENAME, gameFolders.user.szSavegames);
         return 0;
@@ -942,7 +942,7 @@ void CSaveGameManager::SaveGameData(void) {
     }
     m_cf.WriteInt((int32_t)gameData.appData.nStateGameId);
     m_cf.WriteInt(gameStates.app.cheats.bLaserRapidFire);
-    m_cf.WriteInt(gameStates.app.bLunacy); //	Yes, writing this twice.  Removed the Ugly robot system, but didn't want
+    m_cf.WriteInt(gameStates.app.bLunacy); // Yes, writing this twice.  Removed the Ugly robot system, but didn't want
                                            // to change savegame format.
     m_cf.WriteInt(gameStates.gameplay.bMineMineCheat);
     // Save automap marker info
@@ -951,7 +951,7 @@ void CSaveGameManager::SaveGameData(void) {
     // save last was super information
     m_cf.Write(bLastPrimaryWasSuper, sizeof(bLastPrimaryWasSuper), 1);
     m_cf.Write(bLastSecondaryWasSuper, sizeof(bLastSecondaryWasSuper), 1);
-    //	Save flash effect stuff
+    // Save flash effect stuff
     m_cf.WriteFix(paletteManager.FadeDelay());
     m_cf.WriteFix(paletteManager.LastEffectTime());
     m_cf.WriteShort(paletteManager.RedEffect(true));
@@ -1078,7 +1078,7 @@ int32_t CSaveGameManager::SaveState(int32_t bSecret, char *filename, char *descr
     return 1;
 }
 
-//	-----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 
 void CSaveGameManager::AutoSave(int32_t nSaveSlot) {
     if ((nSaveSlot != (NUM_SAVES + 1)) && m_bInGame) {
@@ -1092,7 +1092,7 @@ void CSaveGameManager::AutoSave(int32_t nSaveSlot) {
     }
 }
 
-//	-----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 
 void CSaveGameManager::PopSecretSave(int32_t nSaveSlot) {
     if ((nSaveSlot != -1) && !(m_bSecret || IsMultiGame)) {
@@ -1107,7 +1107,7 @@ void CSaveGameManager::PopSecretSave(int32_t nSaveSlot) {
     }
 }
 
-//	-----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 
 int32_t CSaveGameManager::Load(int32_t bInGame, int32_t bSecret, int32_t bQuick, const char *pszFilenameOverride) {
     if (gameStates.app.bPlayerIsDead)
@@ -1140,7 +1140,7 @@ int32_t CSaveGameManager::Load(int32_t bInGame, int32_t bSecret, int32_t bQuick,
     if (!m_bQuick) {
         if (m_override) {
             strcpy(m_filename, m_override);
-            nSaveSlot = NUM_SAVES + 1; //	So we don't trigger autosave
+            nSaveSlot = NUM_SAVES + 1; // So we don't trigger autosave
         } else if (!(nSaveSlot = GetLoadFile(0))) {
             gameData.appData.bGamePaused = 0;
             StartTime(1);
@@ -1770,8 +1770,8 @@ int32_t CSaveGameManager::LoadUniFormat(int32_t bMulti, fix xOldGameTime, int32_
         gameData.objData.nNextSignature = 0;
         InitCamBots(1);
         gameData.objData.nNextSignature++;
-        //	1 = Didn't die on secret level.
-        //	2 = Died on secret level.
+        // 1 = Didn't die on secret level.
+        // 2 = Died on secret level.
         if (m_bSecret && (missionManager.nCurrentLevel >= 0)) {
             SetPosFromReturnSegment(0);
             if (m_bSecret == 2)
@@ -1919,7 +1919,7 @@ int32_t CSaveGameManager::LoadUniFormat(int32_t bMulti, fix xOldGameTime, int32_
             if (j > LEVEL_SEGMENTS)
                 m_cf.Seek((j - LEVEL_SEGMENTS) * sizeof(uint8_t), SEEK_CUR);
         }
-        //	Restore hacked up weapon system stuff.
+        // Restore hacked up weapon system stuff.
         gameData.fusionData.xNextSoundTime = gameData.timeData.xGame;
         gameData.fusionData.xAutoFireTime = 0;
         gameData.laserData.xNextFireTime = gameData.missileData.xNextFireTime = gameData.timeData.xGame;
@@ -1927,7 +1927,7 @@ int32_t CSaveGameManager::LoadUniFormat(int32_t bMulti, fix xOldGameTime, int32_
     }
     gameData.appData.nStateGameId = (uint32_t)m_cf.ReadInt();
     gameStates.app.cheats.bLaserRapidFire = m_cf.ReadInt();
-    gameStates.app.bLunacy = m_cf.ReadInt(); //	Yes, reading this twice.  Removed the Ugly robot system, but didn't want
+    gameStates.app.bLunacy = m_cf.ReadInt(); // Yes, reading this twice.  Removed the Ugly robot system, but didn't want
                                              // to change savegame format.
     gameStates.gameplay.bMineMineCheat = m_cf.ReadInt();
     if (gameStates.app.bLunacy)
@@ -2072,8 +2072,8 @@ int32_t CSaveGameManager::LoadBinFormat(int32_t bMulti, fix xOldGameTime, int32_
         ClaimObjectSlots();
         InitCamBots(1);
         gameData.objData.nNextSignature++;
-        //	1 = Didn't die on secret level.
-        //	2 = Died on secret level.
+        // 1 = Didn't die on secret level.
+        // 2 = Died on secret level.
         if (m_bSecret && (missionManager.nCurrentLevel >= 0)) {
             SetPosFromReturnSegment(0);
             if (m_bSecret == 2)
@@ -2209,7 +2209,7 @@ int32_t CSaveGameManager::LoadBinFormat(int32_t bMulti, fix xOldGameTime, int32_
             for (i = 0; i < j; i++)
                 automap.m_visited[i] = (uint16_t)m_cf.ReadByte();
         }
-        //	Restore hacked up weapon system stuff.
+        // Restore hacked up weapon system stuff.
         gameData.fusionData.xNextSoundTime = gameData.timeData.xGame;
         gameData.fusionData.xAutoFireTime = 0;
         gameData.laserData.xNextFireTime = gameData.missileData.xNextFireTime = gameData.timeData.xGame;
@@ -2223,7 +2223,7 @@ int32_t CSaveGameManager::LoadBinFormat(int32_t bMulti, fix xOldGameTime, int32_
         m_cf.Read(
             &gameStates.app.bLunacy,
             sizeof(int32_t),
-            1); //	Yes, writing this twice.  Removed the Ugly robot system, but didn't want to change savegame format.
+            1); // Yes, writing this twice.  Removed the Ugly robot system, but didn't want to change savegame format.
         m_cf.Read(&gameStates.app.bLunacy, sizeof(int32_t), 1);
         if (gameStates.app.bLunacy)
             DoLunacyOn();
@@ -2261,7 +2261,7 @@ int32_t CSaveGameManager::LoadBinFormat(int32_t bMulti, fix xOldGameTime, int32_
         paletteManager.StartEffect((int32_t)m_cf.ReadInt(), (int32_t)m_cf.ReadInt(), (int32_t)m_cf.ReadInt());
     }
 
-    //	Load gameData.renderData.lights.subtracted
+    // Load gameData.renderData.lights.subtracted
     if (m_nVersion >= 16) {
         int32_t h = (m_nVersion > 39) ? LEVEL_SEGMENTS : (m_nVersion > 22) ? MAX_SEGMENTS : MAX_SEGMENTS_D2;
         int32_t j = Min(LEVEL_SEGMENTS, h);
@@ -2269,7 +2269,7 @@ int32_t CSaveGameManager::LoadBinFormat(int32_t bMulti, fix xOldGameTime, int32_
         if (j < h)
             m_cf.Seek((h - j) * sizeof(uint8_t), SEEK_CUR);
         ApplyAllChangedLight();
-        // ComputeAllStaticLight ();	//	set xAvgSegLight field in CSegment struct.  See note at that function.
+        // ComputeAllStaticLight ();	// set xAvgSegLight field in CSegment struct.  See note at that function.
     } else
         gameData.renderData.lights.subtracted.Clear();
 

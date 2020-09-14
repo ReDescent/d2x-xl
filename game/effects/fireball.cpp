@@ -196,9 +196,9 @@ CObject *CreateExplosion(
     FORALL_OBJS(pObj) {
         nType = pObj->info.nType;
         id = pObj->info.nId;
-        //	Weapons used to be affected by badass explosions, but this introduces serious problems.
-        //	When a smart bomb blows up, if one of its children goes right towards a nearby wall, it will
-        //	blow up, blowing up all the children.  So I remove it.  MK, 09/11/94
+        // Weapons used to be affected by badass explosions, but this introduces serious problems.
+        // When a smart bomb blows up, if one of its children goes right towards a nearby wall, it will
+        // blow up, blowing up all the children.  So I remove it.  MK, 09/11/94
         if (pObj == pParent)
             continue;
         if (pObj->info.nFlags & OF_SHOULD_BE_DEAD)
@@ -239,7 +239,7 @@ CObject *CreateExplosion(
             fix xScale = -2 * (7 - gameStates.app.nDifficultyLevel) / 8;
 
             pObj->ApplyForce(vForce);
-            //	If not a boss, stun for 2 seconds at 32 force, 1 second at 16 force
+            // If not a boss, stun for 2 seconds at 32 force, 1 second at 16 force
             if (flash && !pObj->IsBoss()) {
                 tAIStaticInfo *aip = &pObj->cType.aiInfo;
                 int32_t nForce = X2I(FixDiv(vForce.Mag() * flash, gameData.timeData.xFrame) / 128) + 2;
@@ -283,9 +283,9 @@ CObject *CreateExplosion(
             CObject *pKiller = NULL;
             CFixVector vRotForce;
 
-            //	Hack!Warning!Test code!
+            // Hack!Warning!Test code!
             if (flash && (pObj->info.nId == N_LOCALPLAYER)) {
-                int32_t fe = Min(I2X(4), force * flash / 32); //	For four seconds or less
+                int32_t fe = Min(I2X(4), force * flash / 32); // For four seconds or less
                 if (pParent->cType.laserInfo.parent.nSignature == gameData.objData.pConsole->info.nSignature) {
                     fe /= 2;
                     force /= 2;
@@ -501,11 +501,11 @@ void CObject::SetupDebris(int32_t nSubObj, int32_t nId, int32_t nTexOverride) {
     // Set physics data for this CObject
     SetupRandomMovement();
 #if 0 // DBG
-SetLife (I2X (nDebrisLife [8]) + 3 * DEBRIS_LIFE / 4 + FixMul (RandShort (), DEBRIS_LIFE));	//	Some randomness, so they don't all go away at the same time.
+SetLife (I2X (nDebrisLife [8]) + 3 * DEBRIS_LIFE / 4 + FixMul (RandShort (), DEBRIS_LIFE));	// Some randomness, so they don't all go away at the same time.
 #else
     SetLife(
         I2X(nDebrisLife[gameOpts->render.nDebrisLife]) + 3 * DEBRIS_LIFE / 4 +
-        FixMul(RandShort(), DEBRIS_LIFE)); //	Some randomness, so they don't all go away at the same time.
+        FixMul(RandShort(), DEBRIS_LIFE)); // Some randomness, so they don't all go away at the same time.
     if (nSubObj == 0)
         info.xLifeLeft *= 2;
 #endif
@@ -624,7 +624,7 @@ void CObject::MaybeDelete(void) {
     }
 }
 
-//	-------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 // blow up an CObject.  Takes the CObject to destroy, and the point of impact
 void CObject::Explode(fix delayTime) {
     ENTER(0, 0);
@@ -762,7 +762,7 @@ void CObject::DoExplosionSequence(void) {
                 nVClip);
         if (!IsMultiGame) { // Multiplayer handled outside of this code!!
             if (pDelObj->info.contains.nCount > 0) {
-                //	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case
+                // If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case
                 // drop vulcan ammo.
                 if (pDelObj->info.contains.nType == OBJ_POWERUP)
                     MaybeReplacePowerupWithEnergy(pDelObj);

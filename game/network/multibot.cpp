@@ -727,7 +727,7 @@ int32_t MultiDestroyRobot(CObject *pRobot, char bIsThief) {
         if (pRobot->info.nId == SPECIAL_REACTOR_ROBOT)
             SpecialReactorStuff();
         if (pRobotInfo->kamikaze)
-            pRobot->Explode(1); //	Kamikaze, explode right away, IN YOUR FACE!
+            pRobot->Explode(1); // Kamikaze, explode right away, IN YOUR FACE!
         else
             pRobot->Explode(STANDARD_EXPL_DELAY);
     }
@@ -814,7 +814,7 @@ void MultiDoCreateRobot(uint8_t *buf) {
     if (!(pObj = CreateMorphRobot(SEGMENT(pRobotMaker->nSegment), &vObjPos, nType)))
         return; // Cannot create CObject!
     pObj->info.nCreator = ((int16_t)(pRobotMaker - gameData.producerData.producers.Buffer())) | 0x80;
-    //	ExtractOrientFromSegment (&pObj->info.position.mOrient, &SEGMENT (pRobotMaker->nSegment));
+    // ExtractOrientFromSegment (&pObj->info.position.mOrient, &SEGMENT (pRobotMaker->nSegment));
     direction = gameData.objData.pConsole->info.position.vPos - pObj->info.position.vPos;
     pObj->info.position.mOrient = CFixMatrix::CreateFU(direction, pObj->info.position.mOrient.m.dir.u);
     // pObj->info.position.mOrient = CFixMatrix::CreateFU(direction, &pObj->info.position.mOrient.m.v.u, NULL);
@@ -884,11 +884,11 @@ void MultiDoBossActions(uint8_t *buf) {
             OBJ_IDX(pBossObj),
             1,
             I2X(1),
-            I2X(512)); //	I2X (5)12 means play twice as loud
+            I2X(512)); // I2X (5)12 means play twice as loud
         gameData.aiData.localInfo[OBJ_IDX(pBossObj)].pNextrimaryFire = 0;
         if (pBossObj->cType.aiInfo.REMOTE_OWNER == N_LOCALPLAYER) {
             MultiDeleteControlledRobot(nBossObj);
-            //			gameData.multigame.robots.controlled [pBossObj->cType.aiInfo.REMOTE_SLOT_NUM] = -1;
+            // 		gameData.multigame.robots.controlled [pBossObj->cType.aiInfo.REMOTE_SLOT_NUM] = -1;
         }
         pBossObj->cType.aiInfo.REMOTE_OWNER = -1; // Boss is up for grabs again!
         pBossObj->cType.aiInfo.REMOTE_SLOT_NUM = 0; // Available immediately!
@@ -1008,7 +1008,7 @@ void MultiDropRobotPowerups(int32_t nObject) {
     if (pDelObj->info.contains.nCount > 0) {
         if (pDelObj->info.contains.nCount > MAX_ROBOT_POWERUPS)
             pDelObj->info.contains.nCount = MAX_ROBOT_POWERUPS;
-        //	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan
+        // If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan
         // ammo.
         if (pDelObj->info.contains.nType == OBJ_POWERUP) {
             MaybeReplacePowerupWithEnergy(pDelObj);
@@ -1054,11 +1054,11 @@ void MultiDropRobotPowerups(int32_t nObject) {
         MultiSendCreateRobotPowerups(pDelObj);
 }
 
-//	-----------------------------------------------------------------------------
-//	Robot *robot got whacked by player player_num and requests permission to do something about it.
-//	Note: This function will be called regardless of whether gameData.appData.nGameMode is a multiplayer mode, so it
-//	should quick-out if not in a multiplayer mode.  On the other hand, it only gets called when a
-//	player or player weapon whacks a robot, so it happens rarely.
+// -----------------------------------------------------------------------------
+// Robot *robot got whacked by player player_num and requests permission to do something about it.
+// Note: This function will be called regardless of whether gameData.appData.nGameMode is a multiplayer mode, so it
+// should quick-out if not in a multiplayer mode.  On the other hand, it only gets called when a
+// player or player weapon whacks a robot, so it happens rarely.
 void MultiRobotRequestChange(CObject *robot, int32_t player_num) {
     int32_t slot, nRemoteObj;
     int8_t dummy;

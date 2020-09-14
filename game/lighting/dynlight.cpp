@@ -980,7 +980,7 @@ if (gameStates.app.bD1Mission)
             Add(pFace, pColor, nLight, (int16_t)nSegment, (int16_t)nSide, -1, nTexture, NULL, pSeg->HasOutdoorsProp());
         }
         // if (m_data.nLights [0])
-        //	return;
+        // return;
         if (!gameStates.render.bHaveDynLights) {
             Reset();
             RETURN

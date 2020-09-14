@@ -13,7 +13,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h> //	for memset ()
+#include <string.h> // for memset ()
 
 #include "u_mem.h"
 #include "descent.h"
@@ -64,10 +64,10 @@ void ExtractLongPos(CObject *pObj, tLongPos *pPos) {
 }
 
 // -------------------------------------------------------------------------------
-//	Create a tShortPos struct from an CObject.
-//	Extract the matrix into byte values.
-//	Create a position relative to vertex 0 with 1/256 Normal "fix" precision.
-//	Stuff CSegment in a int16_t.
+// Create a tShortPos struct from an CObject.
+// Extract the matrix into byte values.
+// Create a position relative to vertex 0 with 1/256 Normal "fix" precision.
+// Stuff CSegment in a int16_t.
 void CreateShortPos(tShortPos *pPos, CObject *pObj, int32_t bSwapBytes) {
     if (!pObj)
         memset(pPos, 0, sizeof(*pPos));
@@ -160,8 +160,8 @@ void ExtractShortPos(CObject *pObj, tShortPos *spp, int32_t bSwapBytes) {
 }
 
 // -----------------------------------------------------------------------------
-//	Extract a vector from a CSegment.  The vector goes from the start face to the end face.
-//	The point on each face is the average of the four points forming the face.
+// Extract a vector from a CSegment.  The vector goes from the start face to the end face.
+// The point on each face is the average of the four points forming the face.
 void ExtractVectorFromSegment(CSegment *pSeg, CFixVector *vp, int32_t start, int32_t end) {
     CFixVector vs, ve;
 
@@ -199,18 +199,18 @@ void ExtractOrientFromSegment(CFixMatrix *m, CSegment *pSeg) {
 
     // vector to matrix does normalizations and orthogonalizations
     *m = CFixMatrix::CreateFU(fVec, uVec);
-    //	*m = CFixMatrix::CreateFU(fVec, &uVec, NULL);
+    // *m = CFixMatrix::CreateFU(fVec, &uVec, NULL);
 }
 
 // -------------------------------------------------------------------------------
-//	Return v0, v1, v2 = 3 vertices with smallest numbers.  If *bFlip set, then negate Normal after computation.
-//	Note, pos.v.c.yu cannot just compute the Normal by treating the points in the opposite direction as this introduces
-//	small differences between normals which should merely be opposites of each other.
+// Return v0, v1, v2 = 3 vertices with smallest numbers.  If *bFlip set, then negate Normal after computation.
+// Note, pos.v.c.yu cannot just compute the Normal by treating the points in the opposite direction as this introduces
+// small differences between normals which should merely be opposites of each other.
 uint16_t SortVertsForNormal(uint16_t v0, uint16_t v1, uint16_t v2, uint16_t v3, uint16_t *vSorted) {
     int32_t i, j;
     uint16_t index[4] = {0, 1, 2, 3};
 
-    //	index is a list that shows how things got scrambled so we know if our Normal is pointing backwards
+    // index is a list that shows how things got scrambled so we know if our Normal is pointing backwards
     vSorted[0] = v0;
     vSorted[1] = v1;
     vSorted[2] = v2;
@@ -224,7 +224,7 @@ uint16_t SortVertsForNormal(uint16_t v0, uint16_t v1, uint16_t v2, uint16_t v3, 
             }
 
     // Assert ((vSorted [0] < vSorted [1]) && (vSorted [1] < vSorted [2]) && (vSorted [2] < vSorted [3]));
-    //	Now, if for any index [i] & index [i+1]: index [i+1] = (index [i]+3)%4, then must flip Normal
+    // Now, if for any index [i] & index [i+1]: index [i+1] = (index [i]+3)%4, then must flip Normal
     return (((index[0] + 3) % 4) == index[1]) || (((index[1] + 3) % 4) == index[2]);
 }
 
@@ -259,5 +259,5 @@ void ResetVertexNormals(void) {
         pp->Normal().Reset();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

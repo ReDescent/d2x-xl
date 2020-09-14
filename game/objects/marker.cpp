@@ -228,7 +228,7 @@ void CMarkerManager::DropSpawnPoint(void) {
 void CMarkerManager::DropForGuidebot(CObject *pObj) {
     uint8_t nMarker = MAX_DROP_SINGLE + 1;
 
-    //	Find spare marker slot.  "if" code below should be an assert, but what if someone changes NUM_MARKERS or
+    // Find spare marker slot.  "if" code below should be an assert, but what if someone changes NUM_MARKERS or
     // MAX_CROP_SINGLE and it never gets hit?
     if (nMarker > NUM_MARKERS - 1)
         nMarker = NUM_MARKERS - 1;

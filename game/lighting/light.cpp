@@ -33,8 +33,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define FLICKERFIX 0
 // int32_t	Use_fvi_lighting = 0;
 
-#define LIGHTING_CACHE_SIZE 4096 //	Must be power of 2!
-#define LIGHTING_FRAME_DELTA 256 //	Recompute cache value every 8 frames.
+#define LIGHTING_CACHE_SIZE 4096 // Must be power of 2!
+#define LIGHTING_FRAME_DELTA 256 // Recompute cache value every 8 frames.
 #define LIGHTING_CACHE_SHIFT 8
 
 int32_t nLightingFrameDelta = 1;
@@ -87,8 +87,8 @@ int32_t LightingMethod(void) {
 }
 
 // ----------------------------------------------------------------------------------------------
-//	Return true if we think vertex nVertex is visible from CSegment nSegment.
-//	If some amount of time has gone by, then recompute, else use cached value.
+// Return true if we think vertex nVertex is visible from CSegment nSegment.
+// If some amount of time has gone by, then recompute, else use cached value.
 
 int32_t LightingCacheVisible(
     int32_t nVertex,
@@ -109,8 +109,8 @@ int32_t LightingCacheVisible(
 #if DBG
         nSegment = FindSegByPos(*vObjPos, nObjSeg, 1, 0);
         if (nSegment == -1) {
-            Int3(); //	Obj_pos is not in nObjSeg!
-            return 0; //	Done processing this CObject.
+            Int3(); // Obj_pos is not in nObjSeg!
+            return 0; // Done processing this CObject.
         }
 #endif
         CHitQuery hitQuery(FQ_TRANSWALL, vObjPos, vVertPos, nObjSeg, nObject);
@@ -120,14 +120,14 @@ int32_t LightingCacheVisible(
         // gameData.aiData.vHitPos = gameData.aiData.hitResult.vPoint;
         // gameData.aiData.nHitSeg = gameData.aiData.hitResult.hit_seg;
         if (hitType == HIT_OBJECT)
-            return bApplyLight; //	Hey, we're not supposed to be checking objects!
+            return bApplyLight; // Hey, we're not supposed to be checking objects!
         if (hitType == HIT_NONE)
             bApplyLight = 1;
         else if (hitType == HIT_WALL) {
             fix distDist = CFixVector::Dist(hitResult.vPoint, *vObjPos);
             if (distDist < I2X(1) / 4) {
                 bApplyLight = 1;
-                // -- Int3 ();	//	Curious, did fvi detect intersection with CWall containing vertex?
+                // -- Int3 ();	// Curious, did fvi detect intersection with CWall containing vertex?
             }
         }
         lightingCache[((nSegment << LIGHTING_CACHE_SHIFT) ^ nVertex) & (LIGHTING_CACHE_SIZE - 1)] =
@@ -266,7 +266,7 @@ void ApplyLight(
         bUseColor = (color != NULL); //&& (color->Red () < 1.0 || color->Green () < 1.0 || color->Blue () < 1.0);
         bForceColor = pObj && ((nObjType == OBJ_WEAPON) || (nObjType == OBJ_FIREBALL) || (nObjType == OBJ_EXPLOSION));
         // for pretty dim sources, only process vertices in CObject's own CSegment.
-        //	12/04/95, MK, markers only cast light in own CSegment.
+        // 12/04/95, MK, markers only cast light in own CSegment.
         if (pObj && ((abs(obji_64) <= I2X(8)) || (nObjType == OBJ_MARKER))) {
             uint16_t *vp = SEGMENT(nObjSeg)->m_vertices;
             for (iVertex = 0; iVertex < SEGMENT_VERTEX_COUNT; iVertex++) {
@@ -343,7 +343,7 @@ void ApplyLight(
 
                             CFixVector vecToPoint;
                             vecToPoint = *vVertPos - *vObjPos;
-                            CFixVector::Normalize(vecToPoint); //	MK, Optimization note: You compute distance about 15
+                            CFixVector::Normalize(vecToPoint); // MK, Optimization note: You compute distance about 15
                                                                // lines up, this is partially redundant
                             dot = CFixVector::Dot(vecToPoint, pObj->info.position.mOrient.m.dir.f);
                             maxDot = I2X(1) / (gameData.renderData.vertColor.bDarkness ? spotSize : 2);
@@ -352,7 +352,7 @@ void ApplyLight(
                                     xOrigIntensity,
                                     FixMul(
                                         HEADLIGHT_SCALE,
-                                        dist)); //	Do the Normal thing, but darken around headlight.
+                                        dist)); // Do the Normal thing, but darken around headlight.
                             else if (!IsMultiGame || (dist < maxHeadlightDist))
                                 gameData.renderData.lights.dynamicLight[nVertex] +=
                                     FixMul(FixMul(dot, dot), xOrigIntensity) / 8; //(8 * spotSize);
@@ -393,7 +393,7 @@ void CastMuzzleFlashLight(int32_t nRenderVertices, CArray<int16_t> &renderVertic
 }
 
 // ---------------------------------------------------------
-//	Translation table to make flares flicker at different rates
+// Translation table to make flares flicker at different rates
 fix objLightXlat[16] = {
     0x1234,
     0x3321,
@@ -543,7 +543,7 @@ fix ComputeLightIntensity(int32_t nObject, CFloatVector *pColor, char *pbGotColo
         if (IsMultiGame)
             if (pObj->info.nId == OMEGA_ID)
                 if (RandShort() > 8192)
-                    return 0; //	3/4 of time, omega blobs will cast 0 light!
+                    return 0; // 3/4 of time, omega blobs will cast 0 light!
         if (pObj->info.nId == FLARE_ID) {
             return fix((1.75f + RandFloat(4.0f)) * Min(xLight, pObj->info.xLifeLeft));
         } else
@@ -555,7 +555,7 @@ fix ComputeLightIntensity(int32_t nObject, CFloatVector *pColor, char *pbGotColo
         xLight &= 0xffff;
         xLight = 8 * abs(I2X(1) / 2 - xLight);
         if (pObj->info.xLifeLeft < I2X(1000))
-            pObj->info.xLifeLeft += I2X(1); //	Make sure this CObject doesn't go out.
+            pObj->info.xLifeLeft += I2X(1); // Make sure this CObject doesn't go out.
         pColor->Red() = 0.1f;
         pColor->Green() = 1.0f;
         pColor->Blue() = 0.1f;
@@ -610,7 +610,7 @@ void SetDynamicLight(void) {
         InitDynColoring();
     }
     lightClusterManager.Reset();
-    //	Create list of vertices that need to be looked at for setting of ambient light.
+    // Create list of vertices that need to be looked at for setting of ambient light.
     nRenderVertices = 0;
     if (!gameStates.render.nLightingMethod) {
         for (iRenderSeg = 0; iRenderSeg < gameData.renderData.mine.visibility[0].nSegments; iRenderSeg++) {
@@ -663,10 +663,10 @@ void SetDynamicLight(void) {
                     &pll->color);
         }
     }
-    //	July 5, 1995: New faster dynamic lighting code.  About 5% faster on the PC (un-optimized).
-    //	Only objects which are in rendered segments cast dynamic light.  We might want to extend this
-    //	one or two segments if we notice light changing as OBJECTS go offgameData.render.screen.  I couldn't see any
-    //	serious visual degradation.  In fact, I could see no humorous degradation, either. --MK
+    // July 5, 1995: New faster dynamic lighting code.  About 5% faster on the PC (un-optimized).
+    // Only objects which are in rendered segments cast dynamic light.  We might want to extend this
+    // one or two segments if we notice light changing as OBJECTS go offgameData.render.screen.  I couldn't see any
+    // serious visual degradation.  In fact, I could see no humorous degradation, either. --MK
     FORALL_OBJS(pObj) {
         if (pObj->info.nType == OBJ_NONE)
             continue;
@@ -693,20 +693,20 @@ void SetDynamicLight(void) {
             gameData.renderData.lights.newObjects[nObject] = 1;
         }
     }
-    //	Now, process all lights from last frame which haven't been processed this frame.
+    // Now, process all lights from last frame which haven't been processed this frame.
     FORALL_OBJS(pObj) {
         nObject = pObj->Index();
-        //	In multiplayer games, process even unprocessed OBJECTS every 4th frame, else don't know about CPlayerData
+        // In multiplayer games, process even unprocessed OBJECTS every 4th frame, else don't know about CPlayerData
         // sneaking up.
         if ((gameData.renderData.lights.objects[nObject]) ||
             (IsMultiGame && (((nObject ^ gameData.appData.nFrameCount) & 3) == 0))) {
             if (gameData.renderData.lights.newObjects[nObject])
-                //	Not lit last frame, so we don't need to light it.  (Already lit if casting light this frame.)
-                //	But copy value from gameData.renderData.lights.newObjects to update
+                // Not lit last frame, so we don't need to light it.  (Already lit if casting light this frame.)
+                // But copy value from gameData.renderData.lights.newObjects to update
                 // gameData.renderData.lights.objects array.
                 gameData.renderData.lights.objects[nObject] = gameData.renderData.lights.newObjects[nObject];
             else {
-                //	Lit last frame, but not this frame.  Get intensity...
+                // Lit last frame, but not this frame.  Get intensity...
                 objPos = &pObj->info.position.vPos;
                 xObjIntensity = ComputeLightIntensity(nObject, &color, &bGotColor);
                 if (bGotColor)
@@ -909,7 +909,7 @@ int32_t IsLight(int32_t tMapNum) {
     return (tMapNum < MAX_WALL_TEXTURES) ? gameData.pigData.tex.brightness[tMapNum] : 0;
 }
 
-//	------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 // cast static light from a CSegment to nearby segments
 // these constants should match the ones in seguvs
 #define LIGHT_DISTANCE_THRESHOLD (I2X(80))
@@ -945,8 +945,8 @@ void ApplyLightToSegment(CSegment *pSeg, CFixVector *vSegCenter, fix xBrightness
                 pSeg->m_xAvgSegLight += xLightAtPoint;
                 if (pSeg->m_xAvgSegLight < 0) // if it went negative, saturate
                     pSeg->m_xAvgSegLight = 0;
-            } //	end if (xLightAtPoint...
-        } //	end if (xDistToRSeg...
+            } // end if (xLightAtPoint...
+        } // end if (xDistToRSeg...
         changedSegs[nChangedSegs++] = nSegment;
     }
 
@@ -959,7 +959,7 @@ void ApplyLightToSegment(CSegment *pSeg, CFixVector *vSegCenter, fix xBrightness
 
 extern CObject *oldViewer;
 
-//	------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 // update the xAvgSegLight field in a CSegment, which is used for CObject lighting
 // this code is copied from the editor routine calim_process_all_lights ()
 void ChangeSegmentLight(int16_t nSegment, int16_t nSide, int32_t dir) {
@@ -983,7 +983,7 @@ void ChangeSegmentLight(int16_t nSegment, int16_t nSide, int32_t dir) {
     oldViewer = NULL;
 }
 
-//	------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 int32_t FindDLIndex(int16_t nSegment, int16_t nSide) {
     if (!gameData.renderData.lights.deltaIndices.Buffer())
@@ -1012,11 +1012,11 @@ int32_t FindDLIndex(int16_t nSegment, int16_t nSide) {
     return 0;
 }
 
-//	------------------------------------------------------------------------------------------
-//	dir = +1 -> add light
-//	dir = -1 -> subtract light
-//	dir = 17 -> add 17x light
-//	dir =  0 -> you are dumb
+// ------------------------------------------------------------------------------------------
+// dir = +1 -> add light
+// dir = -1 -> subtract light
+// dir = 17 -> add 17x light
+// dir =  0 -> you are dumb
 void ChangeLight(int16_t nSegment, int16_t nSide, int32_t dir) {
     int32_t i, j, k;
     fix dl, *pSegLightDelta;
@@ -1076,9 +1076,9 @@ void ChangeLight(int16_t nSegment, int16_t nSide, int32_t dir) {
     ChangeSegmentLight(nSegment, nSide, dir);
 }
 
-//	-----------------------------------------------------------------------------
-//	Subtract light cast by a light source from all surfaces to which it applies light.
-//	This is precomputed data, stored at static light application time in the editor (the slow lighting function).
+// -----------------------------------------------------------------------------
+// Subtract light cast by a light source from all surfaces to which it applies light.
+// This is precomputed data, stored at static light application time in the editor (the slow lighting function).
 // returns 1 if lights actually subtracted, else 0
 int32_t SubtractLight(int16_t nSegment, int32_t nSide) {
     if (gameData.renderData.lights.subtracted[nSegment] & (1 << nSide))
@@ -1088,10 +1088,10 @@ int32_t SubtractLight(int16_t nSegment, int32_t nSide) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
-//	Add light cast by a light source from all surfaces to which it applies light.
-//	This is precomputed data, stored at static light application time in the editor (the slow lighting function).
-//	You probably only want to call this after light has been subtracted.
+// -----------------------------------------------------------------------------
+// Add light cast by a light source from all surfaces to which it applies light.
+// This is precomputed data, stored at static light application time in the editor (the slow lighting function).
+// You probably only want to call this after light has been subtracted.
 // returns 1 if lights actually added, else 0
 int32_t AddLight(int16_t nSegment, int32_t nSide) {
     if (!(gameData.renderData.lights.subtracted[nSegment] & (1 << nSide)))
@@ -1101,8 +1101,8 @@ int32_t AddLight(int16_t nSegment, int32_t nSide) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
-//	Parse the gameData.renderData.lights.subtracted array, turning on or off all lights.
+// -----------------------------------------------------------------------------
+// Parse the gameData.renderData.lights.subtracted array, turning on or off all lights.
 void ApplyAllChangedLight(void) {
     int16_t i, j;
     uint8_t h;
@@ -1116,18 +1116,18 @@ void ApplyAllChangedLight(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
-//	Should call this whenever a new mine gets loaded.
-//	More specifically, should call this whenever something global happens
-//	to change the status of static light in the mine.
+// -----------------------------------------------------------------------------
+// Should call this whenever a new mine gets loaded.
+// More specifically, should call this whenever something global happens
+// to change the status of static light in the mine.
 void ClearLightSubtracted(void) { gameData.renderData.lights.subtracted.Clear(); }
 
 //------------------------------------------------------------------------------
-//	When loading a saved game, segp->xAvgSegLight is bogus.
-//	This is because ApplyAllChangedLight, which is supposed to properly update this value,
-//	cannot do so because it needs the original light cast from a light which is no longer there.
-//	That is, a light has been blown out, so the texture remaining casts 0 light, but the static light
-//	which is present in the xAvgSegLight field contains the light cast from that light.
+// When loading a saved game, segp->xAvgSegLight is bogus.
+// This is because ApplyAllChangedLight, which is supposed to properly update this value,
+// cannot do so because it needs the original light cast from a light which is no longer there.
+// That is, a light has been blown out, so the texture remaining casts 0 light, but the static light
+// which is present in the xAvgSegLight field contains the light cast from that light.
 void ComputeAllStaticLight(void) {
     int32_t h, i, j, k;
     CSegment *pSeg;

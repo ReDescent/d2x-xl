@@ -13,7 +13,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h> //	for memset ()
+#include <string.h> // for memset ()
 
 #include "descent.h"
 #include "error.h"
@@ -46,7 +46,7 @@ CDACSBiDirRouter biDacsRouter[MAX_THREADS];
 // -----------------------------------------------------------------------------------
 
 #define MIN_CACHE_FCD_DIST \
-    (I2X(80)) //	Must be this far apart for cache lookup to succeed.  Recognizes small changes in distance matter at
+    (I2X(80)) // Must be this far apart for cache lookup to succeed.  Recognizes small changes in distance matter at
               // small distances.
 
 void CFCDCache::Flush(void) {
@@ -70,7 +70,7 @@ void CFCDCache::Add(int32_t seg0, int32_t seg1, int32_t nPathLen, fix dist) {
             m_nIndex = 0;
         SetPathLength(nPathLen);
     } else {
-        //	If it's in the cache, remove it.
+        // If it's in the cache, remove it.
         for (int32_t i = 0; i < MAX_FCD_CACHE; i++) {
             if ((m_cache[i].seg0 == seg0) && (m_cache[i].seg1 == seg1)) {
                 m_cache[m_nIndex].seg0 = -1;
@@ -131,7 +131,7 @@ void CSimpleHeap::Setup(int16_t nStartSeg, int16_t nDestSeg, uint32_t flag, int3
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int16_t CSimpleHeap::Expand(CScanInfo &scanInfo) {
     ENTER(1, 0);
@@ -205,9 +205,9 @@ bool CSimpleBiDirHeap::Match(int16_t nSegment, CScanInfo &scanInfo) {
     return (scanInfo.m_heap[!m_nDir].m_path[nSegment].m_bVisited == m_bFlag);
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // static SDL_mutex* semaphore = NULL;
 
@@ -230,9 +230,9 @@ int32_t CRouter::SetSegment(const int16_t nSegment, const CFixVector &p) {
 }
 
 // -----------------------------------------------------------------------------
-//	Determine whether seg0 and seg1 are reachable in a way that allows sound to pass.
-//	Search up to a maximum m_nDepth of m_maxDist.
-//	Return the distance.
+// Determine whether seg0 and seg1 are reachable in a way that allows sound to pass.
+// Search up to a maximum m_nDepth of m_maxDist.
+// Return the distance.
 
 fix CRouter::PathLength(
     const CFixVector &p0,
@@ -477,7 +477,7 @@ fix CDACSUniDirRouter::BuildPath(int16_t nSegment) {
             p1 = &SEGMENT(nDestSeg)->Center();
         }
         // if (j < i + 2) // can only see next segment after route [i].nNode
-        //	xDist += pSeg->m_childDists [0][route [i].nEdge];
+        // xDist += pSeg->m_childDists [0][route [i].nEdge];
         // else
         { // skipped some segment(s)
             xDist += CFixVector::Dist(*p0, *p1);
@@ -628,7 +628,7 @@ fix CDACSBiDirRouter::FindPath(void) {
     RETVAL(-1)
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

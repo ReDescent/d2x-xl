@@ -27,7 +27,7 @@ CPaletteManager paletteManager;
 
 char szCurrentLevelPalette[FILENAME_LEN];
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline int32_t Sqr(int32_t i) { return i * i; }
 
@@ -58,7 +58,7 @@ bool CPalette::Read(CFile &cf) { return cf.File() && (cf.Read(&m_data, sizeof(m_
 
 bool CPalette::Write(CFile &cf) { return cf.File() && (cf.Write(&m_data, sizeof(m_data), 1) == 1); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CPalette::ToRgbaf(uint8_t nIndex, CFloatVector &color) {
     color.Set(m_data.rgb[nIndex].Red(), m_data.rgb[nIndex].Green(), m_data.rgb[nIndex].Blue());
@@ -68,9 +68,9 @@ void CPalette::ToRgbaf(uint8_t nIndex, CFloatVector &color) {
 
 //------------------------------------------------------------------------------
 
-//	Add a computed color (by GrFindClosestColor) to list of computed colors in m_computedColors.
-//	If list wasn't full already, increment gameData.renderData.m_nComputedColors.
-//	If was full, replace a random one.
+// Add a computed color (by GrFindClosestColor) to list of computed colors in m_computedColors.
+// If list wasn't full already, increment gameData.renderData.m_nComputedColors.
+// If was full, replace a random one.
 void CPalette::AddComputedColor(int32_t r, int32_t g, int32_t b, int32_t nIndex) {
     int32_t i;
 
@@ -83,17 +83,17 @@ void CPalette::AddComputedColor(int32_t r, int32_t g, int32_t b, int32_t nIndex)
     m_computedColors[i].nIndex = nIndex;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CPalette::InitComputedColors(void) { memset(m_computedColors, 0xff, sizeof(m_computedColors)); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline int32_t ColorDelta(CRGBColor &palette, int32_t r, int32_t g, int32_t b) {
     return Sqr(r - palette.Red()) + Sqr(g - palette.Green()) + Sqr(b - palette.Blue());
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CPalette::ClosestColor(int32_t r, int32_t g, int32_t b) {
     int32_t i, n;
@@ -102,7 +102,7 @@ int32_t CPalette::ClosestColor(int32_t r, int32_t g, int32_t b) {
 
     n = m_nComputedColors;
 
-    //	If we've already computed this color, return it!
+    // If we've already computed this color, return it!
     pci = m_computedColors;
     for (i = 0; i < n; i++, pci++)
         if ((r == pci->Red()) && (g == pci->Green()) && (b == pci->Blue())) {
@@ -135,22 +135,22 @@ int32_t CPalette::ClosestColor(int32_t r, int32_t g, int32_t b) {
     return nBestIndex;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CPalette::SwapTransparency(void) {
     for (int32_t i = 0; i < 3; i++)
         Swap(m_data.raw[i], m_data.raw[765 + i]);
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CPaletteManager::FindClosestColor15bpp(int32_t rgb) {
     return m_data.game ? m_data.game->ClosestColor(((rgb >> 10) & 31) * 2, ((rgb >> 5) & 31) * 2, (rgb & 31) * 2) : 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CPalette *CPaletteManager::Find(CPalette &palette) {
     tPaletteList *pList;
@@ -177,7 +177,7 @@ CPalette *CPaletteManager::Find(CPalette &palette) {
     return NULL;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CPalette *CPaletteManager::Add(CPalette &palette, int32_t nTransparentColor, int32_t nSuperTranspColor) {
     palette.InitTransparency(nTransparentColor, nSuperTranspColor);
@@ -197,7 +197,7 @@ CPalette *CPaletteManager::Add(CPalette &palette, int32_t nTransparentColor, int
     return Activate(&pList->palette);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CPalette *CPaletteManager::Add(uint8_t *buffer, int32_t nTransparentColor, int32_t nSuperTranspColor) {
     CPalette palette;
@@ -206,7 +206,7 @@ CPalette *CPaletteManager::Add(uint8_t *buffer, int32_t nTransparentColor, int32
     return Add(palette, nTransparentColor, nSuperTranspColor);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CPaletteManager::Destroy(void) {
     tPaletteList *pi, *pj;
@@ -264,7 +264,7 @@ void CPaletteManager::StartEffect(bool bForce) {
     StartEffect(m_data.effect.Red(), m_data.effect.Green(), m_data.effect.Blue(), bForce);
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 #define MAX_PALETTE_ADD 30
 
@@ -272,7 +272,7 @@ void CPaletteManager::BumpEffect(int32_t red, int32_t green, int32_t blue) {
     BumpEffect(float(red) / 64.0f, float(green) / 64.0f, float(blue) / 64.0f);
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 void CPaletteManager::BumpEffect(float red, float green, float blue) {
     float maxVal = 1.0f; //(paletteManager.FadeDelay () ? 60 : MAX_PALETTE_ADD) / 64.0f;
@@ -325,7 +325,7 @@ void CPaletteManager::ResetEffect(void) {
     StartEffect(0, 0, 0);
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 void CPaletteManager::UpdateEffect(void) {
     if (m_data.bDoEffect) {
@@ -338,14 +338,14 @@ void CPaletteManager::UpdateEffect(void) {
     }
 }
 
-//	------------------------------------------------------------------------------------
-//	Diminish palette effects towards Normal.
+// ------------------------------------------------------------------------------------
+// Diminish palette effects towards Normal.
 
 void CPaletteManager::FadeEffect(void) {
     bool bForce = false;
 
     if (m_data.xFadeDelay) {
-        //	Part of hack system to force update of palette after exiting a menu.
+        // Part of hack system to force update of palette after exiting a menu.
         if (m_data.xLastEffectTime)
             bForce = true;
 
@@ -391,14 +391,14 @@ void CPaletteManager::SetGamma(int32_t gamma) {
 
 int32_t CPaletteManager::GetGamma(void) { return m_data.nGamma; }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 const char *CPaletteManager::BrightnessLevel(void) {
     float b = Brightness();
     return (b == 1.0f) ? TXT_STANDARD : (b < 1.0f) ? TXT_LOW : TXT_HIGH;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CPaletteManager::Init(void) {
     memset(&m_data, 0, sizeof(m_data));
@@ -498,7 +498,7 @@ CPalette *CPaletteManager::Load(
         strncpy(paletteManager.LastLoaded(), pszPaletteName, sizeof(paletteManager.LastLoaded()));
         palette = paletteManager.Load(pszPaletteName, pszLevelName);
         // if (!(paletteManager.FadedOut () || bNoScreenChange))
-        //	ResumeEffect ();
+        // ResumeEffect ();
         gameData.hudData.msgs[0].nColor = -1;
         LoadGameBackground();
     }
@@ -529,9 +529,9 @@ CPalette *CPaletteManager::LoadD1(void) {
     return D1();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 const float CPaletteManager::Brightness(void) { return 0.25f + (float)GetGamma() / 4.0f; }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

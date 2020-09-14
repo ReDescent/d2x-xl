@@ -73,7 +73,7 @@ bool CCockpitInfo::bWindowDrawn[2];
 
 CGenericCockpit *cockpit = &fullCockpit;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DrawGuidedCrosshairs(fix xStereoSeparation);
 void DrawWindowLabel(void);
@@ -81,9 +81,9 @@ bool GuidedMissileActive(void);
 
 extern fix staticTime[2];
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpitHistory::Init(void) {
     score = (IsMultiGame && !IsCoopGame) ? -99 : -1;
@@ -100,9 +100,9 @@ void CCockpitHistory::Init(void) {
     xOmegaCharge = -1;
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpitInfo::Init(void) {
     nCloakFadeState = 0;
@@ -118,9 +118,9 @@ void CCockpitInfo::Init(void) {
     bRebuild = false;
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::Init(void) {
     m_history[0].Init();
@@ -130,7 +130,7 @@ void CGenericCockpit::Init(void) {
         m_save.Create(3, "CGenericCockpit::m_save");
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::ScaleUp(void) {
     m_info.xScale *= float(HUD_ASPECT);
@@ -143,7 +143,7 @@ void CGenericCockpit::ScaleUp(void) {
     fontManager.SetScale(cockpit->FontScale());
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::ScaleDown(void) {
     if (ogl.IsOculusRift()) {
@@ -155,7 +155,7 @@ void CGenericCockpit::ScaleDown(void) {
     SetFontScale(1.0f);
 }
 
-//	---------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------
 // draws a 3d view into one of the cockpit windows.  win is 0 for left,
 // 1 for right.  pViewer is CObject.  NULL CObject means give up window
 // nUser is one of the WBU_ constants.  If bRearView is set, show a
@@ -228,7 +228,7 @@ void CGenericCockpit::RenderWindow(
     // gameData.renderData.frame.SetViewport ();
     gameData.renderData.window.Activate("GenericCockpit::RenderWindow", gameData.renderData.window.Parent());
 
-    //	HACK!If guided missile, wake up robots as necessary.
+    // HACK!If guided missile, wake up robots as necessary.
     if (pViewer->info.nType == OBJ_WEAPON)
         WakeupRenderedObjects(pViewer, nWindow + 1);
 
@@ -402,7 +402,7 @@ void CGenericCockpit::RenderWindows(void) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::SetupSceneCenter(CCanvas *refCanv, int32_t &w, int32_t &h) {
     ENTER(0, 0);
@@ -432,7 +432,7 @@ glLineWidth (1);
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // draw all the things on the HUD
 
 void CGenericCockpit::Render(int32_t bExtraInfo, fix xStereoSeparation) {
@@ -682,7 +682,7 @@ void CGenericCockpit::Activate(int32_t nType, bool bClearMessages) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CGenericCockpit::Save(bool bInitial) {
     if (bInitial && IsSaved())
@@ -690,7 +690,7 @@ bool CGenericCockpit::Save(bool bInitial) {
     return m_save.Push(gameStates.render.cockpit.nTypeSave = gameStates.render.cockpit.nType);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CGenericCockpit::Restore(void) {
     if (!m_save.ToS()) {
@@ -702,7 +702,7 @@ bool CGenericCockpit::Restore(void) {
     return true;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::Rewind(bool bActivate) {
     if (bActivate)
@@ -714,8 +714,8 @@ void CGenericCockpit::Rewind(bool bActivate) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CGenericCockpit::IsSaved(void) { return m_save.ToS() > 0; }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

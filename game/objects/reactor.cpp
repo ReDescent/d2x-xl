@@ -32,7 +32,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 void DoCountdownFrame();
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // return the position & orientation of a gun on the control center CObject
 void CalcReactorGunPoint(CFixVector *vGunPoint, CFixVector *vGunDir, CObject *pObj, int32_t nGun) {
     tReactorProps *props;
@@ -47,10 +47,10 @@ void CalcReactorGunPoint(CFixVector *vGunPoint, CFixVector *vGunDir, CObject *pO
     *vGunDir = *pView * props->gunDirs[nGun];
 }
 
-//	-----------------------------------------------------------------------------
-//	Look at control center guns, find best one to fire at *pObj.
-//	Return best gun number (one whose direction dotted with vector to player is largest).
-//	If best gun has negative dot, return -1, meaning no gun is good.
+// -----------------------------------------------------------------------------
+// Look at control center guns, find best one to fire at *pObj.
+// Return best gun number (one whose direction dotted with vector to player is largest).
+// If best gun has negative dot, return -1, meaning no gun is good.
 int32_t CalcBestReactorGun(int32_t nGunCount, CFixVector *vGunPos, CFixVector *vGunDir, CFixVector *vObjPos) {
     int32_t i;
     fix xBestDot;
@@ -82,8 +82,8 @@ int32_t CalcBestReactorGun(int32_t nGunCount, CFixVector *vGunPos, CFixVector *v
 // how long to blow up on insane
 int32_t nAlanPavlishReactorTimes[2][DIFFICULTY_LEVEL_COUNT] = {{90, 60, 45, 35, 30}, {50, 45, 40, 35, 30}};
 
-//	-----------------------------------------------------------------------------
-//	Called every frame.  If control center been destroyed, then actually do something.
+// -----------------------------------------------------------------------------
+// Called every frame.  If control center been destroyed, then actually do something.
 void DoReactorDeadFrame(void) {
     if (gameStates.gameplay.nReactorCount[0] < gameStates.gameplay.nReactorCount[1]) {
         tReactorStates *pStates = &gameData.reactorData.states[0];
@@ -99,7 +99,7 @@ void DoReactorDeadFrame(void) {
         DoCountdownFrame();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define COUNTDOWN_VOICE_TIME F2X(12.75)
 
@@ -127,18 +127,18 @@ void DoCountdownFrame(void) {
         }
     }
 
-    //	Control center destroyed, rock the player's ship.
+    // Control center destroyed, rock the player's ship.
     fc = gameData.reactorData.countdown.nSecsLeft;
     if (fc > 16)
         fc = 16;
-    //	At Trainee, decrease rocking of ship by 4x.
+    // At Trainee, decrease rocking of ship by 4x.
     xScale = 1;
     if (gameStates.app.nDifficultyLevel == 0)
         xScale = 4;
     h = I2X(3) / 16 + (I2X(16 - fc)) / 32;
     gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.x += (FixMul(SRandShort(), h)) / xScale;
     gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.z += (FixMul(SRandShort(), h)) / xScale;
-    //	Hook in the rumble sound effect here.
+    // Hook in the rumble sound effect here.
     oldTime = gameData.reactorData.countdown.nTimer;
     if (!TimeStopped())
         gameData.reactorData.countdown.nTimer -= cdtFrameTime;
@@ -178,7 +178,7 @@ void DoCountdownFrame(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void InitCountdown(CTrigger *pTrigger, int32_t bReactorDestroyed, int32_t nTimer) {
     if (pTrigger && (pTrigger->m_info.time > 0))
@@ -198,11 +198,11 @@ void InitCountdown(CTrigger *pTrigger, int32_t bReactorDestroyed, int32_t nTimer
     }
 }
 
-//	-----------------------------------------------------------------------------
-//	Called when control center gets destroyed.
-//	This code is common to whether control center is implicitly imbedded in a boss,
-//	or is an CObject of its own.
-//	if pObj == NULL that means the boss was the control center and don't set gameData.reactorData.nDeadObj
+// -----------------------------------------------------------------------------
+// Called when control center gets destroyed.
+// This code is common to whether control center is implicitly imbedded in a boss,
+// or is an CObject of its own.
+// if pObj == NULL that means the boss was the control center and don't set gameData.reactorData.nDeadObj
 void DoReactorDestroyedStuff(CObject *pObj) {
     int32_t i, bFinalCountdown, bReactor = pObj && (pObj->info.nType == OBJ_REACTOR);
     CTrigger *pTrigger = NULL;
@@ -216,7 +216,7 @@ void DoReactorDestroyedStuff(CObject *pObj) {
     bFinalCountdown = !(gameStates.app.bD2XLevel && gameStates.gameplay.bMultiBosses && extraGameInfo[0].nBossCount[0]);
     if (bFinalCountdown ||
         (gameStates.app.bD2XLevel && bReactor && (pTrigger = FindObjTrigger(pObj->Index(), TT_COUNTDOWN, -1)))) {
-        //	If a secret level, delete secret.sgc to indicate that we can't return to our secret level.
+        // If a secret level, delete secret.sgc to indicate that we can't return to our secret level.
         if (bFinalCountdown) {
             KillAllBossRobots(0);
             for (i = 0; i < gameData.reactorData.triggers.m_nLinks; i++)
@@ -236,7 +236,7 @@ void DoReactorDestroyedStuff(CObject *pObj) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t FindReactor(CObject *pObj) {
     int32_t i, nObject = pObj->Index();
@@ -247,7 +247,7 @@ int32_t FindReactor(CObject *pObj) {
     return -1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void RemoveReactor(CObject *pObj) {
     int32_t i = FindReactor(pObj);
@@ -262,13 +262,13 @@ void RemoveReactor(CObject *pObj) {
         sizeof(gameData.reactorData.states[gameStates.gameplay.nReactorCount[0]]));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // do whatever this thing does in a frame
 void DoReactorFrame(CObject *pObj) {
     int32_t nBestGun, i;
     tReactorStates *pReactorStates;
 
-    //	If a boss level, then gameData.reactorData.bPresent will be 0.
+    // If a boss level, then gameData.reactorData.bPresent will be 0.
     if (!gameData.reactorData.bPresent)
         return;
     i = FindReactor(pObj);
@@ -283,7 +283,7 @@ void DoReactorFrame(CObject *pObj) {
         return;
 
     if (!(pReactorStates->bHit || pReactorStates->bSeenPlayer)) {
-        if (gameStates.app.tick40fps.bTick) { //	Do ever so often...
+        if (gameStates.app.tick40fps.bTick) { // Do ever so often...
             CFixVector vecToPlayer;
             fix xDistToPlayer;
             int32_t i;
@@ -300,8 +300,8 @@ void DoReactorFrame(CObject *pObj) {
             if (IsMultiGame)
                 gameData.aiData.target.vBelievedPos = OBJPOS(OBJECT(LOCALPLAYER.nObject))->vPos;
 
-            //	Hack for special control centers which are isolated and not reachable because the
-            //	real control center is inside the boss.
+            // Hack for special control centers which are isolated and not reachable because the
+            // real control center is inside the boss.
             for (i = 0; i < SEGMENT_SIDE_COUNT; i++)
                 if (IS_CHILD(pSeg->m_children[i]))
                     break;
@@ -318,7 +318,7 @@ void DoReactorFrame(CObject *pObj) {
         return;
     }
 
-    //	Periodically, make the reactor fall asleep if player not visible.
+    // Periodically, make the reactor fall asleep if player not visible.
     if (pReactorStates->bHit || pReactorStates->bSeenPlayer) {
         if ((pReactorStates->xLastVisCheckTime + I2X(5) < gameData.timeData.xGame) ||
             (pReactorStates->xLastVisCheckTime > gameData.timeData.xGame)) {
@@ -370,7 +370,7 @@ void DoReactorFrame(CObject *pObj) {
                 pObj->Index(),
                 CONTROLCEN_WEAPON_NUM,
                 1);
-            //	some of time, based on level, fire another thing, not directly at player, so it might hit him if he's
+            // some of time, based on level, fire another thing, not directly at player, so it might hit him if he's
             // constantly moving.
             nRandProb = I2X(1) / (abs(missionManager.nCurrentLevel) / 4 + 2);
             count = 0;
@@ -401,11 +401,11 @@ void DoReactorFrame(CObject *pObj) {
         pReactorStates->nNextFireTime -= gameData.physicsData.xTime;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 fix ReactorStrength(void) {
     if (gameData.reactorData.nStrength == -1) { // use old defaults
-        //	Boost control center strength at higher levels.
+        // Boost control center strength at higher levels.
         if (missionManager.nCurrentLevel >= 0)
             return I2X(200) + I2X(50) * missionManager.nCurrentLevel;
         return I2X(200) - missionManager.nCurrentLevel * I2X(150);
@@ -413,9 +413,9 @@ fix ReactorStrength(void) {
     return I2X(gameData.reactorData.nStrength);
 }
 
-//	-----------------------------------------------------------------------------
-//	This must be called at the start of each level.
-//	If this level contains a boss and mode != multiplayer, don't do control center stuff.  (Ghost out control center
+// -----------------------------------------------------------------------------
+// This must be called at the start of each level.
+// If this level contains a boss and mode != multiplayer, don't do control center stuff.  (Ghost out control center
 // CObject.) 	If this level contains a boss and mode == multiplayer, do control center stuff.
 void InitReactorForLevel(int32_t bRestore) {
     gameStates.gameplay.bMultiBosses = gameStates.app.bD2XLevel && EGI_FLAG(bMultiBosses, 0, 0, 0);
@@ -444,7 +444,7 @@ void InitReactorForLevel(int32_t bRestore) {
                     gameData.reactorData.states[0].nObject,
                     pObj->Index());
             else {
-                //	Compute all gun positions.
+                // Compute all gun positions.
                 int32_t j = bRestore ? -1 : FindReactor(pObj);
                 int32_t bNew = j < 0;
                 if (bNew)
@@ -463,7 +463,7 @@ void InitReactorForLevel(int32_t bRestore) {
                     pReactorStates->nObject = pObj->Index();
                     if (bNew) {
                         pObj->SetShield(ReactorStrength());
-                        //	Say the control center has not yet been hit.
+                        // Say the control center has not yet been hit.
                         pReactorStates->bHit = 0;
                         pReactorStates->bSeenPlayer = 0;
                         pReactorStates->nNextFireTime = 0;
@@ -533,7 +533,7 @@ void SpecialReactorStuff(void) {
                                                           (DIFFICULTY_LEVEL_COUNT - 1));
         gameData.reactorData.countdown.nTotalTime =
             X2I(gameData.reactorData.countdown.nTimer) +
-            2; //	Will prevent "Self destruct sequence activated" message from replaying.
+            2; // Will prevent "Self destruct sequence activated" message from replaying.
     }
 }
 

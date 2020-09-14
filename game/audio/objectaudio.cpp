@@ -742,7 +742,7 @@ int32_t CAudio::CreateSegmentSound(
     nSound = XlatSound(nOrgSound);
     if (maxVolume < 0)
         RETVAL(-1)
-    //	if (maxVolume > I2X (1)) maxVolume = I2X (1);
+    // if (maxVolume > I2X (1)) maxVolume = I2X (1);
     if (nSound < 0)
         RETVAL(-1)
     if (!gameData.pigData.sound.sounds[gameStates.sound.bD1Sound][nSound].data) {
@@ -849,7 +849,7 @@ int32_t CAudio::DestroySegmentSound(int16_t nSegment, int16_t nSide, int16_t nSo
 }
 
 //------------------------------------------------------------------------------
-//	John's new function, 2/22/96.
+// John's new function, 2/22/96.
 void CAudio::RecordSoundObjects(void) {
     ENTER(0, 0);
     for (uint32_t i = 0; i < m_objects.ToS(); i++) {

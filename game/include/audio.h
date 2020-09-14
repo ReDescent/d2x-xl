@@ -181,7 +181,7 @@ class CSoundObject {
     public:
     int16_t m_nSignature; // A unique nSignature to this sound
     uint8_t m_flags; // Used to tell if this slot is used and/or currently playing, and how long.
-    uint8_t m_bCustom; //	Keep alignment
+    uint8_t m_bCustom; // Keep alignment
     fix m_maxVolume; // Max volume that this sound is playing at
     fix m_maxDistance; // The max distance that this sound can be heard at...
     int32_t m_soundClass;

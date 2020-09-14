@@ -823,9 +823,6 @@ void CVisibilityData::BuildSegList(
                     point.ProjectAndEncode(transformation, nVertex);
                     if (point.Behind()) {
                         bProjected = 0;
-#if 0
-					break;
-#endif
                     }
                     // offScreenFlags &= (point.m_codes & ~CC_BEHIND);
                     offScreenFlags &= point.Codes();
@@ -844,7 +841,6 @@ void CVisibilityData::BuildSegList(
                 if ((nChildSeg == nDbgSeg) && ((nDbgSide < 0) || (nSide == nDbgSide)))
                     nChildSeg = nChildSeg;
 #endif
-#if 1
                 if ((facePortal.right < 0) || (facePortal.bot < 0) ||
                     (facePortal.left >= gameData.renderData.screen.Width()) ||
                     (facePortal.top >= gameData.renderData.screen.Height()))
@@ -859,12 +855,10 @@ void CVisibilityData::BuildSegList(
                     facePortal.bot = gameData.renderData.screen.Height() - 1;
                 if (offScreenFlags)
                     continue;
-#endif
                 if (bProjected) {
                     if (CodePortal(facePortal, curPortal))
                         continue;
                 }
-#if 1
                 else if (gameStates.render.nShadowMap < 0) {
                     if (!transformation.Frustum().Contains(pSide)) {
 #if DBG
@@ -879,7 +873,6 @@ void CVisibilityData::BuildSegList(
 #endif
                     }
                 }
-#endif
                 // maybe add this segment
                 int32_t nPos = renderPos[nChildSeg];
                 tPortal &newPortal = portals[nCurrent];
@@ -928,10 +921,6 @@ void CVisibilityData::BuildSegList(
                             renderSegList[nCurrent] = -0x7fff;
                         oldPortal = newPortal; // get updated tPortal
                         processed[nPos] = nProcessed - 1; // force reprocess
-#if 0
-					if (!nStart || (nStart > nPos))
-						nStart = nPos;
-#endif
                     }
                 }
             }

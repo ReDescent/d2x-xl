@@ -449,9 +449,6 @@ void CShaderManager::Setup(void) {
     ResetSphereShaders();
     InitFogVolumeShader();
     InitFogShader();
-#if 0
-Link (Alloc ());
-#endif
     ::PrintLog(-1);
 }
 

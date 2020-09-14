@@ -63,7 +63,7 @@ int32_t NMCheckButtonPress(void);
 // Descent 1 briefings
 #define SHAREWARE_ENDING_FILENAME "ending.tex"
 
-//	Can be set by -noscreens command line option.  Causes bypassing of all briefing screens.
+// Can be set by -noscreens command line option.  Causes bypassing of all briefing screens.
 int32_t briefFgColorIndex[MAX_BRIEFING_COLORS], briefBgColorIndex[MAX_BRIEFING_COLORS];
 
 CBriefing briefing;
@@ -457,7 +457,7 @@ void CBriefing::RenderBitmapFrame(int32_t bRedraw) {
         return;
     m_info.tAnimate = t;
 
-    //	Only plot every nth frame.
+    // Only plot every nth frame.
     if (!bRedraw && m_info.nDoorDivCount) {
         m_info.nDoorDivCount--;
     }
@@ -466,7 +466,7 @@ void CBriefing::RenderBitmapFrame(int32_t bRedraw) {
         char *poundSignP;
         int32_t nFrame, dig1, dig2;
 
-        //	Set supertransparency color to black
+        // Set supertransparency color to black
         if (!bRedraw) { // extract current bitmap frame number from bitmap name (<name>#<frame>)
             poundSignP = strchr(m_info.szBitmapName, '#');
             Assert(poundSignP != NULL);
@@ -655,7 +655,7 @@ void CBriefing::RenderElement(int32_t nElement) {
         case 1:
             fontManager.SetColorRGBi(m_info.nEraseColor, 1, 0, 0);
             GrPrintF(NULL, Scaled(m_info.briefingTextX + 1), Scaled(m_info.briefingTextY), "_");
-            //	erase the character
+            // erase the character
             fontManager.SetColorRGB(briefBgColors[gameStates.app.bD1Mission] + m_info.nCurrentColor, NULL);
             GrPrintF(NULL, Scaled(m_info.briefingTextX), Scaled(m_info.briefingTextY), m_message);
             break;
@@ -750,7 +750,7 @@ Assert ((m_info.nCurrentColor >= 0) && (m_info.nCurrentColor < MAX_BRIEFING_COLO
         m_info.nCurrentColor = MAX_BRIEFING_COLORS - 1;
 #endif
 
-    //	Draw cursor if there is some delay and caller says to draw cursor
+    // Draw cursor if there is some delay and caller says to draw cursor
     if (m_info.bFlashingCursor && !m_info.bRedraw)
         RenderElement(0);
 
@@ -764,7 +764,7 @@ Assert ((m_info.nCurrentColor >= 0) && (m_info.nCurrentColor < MAX_BRIEFING_COLO
         tText = t;
     }
 
-    //	Erase cursor
+    // Erase cursor
     if (m_info.bFlashingCursor && (delay > 0) && !m_info.bRedraw)
         RenderElement(1);
 
@@ -823,7 +823,7 @@ void CBriefing::FlashCursor(int32_t bCursor) {
         fontManager.SetColorRGB(&eraseColorRgb, NULL);
     GrPrintF(NULL, Scaled(m_info.briefingTextX + 1), Scaled(m_info.briefingTextY), "_");
     // if (ogl.m_states.nDrawBuffer == GL_FRONT)
-    //	ogl.Update (0);
+    // ogl.Update (0);
 }
 
 //-----------------------------------------------------------------------------
@@ -874,7 +874,7 @@ int32_t CBriefing::WaitForKeyPress(void) {
     StopSound(m_info.nPrintingChannel);
     if (!m_info.t0)
         m_info.t0 = SDL_GetTicks();
-    do { //	Wait for a key
+    do { // Wait for a key
         while ((t = SDL_GetTicks()) - m_info.t0 < 10)
             ;
         FlashCursor(m_info.bFlashingCursor);
@@ -1064,7 +1064,7 @@ int32_t CBriefing::HandleP(void) {
     }
     m_info.bNewPage = 1;
     while (*m_info.message != 10)
-        m_info.message++; //	drop carriage return after special escape sequence
+        m_info.message++; // drop carriage return after special escape sequence
     m_info.message++;
     m_info.prevCh = 10;
     return 1;
@@ -1120,7 +1120,7 @@ int32_t CBriefing::HandleS(void) {
 
 int32_t CBriefing::HandleT(void) {
     m_info.nTabStop = ParseMessageInt(m_info.message) * (1 + gameStates.menus.bHires);
-    m_info.prevCh = 10; //	read to eoln
+    m_info.prevCh = 10; // read to eoln
     return 1;
 }
 
@@ -1310,9 +1310,9 @@ int32_t CBriefing::HandleNewPage(void) {
     }
     m_info.pi = m_info.message;
     // if (ogl.m_states.nDrawBuffer == GL_FRONT) {
-    //	LoadImage (m_info.nScreen);
-    //	ogl.Update (0);
-    //	}
+    // LoadImage (m_info.nScreen);
+    // ogl.Update (0);
+    // }
     m_info.briefingTextX = m_info.pScreen->textLeft;
     m_info.briefingTextY = m_info.pScreen->textTop;
     m_info.nDelayCount = KEY_DELAY_DEFAULT;
@@ -1330,7 +1330,7 @@ int32_t CBriefing::ShowMessage(int32_t nScreen, char *message, int32_t nLevel) {
     m_info.Setup(message, nLevel, nScreen);
 
     // if (gameStates.app.bNostalgia)
-    //	ogl.SetDrawBuffer (GL_FRONT, 0);
+    // ogl.SetDrawBuffer (GL_FRONT, 0);
 
     m_info.bExtraSounds = gameStates.app.bHaveExtraData && gameStates.app.bD1Mission &&
                           (missionManager.nCurrentMission == missionManager.nBuiltInMission[1]);
@@ -1364,7 +1364,7 @@ redrawPage:
         m_info.pj = m_info.message;
         ogl.Update(0);
         // if (ogl.m_states.nDrawBuffer == GL_FRONT)
-        //	m_info.pi = m_info.message;
+        // m_info.pi = m_info.message;
         // else
         {
             m_info.message = m_info.pi;
@@ -1450,7 +1450,7 @@ char *CBriefing::GetMessage(int32_t nScreen) {
 }
 
 //-----------------------------------------------------------------------------
-//	Load Descent briefing text.
+// Load Descent briefing text.
 int32_t CBriefing::LoadImageText(char *filename, CCharArray &textBuffer) {
     CFile cf;
     int32_t len, i;
@@ -1617,7 +1617,7 @@ void CBriefing::Run(const char *filename, int32_t nLevel) {
     }
 
     // if (gameStates.app.bNostalgia)
-    //	ogl.SetDrawBuffer (GL_FRONT, 0);
+    // ogl.SetDrawBuffer (GL_FRONT, 0);
     // else
     ogl.ChooseDrawBuffer();
 

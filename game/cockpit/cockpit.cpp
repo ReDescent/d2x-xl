@@ -39,15 +39,15 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "automap.h"
 #include "gr.h"
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CGenericCockpit::CGenericCockpit() { m_save.Create(10, "CGenericCockpit::m_save"); }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CGenericCockpit::X(int32_t x, bool bForce) {
 #if 0
@@ -66,47 +66,47 @@ void CCockpit::GetHostageWindowCoords(int32_t &x, int32_t &y, int32_t &w, int32_
     h = SECONDARY_W_BOX_BOT - SECONDARY_W_BOX_TOP + 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawRecording(void) { CGenericCockpit::DrawRecording((CCanvas::Current()->Height() > 240) ? 80 : 30); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawCountdown(void) { CGenericCockpit::DrawCountdown(SMALL_FONT->Height() * 4); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawCruise(void) {
     CGenericCockpit::DrawCruise(3, CCanvas::Current()->Height() - m_info.nLineSpacing * (IsMultiGame ? 11 : 6));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawLives(void) {
     hudCockpit.SetColor(WHITE_RGBA);
     hudCockpit.DrawLives();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawScore(void) { hudCockpit.DrawScore(); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawAddedScore(void) {
     hudCockpit.SetLineSpacing(m_info.nLineSpacing);
     hudCockpit.DrawAddedScore();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawOrbs(void) { CGenericCockpit::DrawOrbs(4 * m_info.fontWidth, 2 * m_info.nLineSpacing); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawFlag(void) { CGenericCockpit::DrawFlag(4 * m_info.fontWidth, 2 * m_info.nLineSpacing); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawHomingWarning(void) {
     m_info.bLastHomingWarningDrawn[0] = (LOCALPLAYER.homingObjectDist >= 0) && (gameData.timeData.xGame & 0x4000);
@@ -116,15 +116,15 @@ void CCockpit::DrawHomingWarning(void) {
         HOMING_WARNING_Y);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::ClearBombCount(int32_t bgColor) {}
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawBombCount(void) { CGenericCockpit::DrawBombCount(BOMB_COUNT_X, BOMB_COUNT_Y, BLACK_RGBA, 1); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CCockpit::DrawBombCount(int32_t &nIdBombCount, int32_t x, int32_t y, int32_t nColor, char *pszBombCount) {
     fontManager.SetColorRGBi(nColor, 1, 0, 1);
@@ -136,19 +136,19 @@ int32_t CCockpit::DrawBombCount(int32_t &nIdBombCount, int32_t x, int32_t y, int
         nIdBombCount);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawPrimaryAmmoInfo(int32_t ammoCount) {
     DrawAmmoInfo(ScaleX(PRIMARY_AMMO_X), ScaleY(PRIMARY_AMMO_Y), ammoCount, 1);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawSecondaryAmmoInfo(int32_t ammoCount) {
     DrawAmmoInfo(ScaleX(SECONDARY_AMMO_X), ScaleY(SECONDARY_AMMO_Y), ammoCount, 0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline int32_t NumDispX(int32_t val) {
     int32_t x = ((val > 99) ? 7 : (val > 9) ? 11 : 15);
@@ -157,7 +157,7 @@ static inline int32_t NumDispX(int32_t val) {
     return x + NUMERICAL_GAUGE_X;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawShieldText(void) {
     static int32_t nIdShield = 0;
@@ -183,7 +183,7 @@ CBitmap* pBm = BitBlt (GAUGE_NUMERICAL, NUMERICAL_GAUGE_X, NUMERICAL_GAUGE_Y);
     fontManager.SetScale(1.0f);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawEnergyText(void) {
     static int32_t nIdEnergy = 0;
@@ -209,7 +209,7 @@ CBitmap* pBm = BitBlt (GAUGE_NUMERICAL, NUMERICAL_GAUGE_X, NUMERICAL_GAUGE_Y);
     fontManager.SetScale(1.0f);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawEnergyBar(void) {
 // values taken directly from the bitmap
@@ -280,7 +280,7 @@ void CCockpit::DrawEnergyBar(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 uint8_t afterburnerBarTable[AFTERBURNER_GAUGE_H_L * 2] = {
     3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 2, 11, 2, 10, 2, 10, 2, 10, 2, 10, 2, 10, 2, 10, 1, 10, 1, 10, 1, 10,
@@ -302,7 +302,7 @@ uint8_t afterburnerBarTableHires[AFTERBURNER_GAUGE_H_H * 2] = {
 
     8, 13, 9, 13, 10, 13, 11, 13, 12, 13};
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawAfterburnerBar(void) {
 #if 1
@@ -340,7 +340,7 @@ void CCockpit::DrawAfterburnerBar(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawShieldBar(void) {
     if (!(LOCALPLAYER.flags & PLAYER_FLAGS_INVULNERABLE) || (m_info.tInvul <= 0))
@@ -350,7 +350,7 @@ void CCockpit::DrawShieldBar(void) {
             SHIELD_GAUGE_Y);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 typedef struct tKeyGaugeInfo {
     int32_t nFlag, nGaugeOn, nGaugeOff, x[2], y[2];
@@ -383,7 +383,7 @@ void CCockpit::DrawKeys(void) {
             keyGaugeInfo[i].y[bHires]);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int32_t laserLevel) {
     int32_t nIndex;
@@ -417,23 +417,23 @@ void CCockpit::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int32_t la
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawKillList(void) { CGenericCockpit::DrawKillList(53, CCanvas::Current()->Height() - LHX(6)); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawStatic(int32_t nWindow) { CGenericCockpit::DrawStatic(nWindow, COCKPIT_PRIMARY_BOX); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawPlayerShip(void) {
     CGenericCockpit::DrawPlayerShip(m_info.bCloak, m_history[0].bCloak, SHIP_GAUGE_X, SHIP_GAUGE_Y);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-//	Draws invulnerable ship, or maybe the flashing ship, depending on invulnerability time left.
+// Draws invulnerable ship, or maybe the flashing ship, depending on invulnerability time left.
 void CCockpit::DrawInvul(void) {
     static fix time = 0;
 
@@ -449,11 +449,11 @@ void CCockpit::DrawInvul(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::DrawCockpit(bool bAlphaTest) { CGenericCockpit::DrawCockpit(m_info.nCockpit, 0, bAlphaTest); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::SetupWindow(int32_t nWindow) {
     tGaugeBox *pHudArea = hudWindowAreas + COCKPIT_PRIMARY_BOX + nWindow;
@@ -466,7 +466,7 @@ void CCockpit::SetupWindow(int32_t nWindow) {
     gameData.renderData.window.Activate("HUD Window (window)", &gameData.renderData.frame);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CCockpit::Setup(bool bScene, bool bRebuild) {
     if (bRebuild && !m_info.bRebuild)
@@ -482,13 +482,13 @@ bool CCockpit::Setup(bool bScene, bool bRebuild) {
     return true;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCockpit::Toggle(void) { CGenericCockpit::Activate(CM_STATUS_BAR, true); }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CRearView::Setup(bool bScene, bool bRebuild) {
     if (bRebuild && !m_info.bRebuild)
@@ -505,4 +505,4 @@ bool CRearView::Setup(bool bScene, bool bRebuild) {
     return true;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

@@ -57,12 +57,12 @@ void CBossInfo::InitGateInterval(void) { m_nGateInterval = I2X(4) - gameStates.a
 #define QUEUE_SIZE 256
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Create list of segments boss is allowed to teleport to at pSegList.
-//	Set *segCountP.
-//	Boss is allowed to teleport to segments he fits in (calls ObjectIntersectsWall) and
-//	he can reach from his initial position (calls PathLength).
-//	If bSizeCheck is set, then only add CSegment if boss can fit in it, else any segment is legal.
-//	bOneWallHack added by MK, 10/13/95: A mega-hack! Set to !0 to ignore the
+// Create list of segments boss is allowed to teleport to at pSegList.
+// Set *segCountP.
+// Boss is allowed to teleport to segments he fits in (calls ObjectIntersectsWall) and
+// he can reach from his initial position (calls PathLength).
+// If bSizeCheck is set, then only add CSegment if boss can fit in it, else any segment is legal.
+// bOneWallHack added by MK, 10/13/95: A mega-hack! Set to !0 to ignore the
 bool CBossInfo::SetupSegments(CShortArray &segments, int32_t bSizeCheck, int32_t bOneWallHack) {
     CSegment *pSeg;
     CObject *pBossObj = OBJECT(m_nObject);
@@ -76,7 +76,7 @@ bool CBossInfo::SetupSegments(CShortArray &segments, int32_t bSizeCheck, int32_t
 
     static int16_t bossSegs[MAX_BOSS_TELEPORT_SEGS];
 
-    //	See if there is a boss.  If not, quick out.
+    // See if there is a boss.  If not, quick out.
     xBossSizeSave = pBossObj->info.xSize;
     // -- Causes problems!!	-- pBossObj->SetSize (FixMul (I2X (3) / 4, pBossObj->info.xSize));
     nBossHomeSeg = pBossObj->info.nSegment;
@@ -100,7 +100,7 @@ bool CBossInfo::SetupSegments(CShortArray &segments, int32_t bSizeCheck, int32_t
                 if (!(w & WID_PASSABLE_FLAG))
                     continue;
             }
-            //	If we get here and w == WID_SOLID_WALL, then we want to process through this CWall, else not.
+            // If we get here and w == WID_SOLID_WALL, then we want to process through this CWall, else not.
             if (!IS_CHILD(childSeg))
                 continue;
             if (bOneWallHack)
@@ -178,10 +178,10 @@ bool CBossInfo::Setup(int16_t nObject) {
         m_nGateInterval = I2X(4) - gameStates.app.nDifficultyLevel * I2X(2) / 3;
     if (missionManager.nCurrentLevel == missionManager.nLastLevel) {
         m_nTeleportInterval = I2X(10);
-        m_nCloakInterval = I2X(15); //	Time between cloaks
+        m_nCloakInterval = I2X(15); // Time between cloaks
     } else {
         m_nTeleportInterval = I2X(7);
-        m_nCloakInterval = I2X(10); //	Time between cloaks
+        m_nCloakInterval = I2X(10); // Time between cloaks
     }
     return true;
 }

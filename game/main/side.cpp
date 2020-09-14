@@ -13,7 +13,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h> //	for memset ()
+#include <string.h> // for memset ()
 
 #include "u_mem.h"
 #include "descent.h"
@@ -44,7 +44,7 @@ CFloatVector &CSide::Normalf(int32_t nFace) { return m_fNormals[nFace]; }
 
 // ------------------------------------------------------------------------------------------
 // Compute the center point of a CSide of a CSegment.
-//	The center point is defined to be the average of the 4 points defining the CSide.
+// The center point is defined to be the average of the 4 points defining the CSide.
 void CSide::ComputeCenter(void) {
     if (!FaceCount())
         return;
@@ -153,9 +153,9 @@ void CSide::SetupVertexList(uint16_t *verts, uint16_t *index) {
 // -----------------------------------------------------------------------------------
 // Like create all vertex lists, but returns the vertnums (relative to
 // the side) for each of the faces that make up the CSide.
-//	If there is one face, it has 4 vertices.
-//	If there are two faces, they both have three vertices, so face #0 is stored in vertices 0, 1, 2,
-//	face #1 is stored in vertices 3, 4, 5.
+// If there is one face, it has 4 vertices.
+// If there are two faces, they both have three vertices, so face #0 is stored in vertices 0, 1, 2,
+// face #1 is stored in vertices 3, 4, 5.
 
 void CSide::SetupFaceVertIndex(void) {
     if (m_nType == SIDE_IS_QUAD) {
@@ -248,12 +248,12 @@ void CSide::FixNormals(void) {
 void CSide::SetupAsTriangles(bool bSolid, uint16_t *verts, uint16_t *index) {
     CFixVector vNormal;
     fix dot;
-    CFixVector vec_13; //	vector from vertex 1 to vertex 3
+    CFixVector vec_13; // vector from vertex 1 to vertex 3
 
-    //	Choose how to triangulate.
-    //	If a wall, then
-    //		Always triangulate so segment is convex.
-    //		Use Matt's formula: Na . AD > 0, where ABCD are vertices on side, a is face formed by A, B, C, Na is Normal
+    // Choose how to triangulate.
+    // If a wall, then
+    // 	Always triangulate so segment is convex.
+    // 	Use Matt's formula: Na . AD > 0, where ABCD are vertices on side, a is face formed by A, B, C, Na is Normal
     // from face a. 	If not a wall, then triangulate so whatever is on the other CSide is triangulated the same (ie,
     // between the same absolute vertices)
 #if DBG
@@ -265,9 +265,9 @@ void CSide::SetupAsTriangles(bool bSolid, uint16_t *verts, uint16_t *index) {
         vec_13 = VERTICES[m_corners[3]] - VERTICES[m_corners[1]];
         dot = CFixVector::Dot(vNormal, vec_13);
 
-        //	Now, signify whether to triangulate from 0:2 or 1:3
+        // Now, signify whether to triangulate from 0:2 or 1:3
         m_nType = (dot >= 0) ? SIDE_IS_TRI_02 : SIDE_IS_TRI_13;
-        //	Now, based on triangulation nType, set the normals.
+        // Now, based on triangulation nType, set the normals.
         if (m_nType == SIDE_IS_TRI_02) {
 #if 0
 		VmVecNormalChecked (&vNormal, 
@@ -294,7 +294,7 @@ void CSide::SetupAsTriangles(bool bSolid, uint16_t *verts, uint16_t *index) {
         int32_t bFlip = SortVertsForNormal(m_corners[0], m_corners[1], m_corners[2], m_corners[3], vSorted);
         if ((vSorted[0] == m_corners[0]) || (vSorted[0] == m_corners[2])) {
             m_nType = SIDE_IS_TRI_02;
-            //	Now, get vertices for Normal for each triangle based on triangulation nType.
+            // Now, get vertices for Normal for each triangle based on triangulation nType.
             bFlip = SortVertsForNormal(m_corners[0], m_corners[1], m_corners[2], 0xFFFF, vSorted);
             m_normals[0] = CFixVector::Normal(VERTICES[vSorted[0]], VERTICES[vSorted[1]], VERTICES[vSorted[2]]);
             m_fNormals[0] = CFloatVector::Normal(FVERTICES[vSorted[0]], FVERTICES[vSorted[1]], FVERTICES[vSorted[2]]);
@@ -312,7 +312,7 @@ void CSide::SetupAsTriangles(bool bSolid, uint16_t *verts, uint16_t *index) {
             SortVertsForNormal(m_corners[0], m_corners[2], m_corners[3], 0xFFFF, vSorted);
         } else {
             m_nType = SIDE_IS_TRI_13;
-            //	Now, get vertices for Normal for each triangle based on triangulation nType.
+            // Now, get vertices for Normal for each triangle based on triangulation nType.
             bFlip = SortVertsForNormal(m_corners[0], m_corners[1], m_corners[3], 0xFFFF, vSorted);
             m_normals[0] = CFixVector::Normal(VERTICES[vSorted[0]], VERTICES[vSorted[1]], VERTICES[vSorted[2]]);
             m_fNormals[0] = CFloatVector::Normal(FVERTICES[vSorted[0]], FVERTICES[vSorted[1]], FVERTICES[vSorted[2]]);
@@ -582,7 +582,7 @@ uint8_t CSide::Distf(const CFloatVector &refPoint, float &fSideDist, int32_t bBe
     RETVAL(mask)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 fix CSide::DistToPoint(CFixVector v) {
     CFixVector h, n;
@@ -612,7 +612,7 @@ fix CSide::DistToPoint(CFixVector v) {
     return minDist;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 float CSide::DistToPointf(CFloatVector v) {
     CFloatVector h, n;
@@ -642,11 +642,11 @@ float CSide::DistToPointf(CFloatVector v) {
     return minDist;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CWall *CSide::Wall(void) { return (m_nFaces && IS_WALL(m_nWall)) ? WALL(m_nWall) : NULL; }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Check whether point vPoint in segment nDestSeg can be seen from this side.
 // Level 0: Check from side center, 1: check from center and corners, 2: check from center, corners, and edge centers
 
@@ -662,7 +662,7 @@ int32_t CSide::IsConnected(int16_t nSegment, int16_t nSide) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Check whether side nSide in segment nSegment can be seen from this side.
 
 int32_t CSide::SeesSide(int16_t nSegment, int16_t nSide) {
@@ -682,14 +682,14 @@ int32_t CSide::SeesSide(int16_t nSegment, int16_t nSide) {
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Check whether side nSide in segment nSegment can be seen from this side.
 
 int32_t CSide::SeesConnectedSide(int16_t nSegment, int16_t nSide) {
     return !IsConnected(nSegment, nSide) || SeesSide(nSegment, nSide);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Check whether point vPoint in segment nDestSeg can be seen from this side.
 // Level 0: Check from side center, 1: check from center and corners, 2: check from center, corners, and edge centers
 
@@ -724,7 +724,7 @@ int32_t CSide::SeesPoint(CFixVector &vPoint, int16_t nDestSeg, int8_t nDestSide,
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // see if a pRef is inside a face by projecting into 2d
 uint32_t CSide::PointToFaceRelationf(CFloatVector &vRef, int16_t nFace, CFloatVector &vNormal) {
     // now do 2d check to see if pRef is in CSide
@@ -767,7 +767,7 @@ uint32_t CSide::PointToFaceRelationf(CFloatVector &vRef, int16_t nFace, CFloatVe
     return nEdgeMask;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // see if a pRef is inside a face by projecting into 2d
 uint32_t CSide::PointToFaceRelation(CFixVector &vRef, int16_t nFace, CFixVector vNormal) {
 #if 0
@@ -870,7 +870,7 @@ return nEdgeMask;
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // check if a sphere intersects a face
 int32_t CSide::SphereToFaceRelationf(CFloatVector &vRef, float rad, int16_t iFace, CFloatVector &vNormal) {
     CFloatVector vEdge, vCheck; // this time, real 3d vectors
@@ -929,7 +929,7 @@ int32_t CSide::SphereToFaceRelationf(CFloatVector &vRef, float rad, int16_t iFac
     return IT_NONE;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // check if a sphere intersects a face
 int32_t CSide::SphereToFaceRelation(CFixVector &vRef, fix rad, int16_t iFace, CFixVector vNormal) {
     CFixVector vEdge, vCheck; // this time, real 3d vectors
@@ -987,7 +987,7 @@ int32_t CSide::SphereToFaceRelation(CFixVector &vRef, fix rad, int16_t iFace, CF
     return IT_NONE;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // returns true if line intersects with face. fills in vIntersection with vIntersection
 // pRef on plane, whether or not line intersects CSide
 // iFace determines which of four possible faces we have
@@ -1047,7 +1047,7 @@ int32_t CSide::CheckLineToFaceRegularf(
     return IT_NONE;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // returns true if line intersects with face. fills in vIntersection with vIntersection
 // pRef on plane, whether or not line intersects CSide
 // iFace determines which of four possible faces we have
@@ -1128,7 +1128,7 @@ return i;
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // this version is for when the start and end positions both poke through
 // the plane of a CSide.  In this case, we must do checks against the edge
 // of faces
@@ -1176,7 +1176,7 @@ int32_t CSide::CheckLineToFaceEdgesf(
     return IT_NONE; // no hit
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // this version is for when the start and end positions both poke through
 // the plane of a CSide.  In this case, we must do checks against the edge
 // of faces
@@ -1242,7 +1242,7 @@ return i;
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // finds the uv coords of the given pRef on the given seg & side
 // fills in u & v. if l is non-NULL fills it in also
 void CSide::HitPointUV(fix *u, fix *v, fix *l, CFixVector &vIntersection, int32_t iFace) {

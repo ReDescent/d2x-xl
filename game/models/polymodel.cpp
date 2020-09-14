@@ -63,7 +63,7 @@ void CPolyModel::POF_Seek(int32_t len, int32_t nType) {
         m_filePos += len;
         break;
     case SEEK_END:
-        Assert(len <= 0); //	seeking from end, better be moving back.
+        Assert(len <= 0); // seeking from end, better be moving back.
         m_filePos = m_fileEnd + len;
         break;
     }

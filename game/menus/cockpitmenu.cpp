@@ -55,25 +55,25 @@
 #define WEAPON_ICONS 0
 
 // typedef struct tWindowOpts {
-//	int32_t	nPos;
-//	int32_t	nSize;
-//	int32_t	nAlign;
-//	int32_t	nZoom;
-//	int32_t	nType [2];
+// int32_t	nPos;
+// int32_t	nSize;
+// int32_t	nAlign;
+// int32_t	nZoom;
+// int32_t	nType [2];
 //} tWindowOpts;
 //
 // typedef struct tRadarOpts {
-//	int32_t	nPos;
-//	int32_t	nSize;
-//	int32_t	nRange;
-//	int32_t	nColor;
-//	int32_t	nStyle;
+// int32_t	nPos;
+// int32_t	nSize;
+// int32_t	nRange;
+// int32_t	nColor;
+// int32_t	nStyle;
 //} tRadarOpts;
 //
 // static struct {
-//	tWindowOpts	windows;
-//	tRadarOpts	radar;
-//	int32_t			nTgtInd;
+// tWindowOpts	windows;
+// tRadarOpts	radar;
+// int32_t			nTgtInd;
 //} cockpitOpts;
 
 static int32_t nWindowPos, nWindowAlign, nTgtInd;

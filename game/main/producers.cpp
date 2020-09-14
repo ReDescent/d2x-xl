@@ -182,13 +182,13 @@ bool CSegment::CreateGenerator(int32_t nType) {
     RETVAL(false)
 }
 
-//	The lower this number is, the more quickly the center can be re-triggered.
-//	If it's too low, it can mean all the robots won't be put out, but for about 5
-//	robots, that's not real likely.
+// The lower this number is, the more quickly the center can be re-triggered.
+// If it's too low, it can mean all the robots won't be put out, but for about 5
+// robots, that's not real likely.
 #define OBJECT_PRODUCER_LIFE (I2X(30 - 2 * gameStates.app.nDifficultyLevel))
 
 //------------------------------------------------------------
-//	Trigger (enable) the materialization center in CSegment nSegment
+// Trigger (enable) the materialization center in CSegment nSegment
 int32_t StartObjectProducer(int16_t nSegment) {
     ENTER(0, 0);
     CSegment *pSeg = SEGMENT(nSegment);
@@ -210,31 +210,31 @@ int32_t StartObjectProducer(int16_t nSegment) {
     pObjProducer = gameData.producerData.producers + gameData.producerData.robotMakers[pSeg->m_nObjProducer].nProducer;
     if (pObjProducer->bEnabled)
         RETVAL(0)
-    //	MK: 11/18/95, At insane, object producers work forever!
+    // MK: 11/18/95, At insane, object producers work forever!
     if (gameStates.app.bD1Mission || (gameStates.app.nDifficultyLevel + 1 < DIFFICULTY_LEVEL_COUNT)) {
         if (!pObjProducer->nLives)
             RETVAL(0)
         --pObjProducer->nLives;
     }
 
-    pObjProducer->xTimer = I2X(1000); //	Make sure the first robot gets emitted right away.
-    pObjProducer->bEnabled = 1; //	Say this center is enabled, it can create robots.
+    pObjProducer->xTimer = I2X(1000); // Make sure the first robot gets emitted right away.
+    pObjProducer->bEnabled = 1; // Say this center is enabled, it can create robots.
     pObjProducer->xCapacity = I2X(gameStates.app.nDifficultyLevel + 3);
     pObjProducer->xDisableTime = OBJECT_PRODUCER_LIFE;
 
-    //	Create a bright CObject in the CSegment.
+    // Create a bright CObject in the CSegment.
     pos = pObjProducer->vCenter;
     delta = gameData.segData.vertices[SEGMENT(nSegment)->m_vertices[0]] - pObjProducer->vCenter;
     pos += delta * (I2X(1) / 2);
     nObject = CreateLight(SINGLE_LIGHT_ID, nSegment, pos);
     if (nObject != -1) {
         OBJECT(nObject)->SetLife(OBJECT_PRODUCER_LIFE);
-        OBJECT(nObject)->cType.lightInfo.intensity = I2X(8); //	Light cast by a producer.
+        OBJECT(nObject)->cType.lightInfo.intensity = I2X(8); // Light cast by a producer.
     }
     RETVAL(0)
 }
 
-//	----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 int32_t GetObjProducerObjType(tProducerInfo *pObjProducer, int32_t *objFlags, int32_t maxType) {
     ENTER(0, 0);
@@ -261,7 +261,7 @@ int32_t GetObjProducerObjType(tProducerInfo *pObjProducer, int32_t *objFlags, in
 }
 
 //------------------------------------------------------------
-//	Trigger (enable) the materialization center in CSegment nSegment
+// Trigger (enable) the materialization center in CSegment nSegment
 void OperateRobotMaker(CObject *pObj, int16_t nSegment) {
     ENTER(0, 0);
     CSegment *pSeg = SEGMENT(nSegment);
@@ -284,7 +284,7 @@ void OperateRobotMaker(CObject *pObj, int16_t nSegment) {
     RETURN
 }
 
-//	----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 CObject *CreateMorphRobot(CSegment *pSeg, CFixVector *vObjPosP, uint8_t nObjId) {
     ENTER(0, 0);
@@ -323,8 +323,8 @@ CObject *CreateMorphRobot(CSegment *pSeg, CFixVector *vObjPosP, uint8_t nObjId) 
     InitAIObject(
         pObj->Index(),
         default_behavior,
-        -1); //	Note, -1 = CSegment this robot goes to to hide, should probably be something useful
-    CreateNSegmentPath(pObj, 6, -1); //	Create a 6 CSegment path from creation point.
+        -1); // Note, -1 = CSegment this robot goes to to hide, should probably be something useful
+    CreateNSegmentPath(pObj, 6, -1); // Create a 6 CSegment path from creation point.
     gameData.aiData.localInfo[nObject].mode = AIBehaviorToMode(default_behavior);
     RETVAL(pObj)
 }
@@ -335,7 +335,7 @@ int32_t Num_extryRobots = 15;
 int32_t FrameCount_last_msg = 0;
 #endif
 
-//	----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 void CreateObjectProducerEffect(tProducerInfo *pObjProducer, uint8_t nVideoClip) {
     ENTER(0, 0);
@@ -358,7 +358,7 @@ void CreateObjectProducerEffect(tProducerInfo *pObjProducer, uint8_t nVideoClip)
     RETURN
 }
 
-//	----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 void EquipmentMakerHandler(tProducerInfo *pObjProducer) {
     ENTER(0, 0);
@@ -425,7 +425,7 @@ void EquipmentMakerHandler(tProducerInfo *pObjProducer) {
     RETURN
 }
 
-//	----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 void VirusGenHandler(tProducerInfo *pObjProducer) {
     ENTER(0, 0);
@@ -484,13 +484,13 @@ void VirusGenHandler(tProducerInfo *pObjProducer) {
     RETURN
 }
 
-//	----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 inline int32_t VertigoObjFlags(tObjectProducerInfo *pInfo) {
     return pInfo->objFlags[2] = gameData.objData.nVertigoBotFlags;
 }
 
-//	----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 void RobotMakerHandler(tProducerInfo *pObjProducer) {
     ENTER(0, 0);
@@ -521,7 +521,7 @@ void RobotMakerHandler(tProducerInfo *pObjProducer) {
             pObjProducer->bEnabled = 0;
         }
     }
-    //	No robot making in multiplayer mode.
+    // No robot making in multiplayer mode.
     if (IsMultiGame && (!gameData.appData.GameMode(GM_MULTI_ROBOTS) || !IAmGameHost()))
         RETURN
     // Wait until transmorgafier has capacity to make a robot...
@@ -568,7 +568,7 @@ void RobotMakerHandler(tProducerInfo *pObjProducer) {
             RETURN
         nMyStation = PRODUCER_IDX(pObjProducer);
 
-        //	Make sure this robotmaker hasn't put out its max without having any of them killed.
+        // Make sure this robotmaker hasn't put out its max without having any of them killed.
         nCount = 0;
         FORALL_ROBOT_OBJS(pObj)
         if ((pObj->info.nCreator ^ 0x80) == nMyStation)
@@ -735,7 +735,7 @@ fix CSegment::Refuel(fix nMaxFuel) {
         RETVAL(0)
     if (m_function != SEGMENT_FUNC_FUELCENTER)
         RETVAL(0)
-    DetectEscortGoalAccomplished(-4); //	UGLY!Hack!-4 means went through producer.
+    DetectEscortGoalAccomplished(-4); // UGLY!Hack!-4 means went through producer.
     if (nMaxFuel <= 0)
         RETVAL(0)
     fix amount = IsEntropyGame ? FixMul(gameData.timeData.xFrame, I2X(gameData.producerData.xFuelGiveAmount))
@@ -785,7 +785,7 @@ fix CSegment::Repair(fix nMaxShield) {
     RETVAL(amount)
 }
 
-//	--------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 
 void DisableObjectProducers(void) {
     ENTER(0, 0);
@@ -798,9 +798,9 @@ void DisableObjectProducers(void) {
     RETURN
 }
 
-//	--------------------------------------------------------------------------------------------
-//	Initialize all materialization centers.
-//	Give them all the right number of lives.
+// --------------------------------------------------------------------------------------------
+// Initialize all materialization centers.
+// Give them all the right number of lives.
 void InitAllObjectProducers(void) {
     ENTER(0, 0);
     for (int32_t i = 0; i < gameData.producerData.nProducers; i++)

@@ -65,10 +65,6 @@ bool CTransformation::Pop(const char *pszFile, const int32_t nLine) {
 #endif
         return false;
     }
-#if 0 // DBG
-if (pszFile && *pszFile)
-	PrintLog (0, "%02d end transformation (%s.%d)\n", m_save.ToS (), pszFile, nLine);
-#endif
     m_info = m_save.Pop();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
@@ -90,11 +86,6 @@ void CTransformation::Begin(const CFixVector &vPos, CFixMatrix &mOrient, const c
         return;
     }
 
-#if 0 // DBG
-if (pszFile && *pszFile)
-	PrintLog (0, "%02d begin transformation (%s.%d)\n", m_save.ToS (), pszFile, nLine);
-#endif
-
     if (ogl.m_states.bUseTransform) {
         CFixVector h;
 
@@ -105,11 +96,7 @@ if (pszFile && *pszFile)
             Rotate(mOrient);
         } else {
             glLoadIdentity();
-#if 0
-		glScalef (transformation.m_info.scalef.dir.coord.x, transformation.m_info.scalef.dir.coord.y, -transformation.m_info.scalef.dir.coord.z);
-#else
             glScalef(1, 1, -1);
-#endif
             Rotate(m_info.viewf[2]);
             h = m_info.pos - vPos;
             Move(h);
@@ -198,9 +185,9 @@ void CTransformation::SetupProjection(float aspectRatio) {
     if (ogl.IsOculusRift() && gameData.renderData.rift.Available()) {
         // double riftXlatProj [16] = { 1.0, 0.0, 0.0, (ogl.StereoSeparation () < 0) ?
         // -gameData.renderData.rift.m_projectionCenterOffset : gameData.renderData.rift.m_projectionCenterOffset,
-        //									  0.0, 1.0, 0.0, 0.0,
-        //									  0.0, 0.0, 1.0, 0.0,
-        //									  0.0, 0.0, 0.0, 1.0 };
+        // 								  0.0, 1.0, 0.0, 0.0,
+        // 								  0.0, 0.0, 1.0, 0.0,
+        // 								  0.0, 0.0, 0.0, 1.0 };
 
         double riftXlatProj[16] = {
             1.0,

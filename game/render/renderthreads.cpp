@@ -76,29 +76,8 @@ int32_t RunRenderThreads(int32_t nTask, int32_t nThreads) {
         tiRender.ti[i].bExec = 1;
     if (!bWait)
         return 1;
-#if 0 // DBG
-int32_t nActive;
-t0 = clock ();
-while ((nActive = ThreadsActive (nThreads)) && (clock () - t0 < 1000)) {
-	G3_SLEEP (0);
-	if (nActive < nThreads) {
-		if (!t2)
-			t2 = clock ();
-		else if (clock () - t2 > 33) {	//slower threads must not take more than 33 ms over the fastest one
-			PrintLog (0, "thread locked up (task: %d)\n", nTask);
-			for (i = 0; i < nThreads; i++)
-				tiRender.ti [i].bExec = 0;
-			if (++nLockups > 100) {
-				gameStates.app.bMultiThreaded = 0;
-				gameStates.app.nThreads = 1;
-				}
-			}
-		}
-	}
-#else
     while (ThreadsActive(nThreads))
         G3_SLEEP(0);
-#endif
     return 1;
 
 #endif
@@ -224,7 +203,6 @@ void DestroyRenderThreads(void) {
     SDL_DestroyMutex(tiRender.semaphore);
     tiRender.semaphore = NULL;
 #endif
-    DestroyEffectsThread();
 }
 
 //------------------------------------------------------------------------------
@@ -244,40 +222,6 @@ int32_t _CDECL_ EffectsThread(void *pThreadId) {
     } while (!tiEffects.bDone);
     tiEffects.bDone = 0;
     return 0;
-}
-
-//------------------------------------------------------------------------------
-
-void CreateEffectsThread(void) {
-#if 0
-if (gameStates.app.nThreads > 1) {
-	static bool bInitialized = false;
-
-	if (!bInitialized) {
-		memset (&tiEffects, 0, sizeof (tiEffects));
-		bInitialized = true;
-		}
-#if 1 //! USE_OPENMP
-	tiEffects.bDone = 0;
-	tiEffects.bExec = 0;
-	if	(!(tiEffects.pThread || (tiEffects.pThread = SDL_CreateThread (EffectsThread, NULL))))
-		gameData.appData.bUseMultiThreading [rtEffects] = 0;
-#endif
-	}
-#endif
-}
-
-//------------------------------------------------------------------------------
-
-void DestroyEffectsThread(void) {
-#if 0
-if (!tiEffects.pThread)
-	return;
-tiEffects.bDone = 1;
-while (tiEffects.bDone)
-	G3_SLEEP (0);
-tiEffects.pThread = NULL;
-#endif
 }
 
 //------------------------------------------------------------------------------

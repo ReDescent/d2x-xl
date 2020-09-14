@@ -67,7 +67,7 @@ char *pszPauseMsg = NULL;
 
 #include <SDL.h>
 
-//	Function prototypes --------------------------------------------------------
+// Function prototypes --------------------------------------------------------
 
 void SpeedtestInit(void);
 void SpeedtestFrame(void);
@@ -315,7 +315,7 @@ int32_t SelectNextWindowFunction(int32_t nWindow) {
     return 1; // bScreenChanged
 }
 
-//	Testing functions ----------------------------------------------------------
+// Testing functions ----------------------------------------------------------
 
 #if DBG
 void SpeedtestInit(void) {

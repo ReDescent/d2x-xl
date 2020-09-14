@@ -68,7 +68,7 @@ void OglDrawFilledRect(int32_t left, int32_t top, int32_t right, int32_t bot, CC
     vPosf.v.coord.y = (y0 + y1) / 2;
     ogl.RenderQuad(NULL, vPosf, (x1 - x0) / 2, (y1 - y0) / 2, 2);
     // if (pColor->rgb || (gameStates.render.grAlpha < 1.0f))
-    //	ogl.SetBlending (false);
+    // ogl.SetBlending (false);
 }
 
 //------------------------------------------------------------------------------

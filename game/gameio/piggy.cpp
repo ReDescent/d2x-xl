@@ -258,7 +258,7 @@ redbook.Stop ();           //so we can read off the cd
 strcpy (name, CDROM_dir);
 strcat (name, "descent2.sow");
 do {
-//	ret = unarj_specific_file (name,filename,filename);
+// ret = unarj_specific_file (name,filename,filename);
 // DPH:FIXME
 	ret = !EXIT_SUCCESS;
 	if (ret != EXIT_SUCCESS) {

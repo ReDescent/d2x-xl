@@ -34,7 +34,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "savegame.h"
 #include "audio.h"
 
-//	Special door on boss level which is locked if not in multiplayer...sorry for this awful solution --MK.
+// Special door on boss level which is locked if not in multiplayer...sorry for this awful solution --MK.
 #define BOSS_LOCKED_DOOR_LEVEL 7
 #define BOSS_LOCKED_DOOR_SEG 595
 #define BOSS_LOCKED_DOOR_SIDE 5
@@ -130,8 +130,8 @@ fix AnimPlayTime(tWallEffect *anim) {
 }
 
 // This function determines whether the current CSegment/nSide is transparent
-//		1 = YES
-//		0 = NO
+// 	1 = YES
+// 	0 = NO
 //------------------------------------------------------------------------------
 
 CActiveDoor *FindActiveDoor(int16_t nWall) {
@@ -147,17 +147,17 @@ CActiveDoor *FindActiveDoor(int16_t nWall) {
 
 //------------------------------------------------------------------------------
 // This function checks whether we can fly through the given side.
-//	In other words, whether or not we have a 'doorway'
-//	 Flags:
-//		WID_PASSABLE_FLAG			1
-//		WID_VISIBLE_FLAG			2
-//		WID_TRANSPARENT_FLAG		4
-//	 Return values:
-//		WID_SOLID_WALL				2	// 0/1/0		solid wall
-//		WID_TRANSPARENT_WALL		6	//	0/1/1		transparent wall
-//		WID_ILLUSORY_WALL			3	//	1/1/0		illusory wall
-//		WID_TRANSILLUSORY_WALL	7	//	1/1/1		transparent illusory wall
-//		WID_NO_WALL					5	//	1/0/1		no wall, can fly through
+// In other words, whether or not we have a 'doorway'
+//  Flags:
+// 	WID_PASSABLE_FLAG			1
+// 	WID_VISIBLE_FLAG			2
+// 	WID_TRANSPARENT_FLAG		4
+//  Return values:
+// 	WID_SOLID_WALL				2	// 0/1/0		solid wall
+// 	WID_TRANSPARENT_WALL		6	// 0/1/1		transparent wall
+// 	WID_ILLUSORY_WALL			3	// 1/1/0		illusory wall
+// 	WID_TRANSILLUSORY_WALL	7	// 1/1/1		transparent illusory wall
+// 	WID_NO_WALL					5	// 1/0/1		no wall, can fly through
 
 int32_t CWall::IsPassable(CObject *pObj, bool bIgnoreDoors) {
 #if DBG
@@ -536,8 +536,8 @@ bool DoDoorClose(int32_t nDoor) {
     return false;
 }
 
-//	-----------------------------------------------------------------------------
-//	Allowed to open the normally locked special boss door if in multiplayer mode.
+// -----------------------------------------------------------------------------
+// Allowed to open the normally locked special boss door if in multiplayer mode.
 int32_t AllowToOpenSpecialBossDoor(int32_t nSegment, int16_t nSide) {
     if (IsMultiGame)
         return (missionManager.nCurrentLevel == BOSS_LOCKED_DOOR_LEVEL) && (nSegment == BOSS_LOCKED_DOOR_SEG) &&
@@ -822,7 +822,7 @@ void WallFrameProcess(void) {
 
             // set flags to fix occatsional netgame problem where door is
             // waiting to close but open flag isn't set
-            //			Assert(pDoor->nPartCount == 1);
+            // 		Assert(pDoor->nPartCount == 1);
             if (IS_WALL(pDoor->nBackWall[0]))
                 WALL(pDoor->nBackWall[0])->state = WALL_DOOR_CLOSING;
             if ((pDoor->time > DOOR_WAIT_TIME) &&
@@ -858,8 +858,8 @@ void WallFrameProcess(void) {
 }
 
 //------------------------------------------------------------------------------
-//	An CObject got stuck in a door (like a flare).
-//	Add global entry.
+// An CObject got stuck in a door (like a flare).
+// Add global entry.
 int32_t nStuckObjects = 0;
 tStuckObject stuckObjects[MAX_STUCK_OBJECTS];
 
@@ -885,11 +885,11 @@ void AddStuckObject(CObject *pObj, int16_t nSegment, int16_t nSide) {
     }
 }
 
-//	--------------------------------------------------------------------------------------------------
-//	Look at the list of stuck OBJECTS, clean up in case an CObject has gone away, but not been removed here.
-//	Removes up to one/frame.
+// --------------------------------------------------------------------------------------------------
+// Look at the list of stuck OBJECTS, clean up in case an CObject has gone away, but not been removed here.
+// Removes up to one/frame.
 void RemoveObsoleteStuckObjects(void) {
-    //	Safety and efficiency code.  If no stuck OBJECTS, should never get inside the IF, but this is faster.
+    // Safety and efficiency code.  If no stuck OBJECTS, should never get inside the IF, but this is faster.
     ENTER(0, 0);
     if (!nStuckObjects)
         RETURN
@@ -906,8 +906,8 @@ void RemoveObsoleteStuckObjects(void) {
     RETURN
 }
 
-//	----------------------------------------------------------------------------------------------------
-//	Door with CWall index nWall is opening, kill all OBJECTS stuck in it.
+// ----------------------------------------------------------------------------------------------------
+// Door with CWall index nWall is opening, kill all OBJECTS stuck in it.
 void KillStuckObjects(int32_t nWall) {
     ENTER(0, 0);
     int32_t i;
@@ -931,13 +931,13 @@ void KillStuckObjects(int32_t nWall) {
                     pObj->info.nType,
                     OBJ_WEAPON);
 #endif
-                // Int3();	//	What?  This looks bad.  Object is not a weapon and it is stuck in a CWall!
+                // Int3();	// What?  This looks bad.  Object is not a weapon and it is stuck in a CWall!
                 pStuckObj->nWall = NO_WALL;
             }
         } else if (IS_WALL(pStuckObj->nWall)) {
             nStuckObjects++;
         }
-    //	Ok, this is awful, but we need to do things whenever a door opens/closes/disappears, etc.
+    // Ok, this is awful, but we need to do things whenever a door opens/closes/disappears, etc.
     simpleRouter[0].Flush();
     RETURN
 }
@@ -992,7 +992,7 @@ void BngProcessSegment(CObject *pObj, fix damage, CSegment *pSeg, int32_t depth,
         fix dist;
         CFixVector pnt;
 
-        //	Process only walls which have glass.
+        // Process only walls which have glass.
         if ((tm = pSeg->m_sides[nSide].m_nOvlTex)) {
             int32_t ec = gameData.pigData.tex.pTexMapInfo[tm].nEffectClip;
             tEffectInfo *pEffectInfo = (ec < 0) ? NULL : gameData.effectData.pEffect + ec;
@@ -1092,8 +1092,8 @@ bool CWall::IsInvisible(void) {
 }
 
 // -----------------------------------------------------------------------------------
-//	pObj is going to detonate
-//	blast nearby monitors, lights, maybe other things
+// pObj is going to detonate
+// blast nearby monitors, lights, maybe other things
 void BlastNearbyGlass(CObject *pObj, fix damage) {
     int32_t i;
     int8_t visited[MAX_SEGMENTS_D2X];

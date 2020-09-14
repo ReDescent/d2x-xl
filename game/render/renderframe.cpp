@@ -248,7 +248,7 @@ void FlushFrame(fix xStereoSeparation) {
 
     if (!(i && xStereoSeparation)) { // no stereo or shutter glasses or Oculus Rift
         // if (gameStates.render.bRenderIndirect <= 0)
-        //	Draw2DFrameElements ();
+        // Draw2DFrameElements ();
         ogl.SwapBuffers(0, 0);
     } else {
         if ((i < 0) || (xStereoSeparation > 0)) {
@@ -578,45 +578,6 @@ void RenderMonoFrame(fix xStereoSeparation = 0) {
 #define WINDOW_MIN_W ((gameData.renderData.frame.Width() * 10) / 22) // 160
 #define WINDOW_MIN_H ((gameData.renderData.frame.Height() * 10) / 22)
 
-void GrowWindow(void) {
-#if 0
-StopTime ();
-if (gameStates.render.cockpit.nType == CM_FULL_COCKPIT) {
-	gameData.renderData.screen.SetHeight (gameData.renderData.screen.Height ());
-	gameData.renderData.screen.SetWidth (gameData.renderData.screen.Width ());
-	cockpit->Toggle ();
-	HUDInitMessage (TXT_COCKPIT_F3);
-	StartTime (0);
-	return;
-	}
-
-if (gameStates.render.cockpit.nType != CM_STATUS_BAR) {
-	StartTime (0);
-	return;
-	}
-
-if ((gameData.renderData.screen.Height () >= gameData.renderData.screen.Height ()) || (gameData.renderData.screen.Width () >= gameData.renderData.screen.Width ())) {
-	//gameData.renderData.screen.Width () = gameData.renderData.screen.Width ();
-	//screen[HA] = gameData.renderData.screen.Height ();
-	cockpit->Activate (CM_FULL_SCREEN);
-	}
-else {
-	//int32_t x, y;
-	gameData.renderData.screen.SetWidth (gameData.renderData.screen.Width () + WINDOW_W_DELTA);
-	gameData.renderData.screen.SetHeight (gameData.renderData.screen.Height () + WINDOW_H_DELTA);
-	if (gameData.renderData.screen.Height () > gameData.renderData.screen.Height ())
-		gameData.renderData.screen.SetHeight (gameData.renderData.screen.Height ());
-	if (gameData.renderData.screen.Width () > gameData.renderData.screen.Width ())
-		gameData.renderData.screen.SetWidth (gameData.renderData.screen.Width ());
-	gameData.renderData.screen.SetLeft ((gameData.renderData.screen.Width () - gameData.renderData.screen.Width ()) / 2);
-	gameData.renderData.screen.SetTop ((gameData.renderData.screen.Height () - gameData.renderData.screen.Height ()) / 2);
-	}
-HUDClearMessages ();	//	@mk, 11/11/94
-SavePlayerProfile ();
-StartTime (0);
-#endif
-}
-
 //------------------------------------------------------------------------------
 
 extern CBitmap bmBackground;
@@ -721,7 +682,7 @@ void GameRenderFrame(void) {
     }
     // StopTime ();
     // if (!gameStates.menus.nInMenu)
-    //	paletteManager.EnableEffect ();
+    // paletteManager.EnableEffect ();
     // StartTime (0);
     gameData.appData.nFrameCount++;
     PROF_END(ptRenderFrame)

@@ -29,16 +29,16 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <time.h>
 #endif
 
-//	Amount of time since the current robot was last processed for things such as movement.
-//	It is not valid to use gameData.timeData.xFrame because robots do not get moved every frame.
+// Amount of time since the current robot was last processed for things such as movement.
+// It is not valid to use gameData.timeData.xFrame because robots do not get moved every frame.
 
 // ---------------------------------------------------------
-//	On entry, gameData.botData.nTypes had darn sure better be set.
-//	Mallocs gameData.botData.nTypes tRobotInfo structs into global gameData.botData.pInfo.
+// On entry, gameData.botData.nTypes had darn sure better be set.
+// Mallocs gameData.botData.nTypes tRobotInfo structs into global gameData.botData.pInfo.
 void InitAISystem(void) {}
 
 // ---------------------------------------------------------------------------------------------------------------------
-//	Given a behavior, set initial mode.
+// Given a behavior, set initial mode.
 int32_t AIBehaviorToMode(int32_t behavior) {
     switch (behavior) {
     case AIB_STILL:
@@ -50,19 +50,19 @@ int32_t AIBehaviorToMode(int32_t behavior) {
     case AIB_RUN_FROM:
         return AIM_RUN_FROM_OBJECT;
     case AIB_SNIPE:
-        return AIM_IDLING; //	Changed, 09/13/95, MK, snipers are still until they see you or are hit.
+        return AIM_IDLING; // Changed, 09/13/95, MK, snipers are still until they see you or are hit.
     case AIB_STATION:
         return AIM_IDLING;
     case AIB_FOLLOW:
         return AIM_FOLLOW_PATH;
     default:
-        Int3(); //	Contact Mike: Error, illegal behavior nType
+        Int3(); // Contact Mike: Error, illegal behavior nType
     }
     return AIM_IDLING;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-//	initial_mode == -1 means leave mode unchanged.
+// initial_mode == -1 means leave mode unchanged.
 void InitAIObject(int16_t nObject, int16_t behavior, int16_t nHideSegment) {
     ENTER(1, 0);
     CObject *pObj = OBJECT(nObject);
@@ -84,7 +84,7 @@ void InitAIObject(int16_t nObject, int16_t behavior, int16_t nHideSegment) {
         behavior = AIB_NORMAL;
         pStaticInfo->behavior = (uint8_t)behavior;
     }
-    //	mode is now set from the Robot dialog, so this should get overwritten.
+    // mode is now set from the Robot dialog, so this should get overwritten.
     pLocalInfo->mode = AIM_IDLING;
     pLocalInfo->nPrevVisibility = 0;
     if (behavior != -1) {
@@ -211,7 +211,7 @@ void DoLunacyOff(void) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Call this each time the player starts a new ship.
+// Call this each time the player starts a new ship.
 void InitAIForShip(void) {
     ENTER(1, 0);
     for (int32_t i = 0; i < MAX_AI_CLOAK_INFO; i++) {
@@ -227,7 +227,7 @@ void InitAIForShip(void) {
     RETURN
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Initializations to be performed for all robots for a new level.
 void InitRobotsForLevel(void) {
     ENTER(1, 0);
@@ -262,5 +262,5 @@ void InitAIFrame(void) {
     RETURN
 }
 
-//	---------------------------------------------------------------
+// ---------------------------------------------------------------
 // eof

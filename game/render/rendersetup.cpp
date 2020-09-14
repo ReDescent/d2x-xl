@@ -111,12 +111,7 @@ void SetupRenderView(fix xStereoSeparation, int16_t *pnStartSeg, int32_t bOglSca
     else {
         if (bPlayer) {
             if (xStereoSeparation)
-                gameData.renderData.mine.viewer.vPos +=
-                    gameData.objData.pViewer->info.position.mOrient.m.dir.r * xStereoSeparation;
-#if 0 // is done in the game loop anyway
-		if ((LOCALPLAYER.ObservedPlayer () == N_LOCALPLAYER) && !gameStates.render.nWindow [0])
-			FLIGHTPATH.Update (gameData.objData.pViewer);
-#endif
+                gameData.renderData.mine.viewer.vPos += gameData.objData.pViewer->info.position.mOrient.m.dir.r * xStereoSeparation;
             if (gameStates.render.bRearView) { // no zoom, no head tracking
                 mView.m.dir.f.Neg();
                 mView.m.dir.r.Neg();
@@ -252,22 +247,6 @@ void SetupMineRenderer(int32_t nWindow) {
         gameOptions[1].render.debug.bWalls = 1;
         gameOptions[1].render.debug.bDynamicLight = 1;
     }
-#endif
-
-#if 0
-if (gameStates.app.bNostalgia > 1)
-	gameStates.render.nLightingMethod =
-	gameStates.render.bPerPixelLighting = 0;
-else if (!(lightmapManager.HaveLightmaps ()))
-	gameStates.render.bPerPixelLighting = 0;
-else {
-	if (gameStates.render.nLightingMethod == 2)
-		gameStates.render.bPerPixelLighting = 2;
-	else if ((gameStates.render.nLightingMethod == 1) && gameOpts->render.bUseLightmaps)
-		gameStates.render.bPerPixelLighting = 1;
-	else
-		gameStates.render.bPerPixelLighting = 0;
-	}
 #endif
 
     if ((nWindow == 0) && (gameStates.render.nShadowPass < 2)) {

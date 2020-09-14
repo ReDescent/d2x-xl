@@ -101,7 +101,7 @@ class CD1WeaponInfo {
     int8_t renderType; // How to draw 0=laser, 1=blob, 2=CObject
     int8_t nModel; // Model num if rendertype==2.
     int8_t nInnerModel; // Model num of inner part if rendertype==2.
-    int8_t persistent; //	0 = dies when it hits something, 1 = continues (eg, fusion cannon)
+    int8_t persistent; // 0 = dies when it hits something, 1 = continues (eg, fusion cannon)
 
     int8_t nFlashAnimation; // What tAnimationInfo to use for muzzle flash
     int16_t flashSound; // What sound to play when fired
@@ -110,20 +110,20 @@ class CD1WeaponInfo {
 
     int8_t nWallHitAnimation; // What tAnimationInfo for impact with CWall
     int16_t nWallHitSound; // What sound for impact with CWall
-    int8_t fireCount; //	Number of bursts fired from EACH GUN per firing.  For weapons which fire from both sides,
+    int8_t fireCount; // Number of bursts fired from EACH GUN per firing.  For weapons which fire from both sides,
                       //3*fireCount shots will be fired.
-    int8_t nAmmoUsage; //	How many units of ammunition it uses.
+    int8_t nAmmoUsage; // How many units of ammunition it uses.
 
-    int8_t nAnimationIndex; //	Vclip to render for the weapon, itself.
-    int8_t destructible; //	If !0, this weapon can be destroyed by another weapon.
-    int8_t matter; //	Flag: set if this CObject is matter (as opposed to energy)
-    int8_t bounce; //	Flag: set if this CObject bounces off walls
+    int8_t nAnimationIndex; // Vclip to render for the weapon, itself.
+    int8_t destructible; // If !0, this weapon can be destroyed by another weapon.
+    int8_t matter; // Flag: set if this CObject is matter (as opposed to energy)
+    int8_t bounce; // Flag: set if this CObject bounces off walls
 
-    int8_t homingFlag; //	Set if this weapon can home in on a target.
+    int8_t homingFlag; // Set if this weapon can home in on a target.
     int8_t dum1, dum2, dum3;
 
-    fix xEnergyUsage; //	How much fuel is consumed to fire this weapon.
-    fix xFireWait; //	Time until this weapon can be fired again.
+    fix xEnergyUsage; // How much fuel is consumed to fire this weapon.
+    fix xFireWait; // Time until this weapon can be fired again.
 
     tBitmapIndex bitmap; // Pointer to bitmap if rendertype==0 or 1.
 
@@ -134,13 +134,13 @@ class CD1WeaponInfo {
     fix speed[DIFFICULTY_LEVEL_COUNT]; // How fast it can move, difficulty level based.
     fix mass; // How much mass it has
     fix drag; // How much drag it has
-    fix thrust; //	How much thrust it has
+    fix thrust; // How much thrust it has
     fix poLenToWidthRatio; // For polyobjects, the ratio of len/width. (10 maybe?)
-    fix light; //	Amount of light this weapon casts.
-    fix lifetime; //	Lifetime in seconds of this weapon.
-    fix xDamageRadius; //	Radius of damage caused by weapon, used for missiles (not lasers) to apply to damage to
+    fix light; // Amount of light this weapon casts.
+    fix lifetime; // Lifetime in seconds of this weapon.
+    fix xDamageRadius; // Radius of damage caused by weapon, used for missiles (not lasers) to apply to damage to
                        //things it did not hit
-    //-- unused--	fix	damage_force;			//	Force of damage caused by weapon, used for missiles (not lasers) to apply
+    //-- unused--	fix	damage_force;			// Force of damage caused by weapon, used for missiles (not lasers) to apply
     //to damage to things it did not hit
     // damage_force was a real mess.  Wasn't DifficultyLevel based, and was being applied instead of weapon's actual
     // strength.  Now use 2*strength instead. --MK, 01/19/95
@@ -151,24 +151,24 @@ class CD1WeaponInfo {
 #pragma pack(push, 1)
 class CD2D1WeaponInfo {
     public:
-    int8_t persistent; //	0 = dies when it hits something, 1 = continues (eg, fusion cannon)
-    int8_t fireCount; //	Number of bursts fired from EACH GUN per firing.  For weapons which fire from both sides,
+    int8_t persistent; // 0 = dies when it hits something, 1 = continues (eg, fusion cannon)
+    int8_t fireCount; // Number of bursts fired from EACH GUN per firing.  For weapons which fire from both sides,
                       //3*fireCount shots will be fired.
-    int8_t nAmmoUsage; //	How many units of ammunition it uses.
-    int8_t destructible; //	If !0, this weapon can be destroyed by another weapon.
-    int8_t matter; //	Flag: set if this CObject is matter (as opposed to energy)
-    int8_t bounce; //	Flag: set if this CObject bounces off walls
-    int8_t homingFlag; //	Set if this weapon can home in on a target.
-    fix xEnergyUsage; //	How much fuel is consumed to fire this weapon.
-    fix xFireWait; //	Time until this weapon can be fired again.
+    int8_t nAmmoUsage; // How many units of ammunition it uses.
+    int8_t destructible; // If !0, this weapon can be destroyed by another weapon.
+    int8_t matter; // Flag: set if this CObject is matter (as opposed to energy)
+    int8_t bounce; // Flag: set if this CObject bounces off walls
+    int8_t homingFlag; // Set if this weapon can home in on a target.
+    fix xEnergyUsage; // How much fuel is consumed to fire this weapon.
+    fix xFireWait; // Time until this weapon can be fired again.
     fix strength[DIFFICULTY_LEVEL_COUNT]; // How much damage it can inflict
     fix speed[DIFFICULTY_LEVEL_COUNT]; // How fast it can move, difficulty level based.
     fix mass; // How much mass it has
     fix drag; // How much drag it has
-    fix thrust; //	How much thrust it has
-    fix light; //	Amount of light this weapon casts.
-    fix lifetime; //	Lifetime in seconds of this weapon.
-    fix xDamageRadius; //	Radius of damage caused by weapon, used for missiles (not lasers) to apply to damage to
+    fix thrust; // How much thrust it has
+    fix light; // Amount of light this weapon casts.
+    fix lifetime; // Lifetime in seconds of this weapon.
+    fix xDamageRadius; // Radius of damage caused by weapon, used for missiles (not lasers) to apply to damage to
                        //things it did not hit
 };
 #pragma pack(pop)

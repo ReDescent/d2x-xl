@@ -131,25 +131,9 @@ void G3FillFaceBuffer(CSegFace *pFace, CBitmap *bmBot, CBitmap *bmTop, int32_t b
     if (!gameOpts->render.debug.bTextures)
         return;
 #endif
-#if 0
-if (!gameStates.render.bTriangleMesh) {
-	if (gameStates.render.bFullBright)
-		glColor3f (1,1,1);
-	OglDrawArrays (GL_TRIANGLE_FAN, pFace->m_info.nIndex, 4);
-	}
-else
-#endif
     {
         int32_t i = pFace->m_info.nIndex, j = gameStates.render.bTriangleMesh ? pFace->m_info.nTris * 3 : 4;
 
-#if 0 // DBG
-		if (i == nDbgVertex)
-			BRP;
-		if (i + j > int32_t (FACES.vertices.Length ())) {
-			PrintLog (0, "invalid vertex index %d in G3FillFaceBuffer\n");
-			return;
-			}
-#endif
         if (/*!gameStates.render.bTriangleMesh ||*/ (faceBuffer.bmBot != bmBot) || (faceBuffer.bmTop != bmTop)) {
             if (faceBuffer.nFaces)
                 G3FlushFaceBuffer(1);
@@ -183,11 +167,6 @@ int32_t SetupShader(
         BRP;
 #endif
     nType = bColorKey ? 3 : bMultiTexture ? 2 : bTextured;
-#if 0
-if ((gameStates.render.nType == RENDER_TYPE_ZCULL) && (nType > 1))
-	nShader = SetupTexMergeShader (bColorKey, bColored, nType);
-else
-#endif
     if (!bColored && gameOpts->render.automap.bGrayOut)
         nShader = SetupGrayScaleShader(nType, pColor);
     else if (!gameStates.render.bFullBright && pFace && (gameStates.render.bPerPixelLighting == 2))

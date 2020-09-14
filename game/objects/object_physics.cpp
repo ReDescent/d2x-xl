@@ -215,8 +215,8 @@ void CObject::ApplyFlightControls(void) {
     // whole frame.  So we just scale them up by the max, and divide by
     // gameData.timeData.xFrame to make them independant of framerate
 
-    //	Prevent divide overflows on high frame rates.
-    //	In a signed divide, you get an overflow if num >= div<<15
+    // Prevent divide overflows on high frame rates.
+    // In a signed divide, you get an overflow if num >= div<<15
 
     AdjustThrust(mType.physInfo.thrust, fix(gameData.pigData.ship.player->maxThrust * speedScale));
     AdjustThrust(mType.physInfo.rotThrust, gameData.pigData.ship.player->maxRotThrust);

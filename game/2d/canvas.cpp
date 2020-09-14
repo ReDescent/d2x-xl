@@ -18,7 +18,7 @@ float CScreen::m_fScale = 1.0f;
 
 // CScreen screen;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CCanvas *CCanvas::Create(int32_t w, int32_t h) {
     CCanvas *pCanvas;
@@ -28,7 +28,7 @@ CCanvas *CCanvas::Create(int32_t w, int32_t h) {
     return pCanvas;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Init(void) {
     memset(&m_info, 0, sizeof(m_info));
@@ -38,7 +38,7 @@ void CCanvas::Init(void) {
     SetName("Canvas");
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Setup(int32_t w, int32_t h) {
     Init();
@@ -46,7 +46,7 @@ void CCanvas::Setup(int32_t w, int32_t h) {
     // CBitmap::Setup (BM_LINEAR, w, h, 1, "Canvas");
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CCanvas *CCanvas::CreatePane(int32_t x, int32_t y, int32_t w, int32_t h) {
     CCanvas *pPane;
@@ -58,14 +58,14 @@ CCanvas *CCanvas::CreatePane(int32_t x, int32_t y, int32_t w, int32_t h) {
     return pPane;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Init(int32_t nType, int32_t w, int32_t h, uint8_t *data) {
     Init();
     // CBitmap::Init (nType, 0, 0, w, h, 1, data);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Setup(CCanvas *pParent) {
     SetColor(pParent->m_info.color);
@@ -78,7 +78,7 @@ void CCanvas::Setup(CCanvas *pParent) {
     SetHeight();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Setup(CCanvas *pParent, int32_t x, int32_t y, int32_t w, int32_t h, bool bUnscale) {
     if (pParent)
@@ -89,28 +89,28 @@ void CCanvas::Setup(CCanvas *pParent, int32_t x, int32_t y, int32_t w, int32_t h
     SetHeight();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Destroy(void) {
     Deactivate();
     delete this;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Clear(uint32_t color) {
     SetColorRGBi(color);
     OglDrawFilledRect(0, 0, CCanvas::Current()->Width() - 1, CCanvas::Current()->Height() - 1);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::SetColor(int32_t color) {
     m_info.color.index = color % 256;
     m_info.color.rgb = 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::SetColorRGB(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
     m_info.color.rgb = 1;
@@ -120,13 +120,13 @@ void CCanvas::SetColorRGB(uint8_t red, uint8_t green, uint8_t blue, uint8_t alph
     m_info.color.Alpha() = alpha;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::SetColorRGB15bpp(uint16_t c, uint8_t alpha) {
     CCanvas::SetColorRGB(PAL2RGBA(((c >> 10) & 31) * 2), PAL2RGBA(((c >> 5) & 31) * 2), PAL2RGBA((c & 31) * 2), alpha);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::FadeColorRGB(double dFade) {
     if (dFade && m_info.color.rgb) {
@@ -137,7 +137,7 @@ void CCanvas::FadeColorRGB(double dFade) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::GetExtent(CRectangle &rc, bool bScale, bool bDeep) {
     CCanvas *parent = m_parent;
@@ -168,7 +168,7 @@ void CCanvas::GetExtent(CRectangle &rc, bool bScale, bool bDeep) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::SetViewport(CCanvas *parent) {
     if (!parent)
@@ -192,7 +192,7 @@ void CCanvas::SetViewport(CCanvas *parent) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Activate(const char *szId, CCanvas *parent, bool bReset) {
     if (bReset) {
@@ -209,7 +209,7 @@ void CCanvas::Activate(const char *szId, CCanvas *parent, bool bReset) {
     SetViewport(parent);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CCanvas::Deactivate(void) {
     CCanvas *pCanvas;
@@ -224,8 +224,8 @@ void CCanvas::Deactivate(void) {
         gameData.renderData.frame.Activate("Deactivate (frame)");
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
 void SetupCanvasses(float scale) {

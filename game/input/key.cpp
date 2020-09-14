@@ -571,7 +571,7 @@ void KeyHandler(SDL_KeyboardEvent *event) {
                 if ((/*(nKeyboard != 1) &&*/ gameStates.input.keys.pressed[KEY_LCTRL]) ||
                     gameStates.input.keys.pressed[KEY_RCTRL])
                     pKey->flags |= uint8_t(KEY_CTRLED / 256);
-                //				pKey->timeWentDown = gameStates.input.keys.xLastPressTime = TimerGetFixedSeconds();
+                // 			pKey->timeWentDown = gameStates.input.keys.xLastPressTime = TimerGetFixedSeconds();
             } else {
                 gameStates.input.keys.pressed[keyCode] = 0;
                 gameStates.input.keys.nLastReleased = keyCode;

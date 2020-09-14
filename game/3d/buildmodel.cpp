@@ -121,10 +121,6 @@ float CModelEdge::PartialAngle(void) { return 0.3f; }
 // 1: both faces visible
 
 int32_t CModelEdge::Type(int32_t nDistScale) {
-#if 0
-if (m_nFaces < 2)
-	return -1;
-#endif
     int32_t h = Visibility();
 #if DBG
     if (h == 0)
@@ -381,11 +377,6 @@ void CSubModel::InitMinMax(void) {
 void CSubModel::SetMinMax(CFloatVector3 *pVertex) {
     CFloatVector3 v = *pVertex;
 
-#if 0
-dir.dir.coord.x += X2F (pSubModel->m_vOffset.dir.coord.x);
-dir.dir.coord.y += X2F (pSubModel->m_vOffset.dir.coord.y);
-dir.dir.coord.z += X2F (pSubModel->m_vOffset.dir.coord.z);
-#endif
     if (m_vMin.v.coord.x > v.v.coord.x)
         m_vMin.v.coord.x = v.v.coord.x;
     if (m_vMin.v.coord.y > v.v.coord.y)
@@ -533,13 +524,11 @@ bool CSubModel::BuildEdgeList(CModel *pModel) {
     vCenter.Assign(m_vCenter);
     m_nEdges = 0;
 
-#if 1
     for (uint16_t i = 0; i < m_nFaces; i++, pFace++)
         m_nEdges += pFace->m_nVerts;
     if (!(m_edges.Create(m_nEdges, "RenderModel::CSubModel::m_edges")))
         return false;
     m_nEdges = 0;
-#endif
 
     pFace = m_faces;
     for (uint16_t i = 0; i < m_nFaces; i++, pFace++) {
@@ -551,27 +540,11 @@ bool CSubModel::BuildEdgeList(CModel *pModel) {
             &pModel->m_faceVerts[pFace->m_nIndex].m_vertex,
             &pModel->m_faceVerts[pFace->m_nIndex + 1].m_vertex,
             &pModel->m_faceVerts[pFace->m_nIndex + 2].m_vertex);
-#if 0
-	pFace->m_vNormalf [0].Assign (pFace->m_vNormal);
-#else
         pFace->m_vNormalf[0] = CFloatVector3::Normal(
             pModel->m_faceVerts[pFace->m_nIndex].m_vertex,
             pModel->m_faceVerts[pFace->m_nIndex + 1].m_vertex,
             pModel->m_faceVerts[pFace->m_nIndex + 2].m_vertex);
-#if 0
-#if 0
-	CFloatVector3 v = pFace->m_vCenterf [0];
-	v -= vCenter;
-	CFloatVector3::Normalize (v);
-	if (CFloatVector3::Dot (v, pFace->m_vNormalf [0]) < 0.0f)
-		pFace->m_vNormalf [0].Neg ();
-#else
-	if (pFace->m_faceWinding == GL_CW)
-		pFace->m_vNormalf [0].Neg ();
-#endif
-#endif
         pFace->m_vNormal.Assign(pFace->m_vNormalf[0]);
-#endif
 
         for (uint16_t j = 0; j < pFace->m_nVerts; j++)
             if (AddEdge(
@@ -581,14 +554,6 @@ bool CSubModel::BuildEdgeList(CModel *pModel) {
                     pModel->m_faceVerts[pFace->m_nIndex + (j + 1) % pFace->m_nVerts].m_nIndex))
                 ++nComplete;
     }
-
-#if 0 // DBG
-CModelEdge *pEdge = m_edges.Buffer ();
-int32_t nIncomplete = 0;
-for (int32_t i = m_nEdges; i; i--, pEdge++) 
-	if (pEdge->m_nFaces < 2) 
-		nIncomplete++;
-#endif
 
     return 1; // m_edges.Resize (m_nEdges) != NULL;
 }
@@ -637,14 +602,6 @@ void CModel::Setup(int32_t bHires, int32_t bSort) {
             pSrcFace->m_nId = nId;
         }
     }
-
-#if 0 // DBG
-CModelEdge *pEdge = m_edges.Buffer ();
-int32_t nIncomplete = 0;
-for (int32_t i = m_nEdges; i; i--, pEdge++) 
-	if (pEdge->m_nFaces < 2) 
-		nIncomplete++;
-#endif
 
     m_vbVerts.SetBuffer(reinterpret_cast<CFloatVector3 *>(m_vertBuf[0].Buffer()), 1, m_vertBuf[0].Length());
     m_vbNormals.SetBuffer(m_vbVerts.Buffer() + m_nFaceVerts, true, m_vertBuf[0].Length());

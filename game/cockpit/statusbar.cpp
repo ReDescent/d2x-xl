@@ -33,7 +33,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "hudmsgs.h"
 #include "statusbar.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CBitmap *CStatusBar::StretchBlt(
     int32_t nGauge,
@@ -61,7 +61,7 @@ CBitmap *CStatusBar::StretchBlt(
     return pBm;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // fills in the coords of the hostage video window
 void CStatusBar::GetHostageWindowCoords(int32_t &x, int32_t &y, int32_t &w, int32_t &h) {
     x = SB_SECONDARY_W_BOX_LEFT;
@@ -70,19 +70,19 @@ void CStatusBar::GetHostageWindowCoords(int32_t &x, int32_t &y, int32_t &w, int3
     h = SB_SECONDARY_W_BOX_BOT - SB_SECONDARY_W_BOX_TOP + 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawRecording(void) { CGenericCockpit::DrawRecording(0); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawCountdown(void) { CGenericCockpit::DrawCountdown(SMALL_FONT->Height() * 6); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawCruise(void) { CGenericCockpit::DrawCruise(22, ScaleY(m_info.nLineSpacing * 22)); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawScore(void) {
     char szScore[20];
@@ -103,7 +103,7 @@ void CStatusBar::DrawScore(void) {
     nIdScore = DrawHUDText(&nIdScore, ScaleX(SB_SCORE_RIGHT - w) - LHY(2), ScaleY(SB_SCORE_Y), szScore);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawAddedScore(void) {
     if (IsMultiGame && !IsCoopGame)
@@ -126,7 +126,7 @@ void CStatusBar::DrawAddedScore(void) {
             color = 10;
         else if (color > 31)
             color = 31;
-        color = color - (color % 4); //	Only allowing colors 12, 16, 20, 24, 28 speeds up gr_getcolor, improves caching
+        color = color - (color % 4); // Only allowing colors 12, 16, 20, 24, 28 speeds up gr_getcolor, improves caching
         if (gameStates.app.cheats.bEnabled)
             sprintf(szScore, "%s", TXT_CHEATER);
         else
@@ -147,33 +147,33 @@ void CStatusBar::DrawAddedScore(void) {
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawOrbs(void) { CGenericCockpit::DrawOrbs(m_info.fontWidth, m_info.nLineSpacing); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawFlag(void) {
     CGenericCockpit::DrawFlag(5 * m_info.nLineSpacing, m_info.nLineSpacing * (gameStates.render.fonts.bHires + 1));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawHomingWarning(void) { hudCockpit.DrawHomingWarning(); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawPrimaryAmmoInfo(int32_t ammoCount) {
     DrawAmmoInfo(ScaleX(SB_PRIMARY_AMMO_X), ScaleY(SB_PRIMARY_AMMO_Y), ammoCount, 1);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawSecondaryAmmoInfo(int32_t ammoCount) {
     DrawAmmoInfo(ScaleX(SB_SECONDARY_AMMO_X), ScaleY(SB_SECONDARY_AMMO_Y), ammoCount, 0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawLives(void) {
     static int32_t nIdLives[2] = {0, 0}, nIdKilled = 0;
@@ -214,7 +214,7 @@ void CStatusBar::DrawLives(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawEnergyText(void) {
     static int32_t nIdEnergy = 0;
@@ -234,7 +234,7 @@ void CStatusBar::DrawEnergyText(void) {
         (int32_t)FRound(m_info.nEnergy * LOCALPLAYER.EnergyScale()));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawEnergyBar(void) {
     if (gameStates.app.bD1Mission)
@@ -259,7 +259,7 @@ void CStatusBar::DrawEnergyBar(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawAfterburnerText(void) {
     if (gameStates.app.bD1Mission)
@@ -284,7 +284,7 @@ void CStatusBar::DrawAfterburnerText(void) {
         "AB");
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawAfterburnerBar(void) {
     if (gameStates.app.bD1Mission)
@@ -304,7 +304,7 @@ void CStatusBar::DrawAfterburnerBar(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawShieldText(void) {
     static int32_t nIdShield = 0;
@@ -332,7 +332,7 @@ void CStatusBar::DrawShieldText(void) {
         (int32_t)FRound(m_info.nShield * LOCALPLAYER.ShieldScale()));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawShieldBar(void) {
     if (!(LOCALPLAYER.flags & PLAYER_FLAGS_INVULNERABLE) || (m_info.tInvul <= 0)) {
@@ -343,7 +343,7 @@ void CStatusBar::DrawShieldBar(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 typedef struct tKeyGaugeInfo {
     int32_t nFlag, nGaugeOn, nGaugeOff, x[2], y[2];
@@ -376,15 +376,15 @@ void CStatusBar::DrawKeys(void) {
             keyGaugeInfo[i].y[bHires]);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawPlayerShip(void) {
     CGenericCockpit::DrawPlayerShip(m_info.bCloak, m_history[0].bCloak, SB_SHIP_GAUGE_X, SB_SHIP_GAUGE_Y);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-//	Draws invulnerable ship, or maybe the flashing ship, depending on invulnerability time left.
+// Draws invulnerable ship, or maybe the flashing ship, depending on invulnerability time left.
 void CStatusBar::DrawInvul(void) {
     static fix time = 0;
 
@@ -400,7 +400,7 @@ void CStatusBar::DrawInvul(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::ClearBombCount(int32_t bgColor) {
     CCanvas::Current()->SetColorRGBi(bgColor);
@@ -415,13 +415,13 @@ void CStatusBar::ClearBombCount(int32_t bgColor) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawBombCount(void) {
     CGenericCockpit::DrawBombCount(ScaleX(SB_BOMB_COUNT_X), ScaleY(SB_BOMB_COUNT_Y), BLACK_RGBA, 1);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CStatusBar::DrawBombCount(int32_t &nIdBombCount, int32_t x, int32_t y, int32_t nColor, char *pszBombCount) {
     SetFontColor(nColor);
@@ -429,11 +429,11 @@ int32_t CStatusBar::DrawBombCount(int32_t &nIdBombCount, int32_t x, int32_t y, i
     return nId;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawStatic(int32_t nWindow) { CGenericCockpit::DrawStatic(nWindow, SB_PRIMARY_BOX); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int32_t laserLevel) {
     int32_t nIndex;
@@ -467,17 +467,17 @@ void CStatusBar::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int32_t 
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawKillList(void) { CGenericCockpit::DrawKillList(60, CCanvas::Current()->Height()); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::DrawCockpit(bool bAlphaTest) {
     CGenericCockpit::DrawCockpit(CM_STATUS_BAR + m_info.nCockpit, gameData.renderData.scene.Height(), bAlphaTest);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CStatusBar::Setup(bool bScene, bool bRebuild) {
     if (bRebuild && !m_info.bRebuild)
@@ -507,7 +507,7 @@ bool CStatusBar::Setup(bool bScene, bool bRebuild) {
     return true;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::SetupWindow(int32_t nWindow) {
     tGaugeBox *pHudArea = hudWindowAreas + SB_PRIMARY_BOX + nWindow;
@@ -520,7 +520,7 @@ void CStatusBar::SetupWindow(int32_t nWindow) {
     gameData.renderData.window.Activate("CStatusBar::SetupWindow (window)", &gameData.renderData.frame);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CStatusBar::Toggle(void) {
     CGenericCockpit::Activate(
@@ -528,4 +528,4 @@ void CStatusBar::Toggle(void) {
         true);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

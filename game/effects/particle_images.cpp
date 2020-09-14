@@ -150,11 +150,11 @@ tParticleImageInfo particleImageInfo[MAX_PARTICLE_QUALITY + 1][PARTICLE_TYPES] =
 
 CParticleImageManager particleImageManager;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CParticleImageManager::GetType(int32_t nType) { return nType; }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CParticleImageManager::Animate(int32_t nType) {
     tParticleImageInfo &pii = ParticleImageInfo(nType);
@@ -174,7 +174,7 @@ void CParticleImageManager::Animate(int32_t nType) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CParticleImageManager::AdjustBrightness(CBitmap *pBm) {
     CBitmap *pBmf;
@@ -199,7 +199,7 @@ void CParticleImageManager::AdjustBrightness(CBitmap *pBm) {
     delete[] fFrameBright;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline bool Bind(int32_t nType) {
     if (!ogl.m_features.bTextureArrays.Available())
@@ -261,7 +261,7 @@ if (strstr (pii.szName, "smoke")) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CParticleImageManager::LoadAll(void) {
     if (!gameOpts->render.particles.nQuality)
@@ -278,7 +278,7 @@ int32_t CParticleImageManager::LoadAll(void) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CParticleImageManager::FreeAll(void) {
     if (m_textureArray) {

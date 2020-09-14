@@ -56,20 +56,9 @@ hmp_file *hmp_open(const char *filename, int32_t bUseD1Hog) {
         if ((cf.Seek(4, SEEK_CUR)) || (cf.Read(&data, 4, 1) != 1))
             goto err;
         data -= 12;
-#if 0
-		if (i == 0)  /* track 0: reserve length for tempo */
-		    data += sizeof(hmp_tempo);
-#endif
         hmp->trks[i].len = data;
         if (!(p = hmp->trks[i].data = new uint8_t[data]))
             goto err;
-#if 0
-		if (i == 0) { /* track 0: add tempo */
-			memcpy(p, hmp_tempo, sizeof(hmp_tempo));
-			p += sizeof(hmp_tempo);
-			data -= sizeof(hmp_tempo);
-		}
-#endif
         /* finally, read track data */
         if ((cf.Seek(4, SEEK_CUR)) || (cf.Read(p, data, 1) != 1))
             goto err;
@@ -366,7 +355,7 @@ int32_t hmp_play(hmp_file *hmp, int32_t bLoop) {
         MIDIOUTCAPS devcaps;
         midiOutGetDevCaps(i, &devcaps, sizeof(MIDIOUTCAPS));
         if ((devcaps.wTechnology == MOD_FMSYNTH) || (devcaps.wTechnology == MOD_SYNTH))
-            //			if ((devcaps.dwSupport & (MIDICAPS_VOLUME | MIDICAPS_STREAM)) == (MIDICAPS_VOLUME |
+            // 		if ((devcaps.dwSupport & (MIDICAPS_VOLUME | MIDICAPS_STREAM)) == (MIDICAPS_VOLUME |
             // MIDICAPS_STREAM))
             hmp->devid = i;
         i++;
@@ -402,10 +391,6 @@ int32_t hmp_play(hmp_file *hmp, int32_t bLoop) {
             } else
                 return rc;
         }
-#if 0
-		{  FILE *f = fopen("dump","wb"); fwrite(hmp->evbuf->lpData, 
- hmp->evbuf->dwBytesRecorded,1,f); fclose(f); exit(1);}
-#endif
         if ((rc = midiOutPrepareHeader((HMIDIOUT)hmp->hmidi, hmp->evbuf, sizeof(MIDIHDR))) != MMSYSERR_NOERROR) {
             /* FIXME: cleanup... */
             return HMP_MM_ERR;

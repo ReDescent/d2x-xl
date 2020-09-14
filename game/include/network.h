@@ -358,7 +358,7 @@ typedef struct tNetworkObjInfo {
 
 extern tExtraGameInfo extraGameInfo[3];
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if 1
 
@@ -393,14 +393,14 @@ EGIFlag(char bLocalFlag, char bMultiFlag, char bDefault, int32_t bAllowLocalFlag
 
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline bool IsBuiltinWeapon(int32_t nWeapon) {
     return (!IsMultiGame || gameStates.app.bHaveExtraGameInfo[IsMultiGame]) &&
            (extraGameInfo[IsMultiGame].loadout.nGuns & HAS_FLAG(nWeapon));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define COLLISION_MODEL_SPHERES 0
 #define COLLISION_MODEL_BOXES 2
@@ -412,7 +412,7 @@ static inline int32_t CollisionModel(int32_t nCollisionModel = -1) {
                                  : nCollisionModel;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t NetworkStartGame(void);
 void NetworkRejoinGame(void);

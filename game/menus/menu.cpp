@@ -425,7 +425,7 @@ void CMenu::SaveScreen(CCanvas **gameCanvasP) { gameData.renderData.frame.Activa
 void CMenu::RestoreScreen(void) {
     backgroundManager.Draw();
     // if (gameStates.app.bGameRunning && !gameOpts->menus.nStyle)
-    //	backgroundManager.Remove ();	// remove the stars background loaded for old style menus
+    // backgroundManager.Remove ();	// remove the stars background loaded for old style menus
     gameData.renderData.frame.Deactivate();
     GrabMouse(1, 0);
 }
@@ -1577,7 +1577,7 @@ int32_t CMenu::Menu(
         if (HandleMouse(pnCurItem))
             continue;
 
-        //	 HACK! Don't redraw loadgame preview
+        //  HACK! Don't redraw loadgame preview
         if (bRestoringMenu)
             Item(0).m_bRedraw = 0;
 

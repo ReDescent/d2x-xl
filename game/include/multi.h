@@ -29,7 +29,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 // 2 Descent Registered/Commercial
 // 3 Descent II Shareware
 // 4 Descent II Commercial
-//	5+: D2X-XL
+// 5+: D2X-XL
 
 // Save multiplayer games?
 

@@ -14,7 +14,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "descent.h"
 
 // Global array of vertices, common to one mine.
-//	This is the global mine which create_new_mine returns.
+// This is the global mine which create_new_mine returns.
 // lsegment	Lsegments[MAX_SEGMENTS];
 
 // FIXME: empty file

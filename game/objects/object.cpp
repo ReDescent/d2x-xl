@@ -1234,8 +1234,8 @@ int32_t FreeCandidates(int32_t *pCandidate, int32_t *nCandidateP, int32_t nToFre
 }
 
 //-----------------------------------------------------------------------------
-//	Scan the CObject list, freeing down to nRequested OBJECTS
-//	Returns number of slots freed.
+// Scan the CObject list, freeing down to nRequested OBJECTS
+// Returns number of slots freed.
 int32_t FreeObjectSlots(int32_t nRequested) {
     int32_t i, nCandidates = 0;
     int32_t candidates[MAX_OBJECTS_D2X];
@@ -1497,7 +1497,7 @@ void FixObjectSizes(void) {
 //------------------------------------------------------------------------------
 
 // delete OBJECTS, such as weapons & explosions, that shouldn't stay between levels
-//	Changed by MK on 10/15/94, don't remove proximity bombs.
+// Changed by MK on 10/15/94, don't remove proximity bombs.
 // if bClearAll is set, clear even proximity bombs
 void ClearTransientObjects(int32_t bClearAll) {
     CObject *pObj, *pPrevObj;
@@ -2221,7 +2221,7 @@ CActorIterator::CActorIterator(CObject *&pObj) { pObj = Start(); }
 
 CStaticObjectIterator::CStaticObjectIterator(CObject *&pObj) { pObj = Start(); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CObjectIterator::Match(void) { return true; }
 

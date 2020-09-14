@@ -279,7 +279,7 @@ ReadFileNames:
     }
 
     if (!bInitialized) {
-        //		SetScreenMode (SCREEN_MENU);
+        // 	SetScreenMode (SCREEN_MENU);
         SetPopupScreenMode();
         fontManager.SetCurrent(SUBTITLE_FONT);
         nWidth = 0;

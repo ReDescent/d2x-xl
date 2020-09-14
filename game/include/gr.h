@@ -80,7 +80,7 @@ void GrCopyPalette(uint8_t *gr_palette, uint8_t *pal, int32_t size);
 //=========================================================================
 // Drawing functions:
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Draw a polygon into the current canvas in the current color and drawmode.
 // verts points to an ordered list of x, y pairs.  the polygon should be
 // convex; a concave polygon will be handled in some reasonable manner,
@@ -138,12 +138,12 @@ extern uint16_t grFadeTableSelector;
 // between 0 and 255 then all occurances of that color are mapped to
 // whatever color the 2d uses for transparency. This is normally used
 // right after a call to iff_read_bitmap like this:
-//		iff_error = iff_read_bitmap(filename, new, BM_LINEAR, newpal);
-//		if (iff_error != IFF_NO_ERROR) Error("Can't load IFF file <%s>, error=%d", filename, iff_error);
-//		if (iff_has_transparency)
-//			GrRemapBitmap(new, newpal, iff_transparent_color);
-//		else
-//			GrRemapBitmap(new, newpal, -1);
+// 	iff_error = iff_read_bitmap(filename, new, BM_LINEAR, newpal);
+// 	if (iff_error != IFF_NO_ERROR) Error("Can't load IFF file <%s>, error=%d", filename, iff_error);
+// 	if (iff_has_transparency)
+// 		GrRemapBitmap(new, newpal, iff_transparent_color);
+// 	else
+// 		GrRemapBitmap(new, newpal, -1);
 // Allocates a selector that has a base address at 'address' and length 'size'.
 // Returns 0 if successful... BE SURE TO CHECK the return value since there
 // is a limited number of selectors available!!!

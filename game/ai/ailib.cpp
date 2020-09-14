@@ -32,12 +32,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 int32_t nRobotSoundVolume = DEFAULT_ROBOT_SOUND_VOLUME;
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Returns:
-//		0		Player is not visible from object, obstruction or something.
-//		1		Player is visible, but not in field of view.
-//		2		Player is visible and in field of view.
-//	Note: Uses gameData.aiData.target.vBelievedPos as player's position for cloak effect.
-//	NOTE: Will destructively modify *pos if *pos is outside the mine.
+// Returns:
+// 	0		Player is not visible from object, obstruction or something.
+// 	1		Player is visible, but not in field of view.
+// 	2		Player is visible and in field of view.
+// Note: Uses gameData.aiData.target.vBelievedPos as player's position for cloak effect.
+// NOTE: Will destructively modify *pos if *pos is outside the mine.
 int32_t AICanSeeTarget(CObject *pObj, CFixVector *vPos, fix fieldOfView, CFixVector *vVecToTarget) {
     ENTER(1, 0);
     CHitQuery hitQuery(
@@ -50,7 +50,7 @@ int32_t AICanSeeTarget(CObject *pObj, CFixVector *vPos, fix fieldOfView, CFixVec
         I2X(1) / 4,
         ++gameData.physicsData.bIgnoreObjFlag);
 
-    //	Assume that robot's gun tip is in same CSegment as robot's center.
+    // Assume that robot's gun tip is in same CSegment as robot's center.
     pObj->cType.aiInfo.SUB_FLAGS &= ~SUB_FLAGS_GUNSEG;
     if ((*vPos) != pObj->info.position.vPos) {
         int16_t nSegment = FindSegByPos(*vPos, pObj->info.nSegment, 1, 0);
@@ -95,7 +95,7 @@ int32_t AICanFireAtTarget(CObject *pObj, CFixVector *vGun, CFixVector *vTarget) 
     fix nSize;
     int16_t nModel;
 
-    //	Assume that robot's gun tip is in same CSegment as robot's center.
+    // Assume that robot's gun tip is in same CSegment as robot's center.
     if (vGun->IsZero())
         RETVAL(0)
     if (!extraGameInfo[IsMultiGame].bRobotsHitRobots)
@@ -153,15 +153,15 @@ inline void LimitTargetVisibility(fix xMaxVisibleDist, tAILocalInfo *pLocalInfo)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Note: This function could be optimized.  Surely AICanSeeTarget would benefit from the
-//	information of a normalized gameData.aiData.target.vDir.
-//	Return player visibility:
-//		0		not visible
-//		1		visible, but robot not looking at player (ie, on an unobstructed vector)
-//		2		visible and in robot's field of view
-//		-1		player is cloaked
-//	If the player is cloaked, set gameData.aiData.target.vDir based on time player cloaked and last uncloaked position.
-//	Updates pLocalInfo->nPrevVisibility if player is not cloaked, in which case the previous visibility is left
+// Note: This function could be optimized.  Surely AICanSeeTarget would benefit from the
+// information of a normalized gameData.aiData.target.vDir.
+// Return player visibility:
+// 	0		not visible
+// 	1		visible, but robot not looking at player (ie, on an unobstructed vector)
+// 	2		visible and in robot's field of view
+// 	-1		player is cloaked
+// If the player is cloaked, set gameData.aiData.target.vDir based on time player cloaked and last uncloaked position.
+// Updates pLocalInfo->nPrevVisibility if player is not cloaked, in which case the previous visibility is left
 // unchanged 	and is copied to gameData.aiData.nTargetVisibility
 void ComputeVisAndVec(
     CObject *pObj,
@@ -208,7 +208,7 @@ void ComputeVisAndVec(
                 audio.CreateSegmentSound(pRobotInfo->seeSound, pObj->info.nSegment, 0, *pos, 0, nRobotSoundVolume);
             }
         } else {
-            //	Compute expensive stuff -- gameData.aiData.target.vDir and gameData.aiData.nTargetVisibility
+            // Compute expensive stuff -- gameData.aiData.target.vDir and gameData.aiData.nTargetVisibility
             CFixVector::NormalizedDir(gameData.aiData.target.vDir, gameData.aiData.target.vBelievedPos, *pos);
             if (gameData.aiData.target.vDir.IsZero()) {
                 gameData.aiData.target.vDir.v.coord.x = I2X(1);
@@ -223,8 +223,8 @@ void ComputeVisAndVec(
             if (gameData.aiData.nTargetVisibility == 2)
                 gameData.aiData.nTargetVisibility = gameData.aiData.nTargetVisibility;
 #endif
-            //	This horrible code added by MK in desperation on 12/13/94 to make robots wake up as soon as they
-            //	see you without killing frame rate.
+            // This horrible code added by MK in desperation on 12/13/94 to make robots wake up as soon as they
+            // see you without killing frame rate.
             tAIStaticInfo *pStaticInfo = &pObj->cType.aiInfo;
             if ((gameData.aiData.nTargetVisibility == 2) && (pLocalInfo->nPrevVisibility != 2))
                 if ((pStaticInfo->GOAL_STATE == AIS_REST) || (pStaticInfo->CURRENT_STATE == AIS_REST)) {
@@ -280,26 +280,21 @@ void ComputeVisAndVec(
 
         *flag = 1;
 
-        //	@mk, 09/21/95: If player view is not obstructed and awareness is at least as high as a nearby collision,
-        //	act is if robot is looking at player.
+        // @mk, 09/21/95: If player view is not obstructed and awareness is at least as high as a nearby collision,
+        // act is if robot is looking at player.
         if (pLocalInfo->targetAwarenessType >= PA_NEARBY_ROBOT_FIRED)
             if (gameData.aiData.nTargetVisibility == 1)
                 gameData.aiData.nTargetVisibility = 2;
         if (gameData.aiData.nTargetVisibility)
             pLocalInfo->timeTargetSeen = gameData.timeData.xGame;
     }
-#if 0 // DBG
-if (pObj->Index () == nDbgObj) {
-	HUDMessage (0, "vis: %d", gameData.aiData.nTargetVisibility);
-	}
-#endif
     RETURN
 }
 
-//	-----------------------------------------------------------------------------------------------------------
-//	Return true if door can be flown through by a suitable nType robot.
-//	Brains, avoid robots, companions can open doors.
-//	pObj == NULL means treat as buddy.
+// -----------------------------------------------------------------------------------------------------------
+// Return true if door can be flown through by a suitable nType robot.
+// Brains, avoid robots, companions can open doors.
+// pObj == NULL means treat as buddy.
 int32_t AIDoorIsOpenable(CObject *pObj, CSegment *pSeg, int16_t nSide) {
     ENTER(1, 0);
     CWall *pWall;
@@ -308,7 +303,7 @@ int32_t AIDoorIsOpenable(CObject *pObj, CSegment *pSeg, int16_t nSide) {
         RETVAL(0) // trap -2 (exit CSide)
     if (!(pWall = pSeg->Wall(nSide)))
         RETVAL(1) // d:\temp\dm_testthen say it can't be opened
-    //	The mighty console CObject can open all doors (for purposes of determining paths).
+    // The mighty console CObject can open all doors (for purposes of determining paths).
     if (pObj == gameData.objData.pConsole) {
         if (pWall->nType == WALL_DOOR)
             RETVAL(1)
@@ -339,9 +334,9 @@ int32_t AIDoorIsOpenable(CObject *pObj, CSegment *pSeg, int16_t nSide) {
         if (pWall->nType != WALL_DOOR) /*&& (pWall->nType != WALL_CLOSED))*/
             RETVAL(1)
 
-        //	If Buddy is returning to player, don't let him think he can get through triggered doors.
-        //	It's only valid to think that if the player is going to get him through.  But if he's
-        //	going to the player, the player is probably on the opposite CSide.
+        // If Buddy is returning to player, don't let him think he can get through triggered doors.
+        // It's only valid to think that if the player is going to get him through.  But if he's
+        // going to the player, the player is probably on the opposite CSide.
         if (pObj)
             ailp_mode = gameData.aiData.localInfo[pObj->Index()].mode;
         else if (gameData.escortData.nObjNum >= 0)
@@ -384,7 +379,7 @@ int32_t AIDoorIsOpenable(CObject *pObj, CSegment *pSeg, int16_t nSide) {
 
                 if (nClip == -1)
                     RETVAL(1)
-                //	Buddy allowed to go through secret doors to get to player.
+                // Buddy allowed to go through secret doors to get to player.
                 else if ((ailp_mode != AIM_GOTO_PLAYER) && (gameData.wallData.pAnim[nClip].flags & WCF_HIDDEN)) {
                     if (pWall->state == WALL_DOOR_CLOSED)
                         RETVAL(0)
@@ -400,7 +395,7 @@ int32_t AIDoorIsOpenable(CObject *pObj, CSegment *pSeg, int16_t nSide) {
         if (pWall) {
             if ((pWall->nType == WALL_DOOR) && (pWall->keys == KEY_NONE) && !(pWall->flags & WALL_DOOR_LOCKED))
                 RETVAL(1)
-            else if (pWall->keys != KEY_NONE) { //	Allow bots to open doors to which player has keys.
+            else if (pWall->keys != KEY_NONE) { // Allow bots to open doors to which player has keys.
                 if (pWall->keys & LOCALPLAYER.flags)
                     RETVAL(1)
             }
@@ -411,7 +406,7 @@ int32_t AIDoorIsOpenable(CObject *pObj, CSegment *pSeg, int16_t nSide) {
 
 // -- //
 // --------------------------------------------------------------------------------------------------------------------
-// -- //	Return true if a special CObject (player or control center) is in this CSegment.
+// -- // Return true if a special CObject (player or control center) is in this CSegment.
 // -- int32_t specialObject_in_seg (int32_t nSegment)
 // -- {
 // -- 	int32_t	nObject;
@@ -430,7 +425,7 @@ int32_t AIDoorIsOpenable(CObject *pObj, CSegment *pSeg, int16_t nSide) {
 
 // -- //
 // --------------------------------------------------------------------------------------------------------------------
-// -- //	Randomly select a CSegment attached to *pSeg, reachable by flying.
+// -- // Randomly select a CSegment attached to *pSeg, reachable by flying.
 // -- int32_t get_random_child (int32_t nSegment)
 // -- {
 // -- 	int32_t	nSide;
@@ -447,10 +442,10 @@ int32_t AIDoorIsOpenable(CObject *pObj, CSegment *pSeg, int16_t nSide) {
 // -- }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Return true if placing an CObject of size size at pos *pos intersects a (player or robot or control center) in
+// Return true if placing an CObject of size size at pos *pos intersects a (player or robot or control center) in
 // CSegment *pSeg.
 int32_t CheckObjectObjectIntersection(CFixVector *pos, fix size, CSegment *pSeg) {
-    //	If this would intersect with another CObject (only check those in this CSegment), then try to move.
+    // If this would intersect with another CObject (only check those in this CSegment), then try to move.
     ENTER(1, 0);
     int16_t nObject = pSeg->m_objects;
     while (nObject != -1) {
@@ -467,10 +462,10 @@ int32_t CheckObjectObjectIntersection(CFixVector *pos, fix size, CSegment *pSeg)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Called for an AI CObject if it is fairly aware of the player.
-//	awarenessLevel is in 0..100.  Larger numbers indicate greater awareness (eg, 99 if firing at player).
-//	In a given frame, might not get called for an CObject, or might be called more than once.
-//	The fact that this routine is not called for a given CObject does not mean that CObject is not interested in the
+// Called for an AI CObject if it is fairly aware of the player.
+// awarenessLevel is in 0..100.  Larger numbers indicate greater awareness (eg, 99 if firing at player).
+// In a given frame, might not get called for an CObject, or might be called more than once.
+// The fact that this routine is not called for a given CObject does not mean that CObject is not interested in the
 // player. 	OBJECTS are moved by physics, so they can move even if not interested in a player.  However, if their
 // velocity
 // or 	orientation is changing, this routine will be called. 	Return value: 		0	this player IS NOT allowed to move
@@ -528,5 +523,5 @@ void turn_off_ai_dump(void) {
 
 #endif
 
-//	---------------------------------------------------------------
+// ---------------------------------------------------------------
 // eof

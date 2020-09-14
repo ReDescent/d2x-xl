@@ -116,7 +116,7 @@ int32_t CreateWeaponSpeed(CObject *pWeapon, bool bFix) {
                            : 0;
     CFixVector vDir = pWeapon->Heading();
 
-    //	Here's where to fix the problem with OBJECTS which are moving backwards imparting higher velocity to their
+    // Here's where to fix the problem with OBJECTS which are moving backwards imparting higher velocity to their
     // weaponfire. 	Find out if moving backwards.
     if (!pParent || !CObject::IsMine(nWeaponType))
         xParentSpeed = 0;
@@ -126,10 +126,10 @@ int32_t CreateWeaponSpeed(CObject *pWeapon, bool bFix) {
             xParentSpeed = -xParentSpeed;
     }
 
-    //	Fire the laser from the gun tip so that the back end of the laser bolt is at the gun tip.
+    // Fire the laser from the gun tip so that the back end of the laser bolt is at the gun tip.
     // Move 1 frame, so that the end-tip of the laser is touching the gun barrel.
     // This also jitters the laser a bit so that it doesn't alias.
-    //	Don't do for weapons created by weapons.
+    // Don't do for weapons created by weapons.
     if (!bFix && pParent && (pParent->info.nType == OBJ_PLAYER) && (pWeaponInfo->renderType != WEAPON_RENDER_NONE) &&
         (nWeaponType != FLARE_ID) && !CObject::IsMissile(nWeaponType)) {
 #if 1
@@ -153,10 +153,10 @@ int32_t CreateWeaponSpeed(CObject *pWeapon, bool bFix) {
     fix xWeaponSpeed = WI_Speed(pWeapon->info.nId, gameStates.app.nDifficultyLevel);
     if (pWeaponInfo->speedvar != 128) {
         fix randval =
-            I2X(1) - ((RandShort() * pWeaponInfo->speedvar) >> 6); //	Get a scale factor between speedvar% and 1.0.
+            I2X(1) - ((RandShort() * pWeaponInfo->speedvar) >> 6); // Get a scale factor between speedvar% and 1.0.
         xWeaponSpeed = FixMul(xWeaponSpeed, randval);
     }
-    //	Ugly hack (too bad we're on a deadline), for homing missiles dropped by smart bomb, start them out slower.
+    // Ugly hack (too bad we're on a deadline), for homing missiles dropped by smart bomb, start them out slower.
     if ((nWeaponType == SMARTMSL_BLOB_ID) || (nWeaponType == SMARTMINE_BLOB_ID) ||
         (nWeaponType == ROBOT_SMARTMSL_BLOB_ID) || (nWeaponType == ROBOT_SMARTMINE_BLOB_ID) ||
         (nWeaponType == EARTHSHAKER_MEGA_ID))
@@ -166,7 +166,7 @@ int32_t CreateWeaponSpeed(CObject *pWeapon, bool bFix) {
     /*test*/ pWeapon->mType.physInfo.velocity = vDir * (xWeaponSpeed + xParentSpeed);
     if (pParent)
         pWeapon->SetStartVel(&pParent->mType.physInfo.velocity);
-    //	Set thrust
+    // Set thrust
     if (WI_Thrust(nWeaponType) != 0) {
         pWeapon->mType.physInfo.thrust = pWeapon->mType.physInfo.velocity;
         pWeapon->mType.physInfo.thrust *= FixDiv(WI_Thrust(pWeapon->info.nId), xWeaponSpeed + xParentSpeed);
@@ -267,7 +267,7 @@ void CreateWeaponSound(CObject *pWeapon, int32_t bMakeSound) {
 // ---------------------------------------------------------------------------------
 
 // Initializes a laser after Fire is pressed
-//	Returns CObject number.
+// Returns CObject number.
 int32_t CreateNewWeapon(
     CFixVector *vDirection,
     CFixVector *vPosition,
@@ -306,7 +306,7 @@ int32_t CreateNewWeapon(
     // handled in the middle of a routine that is dealing with the player
     if (nWeaponType >= gameData.weaponData.nTypes[0])
         nWeaponType = 0;
-    //	Don't let homing blobs make muzzle flash.
+    // Don't let homing blobs make muzzle flash.
     if (pParent->IsRobot())
         DoMuzzleStuff(nSegment, vPosition);
     else if (
@@ -339,35 +339,7 @@ int32_t CreateNewWeapon(
 #endif
         RETVAL(-1)
     }
-#if 0
-if (pParent == gameData.objData.pConsole) {
-	switch (nWeaponType) {
-		case LASER_ID:
-		case LASER_ID + 1:
-		case LASER_ID + 2:
-		case LASER_ID + 3:
-		case VULCAN_ID:
-		case SPREADFIRE_ID:
-		case PLASMA_ID:
-		case FUSION_ID:
-		case SUPERLASER_ID:
-		case SUPERLASER_ID + 1:
-		case GAUSS_ID:
-		case HELIX_ID:
-		case PHOENIX_ID:
-			gameData.statsData.player [0].nShots [0]++;
-			gameData.statsData.player [1].nShots [0]++;
-			break;
-		case CONCUSSION_ID:
-		case FLASHMSL_ID:
-		case GUIDEDMSL_ID:
-		case MERCURYMSL_ID:
-			gameData.statsData.player [0].nShots [1]++;
-			gameData.statsData.player [1].nShots [1]++;
-			break;
-		}
-	}
-#endif
+
     pObj->cType.laserInfo.parent.nObject = nParent;
     if (pParent) {
         pObj->cType.laserInfo.parent.nType = pParent->info.nType;
@@ -378,8 +350,8 @@ if (pParent == gameData.objData.pConsole) {
         pObj->cType.laserInfo.parent.nType = -1;
         pObj->cType.laserInfo.parent.nSignature = -1;
     }
-    //	Do the special Omega Cannon stuff.  Then return on account of everything that follows does
-    //	not apply to the Omega Cannon.
+    // Do the special Omega Cannon stuff.  Then return on account of everything that follows does
+    // not apply to the Omega Cannon.
     int32_t nViewer = OBJ_IDX(gameData.objData.pViewer);
     if (nWeaponType == OMEGA_ID) {
         // Create orientation matrix for tracking purposes.
@@ -387,7 +359,7 @@ if (pParent == gameData.objData.pConsole) {
         pObj->info.position.mOrient = CFixMatrix::CreateFU(
             vDir,
             bSpectator ? gameStates.app.playerPos.mOrient.m.dir.u : pParent->info.position.mOrient.m.dir.u);
-        //	pObj->info.position.mOrient = CFixMatrix::CreateFU (vDir, bSpectator ?
+        // pObj->info.position.mOrient = CFixMatrix::CreateFU (vDir, bSpectator ?
         //&gameStates.app.playerPos.mOrient.m.v.u : &pParent->info.position.mOrient.m.v.u, NULL);
         if (((nParent != nViewer) || bSpectator) && (pParent->info.nType != OBJ_WEAPON)) {
             // Muzzle flash
@@ -427,8 +399,8 @@ if (pParent == gameData.objData.pConsole) {
         }
     }
 
-    //	Make children of smart bomb bounce so if they hit a CWall right away, they
-    //	won't detonate.  The frame xInterval code will clear this bit after 1/2 second.
+    // Make children of smart bomb bounce so if they hit a CWall right away, they
+    // won't detonate.  The frame xInterval code will clear this bit after 1/2 second.
     if ((nWeaponType == SMARTMSL_BLOB_ID) || (nWeaponType == SMARTMINE_BLOB_ID) ||
         (nWeaponType == ROBOT_SMARTMSL_BLOB_ID) || (nWeaponType == ROBOT_SMARTMINE_BLOB_ID) ||
         (nWeaponType == EARTHSHAKER_MEGA_ID))
@@ -438,8 +410,8 @@ if (pParent == gameData.objData.pConsole) {
     pObj->info.xShield = WI_Strength(nWeaponType, gameStates.app.nDifficultyLevel);
     // Fill in laser-specific data
     pObj->SetLife(WI_Lifetime(nWeaponType));
-    //	Assign nParent nType to highest level creator.  This propagates nParent nType down from
-    //	the original creator through weapons which create children of their own (ie, smart missile)
+    // Assign nParent nType to highest level creator.  This propagates nParent nType down from
+    // the original creator through weapons which create children of their own (ie, smart missile)
     if (pParent && (pParent->Type() == OBJ_WEAPON)) {
         int32_t nRoot = -1, nChild = nParent;
         int32_t count = 0;
@@ -450,7 +422,7 @@ if (pParent == gameData.objData.pConsole) {
                 break;
             if (pRoot->info.nSignature != pChild->cType.laserInfo.parent.nSignature) {
                 pRoot = NULL;
-                break; //	Probably means nParent was killed.  Just continue.
+                break; // Probably means nParent was killed.  Just continue.
             }
             if (nChild == nRoot) {
                 pChild->cType.laserInfo.parent.nObject = -1;
@@ -467,10 +439,10 @@ if (pParent == gameData.objData.pConsole) {
         }
     }
     // Create orientation matrix so we can look from this pov
-    //	Homing missiles also need an orientation matrix so they know if they can make a turn.
+    // Homing missiles also need an orientation matrix so they know if they can make a turn.
     // if ((pObj->info.renderType == RT_POLYOBJ) || (WI_HomingFlag (pObj->info.nId)))
     pObj->info.position.mOrient = CFixMatrix::CreateFU(vDir, pParent->info.position.mOrient.m.dir.u);
-    //	pObj->info.position.mOrient = CFixMatrix::CreateFU (vDir, &pParent->info.position.mOrient.m.v.u, NULL);
+    // pObj->info.position.mOrient = CFixMatrix::CreateFU (vDir, &pParent->info.position.mOrient.m.v.u, NULL);
     if (((nParent != nViewer) || SPECTATOR(pParent)) && (pParent->info.nType != OBJ_WEAPON)) {
         // Muzzle flash
         if (!SHOW_SMOKE || (gameOpts->render.particles.nQuality < 3) ||
@@ -486,13 +458,13 @@ if (pParent == gameData.objData.pConsole) {
     if (!CreateWeaponSpeed(pObj))
         RETVAL(-1)
     if ((pObj->info.nType == OBJ_WEAPON) && (pObj->info.nId == FLARE_ID))
-        pObj->info.xLifeLeft += SRandShort() << 2; //	add in -2..2 seconds
+        pObj->info.xLifeLeft += SRandShort() << 2; // add in -2..2 seconds
 
     RETVAL(nObject)
 }
 
-//	-----------------------------------------------------------------------------------------------------------
-//	Calls CreateNewWeapon, but takes care of the CSegment and point computation for you.
+// -----------------------------------------------------------------------------------------------------------
+// Calls CreateNewWeapon, but takes care of the CSegment and point computation for you.
 int32_t CreateNewWeaponSimple(
     CFixVector *vDirection,
     CFixVector *vPosition,
@@ -503,12 +475,12 @@ int32_t CreateNewWeaponSimple(
     CHitResult hitResult;
     CObject *pParentObj = OBJECT(parent);
 
-    //	Find segment containing laser fire position.  If the robot is straddling a segment, the position from
-    //	which it fires may be in a different segment, which is bad news for FindHitpoint.  So, cast
-    //	a ray from the object center (whos segment we know) to the laser position.  Then, in the call to CreateNewWeapon
-    //	use the data returned from this call to FindHitpoint.
-    //	Note that while FindHitpoint is pretty slow, it is not terribly slow if the destination point is
-    //	in the same segment as the source point.
+    // Find segment containing laser fire position.  If the robot is straddling a segment, the position from
+    // which it fires may be in a different segment, which is bad news for FindHitpoint.  So, cast
+    // a ray from the object center (whos segment we know) to the laser position.  Then, in the call to CreateNewWeapon
+    // use the data returned from this call to FindHitpoint.
+    // Note that while FindHitpoint is pretty slow, it is not terribly slow if the destination point is
+    // in the same segment as the source point.
 
     CHitQuery hitQuery(
         FQ_TRANSWALL | FQ_CHECK_OBJS,
@@ -579,5 +551,5 @@ bool FixWeaponObject(CObject *pObj, bool bFixType) {
     RETVAL(true)
 }
 
-//	-------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------
 // eof

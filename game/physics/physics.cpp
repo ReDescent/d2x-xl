@@ -61,7 +61,7 @@ fix CheckVectorObjectCollision(
     int32_t nCollisionModel,
     bool bCheckVisibility);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if DBG
 
@@ -83,7 +83,7 @@ int32_t CatchDbgObj(int32_t cond) {
 
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static int32_t
 FindBestAlignedSide(int16_t nSegment, CFloatVector3 &vPos, CFixVector &vDir, float &maxDot, int32_t nDepth) {
@@ -121,7 +121,7 @@ FindBestAlignedSide(int16_t nSegment, CFloatVector3 &vPos, CFixVector &vDir, flo
     RETVAL(nBestSide)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DoPhysicsAlignObject(CObject *pObj) {
     ENTER(0, 0);
@@ -155,7 +155,7 @@ void DoPhysicsAlignObject(CObject *pObj) {
         CAngleVector turnAngles;
 
         CFixMatrix m = CFixMatrix::CreateFU(pObj->info.position.mOrient.m.dir.f, desiredUpVec);
-        //	m = CFixMatrix::CreateFU(pObj->info.position.mOrient.m.v.f, &desiredUpVec, NULL);
+        // m = CFixMatrix::CreateFU(pObj->info.position.mOrient.m.v.f, &desiredUpVec, NULL);
         fixang deltaAngle = CFixVector::DeltaAngle(
             pObj->info.position.mOrient.m.dir.u,
             m.m.dir.u,
@@ -183,7 +183,7 @@ void DoPhysicsAlignObject(CObject *pObj) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::SetTurnRoll(void) {
     // if (!gameStates.app.bD1Mission)
@@ -217,7 +217,7 @@ int32_t bDontMoveAIObjects = 0;
 
 #define FT (I2X(1) / 64)
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // add rotational velocity & acceleration
 
 int32_t CObject::DoPhysicsSimRot(void) {
@@ -302,7 +302,7 @@ int32_t CObject::DoPhysicsSimRot(void) {
     RETVAL(1)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::DoBumpHack(void) {
     ENTER(0, 0);
@@ -322,7 +322,7 @@ void CObject::DoBumpHack(void) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::Bounce(CHitResult hitResult, float fOffs, fix *pxSideDists) {
     ENTER(0, 0);
@@ -376,7 +376,7 @@ int32_t CObject::Bounce(CHitResult hitResult, float fOffs, fix *pxSideDists) {
     RETVAL(0)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::Unstick(void) {
     ENTER(0, 0);
@@ -408,7 +408,7 @@ void CObject::Unstick(void) {
         RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void UpdateStats(CObject *pObj, int32_t nHitType) {
     ENTER(0, 0);
@@ -460,9 +460,9 @@ void UpdateStats(CObject *pObj, int32_t nHitType) {
     RETURN;
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CPhysSimData::Setup(void) {
     xOldSimTime = xMovedTime = xMovedDist = xAttemptedDist = 0;
@@ -512,7 +512,7 @@ void CPhysSimData::Setup(void) {
     xTimeScale += extraGameInfo[IsMultiGame].nSpeedScale * xTimeScale / 4;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CPhysSimData::GetPhysSegs(void) {
     ENTER(0, 0);
@@ -535,9 +535,9 @@ void CPhysSimData::GetPhysSegs(void) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::UpdateOffset(CPhysSimData &simData) {
     ENTER(0, 0);
@@ -562,7 +562,7 @@ int32_t CObject::UpdateOffset(CPhysSimData &simData) {
     RETVAL(!simData.vOffset.IsZero());
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::SetupHitQuery(CHitQuery &hitQuery, int32_t nFlags, CFixVector *vNewPos) {
     hitQuery.p0 = &info.position.vPos;
@@ -574,7 +574,7 @@ void CObject::SetupHitQuery(CHitQuery &hitQuery, int32_t nFlags, CFixVector *vNe
     hitQuery.flags = nFlags;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::HandleWallCollision(CPhysSimData &simData) {
     ENTER(0, 0);
@@ -602,11 +602,11 @@ int32_t CObject::HandleWallCollision(CPhysSimData &simData) {
     RETVAL(1)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::HandleObjectCollision(CPhysSimData &simData) { return 1; }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::HandleBadCollision(CPhysSimData &simData) // hit point outside of level
 {
@@ -632,7 +632,7 @@ int32_t CObject::HandleBadCollision(CPhysSimData &simData) // hit point outside 
     RETVAL(1);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::ComputeMovedTime(CPhysSimData &simData) {
     ENTER(0, 0);
@@ -648,7 +648,7 @@ void CObject::ComputeMovedTime(CPhysSimData &simData) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::UnstickFromWall(CPhysSimData &simData, CFixVector &vOldVel) {
     ENTER(0, 0);
@@ -680,7 +680,7 @@ void CObject::UnstickFromWall(CPhysSimData &simData, CFixVector &vOldVel) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::ProcessWallCollision(CPhysSimData &simData) {
     ENTER(0, 0);
@@ -784,7 +784,7 @@ int32_t CObject::ProcessWallCollision(CPhysSimData &simData) {
     RETVAL(1)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::UnstickFromObject(CPhysSimData &simData, CFixVector &vOldVel) {
     ENTER(0, 0);
@@ -824,7 +824,7 @@ void CObject::UnstickFromObject(CPhysSimData &simData, CFixVector &vOldVel) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::ProcessObjectCollision(CPhysSimData &simData) {
     ENTER(0, 0);
@@ -842,7 +842,7 @@ int32_t CObject::ProcessObjectCollision(CPhysSimData &simData) {
         CFixVector &pos1 = info.position.vPos;
         fix size0 = OBJECT(simData.hitResult.nObject)->info.xSize;
         fix size1 = info.xSize;
-        //	Calculate the hit point between the two objects.
+        // Calculate the hit point between the two objects.
         simData.hitResult.vPoint = pos1 - pos0;
         simData.hitResult.vPoint *= FixDiv(size0, size0 + size1);
         simData.hitResult.vPoint += pos0;
@@ -862,14 +862,14 @@ int32_t CObject::ProcessObjectCollision(CPhysSimData &simData) {
     RETVAL(0)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::ProcessBadCollision(CPhysSimData &simData) // hit point outside of level
 {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::ProcessDrag(CPhysSimData &simData) {
     ENTER(0, 0);
@@ -929,7 +929,7 @@ void CObject::ProcessDrag(CPhysSimData &simData) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::ProcessOffset(CPhysSimData &simData) {
     ENTER(0, 0);
@@ -970,12 +970,12 @@ int32_t CObject::ProcessOffset(CPhysSimData &simData) {
     RETVAL(1)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CObject::FixPosition(CPhysSimData &simData) {
     ENTER(0, 0);
     if (info.controlType == CT_AI) {
-        //	pass retry attempts info to AI.
+        // pass retry attempts info to AI.
         if (simData.nTries > 0)
             gameData.aiData.localInfo[simData.nObject].nRetryCount = simData.nTries - 1;
     }
@@ -1035,7 +1035,7 @@ void CObject::FixPosition(CPhysSimData &simData) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::UpdateSimTime(CPhysSimData &simData) {
     ENTER(0, 0);
@@ -1082,7 +1082,7 @@ int32_t CObject::UpdateSimTime(CPhysSimData &simData) {
     RETVAL(1)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // Simulate a physics CObject for this frame
 
@@ -1091,7 +1091,7 @@ void CObject::FinishPhysicsSim(CPhysSimData &simData) {
     // Velocity () = simData.velocity;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if DBG
 
@@ -1107,7 +1107,7 @@ void CheckObjPos(void) {
 
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // Simulate a physics CObject for this frame
 
@@ -1236,7 +1236,7 @@ redoPhysSim:
         do {
             bRetry = -1;
 
-            //	If retry count is getting large, then we are trying to do something stupid.
+            // If retry count is getting large, then we are trying to do something stupid.
             if (++simData.nTries > 3) {
                 if (info.nType != OBJ_PLAYER)
                     break;
@@ -1274,7 +1274,7 @@ redoPhysSim:
                 if (OBJECT(simData.hitResult.nObject)->IsPlayerMine())
                     simData.nTries--;
                 // else if (OBJECT (simData.hitResult.nObject)->IsPowerup ())
-                //	simData.hitResult.vPoint = simData.vNewPos;
+                // simData.hitResult.vPoint = simData.vNewPos;
             } else
                 simData.hitResult.vPoint = simData.vNewPos;
 
@@ -1334,14 +1334,14 @@ if (Index () == nDbgObj) {
     RETURN
 }
 
-//	----------------------------------------------------------------
+// ----------------------------------------------------------------
 // Applies an instantaneous force on an CObject, resulting in an instantaneous
 // change in velocity.
 
 void CObject::ApplyForce(CFixVector vForce) {
     ENTER(0, 0);
-    //	Put in by MK on 2/13/96 for force getting applied to Omega blobs, which have 0 mass,
-    //	in collision with crazy reactor robot thing on d2levf-s.
+    // Put in by MK on 2/13/96 for force getting applied to Omega blobs, which have 0 mass,
+    // in collision with crazy reactor robot thing on d2levf-s.
     if (mType.physInfo.mass == 0)
         RETURN
     if (info.movementType != MT_PHYSICS)
@@ -1374,17 +1374,17 @@ void CObject::ApplyForce(CFixVector vForce) {
     RETURN
 }
 
-//	----------------------------------------------------------------
-//	Do *dest = *delta unless:
-//				*delta is pretty small
-//		and	they are of different signs.
+// ----------------------------------------------------------------
+// Do *dest = *delta unless:
+// 			*delta is pretty small
+// 	and	they are of different signs.
 void PhysicsSetRotVelAndSaturate(fix *dest, fix delta) {
     *dest = (((delta ^ *dest) >= 0) || (abs(delta) <= I2X(1) / 8)) ? delta : delta / 4;
 }
 
-//	------------------------------------------------------------------------------------------------------
-//	Note: This is the old AITurnTowardsVector code.
-//	ApplyRotForce used to call AITurnTowardsVector until I fixed it, which broke ApplyRotForce.
+// ------------------------------------------------------------------------------------------------------
+// Note: This is the old AITurnTowardsVector code.
+// ApplyRotForce used to call AITurnTowardsVector until I fixed it, which broke ApplyRotForce.
 void CObject::TurnTowardsVector(CFixVector vGoal, fix rate) {
     ENTER(0, 0);
     CAngleVector dest_angles, cur_angles;
@@ -1394,12 +1394,12 @@ void CObject::TurnTowardsVector(CFixVector vGoal, fix rate) {
     // Make this CObject turn towards the vGoal.  Changes orientation, doesn't change direction of movement.
     // If no one moves, will be facing vGoal in 1 second.
 
-    //	Detect null vector.
+    // Detect null vector.
     if (automap.Active() && (this == gameData.objData.pConsole))
         RETURN
     if (vGoal.IsZero())
         RETURN
-    //	Make morph OBJECTS turn more slowly.
+    // Make morph OBJECTS turn more slowly.
     if (info.controlType == CT_MORPH)
         rate *= 2;
 
@@ -1434,9 +1434,9 @@ void CObject::TurnTowardsVector(CFixVector vGoal, fix rate) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
-//	Applies an instantaneous whack on an CObject, resulting in an instantaneous
-//	change in orientation.
+// -----------------------------------------------------------------------------
+// Applies an instantaneous whack on an CObject, resulting in an instantaneous
+// change in orientation.
 void CObject::ApplyRotForce(CFixVector vForce) {
     ENTER(0, 0);
     fix xRate, xMag;
@@ -1453,7 +1453,7 @@ void CObject::ApplyRotForce(CFixVector vForce) {
         if (info.nType == OBJ_ROBOT) {
             if (xRate < I2X(1) / 4)
                 xRate = I2X(1) / 4;
-            //	Changed by mk, 10/24/95, claw guys should not slow down when attacking!
+            // Changed by mk, 10/24/95, claw guys should not slow down when attacking!
             tRobotInfo *pRobotInfo = ROBOTINFO(info.nId);
             if (!pRobotInfo || !(pRobotInfo->thief || pRobotInfo->attackType)) {
                 if (cType.aiInfo.SKIP_AI_COUNT * gameData.physicsData.xTime < I2X(3) / 4) {
@@ -1469,12 +1469,12 @@ void CObject::ApplyRotForce(CFixVector vForce) {
                 xRate = I2X(1) / 2;
         }
     }
-    //	Turn amount inversely proportional to mass.  Third parameter is seconds to do 360 turn.
+    // Turn amount inversely proportional to mass.  Third parameter is seconds to do 360 turn.
     TurnTowardsVector(vForce, xRate);
     RETURN
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // this routine will set the thrust for an CObject to a value that will
 // (hopefully) maintain the CObject's current velocity
 void CObject::SetThrustFromVelocity(void) {
@@ -1482,7 +1482,7 @@ void CObject::SetThrustFromVelocity(void) {
     Thrust() = Velocity() * k;
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // Simulate a physics CObject for this frame
 
 #if DBG_PHYSICS
@@ -1674,7 +1674,7 @@ void CObject::DoPhysicsSimOld(void) {
 
     retryMove:
 
-        //	If retry count is getting large, then we are trying to do something stupid.
+        // If retry count is getting large, then we are trying to do something stupid.
         if (++simData.nTries > 3) {
             if (info.nType != OBJ_PLAYER)
                 break;
@@ -1972,7 +1972,7 @@ void CObject::DoPhysicsSimOld(void) {
                 bRetry = ProcessObjectCollision(simData);
             else {
                 CObject *pHitObj = OBJECT(simData.hitResult.nObject);
-                //	Calculate the hit point between the two objects.
+                // Calculate the hit point between the two objects.
                 CFixVector vHitPos = Position() - pHitObj->Position();
                 vHitPos *= FixDiv(pHitObj->info.xSize, pHitObj->info.xSize + info.xSize);
 #if DBG
@@ -2014,7 +2014,7 @@ void CObject::DoPhysicsSimOld(void) {
     if (bNewPhysCode & 2048)
         FixPosition(simData);
     else {
-        //	Pass retry attempts info to AI.
+        // Pass retry attempts info to AI.
         if (info.controlType == CT_AI) {
             Assert(simData.nObject >= 0);
             if (simData.nTries > 0)
@@ -2095,4 +2095,4 @@ void CObject::DoPhysicsSimOld(void) {
 
 #endif // DBG
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

@@ -454,7 +454,7 @@ const CFixMatrix CFixMatrix::CreateF(const CFixVector &fVec) {
     return m;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // computes a matrix from the forward and the up vector.
 // returns matrix.
 const CFixMatrix CFixMatrix::CreateFU(const CFixVector &fVec, const CFixVector &uVec) {
@@ -494,13 +494,13 @@ const CFixMatrix CFixMatrix::CreateFU(const CFixVector &fVec, const CFixVector &
         }
     }
 
-    //	-----------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
     // now recompute up vector, in case it wasn't entirely perpendiclar
     m.m.dir.u = CFixVector::Cross(m.m.dir.f, m.m.dir.r);
     return m;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // computes a matrix from the forward and the right vector.
 // returns matrix.
 const CFixMatrix CFixMatrix::CreateFR(const CFixVector &fVec, const CFixVector &rVec) {
@@ -546,7 +546,7 @@ const CFixMatrix CFixMatrix::CreateFR(const CFixVector &fVec, const CFixVector &
     return m;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // computes a matrix from the forward and the up vector.
 // returns matrix.
 const CFloatMatrix CFloatMatrix::CreateFU(const CFloatVector &fVec, const CFloatVector &uVec) {
@@ -590,7 +590,7 @@ const CFloatMatrix CFloatMatrix::CreateFU(const CFloatVector &fVec, const CFloat
     return m;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // computes a matrix from the forward and the right vector.
 // returns matrix.
 const CFloatMatrix CFloatMatrix::CreateFR(const CFloatVector &fVec, const CFloatVector &rVec) {
@@ -636,7 +636,7 @@ const CFloatMatrix CFloatMatrix::CreateFR(const CFloatVector &fVec, const CFloat
     return m;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // extract angles from a m.matrix
 const CFloatVector CFloatMatrix::ComputeAngles(void) const {
     CFloatVector a;
@@ -658,7 +658,7 @@ const CFloatVector CFloatMatrix::ComputeAngles(void) const {
     return a;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // extract angles from a m.matrix
 const CAngleVector CFixMatrix::ComputeAngles(void) const {
     CAngleVector a;
@@ -678,7 +678,7 @@ const CAngleVector CFixMatrix::ComputeAngles(void) const {
     return a;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline int32_t VmBehindPlane(const CFixVector &n, const CFixVector &p1, const CFixVector &p2, const CFixVector &i) {
     CFixVector t;
@@ -695,7 +695,7 @@ inline int32_t VmBehindPlane(const CFixVector &n, const CFixVector &p1, const CF
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Find intersection of perpendicular on p1,p2 through p3 with p1,p2.
 // If intersection is not between p1 and p2 and vPos is given, return
 // further away point of p1 and p2 to vPos. Otherwise return intersection.
@@ -1054,7 +1054,7 @@ float VmLineEllipsoidDistance(
     CFloatVector vOrigin, // origin of ray
     CFloatVector vDir, // direction of ray
     CFloatVector vCenter, // center of ellipsoid
-    CFloatVector vScale) //	axes of ellipsoid
+    CFloatVector vScale) // axes of ellipsoid
 {
     CFloatVector vLine = vOrigin - vCenter;
 

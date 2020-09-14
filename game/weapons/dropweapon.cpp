@@ -24,7 +24,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "network.h"
 #include "hudmsgs.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define SPIT_SPEED 20
 
@@ -72,27 +72,27 @@ int32_t SpitPowerup(CObject *pSpitter, uint8_t id, int32_t seed) {
     case POW_SHIELD_BOOST:
     case POW_ENERGY:
         pObj->SetLife(
-            (RandShort() + I2X(3)) * 64); //	Lives for 3 to 3.5 binary minutes (a binary minute is 64 seconds)
+            (RandShort() + I2X(3)) * 64); // Lives for 3 to 3.5 binary minutes (a binary minute is 64 seconds)
         if (IsMultiGame)
             pObj->info.xLifeLeft /= 2;
         break;
     default:
         // if (IsMultiGame)
-        //	pObj->info.xLifeLeft = (RandShort () + I2X (3)) * 64;		//	Lives for 5 to 5.5 binary minutes (a binary
+        // pObj->info.xLifeLeft = (RandShort () + I2X (3)) * 64;		// Lives for 5 to 5.5 binary minutes (a binary
         // minute is 64 seconds)
         break;
     }
     RETVAL(nObject)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline int32_t IsBuiltInDevice(int32_t nDeviceFlag) {
     return gameStates.app.bHaveExtraGameInfo[IsMultiGame] &&
            ((extraGameInfo[IsMultiGame].loadout.nDevice & nDeviceFlag) != 0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DropCurrentWeapon(void) {
     ENTER(0, 0);
@@ -164,7 +164,7 @@ void DropCurrentWeapon(void) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 extern void DropOrb(void);
 
@@ -228,5 +228,5 @@ void DropSecondaryWeapon(int32_t nWeapon, int32_t nAmount, int32_t bSilent) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

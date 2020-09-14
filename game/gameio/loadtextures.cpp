@@ -606,7 +606,7 @@ static char *FindHiresBitmap(const char *bmName, int32_t &nFile, int32_t bD1, in
     // name that is not followed by a single '0' character.
     // const char* p = strchr (bmName, '#');
     // if (p &&  ((p [1] != '0') || (p [2] != '\0')))
-    //	return NULL;
+    // return NULL;
 
     static char fn[6][FILENAME_LEN];
     char baseName[FILENAME_LEN];

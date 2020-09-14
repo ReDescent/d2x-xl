@@ -47,9 +47,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "addon_bitmaps.h"
 #include "marker.h"
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CGenericCockpit::AdjustCockpitY(int32_t y) {
 #if 1
@@ -62,7 +62,7 @@ int32_t CGenericCockpit::AdjustCockpitY(int32_t y) {
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CGenericCockpit::AdjustCockpitXY(char *s, int32_t &x, int32_t &y) {
 #if 1
@@ -88,7 +88,7 @@ int32_t CGenericCockpit::AdjustCockpitXY(char *s, int32_t &x, int32_t &y) {
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CBitmap *CGenericCockpit::BitBlt(
     int32_t nGauge,
@@ -152,7 +152,7 @@ CBitmap *CGenericCockpit::BitBlt(
     return pBm;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t _CDECL_ CGenericCockpit::PrintF(int32_t *idP, int32_t x, int32_t y, const char *pszFmt, ...) {
     static char szBuf[1000];
@@ -237,7 +237,7 @@ void CGenericCockpit::DrawCountdown(int32_t y) {
         return;
 
     if (!IS_D2_OEM && !IS_MAC_SHARE && !IS_SHAREWARE) { // no countdown on registered only
-        //	On last level, we don't want a countdown.
+        // On last level, we don't want a countdown.
         if ((missionManager.nCurrentMission == missionManager.nBuiltInMission[0]) &&
             (missionManager.nCurrentLevel == missionManager.nLastLevel)) {
             if (!IsMultiGame)
@@ -389,7 +389,7 @@ void CGenericCockpit::DrawFrameRate(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawSlowMotion(void) {
     if (Hide())
@@ -408,7 +408,7 @@ void CGenericCockpit::DrawSlowMotion(void) {
     DrawHUDText(NULL, -3 * StringWidth(szSlowMotion) - LHX(2), 3, szSlowMotion);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawPlayerStats(void) {
     if (Hide())
@@ -458,7 +458,7 @@ void CGenericCockpit::DrawPlayerStats(void) {
     nIdStats = GrString(x, y, szStats, &nIdStats);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawTime(void) {
     if (Hide())
@@ -475,7 +475,7 @@ void CGenericCockpit::DrawTime(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawTimerCount(void) {
     if (Hide())
@@ -501,14 +501,14 @@ void CGenericCockpit::DrawTimerCount(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawFlag(int32_t x, int32_t y) {
     if ((gameData.appData.GameMode(GM_CAPTURE)) && (LOCALPLAYER.flags & PLAYER_FLAGS_FLAG))
         BitBlt((GetTeam(N_LOCALPLAYER) == TEAM_BLUE) ? FLAG_ICON_RED : FLAG_ICON_BLUE, x, y, false, false);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawOrbs(int32_t x, int32_t y) {
     if (Hide())
@@ -552,7 +552,7 @@ void CGenericCockpit::DrawOrbs(int32_t x, int32_t y) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CGenericCockpit::BombCount(int32_t &nBombType) {
     if (IsEntropyGame)
@@ -564,7 +564,7 @@ int32_t CGenericCockpit::BombCount(int32_t &nBombType) {
     return LOCALPLAYER.secondaryAmmo[nBombType];
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawBombCount(int32_t x, int32_t y, int32_t bgColor, int32_t bShowAlways) {
     char szBombCount[5], *t;
@@ -594,7 +594,7 @@ void CGenericCockpit::DrawBombCount(int32_t x, int32_t y, int32_t bgColor, int32
     fontManager.SetScale(1.0f);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawAmmoInfo(int32_t x, int32_t y, int32_t ammoCount, int32_t bPrimary) {
     char szAmmo[16];
@@ -611,7 +611,7 @@ void CGenericCockpit::DrawAmmoInfo(int32_t x, int32_t y, int32_t ammoCount, int3
     fontManager.SetScale(1.0f);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawPlayerShip(int32_t nCloakState, int32_t nOldCloakState, int32_t x, int32_t y) {
     static fix xCloakFadeTimer = 0;
@@ -659,7 +659,7 @@ void CGenericCockpit::DrawPlayerShip(int32_t nCloakState, int32_t nOldCloakState
     gameStates.render.grAlpha = 1.0f;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawWeaponInfo(
     int32_t nWeaponType,
@@ -709,7 +709,7 @@ void CGenericCockpit::DrawWeaponInfo(
         nIdWeapon[nWeaponType][2] = PrintF(&nIdWeapon[nWeaponType][2], xText, yText, pszName);
     }
 
-    //	For laser, show level and quadness
+    // For laser, show level and quadness
     if (nIndex == LASER_ID || nIndex == SUPERLASER_ID) {
         sprintf(szName, "%s: 0", TXT_LVL);
         szName[5] = LOCALPLAYER.LaserLevel() + 1 + '0';
@@ -721,7 +721,7 @@ void CGenericCockpit::DrawWeaponInfo(
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int32_t laserLevel) {
     int32_t nIndex;
@@ -782,7 +782,7 @@ void CGenericCockpit::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // returns true if drew picture
 int32_t CGenericCockpit::DrawWeaponDisplay(int32_t nWeaponType, int32_t nWeaponId) {
@@ -836,7 +836,7 @@ int32_t CGenericCockpit::DrawWeaponDisplay(int32_t nWeaponType, int32_t nWeaponI
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 fix staticTime[2];
 
@@ -861,7 +861,7 @@ void CGenericCockpit::DrawStatic(int32_t nWindow, int32_t nIndex) {
             BitBlt(-1, x, y, true, true, I2X(1), 0, bmp);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawWeapons(void) {
     if ((gameStates.render.cockpit.nType == CM_FULL_COCKPIT) || (gameStates.render.cockpit.nType == CM_STATUS_BAR))
@@ -904,7 +904,7 @@ void CGenericCockpit::DrawWeapons(void) {
     fontManager.SetScale(1.0f);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // show names of teammates & players carrying flags
 void CGenericCockpit::DrawPlayerNames(void) {
@@ -1010,7 +1010,7 @@ void CGenericCockpit::DrawPlayerNames(void) {
                             OBJECT(nObject)->info.xSize,
                             I2X(CCanvas::Current()->Height()) / 2,
                             vPlayerPos.ViewPos().v.coord.z);
-                        //					fix dy = -FixMulDiv (FixMul (OBJECT (nObject)->size,
+                        // 				fix dy = -FixMulDiv (FixMul (OBJECT (nObject)->size,
                         //transformation.m_info.scale.y), I2X (CCanvas::Current ()->Height ())/2, vPlayerPos.m_z);
                         fix dx = FixMul(dy, gameData.renderData.screen.Aspect());
                         fix w = dx / 4;
@@ -1056,7 +1056,7 @@ void CGenericCockpit::DrawPlayerNames(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawKillList(int32_t x, int32_t y) {
     if (Hide())
@@ -1256,7 +1256,7 @@ void CGenericCockpit::DrawKillList(int32_t x, int32_t y) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawModuleDamage(void) {
     if (gameStates.app.bNostalgia || !EGI_FLAG(nDamageModel, 0, 0, 0))
@@ -1364,7 +1364,7 @@ void CGenericCockpit::DrawModuleDamage(void) {
     gameData.SetStereoOffsetType(nOffsetSave);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawCockpit(int32_t nCockpit, int32_t y, bool bAlphaTest) {
 #if 1
@@ -1468,4 +1468,4 @@ void DrawWindowLabel(void) {
 }
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

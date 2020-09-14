@@ -64,11 +64,11 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 int32_t redbookVolume = 255;
 
-//	External Variables ---------------------------------------------------------
+// External Variables ---------------------------------------------------------
 
 extern fix showViewTextTimer;
 
-//	Function prototypes --------------------------------------------------------
+// Function prototypes --------------------------------------------------------
 
 #define key_isfunc(k) \
     (((k & 0xff) >= KEY_F1 && (k & 0xff) <= KEY_F10) || (k & 0xff) == KEY_F11 || (k & 0xff) == KEY_F12)
@@ -287,7 +287,7 @@ int32_t HandleSystemKey(int32_t key) {
     int32_t bStopPlayerMovement = 1;
 
     // if (gameStates.gameplay.bSpeedBoost)
-    //	return 0;
+    // return 0;
 
     if (!gameStates.app.bPlayerIsDead)
         switch (key) {
@@ -523,7 +523,7 @@ void HandleGameKey(int32_t key) {
         // DoSelectWeapon the macintosh keycodes aren't consecutive from 1
         // -- 0 on the keyboard -- boy is that STUPID!!!!
 
-    //	Select primary or secondary weapon.
+    // Select primary or secondary weapon.
     case KEY_1:
         DoSelectWeapon(0, 0);
         break;
@@ -657,7 +657,7 @@ void HandleGameKey(int32_t key) {
     } // switch (key)
 }
 
-//	--------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 #if DBG
 
@@ -713,17 +713,17 @@ void HandleTestKey(int32_t key) {
     case KEYDBGGED + KEY_K:
         LOCALPLAYER.SetShield(1);
         break;
-        //	a virtual kill
+        // a virtual kill
     case KEYDBGGED + KEY_SHIFTED + KEY_K:
         LOCALPLAYER.SetShield(-1);
-        break; //	an actual kill
+        break; // an actual kill
 
     case KEYDBGGED + KEY_X:
         LOCALPLAYER.lives++;
         break; // Extra life cheat key.
 
     case KEYDBGGED + KEY_H:
-        //				if (!IsMultiGame)   {
+        // 			if (!IsMultiGame)   {
         LOCALPLAYER.flags ^= PLAYER_FLAGS_CLOAKED;
         if (LOCALPLAYER.flags & PLAYER_FLAGS_CLOAKED) {
             if (IsMultiGame)
@@ -737,7 +737,7 @@ void HandleTestKey(int32_t key) {
 #if TRACE
             console.printf(CON_DBG, "You are DE-cloaked!\n");
 #endif
-        //				}
+        // 			}
         break;
 
     case KEYDBGGED + KEY_R:
@@ -811,12 +811,12 @@ void HandleTestKey(int32_t key) {
 
     case KEYDBGGED + KEY_A: {
         DoMegaWowPowerup(200);
-        //								if (IsMultiGame)     {
-        //									InfoBox(NULL, 1, "Damn", "CHEATER!\nYou cannot use the\nmega-thing in
+        // 							if (IsMultiGame)     {
+        // 								InfoBox(NULL, 1, "Damn", "CHEATER!\nYou cannot use the\nmega-thing in
         //network mode."); 									gameData.multigame.msg.nReceiver = 100;		// Send to
         // everyone... 									sprintf(gameData.multigame.msg.szMsg, "%s cheated!", LOCALPLAYER.callsign); 								} else {
-        //									DoMegaWowPowerup ();
-        //								}
+        // 								DoMegaWowPowerup ();
+        // 							}
         break;
     }
 
@@ -869,7 +869,7 @@ void HandleTestKey(int32_t key) {
 }
 #endif //#if DBG
 
-//	Cheat functions ------------------------------------------------------------
+// Cheat functions ------------------------------------------------------------
 
 char old_IntMethod;
 char OldHomingState[20];
@@ -890,7 +890,7 @@ void ReadControls(void) {
         else
             controls.Read(); // NOTE LINK TO ABOVE!!!
         CheckRearView();
-        //	If automap key pressed, enable automap unless you are in network mode, control center destroyed and < 10
+        // If automap key pressed, enable automap unless you are in network mode, control center destroyed and < 10
         // seconds left
         if (controls[0].automapDownCount && !LOCALOBJECT->Appearing(false) &&
             (gameData.objData.speedBoost[OBJ_IDX(gameData.objData.pConsole)].bBoosted < 1) &&

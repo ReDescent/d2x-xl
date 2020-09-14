@@ -92,7 +92,7 @@ const char *pszAIMode[18] = {
     "TH_WAIT",
 };
 
-//	Index into this array with pStaticInfo->behavior
+// Index into this array with pStaticInfo->behavior
 char pszAIBehavior[6][9] = {"STILL   ", "NORMAL  ", "HIDE    ", "RUN_FROM", "FOLPATH ", "STATION "};
 
 // Index into this array with pStaticInfo->GOAL_STATE or pStaticInfo->CURRENT_STATE
@@ -1340,38 +1340,6 @@ int32_t AIApproachHandler(CObject *pObj, tAIStateInfo *pStateInfo) {
 // --------------------------------------------------------------------------------------------------------------------
 
 static CObject *NearestPlayerTarget(CObject *pAttacker) {
-#if 0
-	int32_t		j;
-	fix			curDist, minDist = MAX_WAKEUP_DIST, bestAngle = -1;
-	CObject*		pCandidate, *pTarget = NULL;
-	CFixVector	vPos = OBJPOS (pAttacker)->vPos;	
-	CFixVector	vViewDir = pAttacker->info.position.mOrient.m.dir.f;
-
-FORALL_PLAYER_OBJS (pCandidate, j) {
-	if (pCandidate->Type () != OBJ_PLAYER) // skip ghost players
-		continue;
-	if (!PLAYER (pCandidate->Id ()).IsConnected ())
-		continue;
-	CFixVector vDir = OBJPOS (pCandidate)->vPos - vPos;
-	curDist = vDir.Mag ();
-	if ((curDist < MAX_WAKEUP_DIST /*/ 2*/) && (curDist < minDist) && ObjectToObjectVisibility (pAttacker, pCandidate, FQ_TRANSWALL, -1.0f)) {
-		vDir /= curDist;
-		fix angle = CFixVector::Dot (vViewDir, vDir);
-		if (angle > bestAngle) {
-			bestAngle = angle;
-			pTarget = pCandidate;
-			minDist = curDist;
-			}
-		}
-	}
-if (pTarget) {
-	pAttacker->SetTarget (gameData.aiData.target.pObj = pTarget);
-	gameData.aiData.target.vBelievedPos = OBJPOS (TARGETOBJ)->vPos;
-	gameData.aiData.target.nBelievedSeg = OBJSEG (TARGETOBJ);
-	CFixVector::NormalizedDir (gameData.aiData.target.vDir, gameData.aiData.target.vBelievedPos, pAttacker->info.position.vPos);
-	return TARGETOBJ;
-	}
-#endif
     return gameData.objData.pConsole;
 }
 
@@ -1692,11 +1660,6 @@ void DoAIFrame(CObject *pObj) {
         RETURN
     si.bMultiGame = !IsRobotGame;
 
-#if 0 // DBG
-gameData.aiData.target.pObj = NULL;
-if (si.pStaticInfo->behavior == AIB_STILL)
-	si.pStaticInfo = si.pStaticInfo;
-#endif
     gameData.aiData.nTargetVisibility = -1;
     si.pLocalInfo->nextActionTime -= gameData.timeData.xFrame;
 
@@ -1713,10 +1676,7 @@ if (si.pStaticInfo->behavior == AIB_STILL)
     }
 
     Assert(si.pRobotInfo->always_0xabcd == 0xabcd);
-#if 0 // DBG
-if (!si.pRobotInfo->bossFlag)
-	RETURN
-#endif
+
     if (DoAnyRobotDyingFrame(pObj))
         RETURN
 
@@ -1811,4 +1771,4 @@ if (!si.pRobotInfo->bossFlag)
     RETURN
 }
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------

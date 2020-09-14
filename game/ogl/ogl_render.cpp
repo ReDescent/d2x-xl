@@ -498,10 +498,6 @@ int32_t G3DrawTexPolyMulti(
     if (FAST_SHADOWS) {
         if (!bBlend)
             ogl.SetBlending(false);
-#if 0
-	else
-		ogl.SetBlendMode (OGL_BLEND_ALPHA);
-#endif
     } else {
         if (gameStates.render.nShadowPass == 1)
             bLight = !bDynLight;
@@ -944,10 +940,6 @@ int32_t G3DrawTexPolySimple(
     if (FAST_SHADOWS) {
         if (!bBlend)
             ogl.SetBlending(false);
-#if 0
-	else
-		ogl.SetBlendMode (OGL_BLEND_ALPHA);
-#endif
     } else {
         if (gameStates.render.nShadowPass == 1)
             bLight = !bDynLight;

@@ -226,7 +226,7 @@ void CScoreTable::DrawCoopDeaths(void) {
     char reactor_message[50];
 
     y = LHY(55 + N_PLAYERS * 9) + yOffs;
-    //	fontManager.SetColor (gr_getcolor (playerColors [j].r,playerColors [j].g,playerColors [j].b),-1);
+    // fontManager.SetColor (gr_getcolor (playerColors [j].r,playerColors [j].g,playerColors [j].b),-1);
     fontManager.SetColorRGBi(GRAY_RGBA, 1, 0, 0);
     x = CENTERSCREEN + LHX(50) + xOffs;
     GrPrintF(NULL, x, y, TXT_DEATHS);

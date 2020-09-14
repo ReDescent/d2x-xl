@@ -252,7 +252,7 @@ paletteManager.BumpEffect (redAdd, greenAdd, blueAdd);
 //------------------------------------------------------------------------------
 
 //#if DBG
-//	Give the megawow powerup!
+// Give the megawow powerup!
 void DoMegaWowPowerup(int32_t quantity) {
     int32_t i;
 
@@ -323,7 +323,7 @@ int32_t PickupShieldBoost(CObject *pObj, int32_t nPlayer) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupCloakingDevice(CObject *pObj, int32_t nPlayer) {
     CPlayerData *pPlayer = gameData.multiplayer.players + nPlayer;
@@ -340,7 +340,7 @@ int32_t PickupCloakingDevice(CObject *pObj, int32_t nPlayer) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupInvulnerability(CObject *pObj, int32_t nPlayer) {
     CPlayerData *pPlayer = gameData.multiplayer.players + nPlayer;
@@ -366,7 +366,7 @@ int32_t PickupExtraLife(CObject *pObj, int32_t nPlayer) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupHoardOrb(CObject *pObj, int32_t nPlayer) {
     CPlayerData *pPlayer = gameData.multiplayer.players + nPlayer;
@@ -429,7 +429,7 @@ int32_t PickupEquipment(CObject *pObj, int32_t nEquipment, const char *pszHave, 
     return bPickedUp;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupHeadlight(CObject *pObj, int32_t nPlayer) {
     CPlayerData *pPlayer = gameData.multiplayer.players + nPlayer;
@@ -452,13 +452,13 @@ int32_t PickupHeadlight(CObject *pObj, int32_t nPlayer) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupFullMap(CObject *pObj, int32_t nPlayer) {
     return PickupEquipment(pObj, PLAYER_FLAGS_FULLMAP, TXT_THE_FULLMAP, TXT_GOT_FULLMAP, nPlayer) ? 1 : 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupConverter(CObject *pObj, int32_t nPlayer) {
     char szTemp[50];
@@ -468,7 +468,7 @@ int32_t PickupConverter(CObject *pObj, int32_t nPlayer) {
     return PickupEquipment(pObj, PLAYER_FLAGS_CONVERTER, TXT_THE_CONVERTER, szTemp, nPlayer) != 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupAmmoRack(CObject *pObj, int32_t nPlayer) {
     return (gameData.multiplayer.weaponStates[nPlayer].nShip != 0)
@@ -476,7 +476,7 @@ int32_t PickupAmmoRack(CObject *pObj, int32_t nPlayer) {
                : PickupEquipment(pObj, PLAYER_FLAGS_AMMO_RACK, TXT_THE_AMMORACK, TXT_GOT_AMMORACK, nPlayer) != 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupAfterburner(CObject *pObj, int32_t nPlayer) {
     int32_t bPickedUp = PickupEquipment(pObj, PLAYER_FLAGS_AFTERBURNER, TXT_THE_BURNER, TXT_GOT_BURNER, nPlayer);
@@ -487,13 +487,13 @@ int32_t PickupAfterburner(CObject *pObj, int32_t nPlayer) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupSlowMotion(CObject *pObj, int32_t nPlayer) {
     return PickupEquipment(pObj, PLAYER_FLAGS_SLOWMOTION, TXT_THE_SLOWMOTION, TXT_GOT_SLOWMOTION, nPlayer) != 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t PickupBulletTime(CObject *pObj, int32_t nPlayer) {
     return PickupEquipment(pObj, PLAYER_FLAGS_BULLETTIME, TXT_THE_BULLETTIME, TXT_GOT_BULLETTIME, nPlayer) != 0;
@@ -606,7 +606,7 @@ int32_t ApplyCloak(int32_t bForce, int32_t nPlayer) {
     if (gameOpts->gameplay.bInventory && (!IsMultiGame || IsCoopGame))
         pPlayer->nCloaks--;
     if (ISLOCALPLAYER(nPlayer)) {
-        pPlayer->cloakTime = gameData.timeData.xGame; //	Not!changed by awareness events (like CPlayerData fires
+        pPlayer->cloakTime = gameData.timeData.xGame; // Not!changed by awareness events (like CPlayerData fires
                                                       //laser).
         pPlayer->flags |= PLAYER_FLAGS_CLOAKED;
         AIDoCloakStuff();
@@ -646,7 +646,7 @@ typedef int32_t (*pPickupKey)(CObject *, int32_t, const char *, int32_t);
 typedef int32_t (*pPickupFlag)(CObject *, int32_t, int32_t, const char *, int32_t);
 #endif
 
-//	returns true if powerup consumed
+// returns true if powerup consumed
 int32_t DoPowerup(CObject *pObj, int32_t nPlayer) {
     if (OBSERVING)
         return 0;
@@ -675,7 +675,7 @@ int32_t DoPowerup(CObject *pObj, int32_t nPlayer) {
     if ((pObj->cType.powerupInfo.nFlags & PF_SPAT_BY_PLAYER) && (pObj->cType.powerupInfo.xCreationTime > 0) &&
         (gameData.timeData.xGame < pObj->cType.powerupInfo.xCreationTime + I2X(2)))
         return 0; // not enough time elapsed
-    gameData.hudData.bPlayerMessage = 0; //	Prevent messages from going to HUD if -PlayerMessages switch is set
+    gameData.hudData.bPlayerMessage = 0; // Prevent messages from going to HUD if -PlayerMessages switch is set
     nId = pObj->info.nId;
     if ((abs(nId) >= (int32_t)sizeofa(pickupHandler)) || !pickupHandler[nId]) // unknown/unhandled powerup type
         return 0;
@@ -1079,7 +1079,7 @@ int16_t PowerupsOnShips(int32_t nPowerup) {
         return 0;
     for (int16_t i = 0; i < N_PLAYERS; i++, pPlayer++) {
         // if ((i == N_LOCALPLAYER) && (LOCALPLAYER.m_bExploded || gameStates.app.bPlayerIsDead))
-        //	continue;
+        // continue;
         if (pPlayer->Shield() < 0)
             continue;
 #if 0 // DBG

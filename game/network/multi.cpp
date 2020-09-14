@@ -1633,7 +1633,7 @@ void MultiDoRemoveObject(uint8_t *buf) {
         return;
     NetworkResetObjSync(nLocalObj);
     // if ((pObj->info.nType == OBJ_POWERUP) && IsNetworkGame)
-    //	RemovePowerupInMine (pObj->info.nId);
+    // RemovePowerupInMine (pObj->info.nId);
     if (pObj->info.nType == OBJ_ROBOT)
         MultiDestroyRobot(pObj);
     else
@@ -1709,7 +1709,7 @@ void MultiDoCloak(uint8_t *buf) {
         return;
     AIDoCloakStuff();
     // if (gameData.appData.GameMode (GM_MULTI_ROBOTS))
-    //	MultiStripRobots (nPlayer);
+    // MultiStripRobots (nPlayer);
     if (gameData.demoData.nState == ND_STATE_RECORDING)
         NDRecordMultiCloak(nPlayer);
 }
@@ -3349,7 +3349,7 @@ void CSegment::ChangeTexture(int32_t oldOwner) {
     static int16_t texOverrides[3] = {-313, TMI_BLUE_TEAM, TMI_RED_TEAM};
 
     // if (oldOwner < 0)
-    //	oldOwner = nOwner;
+    // oldOwner = nOwner;
     if (IsEntropyGame && (extraGameInfo[1].entropy.nOverrideTextures == 2))
         return;
     switch (m_function) {
@@ -5448,7 +5448,7 @@ void MultiDoTeleport(uint8_t *buf) {
     uint8_t nPlayer = buf[pBuffer++];
     int16_t nObject = PLAYER(int32_t(nPlayer)).nObject;
     int16_t nSegment = GET_INTEL_SHORT(buf + pBuffer);
-    //	int16_t	nSide = buf [pBuffer];
+    // int16_t	nSide = buf [pBuffer];
 
     TriggerSetObjPos(nObject, nSegment);
     gameData.multiplayer.bTeleport[nPlayer] = 1;

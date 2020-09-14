@@ -316,7 +316,7 @@ CFace *CModel::AddFace(CSubModel *pso, CFace *pf, CFixVector *pn, uint8_t *p, in
     uint16_t i, v0;
 
     // if (G3FindPolyModelFace (po, WORDPTR (p+30), nVerts))
-    //	return pf;
+    // return pf;
     if (bShadowData) {
         pf->m_vNorm = *pn;
         if (bTriangularize) {
@@ -922,7 +922,7 @@ int32_t CSubModel::RenderShadowVolume(CModel *po, int32_t bCullFront) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t LineHitsFace(CFixVector *pHit, CFixVector *p0, CFixVector *p1, int16_t nSegment, int16_t nSide) {
     uint16_t i, nFaces;
@@ -935,7 +935,7 @@ int32_t LineHitsFace(CFixVector *pHit, CFixVector *p0, CFixVector *p1, int16_t n
     return -1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 float NearestShadowedWallDist(int16_t nObject, int16_t nSegment, CFixVector *vPos, float fScale) {
     static float fClip[4] = {1.1f, 1.5f, 2.0f, 3.0f};
@@ -1379,7 +1379,7 @@ POFGatherPolyModelItems(CObject *pObj, void *modelDataP, CAngleVector *animAngle
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if 0
 

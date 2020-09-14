@@ -707,7 +707,7 @@ int32_t CMissionManager::BuildList(int32_t bAnarchy, int32_t nSubFolder) {
             sizeof(*m_list),
             (int32_t(_CDECL_ *)(const void *, const void *))MLSortFunc);
     // if (m_nCount > nTopPlace)
-    //	qsort(m_list + nTopPlace, m_nCount - nTopPlace, sizeof (*m_list), (int32_t (_CDECL_ *) (const void *, const void
+    // qsort(m_list + nTopPlace, m_nCount - nTopPlace, sizeof (*m_list), (int32_t (_CDECL_ *) (const void *, const void
     //* )) MLSortFunc);
     return m_nCount;
 }

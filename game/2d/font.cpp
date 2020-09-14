@@ -302,8 +302,8 @@ void CFont::Create(const char *fontname) {
 #endif
         } else {
             int32_t mask, bits = 0;
-            //			if (w*h>sizeof (data))
-            //				Error ("OglInitFont: toobig\n");
+            // 		if (w*h>sizeof (data))
+            // 			Error ("OglInitFont: toobig\n");
             if (m_info.flags & FT_PROPORTIONAL)
                 fp = m_info.chars[i];
             else
@@ -469,7 +469,7 @@ int32_t CFont::StringSize(const char *s, int32_t &stringWidth, int32_t &stringHe
             if (*s == 0)
                 break;
 
-            //	1 = next 3 bytes specify color, so skip the 1 and the color value
+            // 1 = next 3 bytes specify color, so skip the 1 and the color value
             if (*s == CC_COLOR)
                 s += 4;
             else if (*s == CC_LSPACING) {

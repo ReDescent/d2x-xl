@@ -341,7 +341,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define FADE_SCALE \
     (2 * I2X(FADE_LEVELS) / REARM_TIME) // fade out and back in REARM_TIME, in fade levels per seconds (int32_t)
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define WEAPON_WINDOW_SIZE 63
 #define WEAPON_WINDOW_SIZE_HIRES 126
@@ -357,6 +357,6 @@ extern int32_t nDbgGauge;
 extern int32_t SW_drawn[2], SW_x[2], SW_y[2], SW_w[2], SW_h[2];
 extern CStaticCanvasColor<0, 0, 0, 255> gaugeFadeColors[2][4];
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #endif //_HUD_DEFS_H

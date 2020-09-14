@@ -167,10 +167,10 @@ void FilterObjectsFromLevel(void);
 // 0 means not a real level loaded
 // Global variables telling what sort of game we have
 
-//	Extra prototypes declared for the sake of LINT
+// Extra prototypes declared for the sake of LINT
 void CopyDefaultsToRobotsAll(void);
 
-//	HUDClearMessages external, declared in cockpit.h
+// HUDClearMessages external, declared in cockpit.h
 #ifndef _GAUGES_H
 void HUDClearMessages(); // From hud.c
 #endif
@@ -620,7 +620,7 @@ void UpdatePlayerStats(void) {
     }
 }
 
-//	------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
 void SetVertigoRobotFlags(void) {
     CObject *pObj;
@@ -1121,7 +1121,7 @@ int32_t LoadLevel(int32_t nLevel, bool bLoadTextures, bool bRestore) {
             SetEquipmentMakerStates();
             SetupWalls();
             SetupEffects();
-            //	lightManager.Setup (nLevel);
+            // lightManager.Setup (nLevel);
             gameData.timeData.nPaused = 0;
         }
         LoadAddonImages();
@@ -1186,8 +1186,8 @@ int32_t StartNewGame(int32_t nLevel) {
 extern int32_t NetworkEndLevelPoll2(CMenu &menu, int32_t &key, int32_t nCurItem); // network.c
 #endif
 
-//	Does the bonus scoring.
-//	Call with deadFlag = 1 if player died, but deserves some portion of bonus (only skill points), anyway.
+// Does the bonus scoring.
+// Call with deadFlag = 1 if player died, but deserves some portion of bonus (only skill points), anyway.
 void DoEndLevelScoreGlitz(int32_t network) {
 #define N_GLITZITEMS 11
 
@@ -1206,7 +1206,7 @@ void DoEndLevelScoreGlitz(int32_t network) {
     SetScreenMode(SCREEN_MENU); // go into menu mode
     if (gameStates.app.bHaveExtraData)
 
-        //	Compute level player is on, deal with secret levels (negative numbers)
+        // Compute level player is on, deal with secret levels (negative numbers)
         nMineLevel = LOCALPLAYER.level;
     if (nMineLevel < 0)
         nMineLevel *= -(missionManager.nLastLevel / missionManager.nSecretLevels);
@@ -1282,7 +1282,7 @@ void DoEndLevelScoreGlitz(int32_t network) {
     backgroundManager.SetShadow(true);
 }
 
-//	-----------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------
 
 // give the player the opportunity to save his game
 void DoEndlevelMenu() {
@@ -1291,16 +1291,16 @@ void DoEndlevelMenu() {
 
 //------------------------------------------------------------------------------
 
-//	Returns true if secret level has been destroyed.
+// Returns true if secret level has been destroyed.
 int32_t PSecretLevelDestroyed(void) {
     if (gameStates.app.bFirstSecretVisit)
-        return 0; //	Never been there, can't have been destroyed.
+        return 0; // Never been there, can't have been destroyed.
     if (CFile::Exist(SECRETC_FILENAME, gameFolders.user.szSavegames, 0))
         return 0;
     return 1;
 }
 
-//	-----------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------
 
 void DoSecretMessage(const char *msg) {
     int32_t fMode = gameStates.app.nFunctionMode;
@@ -1312,7 +1312,7 @@ void DoSecretMessage(const char *msg) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------
 
 void InitSecretLevel(int32_t nLevel) {
     Assert(missionManager.nCurrentLevel == nLevel); // make sure level set right
@@ -1335,7 +1335,7 @@ void InitSecretLevel(int32_t nLevel) {
 
 //------------------------------------------------------------------------------
 
-//	Called from trigger.cpp when player is on a secret level and hits exit to return to base level.
+// Called from trigger.cpp when player is on a secret level and hits exit to return to base level.
 void ExitSecretLevel(void) {
     bool bResume = networkThread.Suspend();
     if ((gameData.demoData.nState == ND_STATE_RECORDING) || (gameData.demoData.nState == ND_STATE_PAUSED))
@@ -1351,7 +1351,7 @@ void ExitSecretLevel(void) {
         SetD1Sound();
         SetDataVersion(-1);
         SetPosFromReturnSegment(1);
-        // LOCALPLAYER.lives--;	//	re-lose the life, LOCALPLAYER.lives got written over in restore.
+        // LOCALPLAYER.lives--;	// re-lose the life, LOCALPLAYER.lives got written over in restore.
         gameData.weaponData.nPrimary = pwSave;
         gameData.weaponData.nSecondary = swSave;
     } else { // File doesn't exist, so can't return to base level.  Advance to next one.
@@ -1375,7 +1375,7 @@ void ExitSecretLevel(void) {
 
 //------------------------------------------------------------------------------
 
-//	Called from trigger.cpp when player is exiting via a directed exit
+// Called from trigger.cpp when player is exiting via a directed exit
 int32_t ReenterLevel(void) {
     char nState = missionManager.GetLevelState(missionManager.NextLevel());
 
@@ -1403,7 +1403,7 @@ int32_t ReenterLevel(void) {
         int32_t nMaxPlayers = IsCoopGame ? MAX_COOP_PLAYERS + 1 : MAX_PLAYERS;
         for (int32_t i = 0; i < nMaxPlayers; i++)
             gameData.multiplayer.bAdjustPowerupCap[i] = true;
-        // LOCALPLAYER.lives--;	//	re-lose the life, LOCALPLAYER.lives got written over in restore.
+        // LOCALPLAYER.lives--;	// re-lose the life, LOCALPLAYER.lives got written over in restore.
         gameData.weaponData.nPrimary = pwSave;
         gameData.weaponData.nSecondary = swSave;
         missionManager.nCurrentLevel = missionManager.NextLevel();
@@ -1413,8 +1413,8 @@ int32_t ReenterLevel(void) {
 }
 
 //------------------------------------------------------------------------------
-//	Set invulnerableTime and cloakTime in player struct to preserve amount of time left to
-//	be invulnerable or cloaked.
+// Set invulnerableTime and cloakTime in player struct to preserve amount of time left to
+// be invulnerable or cloaked.
 void DoCloakInvulSecretStuff(fix xOldGameTime) {
     if (LOCALPLAYER.flags & PLAYER_FLAGS_INVULNERABLE) {
         fix time_used;
@@ -1538,7 +1538,7 @@ void DoEndGame(void) {
 // from which level each do you get to each secret level
 // called to go to the next level (if there is one)
 // if bSecret is true, advance to secret level, else next Normal one
-//	Return true if game over.
+// Return true if game over.
 void AdvanceLevel(int32_t bSecret, int32_t bFromSecret) {
     int32_t result;
 
@@ -1604,7 +1604,7 @@ void DiedInMineMessage(void) {
 }
 
 //------------------------------------------------------------------------------
-//	Called when player dies on secret level.
+// Called when player dies on secret level.
 void ReturningToLevelMessage(void) {
     char msg[128];
 
@@ -1625,11 +1625,11 @@ void ReturningToLevelMessage(void) {
 }
 
 //------------------------------------------------------------------------------
-//	Called when player dies on secret level.
+// Called when player dies on secret level.
 void AdvancingToLevelMessage(void) {
     char msg[128];
 
-    //	Only supposed to come here from a secret level.
+    // Only supposed to come here from a secret level.
     Assert(missionManager.nCurrentLevel < 0);
     if (IsMultiGame)
         return;
@@ -1645,8 +1645,8 @@ void AdvancingToLevelMessage(void) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------------
-//	Set the player's position from the globals gameData.segData.secret.nReturnSegment and
+// -----------------------------------------------------------------------------------
+// Set the player's position from the globals gameData.segData.secret.nReturnSegment and
 // gameData.segData.secret.returnOrient.
 void SetPosFromReturnSegment(int32_t bRelink) {
     CObject *pObj = OBJECT(LOCALPLAYER.nObject);
@@ -1713,7 +1713,7 @@ void StartLevel(int32_t nLevel, int32_t bRandom) {
 //------------------------------------------------------------------------------
 
 // called when the player is starting a new level for Normal game mode and restore state
-//	bSecret set if came from a secret level
+// bSecret set if came from a secret level
 
 int32_t PrepareLevel(int32_t nLevel, bool bLoadTextures, bool bSecret, bool bRestore, bool bNewGame) {
     int32_t funcRes;
@@ -1767,7 +1767,7 @@ reloadLevel:
 InitHoardData ();
 SetMonsterballForces ();
 #endif
-    //	gameData.objData.pViewer = OBJECT (LOCALPLAYER.nObject);
+    // gameData.objData.pViewer = OBJECT (LOCALPLAYER.nObject);
     if (N_PLAYERS > gameData.multiplayer.nPlayerPositions) {
         TextBox(NULL, BG_STANDARD, 1, TXT_OK, "Too many players for this level.");
 #if 1
@@ -1855,12 +1855,12 @@ SetMonsterballForces ();
 LOCALPLAYER.nInvuls =
 LOCALPLAYER.nCloaks = 0;
 #endif
-    //	Say player can use FLASH cheat to mark path to exit.
+    // Say player can use FLASH cheat to mark path to exit.
     nLastLevelPathCreated = -1;
     return 1;
 }
 
-//	-----------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------
 // called when the player is starting a level (new game or new ship)
 
 static void StartSecretLevel(void) {
@@ -1963,7 +1963,7 @@ static int32_t PrepareSecretLevel(int32_t nLevel, bool bLoadTextures) {
     if (gameStates.app.bFirstSecretVisit)
         CopyDefaultsToRobotsAll();
     TurnCheatsOff();
-    //	Say player can use FLASH cheat to mark path to exit.
+    // Say player can use FLASH cheat to mark path to exit.
     nLastLevelPathCreated = -1;
     gameStates.app.bFirstSecretVisit = 0;
     if (bResume)
@@ -1972,9 +1972,9 @@ static int32_t PrepareSecretLevel(int32_t nLevel, bool bLoadTextures) {
 }
 
 //------------------------------------------------------------------------------
-//	Called from switch.c when player passes through secret exit.  That means he was on a non-secret level and he
-//	is passing to the secret level.
-//	Do a savegame.
+// Called from switch.c when player passes through secret exit.  That means he was on a non-secret level and he
+// is passing to the secret level.
+// Do a savegame.
 void EnterSecretLevel(void) {
     int32_t i;
 
@@ -1984,13 +1984,13 @@ void EnterSecretLevel(void) {
         DoEndLevelScoreGlitz(0);
     if (gameData.demoData.nState != ND_STATE_PLAYBACK)
         saveGameManager
-            .Save(0, 1, 0, NULL); //	Not between levels (ie, save all), IS a secret level, NO filename override
-    //	Find secret level number to go to, stuff in missionManager.NextLevel ().
+            .Save(0, 1, 0, NULL); // Not between levels (ie, save all), IS a secret level, NO filename override
+    // Find secret level number to go to, stuff in missionManager.NextLevel ().
     for (i = 0; i < -missionManager.nLastSecretLevel; i++)
         if (missionManager.secretLevelTable[i] == missionManager.nCurrentLevel) {
             missionManager.SetNextLevel(-i - 1);
             break;
-        } else if (i && (missionManager.secretLevelTable[i] > missionManager.nCurrentLevel)) { //	Allows multiple
+        } else if (i && (missionManager.secretLevelTable[i] > missionManager.nCurrentLevel)) { // Allows multiple
                                                                                                // exits in same group.
             missionManager.SetNextLevel(-i);
             break;
@@ -2104,7 +2104,7 @@ void ShowLevelIntro(int32_t nLevel) {
     }
 }
 
-//	---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // If a player enters a level listed in the mission's secret level table,
 // all secret levels he can reach from now on are ones he hasn't been able
 // to reach before (in other words: No secret exits yet to come lead to
@@ -2120,7 +2120,7 @@ void MaybeSetFirstSecretVisit(int32_t nLevel) {
 
 //------------------------------------------------------------------------------
 // called when the player is starting a new level for Normal game model
-//	bSecret if came from a secret level
+// bSecret if came from a secret level
 int32_t StartNewLevel(int32_t nLevel, bool bNewGame) {
     bool bResume = networkThread.Suspend();
     gameStates.app.xThisLevelTime = 0;
@@ -2221,7 +2221,7 @@ int32_t GetRandomPlayerPosition(int32_t nPlayer) {
                         gameData.multiplayer.playerInit[i].nSegment,
                         10,
                         WID_PASSABLE_FLAG,
-                        -1); //	Used to be 5, search up to 10 segments
+                        -1); // Used to be 5, search up to 10 segments
                     if (xDist < 0)
                         continue;
                     if (spawnTable[nSpawnSegs].xDist > xDist)
@@ -2275,29 +2275,29 @@ fix RobotDefaultShield(CObject *pObj) {
     // Assert (objId < gameData.botData.nTypes [0]);
     i = gameStates.app.bD1Mission && (objId < gameData.botData.nTypes[1]);
     pRobotInfo = gameData.botData.info[i] + objId;
-    //	Boost shield for Thief and Buddy based on level.
+    // Boost shield for Thief and Buddy based on level.
     shield = pRobotInfo->strength;
     if (pRobotInfo->thief || pRobotInfo->companion) {
         shield = (shield * (abs(missionManager.nCurrentLevel) + 7)) / 8;
         if (pRobotInfo->companion) {
-            //	Now, scale guide-bot hits by skill level
+            // Now, scale guide-bot hits by skill level
             switch (gameStates.app.nDifficultyLevel) {
             case 0:
                 shield = I2X(20000);
-                break; //	Trainee, basically unkillable
+                break; // Trainee, basically unkillable
             case 1:
                 shield *= 3;
-                break; //	Rookie, pretty dang hard
+                break; // Rookie, pretty dang hard
             case 2:
                 shield *= 2;
-                break; //	Hotshot, a bit tough
+                break; // Hotshot, a bit tough
             default:
                 break;
             }
         }
-    } else if (pRobotInfo->bossFlag) { //	MK, 01/16/95, make boss shield lower on lower diff levels.
+    } else if (pRobotInfo->bossFlag) { // MK, 01/16/95, make boss shield lower on lower diff levels.
         shield = shield / (DIFFICULTY_LEVEL_COUNT + 3) * (gameStates.app.nDifficultyLevel + 4);
-        //	Additional wimpification of bosses at Trainee
+        // Additional wimpification of bosses at Trainee
         if (gameStates.app.nDifficultyLevel == 0)
             shield /= 2;
     }
@@ -2305,14 +2305,14 @@ fix RobotDefaultShield(CObject *pObj) {
 }
 
 //------------------------------------------------------------------------------
-//	Initialize default parameters for one robot, copying from gameData.botData.pInfo to *pObj.
-//	What about setting size!?  Where does that come from?
+// Initialize default parameters for one robot, copying from gameData.botData.pInfo to *pObj.
+// What about setting size!?  Where does that come from?
 void CopyDefaultsToRobot(CObject *pObj) { pObj->SetShield(RobotDefaultShield(pObj)); }
 
 //------------------------------------------------------------------------------
-//	Copy all values from the robot info structure to all instances of robots.
-//	This allows us to change bitmaps.tbl and have these changes manifested in existing robots.
-//	This function should be called at level load time.
+// Copy all values from the robot info structure to all instances of robots.
+// This allows us to change bitmaps.tbl and have these changes manifested in existing robots.
+// This function should be called at level load time.
 void CopyDefaultsToRobotsAll(void) {
     CObject *pObj;
 

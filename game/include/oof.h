@@ -16,7 +16,7 @@
 #define OOF_PMF_SIZE_COMPUTED 32 // This CPolyModel's size is computed
 
 #define OOF_SOF_ROTATE 0x01 // This subobject is a rotator
-#define OOF_SOF_TURRET 0x02 //	This subobject is a turret that tracks
+#define OOF_SOF_TURRET 0x02 // This subobject is a turret that tracks
 #define OOF_SOF_SHELL 0x04 // This subobject is a door housing
 #define OOF_SOF_FRONTFACE 0x08 // This subobject contains the front face for the door
 #define OOF_SOF_MONITOR1 0x010 // This subobject contains it's first monitor

@@ -29,7 +29,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "renderlib.h"
 #include "collision_math.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 uint8_t PointIsInTriangle(CFixVector *vRef, CFixVector *vNormal, uint16_t *triangleVerts) {
     CFloatVector v0, v1, v2;
@@ -52,13 +52,10 @@ uint8_t PointIsInTriangle(CFixVector *vRef, CFixVector *vNormal, uint16_t *trian
     return (u + v <= 1.001f);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // see if a point is inside a face by projecting into 2d
 
 static bool PointIsInQuad(CFixVector point, CFixVector *pVertex, CFixVector vNormal) {
-#if 0
-return PointIsInTriangle (&point, vNormal, pVertex) || PointIsInTriangle (&point, vNormal, pVertex + 1);
-#else
     CFixVector t;
     int32_t i, j, projPlane;
 
@@ -88,10 +85,9 @@ return PointIsInTriangle (&point, vNormal, pVertex) || PointIsInTriangle (&point
             return false;
     }
     return true;
-#endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static fix DistToQuad(CFixVector vRef, CFixVector *pVertex, CFixVector vNormal) {
     // compute intersection of perpendicular through vRef with the plane spanned up by the face
@@ -110,37 +106,7 @@ static fix DistToQuad(CFixVector vRef, CFixVector *pVertex, CFixVector vNormal) 
     return minDist;
 }
 
-//	-----------------------------------------------------------------------------
-// Given: p3
-// Find: intersection with p1,p2 of the line through p3 that is perpendicular on p1,p2
-
-#if 0
-static int32_t FindPointLineIntersectionf (CFixVector* pv1, CFixVector* pv2, CFixVector* pv3)
-{
-	CFloatVector	p1, p2, p3, d31, d21, h, v [2];
-	float				m, u;
-
-p1.Assign (*pv1);
-p2.Assign (*pv2);
-p3.Assign (*pv3);
-d21 = p2 - p1;
-if (!(m = d21.v.coord.x * d21.v.coord.x + d21.v.coord.y * d21.v.coord.y + d21.v.coord.z * d21.v.coord.z))
-	return 0;
-d31 = p3 - p1;
-u = CFloatVector::Dot (d31, d21);
-u /= m;
-h = p1 + d21 * u;
-// limit the intersection to [p1,p2]
-v [0] = p1 - h;
-v [1] = p2 - h;
-m = CFloatVector::Dot (v [0], v [1]);
-if (m >= 1)
-	return 1;
-return 0;
-}
-#endif
-
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // find the point on the specified plane where the line intersects
 // returns true if intersection found, false if line parallel to plane
 // intersection is the found intersection on the plane
@@ -153,7 +119,8 @@ static int32_t FindLinePlaneIntersection(
     CFixVector *vNormal,
     CFixVector *p0,
     CFixVector *p1,
-    fix rad) {
+    fix rad
+) {
 #if 1
     CFloatVector n, u, w;
 
@@ -195,22 +162,10 @@ static int32_t FindLinePlaneIntersection(
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // if intersection is inside the rectangular (!) quad planeP, the perpendicular from intersection to each edge
 // of the quad must hit each edge between the edge's end points (provided vHit
 // is in the quad's plane).
-
-#if 0
-static int32_t CheckLineHitsQuad (CFixVector& intersection, CFixVector* planeP)
-{
-for (int32_t i = 0; i < 4; i++)
-	if (FindPointLineIntersectionf (planeP + i, planeP + ((i + 1) % 4), &intersection))
-		return 0;	//doesn't hit
-return 1;	//hits
-}
-#endif
-
-//	-----------------------------------------------------------------------------
 
 static int32_t FindLineQuadIntersection(
     CFixVector &intersection,
@@ -218,14 +173,11 @@ static int32_t FindLineQuadIntersection(
     CFixVector *planeNormP,
     CFixVector *p0,
     CFixVector *p1,
-    fix rad) {
+    fix rad
+) {
     CFixVector vHit;
     fix dist;
 
-#if 0
-if (CFixVector::Dot (*p1 - *p0, *planeNormP) > 0)
-	return 0x7fffffff;	// hit back of face
-#endif
     if (!FindLinePlaneIntersection(vHit, planeP, planeNormP, p0, p1, 0))
         return 0x7fffffff;
     if (!rad && (CFixVector::Dot(vHit - *p0, vHit - *p1) > 0))
@@ -237,7 +189,7 @@ if (CFixVector::Dot (*p1 - *p0, *planeNormP) > 0)
     return dist;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Simple intersection check by checking whether any of the edges of plane p1
 // penetrate p2. Returns average of all penetration points.
 
@@ -247,7 +199,8 @@ static int32_t FindQuadQuadIntersectionSub(
     CFixVector *vPlane,
     CFixVector *vNormal,
     CFixVector *vRef,
-    fix &dMin) {
+    fix &dMin
+) {
     int32_t i, nHits = 0;
     CFixVector vHit;
 
@@ -265,7 +218,7 @@ static int32_t FindQuadQuadIntersectionSub(
     return nHits;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static int32_t FindQuadQuadIntersection(
     CFixVector &intersection,
@@ -287,7 +240,7 @@ static int32_t FindQuadQuadIntersection(
     return nHits;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static int32_t FindLineHitboxIntersection(
     CFixVector &intersection,
@@ -313,7 +266,7 @@ static int32_t FindLineHitboxIntersection(
     return nHits;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static int32_t FindHitboxIntersection(
     CFixVector &intersection,
@@ -342,7 +295,7 @@ static int32_t FindHitboxIntersection(
     return nHits;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // int32_t DropMarkerObject (CFixVector& vPos, int16_t nSegment, CFixMatrix& orient, uint8_t nMarker);
 
@@ -393,20 +346,12 @@ fix CheckHitboxCollision(
     if (nTotalHits) {
         pmhb1->vHit = pmhb2->vHit = intersection;
         pmhb1->tHit = pmhb2->tHit = gameStates.app.nSDLTicks[0];
-#if 0
-	if (gameStates.app.nSDLTicks [0] - tMarker > 3000) {
-		if (nMarker >= 0)
-			OBJECT (nMarker)->Die ();
-		nMarker = DropMarkerObject (intersection, pObj1->Segment (), pObj1->Orientation (), 0);
-		tMarker = gameStates.app.nSDLTicks [0];
-		}
-#endif
     }
 #endif
     return (nTotalHits) ? dMin ? dMin : 1 : 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 fix CheckVectorHitboxCollision(
     CFixVector &intersection,
@@ -438,7 +383,7 @@ fix CheckVectorHitboxCollision(
     return dMin;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t FindLineTriangleIntersection(
     CFixVector &intersection,
@@ -448,10 +393,6 @@ int32_t FindLineTriangleIntersection(
     CFixVector *p1) {
     CFixVector vHit;
 
-#if 0
-if (CFixVector::Dot (*p1 - *p0, *planeNormP) > 0)
-	return 0x7fffffff;	// hit back of face
-#endif
     if (!FindLinePlaneIntersection(vHit, VERTICES + *triangleVerts, triangleNormal, p0, p1, 0))
         return 0x7fffffff;
     if (!PointIsInTriangle(&vHit, triangleNormal, triangleVerts))
@@ -460,7 +401,7 @@ if (CFixVector::Dot (*p1 - *p0, *planeNormP) > 0)
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Simple intersection check by checking whether any of the edges of plane p1
 // penetrate p2. Returns average of all penetration points.
 
@@ -489,7 +430,7 @@ int32_t FindTriangleQuadIntersection(
     return nHits;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t FindTriangleHitboxIntersection(
     CFixVector &intersection,
@@ -515,7 +456,7 @@ int32_t FindTriangleHitboxIntersection(
     return nHits;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CSegMasks CheckFaceHitboxCollision(
     CFixVector &intersection,
@@ -567,7 +508,7 @@ CSegMasks CheckFaceHitboxCollision(
     return masks;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t UseHitbox(CObject *pObj) {
     return !gameStates.app.bNostalgia && (pObj->info.renderType == RT_POLYOBJ) &&
@@ -575,5 +516,5 @@ int32_t UseHitbox(CObject *pObj) {
            ((pObj->info.nType != OBJ_WEAPON) || ((pObj->info.nId != GAUSS_ID) && (pObj->info.nId != VULCAN_ID)));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

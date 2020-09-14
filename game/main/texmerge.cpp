@@ -189,7 +189,7 @@ void MergeTexturesNormal(int32_t nType, CBitmap *bmBot, CBitmap *bmTop, uint8_t 
         bmTop = rle_expand_texture(bmTop);
     if (bmBot->Flags() & BM_FLAG_RLE)
         bmBot = rle_expand_texture(bmBot);
-    //	Assert(bmBot != bmTop);
+    // Assert(bmBot != bmTop);
     topDataP = bmTop->Buffer();
     btmDataP = bmBot->Buffer();
     scale = bmBot->Width() / bmTop->Width();
@@ -197,7 +197,7 @@ void MergeTexturesNormal(int32_t nType, CBitmap *bmBot, CBitmap *bmTop, uint8_t 
         scale = 1;
     if (scale > 1)
         scale = scale;
-    //	Assert(btmDataP != topDataP);
+    // Assert(btmDataP != topDataP);
     switch (nType) {
     case 0:
         // Normal
@@ -287,7 +287,7 @@ void MergeTextures(int32_t nType, CBitmap *bmBot, CBitmap *bmTop, CBitmap *bmDes
     if (bmBot->Flags() & BM_FLAG_RLE)
         bmBot = rle_expand_texture(bmBot);
 
-    //	Assert(bmBot != bmTop);
+    // Assert(bmBot != bmTop);
 
     topDataP = bmTop->Buffer();
     btmDataP = bmBot->Buffer();

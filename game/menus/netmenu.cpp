@@ -1024,7 +1024,7 @@ int32_t NetworkGameParamPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int32_
         AdjustMaxPlayers(maxPlayers, menu.Value("coop") != 0);
         // enable/disable entropy / monsterball options menu links
         // if ((menu.Available ("entropy") && ((menu.Value ("entropy") != 0) == !menu.Available ("entropy options"))) ||
-        //	 (menu.Available ("monsterball") && ((menu.Value ("monsterball") != 0) == !menu.Available ("monsterball
+        //  (menu.Available ("monsterball") && ((menu.Value ("monsterball") != 0) == !menu.Available ("monsterball
         // options")) && (gameOpts->app.bExpertMode == SUPERUSER)))
         key = -2;
         // force restricted game for team games
@@ -1048,7 +1048,7 @@ int32_t NetworkGameParamPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int32_
                 // enable/disable entropy / monsterball options menu links
                 // if (((m->MaxValue () == sizeofa (szGameTypeList) - 1) && ((v == 8) != menu.Available ("entropy
                 // options"))) ||
-                //	 ((m->MaxValue () == sizeofa (szGameTypeList) - 1) && ((v == 9) != menu.Available ("monsterball
+                //  ((m->MaxValue () == sizeofa (szGameTypeList) - 1) && ((v == 9) != menu.Available ("monsterball
                 // options")) && (gameOpts->app.bExpertMode == SUPERUSER)))
                 key = -2;
                 return nCurItem;

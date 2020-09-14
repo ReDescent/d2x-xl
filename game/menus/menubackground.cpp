@@ -428,7 +428,7 @@ CBitmap *CBackgroundManager::LoadCustomWallpaper(const char *filename) {
     }
 
     // if (filename && strcmp (filename, gameOpts->menus.altBg.szName [bModBg]))
-    //	return NULL;
+    // return NULL;
     if (!tga.Read(
             pszFile,
             pszFolder,

@@ -8,7 +8,7 @@
 
 static int32_t nSlowMotionChannel = -1;
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void SetSlowMotionState(int32_t i) {
     if (gameStates.gameplay.slowmo[i].nState) {
@@ -25,7 +25,7 @@ void SetSlowMotionState(int32_t i) {
     gameStates.gameplay.slowmo[i].tUpdate = gameStates.app.nSDLTicks[0];
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void SlowMotionMessage(void) {
     if (gameStates.gameplay.slowmo[0].nState > 0) {
@@ -44,35 +44,35 @@ void SlowMotionMessage(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void InitBulletTime(int32_t nState) {
     gameStates.gameplay.slowmo[1].nState = nState;
     SetSlowMotionState(1);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void InitSlowMotion(int32_t nState) {
     gameStates.gameplay.slowmo[0].nState = nState;
     SetSlowMotionState(0);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 int32_t SlowMotionActive(void) {
     return gameStates.gameplay.slowmo[0].bActive =
                (gameStates.gameplay.slowmo[0].nState > 0) || (gameStates.gameplay.slowmo[0].fSpeed > 1.0f);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 int32_t BulletTimeActive(void) {
     return gameStates.gameplay.slowmo[1].bActive = SlowMotionActive() && ((gameStates.gameplay.slowmo[1].nState < 0) ||
                                                                           (gameStates.gameplay.slowmo[1].fSpeed == 1));
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void SlowMotionOff(void) {
     if (SlowMotionActive() && (gameStates.gameplay.slowmo[0].nState != -1)) {
@@ -83,7 +83,7 @@ void SlowMotionOff(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void BulletTimeOn(void) {
     if (!BulletTimeActive())
@@ -93,7 +93,7 @@ void BulletTimeOn(void) {
     SlowMotionMessage();
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 int32_t ToggleSlowMotion(void) {
     if (gameData.reactorData.bDestroyed)
@@ -111,12 +111,8 @@ int32_t ToggleSlowMotion(void) {
 #if 1 //! DBG
     if (SlowMotionActive()) {
         if (!gameStates.app.cheats.bSpeed)
-#if 0
-		LOCALPLAYER.UpdateEnergy (-gameData.timeData.xFrame * (1 + BulletTimeActive ()));
-#else
             LOCALPLAYER.UpdateEnergy(
                 -((4 + gameStates.app.nDifficultyLevel) * gameData.timeData.xFrame * (1 + BulletTimeActive())) / 6);
-#endif
             if (!bSlowMotionOk) {
                 if (gameStates.gameplay.slowmo[0].nState != -1) {
                     InitSlowMotion(1);
@@ -163,7 +159,7 @@ int32_t ToggleSlowMotion(void) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void SpeedupSound(void) {
     if (!gameOpts->gameplay.nSlowMotionSpeedup)
@@ -186,7 +182,7 @@ void SpeedupSound(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void SlowdownSound(void) {
     if (HaveSoundThread()) {
@@ -205,7 +201,7 @@ void SlowdownSound(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #define SLOWDOWN_SECS 2
 #define SLOWDOWN_FPS 40
@@ -239,11 +235,6 @@ void DoSlowMotionFrame(void) {
     }
     if (bMsg)
         SlowMotionMessage();
-#if 0 // DBG
-HUDMessage (0, "%1.2f %1.2f %d", 
-				gameStates.gameplay.slowmo [0].fSpeed, gameStates.gameplay.slowmo [1].fSpeed,
-				gameStates.gameplay.slowmo [1].bActive);
-#endif
 }
 
 //------------------------------------------------------------------------------

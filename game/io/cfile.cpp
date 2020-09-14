@@ -435,7 +435,7 @@ size_t CFile::Write(const void *buf, int32_t nElemSize, int32_t nElemCount, int3
     }
 
     // if (bCompressed < 0)
-    //	PrintLog (0, "Write: %d bytes @ %d\n", nElemSize * nElemCount, (int32_t) m_info.rawPosition);
+    // PrintLog (0, "Write: %d bytes @ %d\n", nElemSize * nElemCount, (int32_t) m_info.rawPosition);
     int32_t nWritten = (int32_t)fwrite(buf, nElemSize, nElemCount, m_info.file);
     m_info.rawPosition = ftell(m_info.file);
     if (Error()) {
@@ -540,7 +540,7 @@ size_t CFile::Read(void *buf, size_t elSize, size_t nElems, int32_t bCompressed)
     }
 
     // if (bCompressed < 0)
-    //	PrintLog (0, "Read: %d bytes @ %d\n", (int32_t) size, (int32_t) m_info.rawPosition);
+    // PrintLog (0, "Read: %d bytes @ %d\n", (int32_t) size, (int32_t) m_info.rawPosition);
     i = fread(buf, 1, size, m_info.file);
     m_info.rawPosition += i;
     return i / elSize;
@@ -922,8 +922,8 @@ int32_t CFile::Extract(const char *filename, const char *folder, int32_t bUseD1H
     return 1;
 }
 
-//	-----------------------------------------------------------------------------------
-//	Imagine if C had a function to copy a file...
+// -----------------------------------------------------------------------------------
+// Imagine if C had a function to copy a file...
 
 #define COPY_BUF_SIZE 65536
 

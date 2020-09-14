@@ -592,11 +592,7 @@ void CAudioChannel::Mix(uint8_t *stream, int32_t len) {
 
 CAudio::CAudio() {
     memset(&m_info, 0, sizeof(m_info));
-#if 0
-    m_info.nFormat = AUDIO_S16SYS;
-#else
     m_info.nFormat = AUDIO_U8;
-#endif
     m_info.nVolume[0] = m_info.nVolume[1] = SOUND_MAX_VOLUME;
     m_info.nMaxChannels = MAX_SOUND_CHANNELS;
     Init();

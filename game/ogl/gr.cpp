@@ -425,7 +425,7 @@ int32_t SetGameScreenMode(uint32_t sm) {
         gameData.renderData.frame.SetWidth(gameData.renderData.screen.Width());
         gameData.renderData.frame.SetHeight(gameData.renderData.screen.Height());
     }
-    //	Define screen pages for game mode
+    // Define screen pages for game mode
     // If we designate through screenFlags to use paging, then do so.
     gameData.renderData.frame.Setup(&gameData.renderData.screen);
     gameStates.render.fonts.bHires =

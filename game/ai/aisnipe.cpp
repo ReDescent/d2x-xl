@@ -26,7 +26,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <time.h>
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Make a robot near the player snipe.
 #define MNRS_SEG_MAX 70
 
@@ -56,7 +56,7 @@ void MakeNearbyRobotSnipe(void) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DoSnipeWait(CObject *pObj, tAILocalInfo *pLocalInfo) {
     ENTER(1, 0);
@@ -74,12 +74,12 @@ void DoSnipeWait(CObject *pObj, tAILocalInfo *pLocalInfo) {
     if (xConnectedDist < MAX_SNIPE_DIST) {
         CreatePathToTarget(pObj, 30, 1);
         pLocalInfo->mode = AIM_SNIPE_ATTACK;
-        pLocalInfo->nextActionTime = SNIPE_ATTACK_TIME; //	have up to 10 seconds to find player.
+        pLocalInfo->nextActionTime = SNIPE_ATTACK_TIME; // have up to 10 seconds to find player.
     }
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DoSnipeAttack(CObject *pObj, tAILocalInfo *pLocalInfo) {
     ENTER(1, 0);
@@ -101,7 +101,7 @@ void DoSnipeAttack(CObject *pObj, tAILocalInfo *pLocalInfo) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DoSnipeFire(CObject *pObj, tAILocalInfo *pLocalInfo) {
     ENTER(1, 0);
@@ -121,7 +121,7 @@ void DoSnipeFire(CObject *pObj, tAILocalInfo *pLocalInfo) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DoSnipeRetreat(CObject *pObj, tAILocalInfo *pLocalInfo) {
     ENTER(1, 0);
@@ -142,7 +142,7 @@ void DoSnipeRetreat(CObject *pObj, tAILocalInfo *pLocalInfo) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if defined(_WIN32) && !DBG
 typedef void __fastcall tAISnipeHandler(CObject *, tAILocalInfo *);
@@ -162,7 +162,7 @@ void DoSnipeFrame(CObject *pObj) {
         if ((i >= AIM_SNIPE_ATTACK) && (i <= AIM_SNIPE_WAIT))
             aiSnipeHandlers[i - AIM_SNIPE_ATTACK](pObj, pLocalInfo);
         else {
-            Int3(); //	Oops, illegal mode for snipe behavior.
+            Int3(); // Oops, illegal mode for snipe behavior.
             pLocalInfo->mode = AIM_SNIPE_ATTACK;
             pLocalInfo->nextActionTime = I2X(1);
         }
@@ -170,5 +170,5 @@ void DoSnipeFrame(CObject *pObj) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

@@ -31,7 +31,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "headlight.h"
 #include "hudicons.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define NUM_INV_ITEMS 10
 #define INV_ITEM_HEADLIGHT 2
@@ -52,7 +52,7 @@ int32_t bHaveGaugeBms = -1;
 
 CHUDIcons hudIcons;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUDIcons::LoadIcons(const char *pszIcons[], CBitmap *icons, int32_t nIcons, int32_t &bHaveIcons) {
     char szFilename[FILENAME_LEN];
@@ -77,7 +77,7 @@ int32_t CHUDIcons::LoadIcons(const char *pszIcons[], CBitmap *icons, int32_t nIc
     return bHaveIcons = 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::DestroyIcons(CBitmap *icons, int32_t nIcons, int32_t &bHaveIcons) {
     if (bHaveIcons > 0) {
@@ -87,7 +87,7 @@ void CHUDIcons::DestroyIcons(CBitmap *icons, int32_t nIcons, int32_t &bHaveIcons
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 const char *pszObjTallyIcons[] = {"rboticon.tga", "pwupicon.tga"};
 
@@ -95,11 +95,11 @@ int32_t CHUDIcons::LoadTallyIcons(void) {
     return LoadIcons(pszObjTallyIcons, bmObjTally, sizeofa(bmObjTally), bHaveObjTallyBms);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::DestroyTallyIcons(void) { DestroyIcons(bmObjTally, sizeofa(bmObjTally), bHaveObjTallyBms); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 const char *pszGaugeIcons[] = {"shield-icon.tga", "energy-icon.tga", "afterburner-icon.tga"};
 
@@ -107,15 +107,15 @@ int32_t CHUDIcons::LoadGaugeIcons(void) {
     return LoadIcons(pszGaugeIcons, bmGaugeIcons, sizeofa(bmGaugeIcons), bHaveGaugeBms);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::DestroyGaugeIcons(void) { DestroyIcons(bmGaugeIcons, sizeofa(bmGaugeIcons), bHaveGaugeBms); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CBitmap &CHUDIcons::GaugeIcon(int32_t i) { return bmGaugeIcons[i]; }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::DrawTally(void) {
     if (!gameOpts->render.cockpit.bObjectTally)
@@ -180,7 +180,7 @@ void CHUDIcons::DrawTally(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::ToggleWeaponIcons(void) {
     for (int32_t i = 0; i < controls[0].toggleIconsCount; i++)
@@ -193,7 +193,7 @@ void CHUDIcons::ToggleWeaponIcons(void) {
         }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static uint8_t ammoType[2][10] = {{0, 1, 0, 0, 0, 0, 1, 0, 0, 0}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
@@ -247,7 +247,7 @@ CHUDIcons::GetWeaponState(int32_t &bHave, int32_t &bAvailable, int32_t &bActive,
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUDIcons::GetAmmo(char *szAmmo, int32_t i, int32_t j, int32_t l) {
     if (ammoType[i][l]) {
@@ -274,7 +274,7 @@ int32_t CHUDIcons::GetAmmo(char *szAmmo, int32_t i, int32_t j, int32_t l) {
     return GREEN_RGBA;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUDIcons::GetWeaponIndex(int32_t i, int32_t j, int32_t &nMaxAutoSelect) {
     static int32_t nLvlMap[2][10] = {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0, 1, 2, 3, 4, 4, 3, 1, 0, 2}};
@@ -288,7 +288,7 @@ int32_t CHUDIcons::GetWeaponIndex(int32_t i, int32_t j, int32_t &nMaxAutoSelect)
     return nLvlMap[gameStates.app.bD1Mission][j + (gameStates.app.bD1Mission ? i * 5 : 0)];
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CBitmap *CHUDIcons::LoadWeaponIcon(int32_t i, int32_t l) {
     CBitmap *pBm, *pBmo;
@@ -307,7 +307,7 @@ CBitmap *CHUDIcons::LoadWeaponIcon(int32_t i, int32_t l) {
     return pBm;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::SetWeaponFillColor(int32_t bHave, int32_t bAvailable, float alpha) {
     if (bHave) {
@@ -322,7 +322,7 @@ void CHUDIcons::SetWeaponFillColor(int32_t bHave, int32_t bAvailable, float alph
         CCanvas::Current()->SetColorRGB(64, 64, 64, (uint8_t)(159 + alpha * 12));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::SetWeaponFrameColor(int32_t bHave, int32_t bAvailable, int32_t bActive, float alpha) {
     if (bActive)
@@ -342,7 +342,7 @@ void CHUDIcons::SetWeaponFrameColor(int32_t bHave, int32_t bAvailable, int32_t b
         CCanvas::Current()->SetColorRGB(64, 64, 64, 255);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define ICON_SCALE 3
 
@@ -486,7 +486,7 @@ void CHUDIcons::DrawWeapons(void) {
     gameData.SetStereoOffsetType(nOffsetSave);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUDIcons::LoadInventoryIcons(void) {
     int32_t h, i;
@@ -513,7 +513,7 @@ int32_t CHUDIcons::LoadInventoryIcons(void) {
     return bHaveInvBms = 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::DestroyInventoryIcons(void) {
     if (bmpInventory) {
@@ -523,7 +523,7 @@ void CHUDIcons::DestroyInventoryIcons(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUDIcons::EquipmentActive(int32_t bFlag) {
     switch (bFlag) {
@@ -551,7 +551,7 @@ int32_t CHUDIcons::EquipmentActive(int32_t bFlag) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::DrawInventory(void) {
     if (ogl.IsOculusRift())
@@ -680,7 +680,7 @@ void CHUDIcons::DrawInventory(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::Render(void) {
     if (gameStates.app.bNostalgia)
@@ -713,7 +713,7 @@ void CHUDIcons::Render(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUDIcons::Destroy(void) {
     DestroyTallyIcons();
@@ -721,4 +721,4 @@ void CHUDIcons::Destroy(void) {
     DestroyInventoryIcons();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

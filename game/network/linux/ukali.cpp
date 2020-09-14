@@ -90,10 +90,10 @@ int32_t knix_ReceivePacket(int32_t hand, char *outdata, int32_t *outlen, kaliadd
         return 0;
 
     switch (data[0]) {
-        //		case 1: // open socket
-        //			break;
-        //		case 2: // close socket
-        //			break;
+        // 	case 1: // open socket
+        // 		break;
+        // 	case 2: // close socket
+        // 		break;
     case 3: // received data packet
         if (len < 11)
             break;
@@ -111,13 +111,13 @@ int32_t knix_ReceivePacket(int32_t hand, char *outdata, int32_t *outlen, kaliadd
             break;
         memcpy(g_mynodenum, &data[1], 6);
         break;
-        //		case 5: // Init KaliNix connection
-        //			break;
+        // 	case 5: // Init KaliNix connection
+        // 		break;
     case 6: // open response
     case 7: // close response
         if (len < 3)
             break;
-        //			memcpy(g_LastPort, &data[1], sizeof(g_LastPort))
+        // 		memcpy(g_LastPort, &data[1], sizeof(g_LastPort))
         break;
     }
 
@@ -143,11 +143,11 @@ int32_t knix_GetMyAddress(void) {
 
 int32_t KaliSendPacket(int32_t hand, char *data, int32_t len, kaliaddr_ipx *to) {
     static char sendbuf[MAX_PACKET_SIZE + 11];
-    //		char	code; == 3
-    //		char	sa_nodenum[6];
-    //		char	dport[2];
-    //		char	sport[2];
-    //		char data[];
+    // 	char	code; == 3
+    // 	char	sa_nodenum[6];
+    // 	char	dport[2];
+    // 	char	sport[2];
+    // 	char data[];
 
     sendbuf[0] = 3;
     memcpy(&sendbuf[1], to->sa_nodenum, sizeof(to->sa_nodenum));

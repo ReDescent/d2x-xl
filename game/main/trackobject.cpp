@@ -8,14 +8,14 @@
 
 #define OMEGA_MIN_TRACKABLE_DOT \
     (I2X(15) / \
-     16) //	Larger values mean narrower cone.  I2X (1) means damn near impossible.  0 means 180 degree field of view.
-#define OMEGA_MAX_TRACKABLE_DIST MAX_OMEGA_DIST //	An CObject must be at least this close to be tracked.
+     16) // Larger values mean narrower cone.  I2X (1) means damn near impossible.  0 means 180 degree field of view.
+#define OMEGA_MAX_TRACKABLE_DIST MAX_OMEGA_DIST // An CObject must be at least this close to be tracked.
 
 #define NEW_TARGETTING 1
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CTarget {
     public:
@@ -32,9 +32,9 @@ class CTarget {
 
 static CStack<class CTarget> targetLists[MAX_THREADS + 1];
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CHomingTargetData {
     public:
@@ -65,7 +65,7 @@ class CHomingTargetData {
     int32_t Target(int32_t nThread);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHomingTargetData::Add(CObject *pTarget, float dotScale) {
     ENTER(0, 0);
@@ -83,9 +83,9 @@ void CHomingTargetData::Add(CObject *pTarget, float dotScale) {
     m_targets.Push(CTarget(fix(dist * (1.0f - X2F(dot) / 2.0f)), pTarget));
 #endif
 #else
-    //	Note: This uses the constant, not-scaled-by-frametime value, because it is only used
-    //	to determine if an CObject is initially trackable.  FindHomingTarget is called on subsequent
-    //	frames to determine if the CObject remains trackable.
+    // Note: This uses the constant, not-scaled-by-frametime value, because it is only used
+    // to determine if an CObject is initially trackable.  FindHomingTarget is called on subsequent
+    // frames to determine if the CObject remains trackable.
     if (ObjectToObjectVisibility(m_pTracker, pTarget, FQ_TRANSWALL, 1.0f, nThread)) {
         m_xBestDot = dot;
         m_nBestObj = pTarget->Index();
@@ -94,7 +94,7 @@ void CHomingTargetData::Add(CObject *pTarget, float dotScale) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHomingTargetData::Target(int32_t nThread) {
     ENTER(0, nThread);
@@ -114,12 +114,12 @@ int32_t CHomingTargetData::Target(int32_t nThread) {
 #endif
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	Return true if weapon *pTracker is able to track CObject OBJECT (nTarget), else return false.
-//	In order for the CObject to be trackable, it must be within a reasonable turning radius for the missile
-//	and it must not be obstructed by a CWall.
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Return true if weapon *pTracker is able to track CObject OBJECT (nTarget), else return false.
+// In order for the CObject to be trackable, it must be within a reasonable turning radius for the missile
+// and it must not be obstructed by a CWall.
 int32_t CObject::ObjectIsTrackable(int32_t nTarget, fix &xDot, int32_t nThread) {
     ENTER(0, nThread);
     if (IsCoopGame)
@@ -127,14 +127,14 @@ int32_t CObject::ObjectIsTrackable(int32_t nTarget, fix &xDot, int32_t nThread) 
     CObject *pTarget = OBJECT(nTarget);
     if (!pTarget)
         RETVAL(0)
-    //	Don't track player if he's cloaked.
+    // Don't track player if he's cloaked.
     if ((nTarget == LOCALPLAYER.nObject) && (LOCALPLAYER.flags & PLAYER_FLAGS_CLOAKED))
         RETVAL(0)
-    //	Can't track AI CObject if he's cloaked.
+    // Can't track AI CObject if he's cloaked.
     if (pTarget->Type() == OBJ_ROBOT) {
         if (pTarget->cType.aiInfo.CLOAKED)
             RETVAL(0)
-        //	Your missiles don't track your escort.
+        // Your missiles don't track your escort.
         if (pTarget->IsGuideBot() && (cType.laserInfo.parent.nType == OBJ_PLAYER))
             RETVAL(0)
     }
@@ -149,20 +149,20 @@ int32_t CObject::ObjectIsTrackable(int32_t nTarget, fix &xDot, int32_t nThread) 
 
     if ((EGI_FLAG(bEnhancedShakers, 0, 0, 0) && (Type() == OBJ_WEAPON) &&
          (Id() == EARTHSHAKER_MEGA_ID) /*&& (xDot >= 0)*/)) {
-        //	xDot is in legal range, now see if CObject is visible
+        // xDot is in legal range, now see if CObject is visible
         RETVAL(ObjectToObjectVisibility(this, pTarget, FQ_TRANSWALL, -1.0f, nThread))
     }
     RETVAL(0)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::SelectHomingTarget(CFixVector &vTrackerPos, int32_t nThread) {
     ENTER(0, nThread);
     if (!IsMultiGame)
         RETVAL(FindAnyHomingTarget(vTrackerPos, OBJ_ROBOT, -1, nThread))
     if ((Type() == OBJ_PLAYER) || (cType.laserInfo.parent.nType == OBJ_PLAYER)) {
-        //	It's fired by a player, so if robots present, track robot, else track player.
+        // It's fired by a player, so if robots present, track robot, else track player.
         RETVAL(
             IsCoopGame ? FindAnyHomingTarget(vTrackerPos, OBJ_ROBOT, -1, nThread)
                        : FindAnyHomingTarget(vTrackerPos, OBJ_PLAYER, OBJ_ROBOT, nThread))
@@ -175,7 +175,7 @@ int32_t CObject::SelectHomingTarget(CFixVector &vTrackerPos, int32_t nThread) {
         nThread))
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::FindTargetWindow(void) {
     ENTER(0, 0);
@@ -188,7 +188,7 @@ int32_t CObject::FindTargetWindow(void) {
     RETVAL(-1)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CObject::MaxTrackableDist(int32_t &xBestDot) {
     ENTER(0, 0);
@@ -206,16 +206,16 @@ int32_t CObject::MaxTrackableDist(int32_t &xBestDot) {
     RETVAL(MAX_TRACKABLE_DIST)
 }
 
-//	-----------------------------------------------------------------------------
-//	Find CObject to home in on.
-//	Scan list of OBJECTS rendered last frame, find one that satisfies function of nearness to center and distance.
+// -----------------------------------------------------------------------------
+// Find CObject to home in on.
+// Scan list of OBJECTS rendered last frame, find one that satisfies function of nearness to center and distance.
 int32_t CObject::FindVisibleHomingTarget(CFixVector &vTrackerPos, int32_t nThread) {
     ENTER(0, nThread);
-    //	Find an CObject to track based on game mode (eg, whether in network play) and who fired it.
+    // Find an CObject to track based on game mode (eg, whether in network play) and who fired it.
     if (IsMultiGame)
         RETVAL(SelectHomingTarget(vTrackerPos, nThread))
 
-    //	Not in network mode.  If not fired by player, then track player.
+    // Not in network mode.  If not fired by player, then track player.
     if ((Type() != OBJ_PLAYER) && (cType.laserInfo.parent.nObject != LOCALPLAYER.nObject) &&
         !(LOCALPLAYER.flags & PLAYER_FLAGS_CLOAKED))
         RETVAL(OBJ_IDX(gameData.objData.pConsole))
@@ -229,7 +229,7 @@ int32_t CObject::FindVisibleHomingTarget(CFixVector &vTrackerPos, int32_t nThrea
     bool bPlayer = (Type() == OBJ_PLAYER);
     CHomingTargetData targetData(this, vTrackerPos, targetLists[0]);
 
-    //	Not in multiplayer mode and fired by player.
+    // Not in multiplayer mode and fired by player.
     for (int32_t i = windowRenderedData[nWindow].nObjects - 1; i >= 0; i--) {
         int16_t nObject = windowRenderedData[nWindow].renderedObjects[i];
         if (nObject == LOCALPLAYER.nObject)
@@ -237,12 +237,12 @@ int32_t CObject::FindVisibleHomingTarget(CFixVector &vTrackerPos, int32_t nThrea
         CObject *pTarget = OBJECT(nObject);
         if (!pTarget)
             continue;
-        //	Can't track AI CObject if he's cloaked.
+        // Can't track AI CObject if he's cloaked.
         int32_t nType = pTarget->Type();
         if (nType == OBJ_ROBOT) {
             if (pTarget->cType.aiInfo.CLOAKED)
                 continue;
-            //	Your missiles don't track your escort.
+            // Your missiles don't track your escort.
             if (pTarget->IsGuideBot() && (bPlayer || (cType.laserInfo.parent.nType == OBJ_PLAYER)))
                 continue;
         } else if (nType == OBJ_WEAPON) {
@@ -256,12 +256,12 @@ int32_t CObject::FindVisibleHomingTarget(CFixVector &vTrackerPos, int32_t nThrea
     RETVAL(targetData.Target(nThread))
 }
 
-//	-----------------------------------------------------------------------------
-//	Find CObject to home in on.
-//	Scan list of OBJECTS rendered last frame, find one that satisfies function of nearness to center and distance.
-//	Can track two kinds of OBJECTS.  If you are only interested in one nType, set targetType2 to NULL
-//	Always track proximity bombs.  --MK, 06/14/95
-//	Make homing OBJECTS not track parent's prox bombs.
+// -----------------------------------------------------------------------------
+// Find CObject to home in on.
+// Scan list of OBJECTS rendered last frame, find one that satisfies function of nearness to center and distance.
+// Can track two kinds of OBJECTS.  If you are only interested in one nType, set targetType2 to NULL
+// Always track proximity bombs.  --MK, 06/14/95
+// Make homing OBJECTS not track parent's prox bombs.
 
 int32_t
 CObject::FindAnyHomingTarget(CFixVector &vTrackerPos, int32_t targetType1, int32_t targetType2, int32_t nThread) {
@@ -298,7 +298,7 @@ CObject::FindAnyHomingTarget(CFixVector &vTrackerPos, int32_t targetType1, int32
             if (pTarget->cType.aiInfo.CLOAKED)
                 continue; // don' track cloaked robots
             if (pTarget->IsGuideBot() && (cType.laserInfo.parent.nType == OBJ_PLAYER))
-                continue; //	player missiles don't track the guidebot.
+                continue; // player missiles don't track the guidebot.
         }
 
         targetData.Add(pTarget, dotScale);
@@ -307,8 +307,8 @@ CObject::FindAnyHomingTarget(CFixVector &vTrackerPos, int32_t targetType1, int32
     RETVAL(targetData.Target(nThread))
 }
 
-//	---------------------------------------------------------------------------------------------
-//	See if legal to keep tracking currently tracked CObject.  If not, see if another CObject is trackable.  If not,
+// ---------------------------------------------------------------------------------------------
+// See if legal to keep tracking currently tracked CObject.  If not, see if another CObject is trackable.  If not,
 // return -1, 	else return CObject number of tracking CObject. 	Computes and returns a fairly precise dot product.
 // This function is only called every 25 ms max. (-> updating at 40 fps or less)
 
@@ -319,13 +319,13 @@ int32_t CObject::UpdateHomingTarget(int32_t nTarget, fix &dot, int32_t nThread) 
     int32_t targetType1, targetType2 = -1;
 
     // if (!gameOpts->legacy.bHomers && gameStates.limitFPS.bHomers && !gameStates.app.tick40fps.bTick)
-    //	Every 8 frames for each CObject, scan all OBJECTS.
+    // Every 8 frames for each CObject, scan all OBJECTS.
     nFrame = OBJ_IDX(this) ^ gameData.appData.nFrameCount;
     if (ObjectIsTrackable(nTarget, dot, nThread) && (!gameOpts->legacy.bHomers || (nFrame % 8)))
         RETVAL(nTarget)
 
     if (!gameOpts->legacy.bHomers || (nFrame % 4 == 0)) {
-        //	If player fired missile, then search for an CObject, if not, then give up.
+        // If player fired missile, then search for an CObject, if not, then give up.
         CObject *pTarget, *pParent = OBJECT(cType.laserInfo.parent.nObject);
         if (pParent && pParent->IsPlayer()) {
             if (nTarget == -1) {
@@ -333,9 +333,9 @@ int32_t CObject::UpdateHomingTarget(int32_t nTarget, fix &dot, int32_t nThread) 
                     if (IsCoopGame)
                         rVal = FindAnyHomingTarget(Position(), OBJ_ROBOT, -1, nThread);
                     else if (gameData.appData.GameMode(
-                                 GM_MULTI_ROBOTS)) //	Not cooperative, if robots, track either robot or player
+                                 GM_MULTI_ROBOTS)) // Not cooperative, if robots, track either robot or player
                         rVal = FindAnyHomingTarget(Position(), OBJ_PLAYER, OBJ_ROBOT, nThread);
-                    else //	Not cooperative and no robots, track only a player
+                    else // Not cooperative and no robots, track only a player
                         rVal = FindAnyHomingTarget(Position(), OBJ_PLAYER, -1, nThread);
                 } else
                     rVal = FindAnyHomingTarget(Position(), OBJ_PLAYER, OBJ_ROBOT, nThread);
@@ -355,10 +355,10 @@ int32_t CObject::UpdateHomingTarget(int32_t nTarget, fix &dot, int32_t nThread) 
                 rVal = FindAnyHomingTarget(Position(), pTarget->Type(), targetType2, nThread);
             }
         }
-        Assert(rVal != -2); //	This means it never got set which is bad! Contact Mike.
+        Assert(rVal != -2); // This means it never got set which is bad! Contact Mike.
         RETVAL(rVal)
     }
     RETVAL(-1)
 }
 
-//	--------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------

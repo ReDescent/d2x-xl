@@ -363,7 +363,7 @@ bool CThrusterFlames::Setup(CObject *pObj, int32_t nStages) {
         m_ti.pp = NULL;
         m_ti.fScale = fSpeed / float(pObj->MaxSpeedScaled()) + 0.5f;
         // if (m_ti.fScale < m_ti.fSize / 2)
-        //	m_ti.fScale = m_ti.fSize / 2;
+        // m_ti.fScale = m_ti.fSize / 2;
         m_ti.fScale += float(Rand(100)) / 1000.0f;
         if (!CalcPos(pObj))
             return false;

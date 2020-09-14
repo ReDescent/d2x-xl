@@ -29,12 +29,12 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 // #define	PAE_WEAPON_HIT_WALL		1					// weapon hit wall, create player awareness
 // #define	PAE_WEAPON_HIT_ROBOT		2					// weapon hit wall, create player awareness
 
-//	Constants indicating currently moving forward or backward through path.
-//	Note that you can add aip->direction to aip_path_index to get next segment on path.
+// Constants indicating currently moving forward or backward through path.
+// Note that you can add aip->direction to aip_path_index to get next segment on path.
 #define D1_AI_DIR_FORWARD 1
 #define D1_AI_DIR_BACKWARD (-D1_AI_DIR_FORWARD)
 
-//	Behaviors
+// Behaviors
 #define D1_AIB_STILL 0x80
 #define D1_AIB_NORMAL 0x81
 #define D1_AIB_HIDE 0x82
@@ -45,7 +45,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define D1_MIN_BEHAVIOR 0x80
 #define D1_MAX_BEHAVIOR 0x85
 
-//	Modes
+// Modes
 #define D1_AIM_STILL 0
 #define D1_AIM_WANDER 1
 #define D1_AIM_FOLLOW_PATH 2
@@ -75,25 +75,25 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define D1_AIE_COLL 2
 #define D1_AIE_HURT 3
 
-//	Constants defining meaning of flags in D1_AI_state
-#define MAX_D1_AI_FLAGS 11 //	This MUST cause word (4 bytes) alignment in D1_AI_static, allowing for one byte mode
+// Constants defining meaning of flags in D1_AI_state
+#define MAX_D1_AI_FLAGS 11 // This MUST cause word (4 bytes) alignment in D1_AI_static, allowing for one byte mode
 
-#define CURRENT_GUN flags[0] //	This is the last gun the object fired from
-#define CURRENT_STATE flags[1] //	current behavioral state
-#define GOAL_STATE flags[2] //	goal state
-#define PATH_DIR flags[3] //	direction traveling path, 1 = forward, -1 = backward, other = error!
-#define SUBMODE flags[4] //	submode, eg D1_AISM_HIDING if mode == D1_AIM_HIDE
-#define GOALSIDE flags[5] //	for guys who open doors, this is the side they are going after.
-#define CLOAKED flags[6] //	Cloaked now.
-#define SKIP_D1_AI_COUNT flags[7] //	Skip AI this frame, but decrement in do_D1_AI_frame.
+#define CURRENT_GUN flags[0] // This is the last gun the object fired from
+#define CURRENT_STATE flags[1] // current behavioral state
+#define GOAL_STATE flags[2] // goal state
+#define PATH_DIR flags[3] // direction traveling path, 1 = forward, -1 = backward, other = error!
+#define SUBMODE flags[4] // submode, eg D1_AISM_HIDING if mode == D1_AIM_HIDE
+#define GOALSIDE flags[5] // for guys who open doors, this is the side they are going after.
+#define CLOAKED flags[6] // Cloaked now.
+#define SKIP_D1_AI_COUNT flags[7] // Skip AI this frame, but decrement in do_D1_AI_frame.
 #define REMOTE_OWNER flags[8] // Who is controlling this remote AI object (multiplayer use only)
 #define REMOTE_SLOT_NUM flags[9] // What slot # is this robot in for remote control purposes (multiplayer use only)
 #define MULTI_ANGER flags[10] // How angry is a robot in multiplayer mode
 
 #define D1_MAX_POINT_SEGS 2500
 
-//	These are the information for a robot describing the location of the player last time he wasn't cloaked,
-//	and the time at which he was uncloaked.  We should store this for each robot, but that's memory expensive.
+// These are the information for a robot describing the location of the player last time he wasn't cloaked,
+// and the time at which he was uncloaked.  We should store this for each robot, but that's memory expensive.
 // extern	fix			Last_uncloaked_time;
 // extern	CFixVector	Last_uncloaked_position;
 

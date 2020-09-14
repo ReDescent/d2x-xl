@@ -615,7 +615,7 @@ int32_t CCameraManager::Render(void) {
     time_t t;
     int32_t nCamsRendered;
     int32_t cm = gameStates.render.cockpit.nType;
-    //	int32_t		frameCap = gameOpts->render.nMaxFPS;
+    // int32_t		frameCap = gameOpts->render.nMaxFPS;
     int32_t nWaitFrames, nMaxWaitFrames = -1;
 
     if (!gameStates.app.bD2XLevel)

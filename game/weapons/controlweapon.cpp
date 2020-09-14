@@ -32,12 +32,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define PRINT_WEAPON_INFO 0
 
-//	Note, only Vulcan cannon requires ammo.
+// Note, only Vulcan cannon requires ammo.
 // NOTE: Now Vulcan and Gauss require ammo. -5/3/95 Yuan
 // uint8_t	DefaultPrimaryAmmoLevel [MAX_PRIMARY_WEAPONS] = {255, 0, 255, 255, 255};
 // uint8_t	DefaultSecondaryAmmoLevel [MAX_SECONDARY_WEAPONS] = {3, 0, 0, 0, 0};
 
-//	Convert primary weapons to indices in weapon info array.
+// Convert primary weapons to indices in weapon info array.
 uint8_t primaryWeaponToWeaponInfo[MAX_PRIMARY_WEAPONS] =
     {LASER_ID, VULCAN_ID, SPREADFIRE_ID, PLASMA_ID, FUSION_ID, SUPERLASER_ID, GAUSS_ID, HELIX_ID, PHOENIX_ID, OMEGA_ID};
 
@@ -604,35 +604,35 @@ uint8_t bCycling = 0;
 // allow player to reorder menus?
 
 // char	*Primary_weapon_names [MAX_PRIMARY_WEAPONS] = {
-//	"Laser Cannon",
-//	"Vulcan Cannon",
-//	"Spreadfire Cannon",
-//	"Plasma Cannon",
-//	"Fusion Cannon"
+// "Laser Cannon",
+// "Vulcan Cannon",
+// "Spreadfire Cannon",
+// "Plasma Cannon",
+// "Fusion Cannon"
 //};
 
 // char	*pszSecondaryWeaponNames [MAX_SECONDARY_WEAPONS] = {
-//	"Concussion Missile",
-//	"Homing Missile",
-//	"Proximity Bomb",
-//	"Smart Missile",
-//	"Mega Missile"
+// "Concussion Missile",
+// "Homing Missile",
+// "Proximity Bomb",
+// "Smart Missile",
+// "Mega Missile"
 //};
 
 // char	*pszShortPrimaryWeaponNames [MAX_PRIMARY_WEAPONS] = {
-//	"Laser",
-//	"Vulcan",
-//	"Spread",
-//	"Plasma",
-//	"Fusion"
+// "Laser",
+// "Vulcan",
+// "Spread",
+// "Plasma",
+// "Fusion"
 //};
 
 // char	*pszShortSecondaryWeaponNames [MAX_SECONDARY_WEAPONS] = {
-//	"Concsn\nMissile",
-//	"Homing\nMissile",
-//	"Proxim.\nBomb",
-//	"Smart\nMissile",
-//	"Mega\nMissile"
+// "Concsn\nMissile",
+// "Homing\nMissile",
+// "Proxim.\nBomb",
+// "Smart\nMissile",
+// "Mega\nMissile"
 //};
 
 // ; (0) Laser Level 1
@@ -672,7 +672,7 @@ uint8_t bCycling = 0;
 // ; (34) ---------- Super Plasma Cannon ----------
 // ; (35) ---------- Super Fusion Cannon ----------
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t AllowedToFireGun(void) {
     float s;
@@ -683,8 +683,8 @@ int32_t AllowedToFireGun(void) {
     }
     if (gameStates.app.bD2XLevel && (SEGMENT(gameData.objData.pConsole->info.nSegment)->HasNoDamageProp()))
         return 0;
-    //	Make sure enough time has elapsed to fire laser, but if it looks like it will
-    //	be a long while before laser can be fired, then there must be some mistake!
+    // Make sure enough time has elapsed to fire laser, but if it looks like it will
+    // be a long while before laser can be fired, then there must be some mistake!
     if (!IsMultiGame && ((s = gameStates.gameplay.slowmo[0].fSpeed) > 1)) {
         fix t = gameData.laserData.xLastFiredTime +
                 (fix)((gameData.laserData.xNextFireTime - gameData.laserData.xLastFiredTime) * s);
@@ -706,7 +706,7 @@ fix xNextFlareFireTime = 0;
 int32_t AllowedToFireFlare(void) {
     if ((xNextFlareFireTime > gameData.timeData.xGame) &&
         (xNextFlareFireTime <
-         gameData.timeData.xGame + FLARE_BIG_DELAY)) //	In case time is bogus, never wait > 1 second.
+         gameData.timeData.xGame + FLARE_BIG_DELAY)) // In case time is bogus, never wait > 1 second.
         return 0;
     if (LOCALPLAYER.Energy() >= WI_EnergyUsage(FLARE_ID))
         xNextFlareFireTime = gameData.timeData.xGame + F2X(gameStates.gameplay.slowmo[0].fSpeed) / 4;
@@ -721,8 +721,8 @@ int32_t AllowedToFireMissile(int32_t nPlayer, int32_t bCheckSegment) {
     float s;
     fix t;
 
-    //	Make sure enough time has elapsed to fire missile, but if it looks like it will
-    //	be a long while before missile can be fired, then there must be some mistake!
+    // Make sure enough time has elapsed to fire missile, but if it looks like it will
+    // be a long while before missile can be fired, then there must be some mistake!
     if (gameStates.app.bD2XLevel && bCheckSegment && (gameData.objData.pConsole->info.nSegment != -1) &&
         (SEGMENT(gameData.objData.pConsole->info.nSegment)->HasNoDamageProp()))
         return 0;
@@ -743,20 +743,20 @@ int32_t AllowedToFireMissile(int32_t nPlayer, int32_t bCheckSegment) {
     return 1;
 }
 
-//	------------------------------------------------------------------------------------
-//	Return:
+// ------------------------------------------------------------------------------------
+// Return:
 // Bits set:
-//		HAS_WEAPON_FLAG
-//		HAS_ENERGY_FLAG
-//		HAS_AMMO_FLAG
+// 	HAS_WEAPON_FLAG
+// 	HAS_ENERGY_FLAG
+// 	HAS_AMMO_FLAG
 // See weapon[HA] for bit values
 int32_t PlayerHasWeapon(int32_t nWeapon, int32_t bSecondary, int32_t nPlayer, int32_t bAll) {
     int32_t returnValue = 0;
     int32_t nWeaponIndex;
     CPlayerData *pPlayer = gameData.multiplayer.players + ((nPlayer < 0) ? N_LOCALPLAYER : nPlayer);
 
-    //	Hack! If energy goes negative, you can't fire a weapon that doesn't require energy.
-    //	But energy should not go negative (but it does), so find out why it does!
+    // Hack! If energy goes negative, you can't fire a weapon that doesn't require energy.
+    // But energy should not go negative (but it does), so find out why it does!
     if (gameStates.app.bD1Mission && (nWeapon >= SUPER_WEAPON))
         return 0;
     if (pPlayer->energy < 0)
@@ -819,7 +819,7 @@ int32_t PlayerHasWeapon(int32_t nWeapon, int32_t bSecondary, int32_t nPlayer, in
     return returnValue;
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 void InitWeaponOrdering(void) {
     // int16_t routine to setup default weapon priorities for new pilots
@@ -832,7 +832,7 @@ void InitWeaponOrdering(void) {
         secondaryOrder[i] = defaultSecondaryOrder[i];
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 void CyclePrimary(void) {
     bCycling = 1;
@@ -840,7 +840,7 @@ void CyclePrimary(void) {
     bCycling = 0;
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 void CycleSecondary(void) {
     bCycling = 1;
@@ -848,7 +848,7 @@ void CycleSecondary(void) {
     bCycling = 0;
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 // if message flag set, print message saying selected
 void SelectWeapon(int32_t nWeaponNum, int32_t bSecondary, int32_t bPrintMessage, int32_t bWaitForRearm) {
     const char *szWeaponName;
@@ -953,8 +953,8 @@ void ToggleBomb(void) {
 }
 
 // flags whether the last time we use this weapon, it was the 'super' version
-//	------------------------------------------------------------------------------------
-//	Select a weapon, primary or secondary.
+// ------------------------------------------------------------------------------------
+// Select a weapon, primary or secondary.
 void DoSelectWeapon(int32_t nWeapon, int32_t bSecondary) {
     int32_t nWeaponSave = nWeapon;
     int32_t nWeaponStatus, nCurrent, hasFlag;
@@ -1023,7 +1023,7 @@ void DoSelectWeapon(int32_t nWeapon, int32_t bSecondary) {
     SelectWeapon(nWeapon, bSecondary, 1, 1);
 }
 
-//	----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 
 inline int32_t WeaponId(int32_t w) {
     if (w != LASER_INDEX)
@@ -1033,7 +1033,7 @@ inline int32_t WeaponId(int32_t w) {
     return SUPER_LASER_INDEX;
 }
 
-//	----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 
 void SetLastSuperWeaponStates(void) {
     CPlayerData *pPlayer = gameData.multiplayer.players + N_LOCALPLAYER;
@@ -1045,8 +1045,8 @@ void SetLastSuperWeaponStates(void) {
     }
 }
 
-//	----------------------------------------------------------------------------------------
-//	Automatically select next best weapon if unable to fire current weapon.
+// ----------------------------------------------------------------------------------------
+// Automatically select next best weapon if unable to fire current weapon.
 // Weapon nType: 0==primary, 1==secondary
 
 void AutoSelectWeapon(int32_t nWeaponType, int32_t bAutoSelect) {
@@ -1088,10 +1088,10 @@ void AutoSelectWeapon(int32_t nWeaponType, int32_t bAutoSelect) {
                 if (iNewWeapon == MAX_PRIMARY_WEAPONS)
                     iNewWeapon = 0;
 
-                //	Hack alert!  Because the fusion uses 0 energy at the end (it's got the weird chargeup)
-                //	it looks like it takes 0 to fire, but it doesn't, so never auto-select.
+                // Hack alert!  Because the fusion uses 0 energy at the end (it's got the weird chargeup)
+                // it looks like it takes 0 to fire, but it doesn't, so never auto-select.
                 // if (primaryOrder [iNewWeapon] == FUSION_INDEX)
-                //	continue;
+                // continue;
 
                 nNewWeapon = primaryOrder[iNewWeapon];
                 if (nNewWeapon == gameData.weaponData.nPrimary) {
@@ -1105,7 +1105,7 @@ void AutoSelectWeapon(int32_t nWeaponType, int32_t bAutoSelect) {
                         if (TactileStick)
                             ButtonReflexClear(0);
 #endif
-                        //	if (POrderList(0)<POrderList(255))
+                        // if (POrderList(0)<POrderList(255))
                         SelectWeapon(0, 0, 0, 1);
                     }
                     return; // Tried all weapons!
@@ -1157,9 +1157,9 @@ void AutoSelectWeapon(int32_t nWeaponType, int32_t bAutoSelect) {
 
 #if DBG
 
-//	----------------------------------------------------------------------------------------
-//	Show player which weapons he has, how much ammo...
-//	Looks like a debug screen now because it writes to mono screen, but that will change...
+// ----------------------------------------------------------------------------------------
+// Show player which weapons he has, how much ammo...
+// Looks like a debug screen now because it writes to mono screen, but that will change...
 void ShowWeaponStatus(void) {
 #if TRACE
     for (int32_t i = 0; i < MAX_PRIMARY_WEAPONS; i++) {
@@ -1185,9 +1185,9 @@ void ShowWeaponStatus(void) {
 
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-//	Call this once/frame to process all super mines in the level.
+// Call this once/frame to process all super mines in the level.
 void ProcessSmartMinesFrame(void) {
     int32_t i, j;
     int32_t nParentObj;
@@ -1195,8 +1195,8 @@ void ProcessSmartMinesFrame(void) {
     CObject *pBomb, *pActor;
     CFixVector *vBombPos;
 
-    //	If we don't know of there being any super mines in the level, just
-    //	check every 8th CObject each frame.
+    // If we don't know of there being any super mines in the level, just
+    // check every 8th CObject each frame.
     gameStates.gameplay.bHaveSmartMines = 0;
 
     FORALL_WEAPON_OBJS(pBomb) {
@@ -1220,8 +1220,8 @@ void ProcessSmartMinesFrame(void) {
             if (pBomb->info.nSegment == pActor->info.nSegment)
                 pBomb->UpdateLife(1);
             else {
-                //	Object which is close enough to detonate smart mine is not in same CSegment as smart mine.
-                //	Need to do a more expensive check to make sure there isn't an obstruction.
+                // Object which is close enough to detonate smart mine is not in same CSegment as smart mine.
+                // Need to do a more expensive check to make sure there isn't an obstruction.
                 if (((gameData.appData.nFrameCount ^ (i + j)) % 4) == 0) {
                     CHitQuery hitQuery(0, &pBomb->Position(), &pActor->Position(), pBomb->Segment(), i);
                     CHitResult hitResult;
@@ -1295,7 +1295,7 @@ void DoWeaponStuff(void) {
     }
     if (gameData.missileData.nGlobalFiringCount < 0)
         gameData.missileData.nGlobalFiringCount = 0;
-    //	Drop proximity bombs.
+    // Drop proximity bombs.
     if (controls[0].dropBombDownCount) {
         if (gameStates.app.bD2XLevel && (SEGMENT(gameData.objData.pConsole->info.nSegment)->HasNoDamageProp()))
             controls[0].dropBombDownCount = 0;
@@ -1318,7 +1318,7 @@ void DoWeaponStuff(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t tactile_fire_duration[] = {120, 80, 150, 250, 150, 200, 100, 180, 280, 100};
 int32_t tactile_fire_repeat[] = {260, 90, 160, 160, 160, 210, 110, 191, 291, 111};
@@ -1353,7 +1353,7 @@ void TactileSetButtonJolt() {
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CWeaponInfo::SetChildren(CFile &cf, int32_t fileVersion, int32_t bD1Data) {
     if (!bD1Data && (fileVersion >= 3))
@@ -1382,7 +1382,7 @@ void CWeaponInfo::SetChildren(CFile &cf, int32_t fileVersion, int32_t bD1Data) {
         }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CWeaponInfo::Read(CFile &cf, int32_t fileVersion) {
     int32_t bD1 = fileVersion < 0;
@@ -1548,7 +1548,7 @@ void CWeaponInfo::Read(CFile &cf, int32_t fileVersion) {
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t ReadWeaponInfos(int32_t nOffset, int32_t nCount, CFile &cf, int32_t fileVersion, bool bDefault) {
     int32_t i;
@@ -1570,5 +1570,5 @@ int32_t ReadWeaponInfos(int32_t nOffset, int32_t nCount, CFile &cf, int32_t file
     return i;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

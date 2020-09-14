@@ -117,15 +117,6 @@ void DrawOutline(int32_t nVertices, CRenderPoint **pointList) {
         normal.ViewPos() = pointList[i]->ViewPos() + (n * (I2X(10)));
         G3DrawLine(pointList[i], &normal);
     }
-#if 0
-VmVecNormal (&Normal.m_vertex [1],
-				 &pointList [0]->m_vertex [1],
-				 &pointList [1]->m_vertex [1],
-				 &pointList [2]->m_vertex [1]);
-VmVecInc (&Normal.m_vertex [1], &center.m_vertex [1]);
-VmVecScale (&Normal.m_vertex [1], I2X (10));
-G3DrawLine (&center, &Normal);
-#endif
     ogl.SetDepthMode(depthFunc);
 }
 
@@ -135,7 +126,7 @@ char IsColoredSeg(int16_t nSegment) {
     if (nSegment < 0)
         return 0;
     // if (!gameStates.render.nLightingMethod)
-    //	return 0;
+    // return 0;
     CSegment *pSeg = SEGMENT(nSegment);
     if (IsEntropyGame && (extraGameInfo[1].entropy.nOverrideTextures == 2) && (pSeg->m_owner > 0))
         return (pSeg->m_owner == 1) ? 2 : 1;
@@ -144,22 +135,12 @@ char IsColoredSeg(int16_t nSegment) {
     int32_t nFogType = pSeg->FogType();
     if (nFogType)
         return 2 + nFogType;
-#if 0
-if (pSeg->m_function == SEGMENT_FUNC_TEAM_BLUE) 
-	return 1;
-if (pSeg->m_function == SEGMENT_FUNC_TEAM_RED)
-	return 2;
-#endif
     return 0;
 }
 
 // ----------------------------------------------------------------------------
 
 char IsColoredSegFace(int16_t nSegment, int16_t nSide) {
-#if 0 //! DBG
-if (!gameStates.render.nLightingMethod)
-	return 0;
-#endif
 #if DBG
     if ((nSegment == nDbgSeg) && ((nDbgSide < 0) || (nSide == nDbgSide)))
         BRP;
@@ -195,26 +176,17 @@ if (!gameStates.render.nLightingMethod)
 // ----------------------------------------------------------------------------
 
 CFloatVector segmentColors[6] = {
-#if 0 // DBG
-	 {{{1, 1, 1, 0}}},
-	 {{{1, 1, 1, 0}}},
-	 {{{1, 1, 1, 0}}},
-	 {{{1, 1, 1, 0}}},
-	 {{{1, 1, 1, 0}}},
-	 {{{1, 1, 1, 0}}}
-#else
     {{{0.8f, 0.6f, 0, 0.333f}}},
     {{{0.0, 0.6f, 0.8f, 0.333f}}},
     {{{0.2f, 0.4f, 0.6f, 0.333f}}},
     {{{1.0f, 0.7f, 0.4f, 0.333f}}},
     {{{0.7f, 0.7f, 0.7f, 0.0f}}},
     {{{0.7f, 0.7f, 0.7f, 0.0f}}}
-#endif
 };
 
 CFloatVector *ColoredSegmentColor(int32_t nSegment, int32_t nSide, char nColor) {
     // if (!gameStates.render.nLightingMethod)
-    //	return NULL;
+    // return NULL;
 
     CSegment *pSeg = SEGMENT(nSegment);
     CSegment *pConnSeg = SEGMENT(pSeg->m_children[nSide]);
@@ -224,11 +196,6 @@ CFloatVector *ColoredSegmentColor(int32_t nSegment, int32_t nSide, char nColor) 
         BRP;
 #endif
 
-#if 0
-if (nColor > 0)
-	nColor--;
-else
-#endif
     {
         if (IsEntropyGame && (extraGameInfo[1].entropy.nOverrideTextures == 2) && (pSeg->m_owner > 0)) {
             if (pConnSeg && (pConnSeg->m_owner == pSeg->m_owner))
@@ -289,7 +256,7 @@ void AlphaBlend(CFloatVector &dest, CFloatVector &src, float fAlpha) {
     dest.v.color.b = dest.v.color.b * da + src.v.color.b * fAlpha;
     // dest.v.color.a += other.v.color.a;
     // if (dest.v.color.a > 1.0f)
-    //	dest.v.color.a = 1.0f;
+    // dest.v.color.a = 1.0f;
 }
 
 //------------------------------------------------------------------------------

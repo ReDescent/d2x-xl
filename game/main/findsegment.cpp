@@ -13,7 +13,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h> //	for memset ()
+#include <string.h> // for memset ()
 
 #include "u_mem.h"
 #include "descent.h"
@@ -263,10 +263,10 @@ int16_t FindClosestSeg(CFixVector &vPos) {
     return nClosestSeg;
 }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	Do a bfs from nSegment, marking slots in markedSegs if the segment is reachable.
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Do a bfs from nSegment, marking slots in markedSegs if the segment is reachable.
 
 #define AMBIENT_SEGMENT_DEPTH 5
 
@@ -284,22 +284,22 @@ void AmbientMarkBfs(int16_t nSegment, int8_t *markedSegs, int32_t nDepth) {
     }
 }
 
-//	-----------------------------------------------------------------------------
-//	Indicate all segments which are within audible range of falling water or lava,
-//	and so should hear ambient gurgles.
+// -----------------------------------------------------------------------------
+// Indicate all segments which are within audible range of falling water or lava,
+// and so should hear ambient gurgles.
 void SetAmbientSoundFlagsCommon(int32_t tmi_bit, int32_t s2f_bit) {
     int16_t i, j;
 
     static int8_t markedSegs[MAX_SEGMENTS_D2X];
 
-    //	Now, all segments containing ambient lava or water sound makers are flagged.
-    //	Additionally flag all segments which are within range of them.
+    // Now, all segments containing ambient lava or water sound makers are flagged.
+    // Additionally flag all segments which are within range of them.
     memset(markedSegs, 0, sizeof(markedSegs));
     for (i = 0; i <= gameData.segData.nLastSegment; i++) {
         SEGMENT(i)->m_flags &= ~s2f_bit;
     }
 
-    //	Mark all segments which are sources of the sound.
+    // Mark all segments which are sources of the sound.
     CSegment *pSeg = SEGMENTS.Buffer();
     for (i = 0; i <= gameData.segData.nLastSegment; i++, pSeg++) {
         CSide *pSide = pSeg->m_sides;
@@ -310,31 +310,31 @@ void SetAmbientSoundFlagsCommon(int32_t tmi_bit, int32_t s2f_bit) {
                 (gameData.pigData.tex.pTexMapInfo[pSide->m_nOvlTex].flags & tmi_bit)) {
                 if (!IS_CHILD(pSeg->m_children[j]) || IS_WALL(pSide->m_nWall)) {
                     pSeg->m_flags |= s2f_bit;
-                    markedSegs[i] = 1; //	Say it's itself that it is close enough to to hear something.
+                    markedSegs[i] = 1; // Say it's itself that it is close enough to to hear something.
                 }
             }
         }
     }
-    //	Next mark all segments within N segments of a source.
+    // Next mark all segments within N segments of a source.
     pSeg = SEGMENTS.Buffer();
     for (i = 0; i <= gameData.segData.nLastSegment; i++, pSeg++) {
         if (pSeg->m_flags & s2f_bit)
             AmbientMarkBfs(i, markedSegs, AMBIENT_SEGMENT_DEPTH);
     }
-    //	Now, flip bits in all segments which can hear the ambient sound.
+    // Now, flip bits in all segments which can hear the ambient sound.
     for (i = 0; i <= gameData.segData.nLastSegment; i++)
         if (markedSegs[i])
             SEGMENT(i)->m_flags |= s2f_bit;
 }
 
-//	-----------------------------------------------------------------------------
-//	Indicate all segments which are within audible range of falling water or lava,
-//	and so should hear ambient gurgles.
+// -----------------------------------------------------------------------------
+// Indicate all segments which are within audible range of falling water or lava,
+// and so should hear ambient gurgles.
 
 void SetAmbientSoundFlags(void) {
     SetAmbientSoundFlagsCommon(TMI_VOLATILE, S2F_AMBIENT_LAVA);
     SetAmbientSoundFlagsCommon(TMI_WATER, S2F_AMBIENT_WATER);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

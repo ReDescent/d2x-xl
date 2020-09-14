@@ -157,7 +157,7 @@ void COGL::SetReadBuffer(int32_t nBuffer, int32_t bFBO) {
 
 int32_t COGL::SelectDrawBuffer(int32_t nBuffer, int32_t nColorBuffers) {
     // if (gameStates.render.nShadowMap > 0)
-    //	nBuffer = gameStates.render.nShadowMap + 5;
+    // nBuffer = gameStates.render.nShadowMap + 5;
     int32_t nPrevBuffer = (m_states.nCamera < 0) ? m_states.nCamera
                                                  : (m_data.pDrawBuffer && m_data.pDrawBuffer->Active() &&
                                                     !m_data.pDrawBuffer->Resize(DrawBufferWidth(), DrawBufferHeight()))

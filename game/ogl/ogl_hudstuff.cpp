@@ -49,12 +49,6 @@ void OglDrawMouseIndicator(void) {
         ComputeSinCosTable(sizeofa(sinCos12), sinCos12);
         bInitSinCos = 0;
     }
-#if 0
-if (mouseIndList)
-glCallList (mouseIndList);
-else {
-	glNewList (mouseIndList, GL_COMPILE_AND_EXECUTE);
-#endif
     if (joyMouse.Load()) {
         color.Alpha() = 255;
         joyMouse.Bitmap()->RenderScaled(mouseData.x - 8, mouseData.y - 8, 16, 16, I2X(1), 0, &color);
@@ -124,10 +118,6 @@ else {
     }
     ogl.SetLineSmooth(false);
     glLineWidth(1);
-#if 0
-	glEndList ();
-   }
-#endif
 }
 
 //------------------------------------------------------------------------------

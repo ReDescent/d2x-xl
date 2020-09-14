@@ -223,7 +223,7 @@ int32_t CBitmap::Render(
     int32_t nTransp = (Flags() & BM_FLAG_TGA) ? -1 : HasTransparency() ? 2 : 0;
     bool bLocal = Texture() == NULL;
 
-    //	uint8_t *oldpal;
+    // uint8_t *oldpal;
     CFloatVector color;
     int32_t nColors;
     bool bBlend = bTransp && nTransp;

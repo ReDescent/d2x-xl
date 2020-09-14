@@ -99,7 +99,7 @@ uint32_t nCurrentVGAMode;
 
 // do menus work in 640x480 or 320x200?
 // PC version sets this in main ().  Mac versios is always high-res, so set to 1 here
-//	Toggle_var points at a variable which gets !ed on ctrl-alt-T press.
+// Toggle_var points at a variable which gets !ed on ctrl-alt-T press.
 
 #if DBG // these only exist if debugging
 
@@ -110,7 +110,7 @@ fix xFixedFrameTime = 0; // if non-zero, set frametime to this
 
 CBitmap bmBackground;
 
-//	Function prototypes for GAME.C exclusively.
+// Function prototypes for GAME.C exclusively.
 
 #define cv_w Bitmap().Width()
 #define cv_h Bitmap().Height()
@@ -119,7 +119,7 @@ void FireGun(void);
 void SlideTextures(void);
 void PowerupGrabCheatAll(void);
 
-//	Other functions
+// Other functions
 void MultiCheckForScoreGoalWinner(bool bForce);
 void MultiCheckForEntropyWinner(void);
 void MultiSendSoundFunction(char, char);
@@ -206,7 +206,7 @@ bool InitGame(int32_t nSegments, int32_t nVertices) {
     InitAISystem();
     PrintLog(-1);
     //*---*/PrintLog (1, "gauge canvases...\n");
-    //	InitGaugeCanvases ();
+    // InitGaugeCanvases ();
     /*---*/ PrintLog(1, "Exploding walls data...\n");
     InitExplodingWalls();
     PrintLog(-1);
@@ -220,7 +220,7 @@ bool InitGame(int32_t nSegments, int32_t nVertices) {
     /*---*/ PrintLog(1, "Default ship data...\n");
     InitDefaultShipProps();
     PrintLog(-1);
-    nClearWindow = 2; //	do portal only window clear.
+    nClearWindow = 2; // do portal only window clear.
     PrintLog(-1);
     /*---*/ PrintLog(1, "Detail levels (%d)...\n", gameStates.app.nDetailLevel);
     gameStates.app.nDetailLevel = InitDetailLevels(gameStates.app.nDetailLevel);
@@ -259,7 +259,7 @@ void FlyInit(CObject *pObj) {
 
 // void morph_test (), morph_step ();
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 void DoCloakStuff(void) {
     ENTER(0, 0);
@@ -280,7 +280,7 @@ void DoCloakStuff(void) {
     RETURN
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 int32_t bFakingInvul = 0;
 
@@ -302,7 +302,7 @@ void DoInvulnerableStuff(void) {
     RETURN
 }
 
-//@@//	------------------------------------------------------------------------------------
+//@@// ------------------------------------------------------------------------------------
 //@@void afterburner_shake (void)
 //@@{
 //@@	int32_t	rx, rz;
@@ -315,7 +315,7 @@ void DoInvulnerableStuff(void) {
 //@@
 //@@}
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 #define AFTERBURNER_LOOP_START ((gameOpts->sound.audioSampleRate == SAMPLE_RATE_22K) ? 32027 : (32027 / 2)) // 20098
 #define AFTERBURNER_LOOP_END ((gameOpts->sound.audioSampleRate == SAMPLE_RATE_22K) ? 48452 : (48452 / 2)) // 25776
@@ -471,7 +471,7 @@ void GameDisableCheats() {
 }
 
 // ----------------------------------------------------------------------------
-//	GameSetup ()
+// GameSetup ()
 
 void CleanupAfterGame(bool bHaveLevel) {
     ENTER(0, 0);
@@ -479,7 +479,6 @@ void CleanupAfterGame(bool bHaveLevel) {
 #ifdef MWPROFILE
         ProfilerSetStatus(0);
 #endif
-        DestroyEffectsThread();
         networkThread.Stop();
         importantMessages[0].Destroy();
         importantMessages[1].Destroy();
@@ -528,7 +527,7 @@ void CleanupAfterGame(bool bHaveLevel) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if PHYSICS_FPS >= 0
 
@@ -579,9 +578,9 @@ int32_t GameFrame(int32_t bRenderFrame, int32_t bReadControls, int32_t fps) {
 
 #endif
 
-//	------------------------------------------------------------------------------------
-//	------------------------------------------------------------------------------------
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 // this function is the game.  called when game mode selected.  runs until
 // editor mode or exit selected
 
@@ -768,9 +767,9 @@ void SetFunctionMode(int32_t newFuncMode) {
     }
 }
 
-//	------------------------------------------------------------------------------------
-//	------------------------------------------------------------------------------------
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 #if DBG
 static int32_t nRenderCalls = 0;
@@ -827,7 +826,7 @@ class CGameLoop {
 
 CGameLoop gameLoop;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t _CDECL_ GameThreadHandler(void *pnThread) {
     gameLoop.StateLoop();
@@ -906,8 +905,8 @@ void CGameLoop::Render(void) {
 
 void CGameLoop::Setup(void) {
     ENTER(0, 0);
-    DoLunacyOn(); //	Copy values for insane into copy buffer in ai.c
-    DoLunacyOff(); //	Restore true insane mode.
+    DoLunacyOn(); // Copy values for insane into copy buffer in ai.c
+    DoLunacyOff(); // Restore true insane mode.
     gameStates.app.bGameAborted = 0;
     gameStates.app.bEndLevelSequence = 0;
     paletteManager.ResetEffect();
@@ -932,7 +931,7 @@ void CGameLoop::Setup(void) {
     RETURN
 }
 
-//	------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 int32_t CGameLoop::Preprocess(void) {
     ENTER(0, 0);
@@ -948,7 +947,7 @@ int32_t CGameLoop::Preprocess(void) {
     UpdatePlayerStats();
     UpdatePlayerWeaponInfo();
     paletteManager
-        .FadeEffect(); //	Should leave palette effect up for as long as possible by putting right before render.
+        .FadeEffect(); // Should leave palette effect up for as long as possible by putting right before render.
     DoAfterburnerStuff();
     DoCloakStuff();
     DoInvulnerableStuff();
@@ -1041,7 +1040,7 @@ int32_t CGameLoop::Postprocess(void) {
             longjmp(gameExitPoint, 0); // Go back to menu
     } else { // Note the link to above!
         PROF_CONT
-        LOCALPLAYER.homingObjectDist = -1; //	Assume not being tracked.  CObject::UpdateWeapon modifies this.
+        LOCALPLAYER.homingObjectDist = -1; // Assume not being tracked.  CObject::UpdateWeapon modifies this.
         if (!UpdateAllObjects())
             RETVAL(0)
         PowerupGrabCheatAll();
@@ -1328,7 +1327,7 @@ void ComputeSlideSegs(void) {
     gameData.segData.bHaveSlideSegs = 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void SlideTextures(void) {
     ENTER(1, 0);
@@ -1387,9 +1386,9 @@ void SlideTextures(void) {
     RETURN
 }
 
-//	-------------------------------------------------------------------------------------------------------
-//	If player is close enough to nObject, which ought to be a powerup, pick it up!
-//	This could easily be made difficulty level dependent.
+// -------------------------------------------------------------------------------------------------------
+// If player is close enough to nObject, which ought to be a powerup, pick it up!
+// This could easily be made difficulty level dependent.
 void PowerupGrabCheat(CObject *pPlayer, int32_t nObject) {
     if (gameStates.app.bGameSuspended & SUSP_POWERUPS)
         return;
@@ -1408,12 +1407,12 @@ void PowerupGrabCheat(CObject *pPlayer, int32_t nObject) {
     pPlayer->CollidePlayerAndPowerup(pPowerup, vCollision);
 }
 
-//	-------------------------------------------------------------------------------------------------------
-//	Make it easier to pick up powerups.
-//	For all powerups in this CSegment, pick them up at up to twice pickuppable distance based on dot product
-//	from CPlayerData to powerup and CPlayerData's forward vector.
-//	This has the effect of picking them up more easily left/right and up/down, but not making them disappear
-//	way before the player gets there.
+// -------------------------------------------------------------------------------------------------------
+// Make it easier to pick up powerups.
+// For all powerups in this CSegment, pick them up at up to twice pickuppable distance based on dot product
+// from CPlayerData to powerup and CPlayerData's forward vector.
+// This has the effect of picking them up more easily left/right and up/down, but not making them disappear
+// way before the player gets there.
 void PowerupGrabCheatAll(void) {
     if (gameStates.app.tick40fps.bTick && (gameData.objData.pConsole->info.nSegment != -1)) {
         int16_t nObject = SEGMENT(gameData.objData.pConsole->info.nSegment)->m_objects;
@@ -1425,9 +1424,9 @@ void PowerupGrabCheatAll(void) {
     }
 }
 
-//	------------------------------------------------------------------------------------------------------------------
-//	Create path for CPlayerData from current CSegment to goal CSegment.
-//	Return true if path created, else return false.
+// ------------------------------------------------------------------------------------------------------------------
+// Create path for CPlayerData from current CSegment to goal CSegment.
+// Return true if path created, else return false.
 
 int32_t nLastLevelPathCreated = -1;
 
@@ -1477,7 +1476,7 @@ int32_t MarkPlayerPathToSegment(int32_t nSegment) {
         vSegCenter = gameData.aiData.routeSegs[playerHideIndex + i].point;
         nObject = CreatePowerup(POW_ENERGY, -1, nSegment, vSegCenter, 1);
         if (nObject == -1) {
-            Int3(); //	Unable to drop energy powerup for path
+            Int3(); // Unable to drop energy powerup for path
             return 1;
         }
         pObj = OBJECT(nObject);
@@ -1492,7 +1491,7 @@ int32_t MarkPlayerPathToSegment(int32_t nSegment) {
 }
 
 //-----------------------------------------------------------------------------
-//	Return true if it happened, else return false.
+// Return true if it happened, else return false.
 int32_t MarkPathToExit(void) {
     for (int32_t i = 0; i <= gameData.segData.nLastSegment; i++) {
         for (int32_t j = 0, h = SEGMENT_SIDE_COUNT; j < h; j++)

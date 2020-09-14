@@ -100,7 +100,7 @@ void FlashFrame(void) {
     if (paletteManager.BlueEffect() > 10) // whiting out
         return;
 
-    //	flashAngle += FixMul(FLASH_CYCLE_RATE, gameData.timeData.xFrame);
+    // flashAngle += FixMul(FLASH_CYCLE_RATE, gameData.timeData.xFrame);
     if (gameStates.gameplay.seismic.nMagnitude) {
         fix xAddedFlash = abs(gameStates.gameplay.seismic.nMagnitude);
         if (xAddedFlash < I2X(1))
@@ -108,7 +108,7 @@ void FlashFrame(void) {
         flashAngle +=
             (fixang)FixMul(gameStates.render.nFlashRate, FixMul(gameData.timeData.xFrame, xAddedFlash + I2X(1)));
         FixFastSinCos(flashAngle, &gameStates.render.nFlashScale, NULL);
-        gameStates.render.nFlashScale = (gameStates.render.nFlashScale + I2X(3)) / 4; //	gets in range 0.5 to 1.0
+        gameStates.render.nFlashScale = (gameStates.render.nFlashScale + I2X(3)) / 4; // gets in range 0.5 to 1.0
     } else {
         flashAngle += (fixang)FixMul(gameStates.render.nFlashRate, gameData.timeData.xFrame);
         FixFastSinCos(flashAngle, &gameStates.render.nFlashScale, NULL);
@@ -715,7 +715,7 @@ void RenderMeshOutline(int32_t nScale, float fScale) {
 
     fScale *= Max(1.0f, float(CCanvas::Current()->Width()) / 640.0f);
     // if (!bBlur)
-    //	fScale *= 2.0f;
+    // fScale *= 2.0f;
 
     glColor4f(
         float(gameStates.render.outlineColor.r) / 255.0f,
@@ -905,35 +905,23 @@ void RenderMine(int16_t nStartSeg, fix xStereoSeparation, int32_t nWindow) {
     SetupMineRenderer(nWindow);
     PROF_END(ptAux)
     ComputeMineLighting(nStartSeg, xStereoSeparation, nWindow);
-#if 0
-++gameStates.render.bFullBright;
-RenderSegmentList (RENDER_TYPE_ZCULL);	// render depth only
---gameStates.render.bFullBright;
-#endif
-#if 0 // DBG
-RenderCockpitModel ();
-#endif
-#if 1
+
     gameStates.render.EnableCartoonStyle(1, 1, 1);
     RenderSkyBoxObjects();
     RenderSegmentList(RENDER_TYPE_GEOMETRY);
 
-#if 1
     if (gameStates.render.CartoonStyle() && (gameStates.render.nShadowPass < 2)) {
         // ogl.CopyDepthTexture (0, GL_TEXTURE1, 1);
         RenderSegmentEdges();
     }
-#endif
 
-#if 1
     if (!(EGI_FLAG(bShadows, 0, 1, 0) && (gameStates.render.nShadowMap > 0))) {
         if (!gameStates.app.bNostalgia && (!automap.Active() || gameOpts->render.automap.bCoronas) &&
             gameOpts->render.effects.bEnabled && gameOpts->render.coronas.bUse)
             if (!nWindow && SetupCoronas())
                 RenderSegmentList(RENDER_TYPE_CORONAS);
     }
-#endif
-#endif
+
     gameStates.render.DisableCartoonStyle();
     gameData.appData.nMineRenderCount++;
     PROF_END(ptRenderMine);

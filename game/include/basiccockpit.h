@@ -98,7 +98,7 @@ void ToggleCockpit();
 extern double cmScaleX, cmScaleY;
 extern int nHUDLineSpacing;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define HUD_SCALE(v, s) ((int)(double(v) * (s) /*+ 0.5*/))
 #define HUD_SCALE_X(v) HUD_SCALE(v, cmScaleX)
@@ -107,7 +107,7 @@ extern int nHUDLineSpacing;
 #define HUD_LHY(y) (gameStates.menus.bHires ? (24 * (y)) / 10 : y)
 #define HUD_ASPECT ((double)screen.Height() / (double)screen.Width() / 0.75)
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CBitmap *HUDBitBlt(
     int nGauge,
@@ -119,7 +119,7 @@ CBitmap *HUDBitBlt(
     int orient = 0,
     CBitmap *bmP = NULL);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 typedef struct tOldCockpitInfo {
     int score;
@@ -236,7 +236,7 @@ class CGenericCockpit {
     void AddBonusPointsToScore(int points);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CCockpit : public CGenericCockpit {
     public:
@@ -260,7 +260,7 @@ class CCockpit : public CGenericCockpit {
     virtual void DrawInvulnerableShip(void);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class CStatusBar : public CGenericCockpit {
     public:
@@ -294,6 +294,6 @@ class CStatusBar : public CGenericCockpit {
     virtual void DrawInvulnerableShip(void);
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #endif /* _COCKPIT_H */

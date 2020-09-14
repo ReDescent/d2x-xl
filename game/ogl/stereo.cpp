@@ -107,20 +107,9 @@ static bool RiftWarpFrame(const OVR::Util::Render::DistortionConfig *pDistortion
         y + h * 0.5f);
     shaderManager.Set("ScreenCenter", x + w * 0.5f, y + h * 0.5f);
 
-// MA: This is more correct but we would need higher-res texture vertically; we should adopt this
-// once we have asymmetric input texture scale.
-#if 0 // DBG -- obsolete, experimental code to decrease the size of the render output. gameOpts->render.stereo.nRiftFOV
-      // now actually influences the FOV.
-float scaleFactor;
-if (gameOpts->render.stereo.nRiftFOV == RIFT_MAX_FOV) 
-	scaleFactor = 1.0f / distortion.Scale;
-else {
-	float i, f = modf (distortion.Scale, &i);
-	scaleFactor = 1.0f / (i + f * (float (gameOpts->render.stereo.nRiftFOV) / float (RIFT_MAX_FOV)));
-	}
-#else
+    // MA: This is more correct but we would need higher-res texture vertically; we should adopt this
+    // once we have asymmetric input texture scale.
     float scaleFactor = 1.0f / distortion.Scale;
-#endif
     shaderManager.Set("Scale", (w / 2) * scaleFactor, (h / 2) * scaleFactor * as);
     shaderManager.Set("ScaleIn", 2.0f / w, 2.0f / h / as);
     shaderManager.Set("HmdWarpParam", distortion.K[0], distortion.K[1], distortion.K[2], distortion.K[3]);
@@ -185,20 +174,6 @@ bool RiftWarpScene(void) {
 const char *enhance3DFS[2][2][3] = {
     {
         {
-#if 0
-		"uniform sampler2D leftFrame, rightFrame;\r\n" \
-		"void main() {\r\n" \
-		"gl_FragColor = vec4 (texture2D (leftFrame, gl_TexCoord [0].xy).xy, dot (texture2D (rightFrame, gl_TexCoord [0].xy).rgb, vec3 (0.15, 0.15, 0.7)), 1.0);\r\n" \
-		"}",
-		"uniform sampler2D leftFrame, rightFrame;\r\n" \
-		"gl_FragColor = vec4 (clamp (1.0, dot (texture2D (leftFrame, gl_TexCoord [0].xy).rgb, vec3 (1.0, 0.15, 0.15))), texture2D (rightFrame, gl_TexCoord [0].xy).yz, 0.0, 1.0);\r\n" \
-		"}",
-		"uniform sampler2D leftFrame, rightFrame;\r\n" \
-		"void main() {\r\n" \
-		"vec3 cl = texture2D (leftFrame, gl_TexCoord [0].xy).rgb;\r\n" \
-		"gl_FragColor = vec4 (cl.r, dot (texture2D (rightFrame, gl_TexCoord [0].xy).rgb, vec3 (0.15, 0.7, 0.15)), cl.b, 1.0);\r\n" \
-		"}"
-#else
             // amber/blue
             "uniform sampler2D leftFrame, rightFrame;\r\n"
             "void main() {\r\n"
@@ -221,7 +196,6 @@ const char *enhance3DFS[2][2][3] = {
             "float s = min (1.0 - cl.g, 0.3) / max (0.000001, cl.r + cl.b);\r\n"
             "gl_FragColor = vec4 (cr.r, dot (cl, vec3 (cl.r * s, 1.0, cl.b * s)), cr.b, 1.0);\r\n"
             "}"
-#endif
         },
         {// amber/blue
          "uniform sampler2D leftFrame, rightFrame;\r\n"
@@ -351,22 +325,6 @@ const char *enhance3DFS[2][2][3] = {
       "}"}}};
 
 const char *duboisFS =
-#if 0
-		"uniform sampler2D leftFrame, rightFrame;\r\n" \
-		"vec3 rl = vec3 ( 0.4561000,  0.5004840,  0.17638100);\r\n" \
-		"vec3 gl = vec3 (-0.0400822, -0.0378246, -0.01575890);\r\n" \
-		"vec3 bl = vec3 (-0.0152161, -0.0205971, -0.00546856);\r\n" \
-		"vec3 rr = vec3 (-0.0434706, -0.0879388, -0.00155529);\r\n" \
-		"vec3 gr = vec3 ( 0.3784760,  0.7336400, -0.01845030);\r\n" \
-		"vec3 br = vec3 (-0.0721527, -0.1129610,  1.22640000);\r\n" \
-		"void main() {\r\n" \
-		"vec3 cl = texture2D (leftFrame, gl_TexCoord [0].xy).rgb;\r\n" \
-		"vec3 cr = texture2D (rightFrame, gl_TexCoord [0].xy).rgb;\r\n" \
-		"gl_FragColor = vec4 (clamp (dot (cl, rl) + dot (cr, rr), 0.0, 1.0),\r\n" \
-		"                     clamp (dot (cl, gl) + dot (cr, gr), 0.0, 1.0),\r\n" \
-		"                     clamp (dot (cl, bl) + dot (cr, br), 0.0, 1.0), 1.0);\r\n" \
-		"}";
-#else
     "uniform sampler2D leftFrame, rightFrame;\r\n"
     "mat3 lScale = mat3 ( 0.4561000,  0.5004840,  0.17638100,\r\n"
     "                    -0.0400822, -0.0378246, -0.01575890,\r\n"
@@ -378,7 +336,6 @@ const char *duboisFS =
     "gl_FragColor = vec4 (clamp (texture2D (leftFrame, gl_TexCoord [0].xy).rgb * lScale + texture2D (rightFrame, gl_TexCoord [0].xy).rgb * rScale,\r\n"
     "                            vec3 (0.0, 0.0, 0.0), vec3 (1.0, 1.0, 1.0)), 1.0);\r\n"
     "}";
-#endif
 
     const char *enhance3DVS = "void main(void){"
                               "gl_TexCoord [0]=gl_MultiTexCoord0;"

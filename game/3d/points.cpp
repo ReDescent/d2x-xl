@@ -134,13 +134,8 @@ uint8_t CRenderPoint::Project(CTransformation &transformation, CFloatVector3 &pV
         return m_flags;
     CFloatVector3 v = transformation.m_info.projection * pViewos;
     float z = fabs(pViewos.v.coord.z);
-#if 0
-m_screen.x = fix ((float) gameData.renderData.screen.Width () * 0.5f * (1.0f + v.v.coord.x / z));
-m_screen.y = fix ((float) gameData.renderData.screen.Height () * 0.5f * (1.0f + v.v.coord.y / z));
-#else
     m_screen.x = fix(CCanvas::fCanvW2 * (1.0f + v.v.coord.x / z));
     m_screen.y = fix(CCanvas::fCanvH2 * (1.0f + v.v.coord.y / z));
-#endif
     m_flags |= PF_PROJECTED;
     return m_flags;
 }

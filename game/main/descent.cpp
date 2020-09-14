@@ -407,7 +407,7 @@ void MainLoop(void) {
                 MainMenu();
             }
             // if ((gameData.multiplayer.autoNG.bValid > 0) && (gameStates.app.nFunctionMode != FMODE_GAME))
-            //	gameStates.app.nFunctionMode = FMODE_EXIT;
+            // gameStates.app.nFunctionMode = FMODE_EXIT;
             break;
 
         case FMODE_GAME:
@@ -805,8 +805,8 @@ int32_t SDLCALL main(int32_t argc, char *argv[]) {
         return -1;
     }
 
-    //	If built with editor, option to auto-load a level and quit game
-    //	to write certain data.
+    // If built with editor, option to auto-load a level and quit game
+    // to write certain data.
     PrintLog(1, "Loading player profile\n");
     DoSelectPlayer();
     CreateSoundThread(); // needs to be repeated here due to dependency on data read in DoSelectPlayer()

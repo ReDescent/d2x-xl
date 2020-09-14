@@ -42,9 +42,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 void BlastNearbyGlass(CObject *pObj, fix damage);
 void NDRecordGuidedEnd(void);
 
-//	-------------------------------------------------------------------------------------------------------------------------------
-//	***** HEY ARTISTS!!*****
-//	Here are the constants you're looking for!--MK
+// -------------------------------------------------------------------------------------------------------------------------------
+// ***** HEY ARTISTS!!*****
+// Here are the constants you're looking for!--MK
 
 #define FULL_COCKPIT_OFFS 0
 #define LASER_OFFS (I2X(29) / 100)
@@ -71,19 +71,6 @@ void TrackWeaponObject(int16_t nObject, int32_t nOwner) {
 
 void RenderLaser(CObject *pObj) {
 
-//	Commented out by John (sort of, typed by Mike) on 6/8/94
-#if 0
-	switch (pObj->info.nId) {
-	case WEAPON_TYPE_WEAK_LASER:
-	case WEAPON_TYPE_STRONG_LASER:
-	case WEAPON_TYPE_CANNON_BALL:
-	case WEAPON_TYPEMSL:
-		break;
-	default:
-		Error ("Invalid weapon nType in RenderLaser\n");
-	}
-#endif
-
     CWeaponInfo *pWeaponInfo = WEAPONINFO(pObj);
 
     if (!pWeaponInfo) {
@@ -101,7 +88,7 @@ void RenderLaser(CObject *pObj) {
     case WEAPON_RENDER_POLYMODEL:
         break;
     case WEAPON_RENDER_VCLIP:
-        Int3(); //	Oops, not supported, nType added by mk on 09/09/94, but not for lasers...
+        Int3(); // Oops, not supported, nType added by mk on 09/09/94, but not for lasers...
     default:
         Error("Invalid weapon render type %d in RenderLaser\n", pWeaponInfo->renderType);
     }
@@ -121,10 +108,10 @@ static int32_t LaserCreationTimeout(int32_t nId, fix xCreationTime) {
 }
 
 //---------------------------------------------------------------------------------
-//	Changed by MK on 09/07/94
-//	I want you to be able to blow up your own bombs.
-//	AND...Your proximity bombs can blow you up if they're 2.0 seconds or more old.
-//	Changed by MK on 06/06/95: Now must be 4.0 seconds old.  Much valid Net-complaining.
+// Changed by MK on 09/07/94
+// I want you to be able to blow up your own bombs.
+// AND...Your proximity bombs can blow you up if they're 2.0 seconds or more old.
+// Changed by MK on 06/06/95: Now must be 4.0 seconds old.  Much valid Net-complaining.
 
 int32_t LasersAreRelated(int32_t o1, int32_t o2) {
     ENTER(0, 0);
@@ -142,7 +129,7 @@ int32_t LasersAreRelated(int32_t o1, int32_t o2) {
     if (pObj1->info.nType == OBJ_WEAPON)
         if ((pObj1->cType.laserInfo.parent.nObject == o2) &&
             (pObj1->cType.laserInfo.parent.nSignature == pObj2->info.nSignature)) {
-            //	o1 is a weapon, o2 is the parent of 1, so if o1 is PROXIMITY_BOMB and o2 is player, they are related
+            // o1 is a weapon, o2 is the parent of 1, so if o1 is PROXIMITY_BOMB and o2 is player, they are related
             // only if o1 < 2.0 seconds old
             if (LaserCreationTimeout(id1, ct1))
                 RETVAL(0)
@@ -155,7 +142,7 @@ int32_t LasersAreRelated(int32_t o1, int32_t o2) {
     if (pObj2->info.nType == OBJ_WEAPON)
         if ((pObj2->cType.laserInfo.parent.nObject == o1) &&
             (pObj2->cType.laserInfo.parent.nSignature == pObj1->info.nSignature)) {
-            //	o2 is a weapon, o1 is the parent of 2, so if o2 is PROXIMITY_BOMB and o1 is player, they are related
+            // o2 is a weapon, o1 is the parent of 2, so if o2 is PROXIMITY_BOMB and o1 is player, they are related
             // only if o1 < 2.0 seconds old
             if (LaserCreationTimeout(id2, ct2))
                 RETVAL(0)
@@ -166,21 +153,21 @@ int32_t LasersAreRelated(int32_t o1, int32_t o2) {
     if ((pObj1->info.nType != OBJ_WEAPON) || (pObj2->info.nType != OBJ_WEAPON))
         RETVAL(0)
 
-    //	Here is the 09/07/94 change -- Siblings must be identical, others can hurt each other
+    // Here is the 09/07/94 change -- Siblings must be identical, others can hurt each other
     // See if they're siblings...
-    //	MK: 06/08/95, Don't allow prox bombs to detonate for 3/4 second.  Else too likely to get toasted by your own
+    // MK: 06/08/95, Don't allow prox bombs to detonate for 3/4 second.  Else too likely to get toasted by your own
     // bomb if hit by opponent.
     if (pObj1->cType.laserInfo.parent.nSignature == pObj2->cType.laserInfo.parent.nSignature) {
         if ((id1 != PROXMINE_ID) && (id2 != PROXMINE_ID) && (id1 != SMARTMINE_ID) && (id2 != SMARTMINE_ID))
             RETVAL(1)
-        //	If neither is older than 1/2 second, then can't blow up!
+        // If neither is older than 1/2 second, then can't blow up!
         if ((gameData.timeData.xGame > (ct1 + I2X(1) / 2) * gameStates.gameplay.slowmo[0].fSpeed) ||
             (gameData.timeData.xGame > (ct2 + I2X(1) / 2) * gameStates.gameplay.slowmo[0].fSpeed))
             RETVAL(0)
         RETVAL(1)
     }
 
-    //	Anything can cause a collision with a robot super prox mine.
+    // Anything can cause a collision with a robot super prox mine.
     if (CObject::IsMine(id1) || CObject::IsMine(id2))
         RETVAL(0)
     if (!COMPETITION && EGI_FLAG(bKillMissiles, 0, 0, 0) && (CObject::IsMissile(id1) || CObject::IsMissile(id2)))
@@ -198,7 +185,7 @@ void DoMuzzleStuff(int32_t nSegment, CFixVector *pos) {
         gameData.muzzleData.queueIndex = 0;
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 CFixVector *GetGunPoints(CObject *pObj, int32_t nGun) {
     if (!pObj)
@@ -251,7 +238,7 @@ CFixVector *TransformGunPoint(
 
     if (nGun < 0) { // use center between gunPoints nGun and nGun + 1
         *v = vGunPoints[-nGun] + vGunPoints[-nGun - 1];
-        //	VmVecScale (VmVecAdd (v, vGunPoints - nGun, vGunPoints - nGun - 1), I2X (1) / 2);
+        // VmVecScale (VmVecAdd (v, vGunPoints - nGun, vGunPoints - nGun - 1), I2X (1) / 2);
         *v *= (I2X(1) / 2);
     } else {
         v[0] = vGunPoints[nGun];
@@ -270,7 +257,7 @@ CFixVector *TransformGunPoint(
     if (nGun < 0)
         v[1] += (*pMatrix).m.dir.u * (-2 * v->Mag());
     (*vMuzzle) = pPos->vPos + v[1];
-    //	If supposed to fire at a delayed time (xDelay), then move this point backwards.
+    // If supposed to fire at a delayed time (xDelay), then move this point backwards.
     if (xDelay)
         *vMuzzle += pMatrix->m.dir.f * (-FixMul(xDelay, WI_Speed(nLaserType, gameStates.app.nDifficultyLevel)));
     return vMuzzle;
@@ -339,7 +326,7 @@ int32_t FireWeaponDelayedWithSpread(
     if (nFate == HIT_WALL) {
         RETVAL(-1)
     }
-    //	Now, make laser spread out.
+    // Now, make laser spread out.
     vLaserDir = m.m.dir.f;
     if (xSpreadR || xSpreadU) {
         vLaserDir += m.m.dir.r * xSpreadR;
@@ -356,12 +343,10 @@ int32_t FireWeaponDelayedWithSpread(
 #endif
         RETVAL(-1)
     }
-    //	Omega cannon is a hack, not surprisingly.  Don't want to do the rest of this stuff.
+    // Omega cannon is a hack, not surprisingly.  Don't want to do the rest of this stuff.
     if (nLaserType == OMEGA_ID)
         RETVAL(-1)
-#if 0 // debug stuff
-TrackWeaponObject (nObject, int32_t (nPlayer));
-#endif
+
     if ((nLaserType == GUIDEDMSL_ID) && gameData.multigame.bIsGuided)
         gameData.objData.SetGuidedMissile(nPlayer, pWeapon);
     gameData.multigame.bIsGuided = 0;
@@ -369,20 +354,12 @@ TrackWeaponObject (nObject, int32_t (nPlayer));
         if (!gameData.objData.pMissileViewer && (nPlayer == N_LOCALPLAYER))
             gameData.objData.pMissileViewer = pWeapon;
     }
-//	If this weapon is supposed to be silent, set that bit!
-#if 0 
-// the following code prevents sound from cutting out due to too many sound sources (e.g. laser bolts)
-// the backside is that only one laser bolt from a round creates an impact sound
-// turn on if sound cuts out during intense firefights
-if (!bMakeSound)
-	pWeapon->info.nFlags |= OF_SILENT;
-#endif
-    //	If this weapon is supposed to be silent, set that bit!
+
     if (bHarmless)
         pWeapon->info.nFlags |= OF_HARMLESS;
 
-    //	If the object firing the laser is the player, then indicate the laser object so robots can dodge.
-    //	New by MK on 6/8/95, don't let robots evade proximity bombs, thereby decreasing uselessness of bombs.
+    // If the object firing the laser is the player, then indicate the laser object so robots can dodge.
+    // New by MK on 6/8/95, don't let robots evade proximity bombs, thereby decreasing uselessness of bombs.
     if ((nPlayer == N_LOCALPLAYER) && !pWeapon->IsPlayerMine())
         gameStates.app.bPlayerFiredLaserThisFrame = nObject;
 
@@ -399,7 +376,7 @@ if (!bMakeSound)
     RETVAL(nObject)
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void CreateFlare(CObject *pObj) {
     ENTER(0, 0);
@@ -432,7 +409,7 @@ float MissileSpeedScale(CObject *pObj) {
 }
 
 //-------------------------------------------------------------------------------------------
-//	Set object *pObj's orientation to (or towards if I'm ambitious) its velocity.
+// Set object *pObj's orientation to (or towards if I'm ambitious) its velocity.
 
 void HomingMissileTurnTowardsVelocity(CObject *pObj, CFixVector *vNormVel) {
     CFixVector vNewDir;
@@ -493,12 +470,12 @@ void CObject::UpdateHomingWeapon(int32_t nThread) {
         fix dot = I2X(1);
         fix speed, xMaxSpeed, xDist;
         int32_t nObjId = info.nId;
-        //	For first 1/2 second of life, missile flies straight.
+        // For first 1/2 second of life, missile flies straight.
         if (cType.laserInfo.xCreationTime + HomingMslStraightTime(nObjId) < gameData.timeData.xGame) {
-            //	If it's time to do tracking, then it's time to grow up, stop bouncing and start exploding!.
+            // If it's time to do tracking, then it's time to grow up, stop bouncing and start exploding!.
             if (Bounces())
                 mType.physInfo.flags &= ~PF_BOUNCES;
-            //	Make sure the CObject we are tracking is still trackable.
+            // Make sure the CObject we are tracking is still trackable.
             int32_t nTarget = UpdateHomingTarget(cType.laserInfo.nHomingTarget, dot, nThread);
             CObject *pTarget = OBJECT(nTarget);
             if (pTarget) {
@@ -523,11 +500,8 @@ void CObject::UpdateHomingWeapon(int32_t nThread) {
                     if (h > 7)
                         vVecToObject *= (I2X(1) / (h - 6));
                 }
-#if 0
-			vVecToObject *= HomingMslScale ();
-#endif
                 vNewVel += vVecToObject;
-                //	The boss' smart children track better...
+                // The boss' smart children track better...
                 CWeaponInfo *pWeaponInfo = WEAPONINFO(info.nId);
                 if (!pWeaponInfo || (pWeaponInfo->renderType != WEAPON_RENDER_POLYMODEL))
                     vNewVel += vVecToObject;
@@ -535,17 +509,17 @@ void CObject::UpdateHomingWeapon(int32_t nThread) {
                 // CFixVector vOldVel = mType.physInfo.velocity;
                 CFixVector vTest = info.position.vPos + vNewVel * xDist;
                 if (CanSeePoint(this, &info.position.vPos, &vTest, info.nSegment, 3 * info.xSize / 2, -1.0f, nThread))
-                /*mType.physInfo.velocity = vOldVel;
-            else*/
-                { //	Subtract off life proportional to amount turned. For hardest turn, it will lose 2 seconds per
-                  // second.
+                {
+                    // Subtract off life proportional to amount turned. For hardest turn, it will lose 2 seconds per second.
                     mType.physInfo.velocity = vNewVel;
                     mType.physInfo.velocity *= speed;
                     dot = abs(I2X(1) - dot);
                     info.xLifeLeft -= FixMul(dot * 32, I2X(1) / 40);
-                    //	Only polygon OBJECTS have visible orientation, so only they should turn.
-                    if (pWeaponInfo && (pWeaponInfo->renderType == WEAPON_RENDER_POLYMODEL))
-                        HomingMissileTurnTowardsVelocity(this, &vNewVel); //	vNewVel is normalized velocity.
+                    // Only polygon OBJECTS have visible orientation, so only they should turn.
+                    if (pWeaponInfo && (pWeaponInfo->renderType == WEAPON_RENDER_POLYMODEL)) {
+                        // vNewVel is normalized velocity.
+                        HomingMissileTurnTowardsVelocity(this, &vNewVel);
+                    }
                 }
             }
         }
@@ -555,12 +529,12 @@ void CObject::UpdateHomingWeapon(int32_t nThread) {
 }
 
 //-------------------------------------------------------------------------------------------
-//	Make sure weapon is not moving faster than allowed speed.
+// Make sure weapon is not moving faster than allowed speed.
 
 void CObject::UpdateWeaponSpeed(void) {
     fix xSpeed = mType.physInfo.velocity.Mag();
     if ((info.nType == OBJ_WEAPON) && (xSpeed > WI_Speed(info.nId, gameStates.app.nDifficultyLevel))) {
-        //	Only slow down if not allowed to move.  Makes sense, huh?  Allows proxbombs to get moved by physics force.
+        // Only slow down if not allowed to move.  Makes sense, huh?  Allows proxbombs to get moved by physics force.
         //--MK, 2/13/96
         if (WI_Speed(info.nId, gameStates.app.nDifficultyLevel)) {
             fix xScaleFactor = FixDiv(WI_Speed(info.nId, gameStates.app.nDifficultyLevel), xSpeed);
@@ -573,8 +547,8 @@ void CObject::UpdateWeaponSpeed(void) {
 // sequence this weapon object for this _frame_ (underscores added here to aid MK in his searching!)
 void CObject::UpdateWeapon(void) {
     Assert(info.controlType == CT_WEAPON);
-    //	Ok, this is a big hack by MK.
-    //	If you want an CObject to last for exactly one frame, then give it a lifeleft of ONE_FRAME_TIME
+    // Ok, this is a big hack by MK.
+    // If you want an CObject to last for exactly one frame, then give it a lifeleft of ONE_FRAME_TIME
     if (RemoveWeapon())
         return;
     if (info.nType == OBJ_WEAPON) {
@@ -582,7 +556,7 @@ void CObject::UpdateWeapon(void) {
             CFixVector::Normalize(mType.physInfo.velocity);
             mType.physInfo.velocity *= (WI_Speed(info.nId, gameStates.app.nDifficultyLevel));
         }
-        //	For homing missiles, turn towards target. (unless it's a guided missile still under player control)
+        // For homing missiles, turn towards target. (unless it's a guided missile still under player control)
         if ((gameOpts->legacy.bHomers ||
              (gameData.laserData.xUpdateTime >= HOMING_WEAPON_FRAMETIME)) && // limit update frequency to 40 fps
             (gameStates.app.cheats.bHomingWeapons || WI_HomingFlag(info.nId)) &&
@@ -599,32 +573,28 @@ void CObject::UpdateWeapon(void) {
     UpdateWeaponSpeed();
 }
 
-//	--------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------
 
 void StopPrimaryFire(void) {
-#if 0
-gameData.laserData.xNextFireTime = gameData.timeData.xGame;	//	Prevents shots-to-fire from building up.
-#else
     if (gameStates.app.cheats.bLaserRapidFire == 0xBADA55)
         gameData.laserData.xNextFireTime = gameData.timeData.xGame + I2X(1) / 25;
     else
         gameData.laserData.xNextFireTime = gameData.timeData.xGame + WI_FireWait(gameData.weaponData.nPrimary);
-#endif
     gameData.laserData.nGlobalFiringCount = 0;
     controls.StopPrimaryFire();
     gameData.weaponData.firing[0].nStart = gameData.weaponData.firing[0].nStop =
         gameData.weaponData.firing[0].nDuration = 0;
 }
 
-//	--------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------
 
 void StopSecondaryFire(void) {
-    gameData.missileData.xNextFireTime = gameData.timeData.xGame; //	Prevents shots-to-fire from building up.
+    gameData.missileData.xNextFireTime = gameData.timeData.xGame; // Prevents shots-to-fire from building up.
     gameData.missileData.nGlobalFiringCount = 0;
     controls.StopSecondaryFire();
 }
 
-//	--------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------
 // Assumption: This is only called by the actual console player, not for network players
 
 int32_t LocalPlayerFireGun(void) {
@@ -649,12 +619,12 @@ int32_t LocalPlayerFireGun(void) {
     nWeaponIndex = primaryWeaponToWeaponInfo[gameData.weaponData.nPrimary];
     xEnergyUsed = WI_EnergyUsage(nWeaponIndex);
     if (gameData.weaponData.nPrimary == OMEGA_INDEX)
-        xEnergyUsed = 0; //	Omega consumes energy when recharging, not when firing.
+        xEnergyUsed = 0; // Omega consumes energy when recharging, not when firing.
     if (gameStates.app.nDifficultyLevel < 2)
         xEnergyUsed = FixMul(xEnergyUsed, I2X(gameStates.app.nDifficultyLevel + 2) / 4);
-    //	MK, 01/26/96, Helix use 2x energy in multiplayer.  bitmaps.tbl parm should have been reduced for single player.
+    // MK, 01/26/96, Helix use 2x energy in multiplayer.  bitmaps.tbl parm should have been reduced for single player.
     // if (nWeaponIndex == FUSION_ID)
-    //	postProcessManager.Add (NEW CPostEffectShockwave (SDL_GetTicks (), I2X (1) / 3, pObj->info.xSize, 1, OBJPOS
+    // postProcessManager.Add (NEW CPostEffectShockwave (SDL_GetTicks (), I2X (1) / 3, pObj->info.xSize, 1, OBJPOS
     //(pObj)->vPos + OBJPOS (pObj)->mOrient.m.dir.f * pObj->info.xSize));
     else if (nWeaponIndex == HELIX_ID) {
         if (IsMultiGame)
@@ -674,7 +644,7 @@ int32_t LocalPlayerFireGun(void) {
         nPrimaryAmmo = pPlayer->primaryAmmo[VULCAN_INDEX];
     }
     if ((pPlayer->energy < xEnergyUsed) || (nPrimaryAmmo < nAmmoUsed))
-        AutoSelectWeapon(0, 1); //	Make sure the player can fire from this weapon.
+        AutoSelectWeapon(0, 1); // Make sure the player can fire from this weapon.
 
     if ((gameData.laserData.xLastFiredTime + 2 * gameData.timeData.xFrame < gameData.timeData.xGame) ||
         (gameData.timeData.xGame < gameData.laserData.xLastFiredTime))
@@ -741,19 +711,19 @@ int32_t LocalPlayerFireGun(void) {
                     pPlayer->primaryAmmo[VULCAN_INDEX] -= nAmmoUsed;
             }
 #endif
-            AutoSelectWeapon(0, 1); //	Make sure the player can fire from this weapon.
+            AutoSelectWeapon(0, 1); // Make sure the player can fire from this weapon.
         } else {
-            AutoSelectWeapon(0, 1); //	Make sure the player can fire from this weapon.
+            AutoSelectWeapon(0, 1); // Make sure the player can fire from this weapon.
             StopPrimaryFire();
-            break; //	Couldn't fire weapon, so abort.
+            break; // Couldn't fire weapon, so abort.
         }
     }
     gameData.laserData.nGlobalFiringCount = 0;
     RETVAL(rVal)
 }
 
-//	-------------------------------------------------------------------------------------------
-//	if nGoalObj == -1, then create Random vector
+// -------------------------------------------------------------------------------------------
+// if nGoalObj == -1, then create Random vector
 int32_t CreateHomingWeapon(CObject *pObj, int32_t nGoalObj, uint8_t objType, int32_t bMakeSound) {
     ENTER(0, 0);
     int16_t nObject;
@@ -762,7 +732,7 @@ int32_t CreateHomingWeapon(CObject *pObj, int32_t nGoalObj, uint8_t objType, int
 
     if (!pGoalObj)
         vGoal = CFixVector::Random();
-    else { //	Create a vector towards the goal, then add some noise to it.
+    else { // Create a vector towards the goal, then add some noise to it.
         CFixVector::NormalizedDir(vGoal, pGoalObj->info.position.vPos, pObj->info.position.vPos);
         vRandom = CFixVector::Random();
         vGoal += vRandom * (I2X(1) / 4);
@@ -793,7 +763,7 @@ void CreateSmartChildren(CObject *pObj, int32_t nSmartChildren) {
         parent.nType = OBJ_ROBOT;
         parent.nObject = pObj->Index();
     } else {
-        Int3(); //	Hey, what kind of CObject is this!?
+        Int3(); // Hey, what kind of CObject is this!?
         parent.nType = 0;
         parent.nObject = 0;
     }
@@ -828,7 +798,7 @@ void CreateSmartChildren(CObject *pObj, int32_t nSmartChildren) {
         } else if (pTarget->info.nType == OBJ_ROBOT) {
             if (pTarget->cType.aiInfo.CLOAKED)
                 continue;
-            if (parent.nType == OBJ_ROBOT) //	Robot blobs can't track robots.
+            if (parent.nType == OBJ_ROBOT) // Robot blobs can't track robots.
                 continue;
             if ((parent.nType == OBJ_PLAYER) && pTarget->IsGuideBot()) // Your shots won't track the buddy.
                 continue;
@@ -841,7 +811,7 @@ void CreateSmartChildren(CObject *pObj, int32_t nSmartChildren) {
                 break;
         }
     }
-    //	Get type of weapon for child from parent.
+    // Get type of weapon for child from parent.
     if (nObjType == OBJ_WEAPON) {
         if (!pWeaponInfo)
             RETURN
@@ -860,7 +830,7 @@ void CreateSmartChildren(CObject *pObj, int32_t nSmartChildren) {
     RETURN
 }
 
-//	-------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------
 
 // give up control of the guided missile
 void ReleaseGuidedMissile(int32_t nPlayer) {
@@ -879,7 +849,7 @@ void ReleaseGuidedMissile(int32_t nPlayer) {
     RETURN
 }
 
-//	-------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------
 // parameter determines whether or not to do autoselect if have run out of ammo
 // this is needed because if you drop a bomb with the B key, you don't
 // want to autoselect if the bomb isn't actually selected.
@@ -1023,9 +993,9 @@ void GetPlayerMslLock(void) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------
-//	Fire Laser:  Registers a laser fire, and performs special stuff for the fusion
-//				    cannon.
+// -----------------------------------------------------------------------------
+// Fire Laser:  Registers a laser fire, and performs special stuff for the fusion
+// 			    cannon.
 void FireGun(void) {
     ENTER(0, 0);
     int32_t i = primaryWeaponToWeaponInfo[gameData.weaponData.nPrimary];
@@ -1037,5 +1007,5 @@ void FireGun(void) {
     RETURN
 }
 
-//	-------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------
 // eof

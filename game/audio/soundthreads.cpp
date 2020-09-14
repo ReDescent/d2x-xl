@@ -101,9 +101,6 @@ int32_t StartSoundThread(tSoundTask nTask) {
         WaitForSoundThread();
         tiSound.nTask = nTask;
         tiSound.bExec = 1;
-#if 0
-        PrintLog (0, "running render threads (task: %d)\n", nTask);
-#endif
         return 1;
     }
     return 0;

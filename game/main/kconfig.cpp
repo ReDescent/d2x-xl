@@ -90,7 +90,7 @@ int32_t joybutton_text[28] = {TNUM_BTN_1,  TNUM_BTN_2, TNUM_BTN_3,  TNUM_BTN_4, 
                               TNUM_LEFT,   TNUM_RIGHT, -1,          TNUM_UP,     TNUM_DOWN,   TNUM_LEFT,  TNUM_RIGHT};
 
 int32_t joyaxis_text[7] = {TNUM_X1, TNUM_Y1, TNUM_Z1, TNUM_R1, TNUM_P1, TNUM_R1, TNUM_YA1};
-//	int32_t JOYAXIS_TEXT [4] = { TNUM_X1, TNUM_Y1, TNUM_X2, TNUM_Y2 };
+// int32_t JOYAXIS_TEXT [4] = { TNUM_X1, TNUM_Y1, TNUM_X2, TNUM_Y2 };
 #endif
 
 #if 0
@@ -856,7 +856,7 @@ void CControlConfig::DrawTable(void) {
 
 void CControlConfig::Render(void) {
     // if (gameOpts->menus.nStyle && gameStates.app.bGameRunning)
-    //	RenderMenuGameFrame ()
+    // RenderMenuGameFrame ()
     //
     // if (BeginRenderMenu ())
     int32_t nOffsetSave = gameData.SetStereoOffsetType(STEREO_OFFSET_FIXED);
@@ -937,14 +937,14 @@ int32_t CControlConfig::AssignControl(kcItem *item, int32_t nType, uint8_t code)
         if ((i != n) && (m_items[i].nType == nType) && (m_items[i].value == code)) {
             m_items[i].value = 255;
             // if (ogl.m_states.nDrawBuffer == GL_FRONT)
-            //	DrawItem (m_items + i, 0);
+            // DrawItem (m_items + i, 0);
         }
     }
     item->value = code;
     // if (ogl.m_states.nDrawBuffer == GL_FRONT) {
-    //	DrawItem (item, 1);
-    //	backgroundManager.Draw ();
-    //	}
+    // DrawItem (item, 1);
+    // backgroundManager.Draw ();
+    // }
     GameFlushInputs();
     fontManager.SetColorRGBi(RGBA_PAL2(28, 28, 28), 1, 0, 1);
     return BT_NONE;
@@ -1076,7 +1076,7 @@ int32_t CControlConfig::ChangeControl(kcItem *item, int32_t nType, kc_ctrlfunc_p
             return AssignControl(item, BT_NONE, 255);
         }
         // if (ogl.m_states.nDrawBuffer == GL_FRONT)
-        //	G3_SLEEP (10);
+        // G3_SLEEP (10);
     }
     return AssignControl(item, nType, ctrlfunc(m_nChangeState));
 }
@@ -1087,7 +1087,7 @@ int32_t CControlConfig::ChangeInvert(kcItem *item) {
     GameFlushInputs();
     item->value = !item->value;
     // if (ogl.m_states.nDrawBuffer == GL_FRONT)
-    //	DrawItem (item, 1);
+    // DrawItem (item, 1);
     return BT_NONE;
 }
 
@@ -1381,7 +1381,7 @@ int32_t CControlConfig::HandleInput(void) {
         MouseGetPos(&mx, &my);
         mx -= m_xOffs;
         my -= m_yOffs;
-        //			my = (my * 12) / 10;	//y mouse pos is off here, no clue why
+        // 		my = (my * 12) / 10;	//y mouse pos is off here, no clue why
         for (i = 0; i < m_nItems; i++) {
             item_height = GetItemHeight(m_items + i);
             int32_t x1 = /*CCanvas::Current ()->Left () +*/ LHX(m_items[i].x) + LHX(m_items[i].w1);

@@ -1083,7 +1083,7 @@ void StaticParticlesFrame(void) {
 
 void DoParticleFrame(void) {
     // if (gameStates.render.nShadowPass > 1)
-    //	return;
+    // return;
     PlayerBulletFrame();
     ObjectParticleFrame();
     StaticParticlesFrame();

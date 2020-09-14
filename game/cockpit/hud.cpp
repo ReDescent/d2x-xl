@@ -41,7 +41,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 #include "font.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static void DrawSeparator(int32_t l, int32_t t, int32_t r, int32_t b) {
     int32_t nLayout = gameStates.menus.nInMenu ? 0 : gameOpts->render.cockpit.nShipStateLayout;
@@ -53,7 +53,7 @@ static void DrawSeparator(int32_t l, int32_t t, int32_t r, int32_t b) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::GetHostageWindowCoords(int32_t &x, int32_t &y, int32_t &w, int32_t &h) {
     x = SECONDARY_W_BOX_LEFT;
@@ -62,19 +62,19 @@ void CHUD::GetHostageWindowCoords(int32_t &x, int32_t &y, int32_t &w, int32_t &h
     h = SECONDARY_W_BOX_BOT - SECONDARY_W_BOX_TOP + 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawRecording(void) { CGenericCockpit::DrawRecording(0); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawCountdown(void) { CGenericCockpit::DrawCountdown(SMALL_FONT->Height() * 4); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawCruise(void) { CGenericCockpit::DrawCruise(3, -(IsMultiGame ? 11 : 6) * LineSpacing()); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawScore(void) {
     if (cockpit->Hide())
@@ -96,7 +96,7 @@ void CHUD::DrawScore(void) {
     DrawHUDText(NULL, -w - LHX(2), 3, szScore);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawAddedScore(void) {
     if (cockpit->Hide())
@@ -119,7 +119,7 @@ void CHUD::DrawAddedScore(void) {
             color = 10;
         else if (color > 31)
             color = 30;
-        color = color - (color % 4); //	Only allowing colors 12, 16, 20, 24, 28 speeds up gr_getcolor, improves caching
+        color = color - (color % 4); // Only allowing colors 12, 16, 20, 24, 28 speeds up gr_getcolor, improves caching
         if (gameStates.app.cheats.bEnabled)
             sprintf(szScore, "%s", TXT_CHEATER);
         else
@@ -133,7 +133,7 @@ void CHUD::DrawAddedScore(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawHomingWarning(void) {
     if (cockpit->Hide())
@@ -193,7 +193,7 @@ if (gameData.timeData.xGame & 0x4000) {
 }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawKeys(void) {
     if (cockpit->Hide())
@@ -225,7 +225,7 @@ else
     gameData.SetStereoOffsetType(nOffsetSave);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawOrbs(void) {
     if (cockpit->Hide())
@@ -233,7 +233,7 @@ void CHUD::DrawOrbs(void) {
     CGenericCockpit::DrawOrbs(m_info.fontWidth, LineSpacing() * (gameStates.render.fonts.bHires + 1));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawFlag(void) {
     if (cockpit->Hide())
@@ -241,7 +241,7 @@ void CHUD::DrawFlag(void) {
     CGenericCockpit::DrawFlag(5 * LineSpacing(), LineSpacing() * (gameStates.render.fonts.bHires + 1));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUD::FlashGauge(int32_t h, int32_t *bFlash, int32_t tToggle) {
     time_t t = gameStates.app.nSDLTicks[0];
@@ -263,7 +263,7 @@ int32_t CHUD::FlashGauge(int32_t h, int32_t *bFlash, int32_t tToggle) {
     return (int32_t)((b && (tToggle <= t)) ? t + 300 / b : 0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawShieldText(void) {
     if (cockpit->Hide())
@@ -298,7 +298,7 @@ void CHUD::DrawShieldText(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawShieldBar(void) {
     if (cockpit->Hide())
@@ -381,7 +381,7 @@ void CHUD::DrawShieldBar(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawEnergyText(void) {
     if (cockpit->Hide())
@@ -425,7 +425,7 @@ void CHUD::DrawEnergyText(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawEnergyBar(void) {
     if (cockpit->Hide())
@@ -473,7 +473,7 @@ void CHUD::DrawEnergyBar(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawAfterburnerText(void) {
     if (cockpit->Hide())
@@ -510,7 +510,7 @@ void CHUD::DrawAfterburnerText(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawAfterburnerBar(void) {
     if (cockpit->Hide())
@@ -544,7 +544,7 @@ void CHUD::DrawAfterburnerBar(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawEnergyLevelsCombined(void) {
     int32_t y = AdjustCockpitY(-2 * LineSpacing());
@@ -590,7 +590,7 @@ void CHUD::DrawEnergyLevelsCombined(void) {
     gameData.SetStereoOffsetType(nOffsetSave);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawEnergyLevels(void) {
 #if DBG
@@ -603,22 +603,22 @@ void CHUD::DrawEnergyLevels(void) {
         CGenericCockpit::DrawEnergyLevels();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define SECONDARY_WEAPON_NAMES_VERY_SHORT(nWeaponId) \
     ((nWeaponId <= MEGA_INDEX) ? GAMETEXT(541 + nWeaponId) : GT(636 + nWeaponId - FLASHMSL_INDEX))
 
 // return which bomb will be dropped next time the bomb key is pressed
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::ClearBombCount(int32_t bgColor) {}
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawBombCount(void) { CGenericCockpit::DrawBombCount(0, 0, BLACK_RGBA, 0); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUD::DrawBombCount(int32_t &nIdBombCount, int32_t x, int32_t y, int32_t nColor, char *pszBombCount) {
     if (gameOpts->render.cockpit.nShipStateLayout)
@@ -639,15 +639,15 @@ int32_t CHUD::DrawBombCount(int32_t &nIdBombCount, int32_t x, int32_t y, int32_t
     return retCode;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawPrimaryAmmoInfo(int32_t ammoCount) { DrawAmmoInfo(PRIMARY_AMMO_X, PRIMARY_AMMO_Y, ammoCount, 1); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawSecondaryAmmoInfo(int32_t ammoCount) { DrawAmmoInfo(SECONDARY_AMMO_X, SECONDARY_AMMO_Y, ammoCount, 0); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static const char *CC_AVAILABLE = "\x1\x80\xf0\x80\x0";
 static const char *CC_EQUIPPED[3] = {"\x1\xff\x80\x80\x0", "\x1\xff\xe0\x80\x0", "\x1\x80\xff\xff\x0"};
@@ -661,7 +661,7 @@ int32_t CHUD::StrWeaponStateColor(char *pszList, int32_t l, int32_t bAvailable, 
     return l + 4;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::SetWeaponStateColor(int32_t bAvailable, int32_t bActive) {
     static uint32_t equippedColors[3] = {RED_RGBA, GOLD_RGBA, CYAN_RGBA};
@@ -675,7 +675,7 @@ void CHUD::SetWeaponStateColor(int32_t bAvailable, int32_t bActive) {
         0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 char *CHUD::StrPrimaryWeaponList(char *pszList, char *pszAmmo) {
     // Q6SPVF HPGO - (Quad) Lasers <level>, Spreafire, Plasma, Vulcan, Fusion, Helix, Gauss, Omega
@@ -769,7 +769,7 @@ else
     return pszList;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static int32_t WeaponListTop(void) {
     if (gameOpts->render.cockpit.nCompactHeight == 2)
@@ -779,7 +779,7 @@ static int32_t WeaponListTop(void) {
            gameOpts->render.cockpit.nCompactHeight * nLineSpacing * 2;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawPrimaryWeaponList(void) {
     // Q6SPVF HPGO - (Quad) Lasers <level>, Spreafire, Plasma, Vulcan, Fusion, Helix, Gauss, Omega
@@ -863,7 +863,7 @@ void CHUD::DrawPrimaryWeaponList(void) {
     DrawSeparator(x + 2, t, x + 2, y - 2);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUD::StrProxMineStatus(char *pszList, int32_t l, int32_t n, char tag, int32_t *nState) {
     int32_t bActive, bHave, bAvailable;
@@ -876,7 +876,7 @@ int32_t CHUD::StrProxMineStatus(char *pszList, int32_t l, int32_t n, char tag, i
     return l;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 char *CHUD::StrSecondaryWeaponList(char *pszList) {
     // CHSM MGFS - Concussion, Homer, Smart, Mega, Mercury, Guided, Flash, Shaker
@@ -922,7 +922,7 @@ char *CHUD::StrSecondaryWeaponList(char *pszList) {
     return pszList;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawSecondaryWeaponList(void) {
     // CHSM MGFS - Concussion, Homer, Smart, Mega, Mercury, Guided, Flash, Shaker
@@ -962,7 +962,7 @@ void CHUD::DrawSecondaryWeaponList(void) {
     DrawSeparator(x - 4, t, x - 4, y - nLineSpacing / 2 - 2);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CHUD::DrawAmmoCount(char *szLabel, int32_t x, int32_t y, int32_t j, int32_t k, int32_t *nState) {
     int32_t bActive, bHave, bAvailable;
@@ -991,7 +991,7 @@ int32_t CHUD::DrawAmmoCount(char *szLabel, int32_t x, int32_t y, int32_t j, int3
     return x + wt;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawSecondaryAmmoList(char *pszList) {
     // CHSM MGFS - Concussion, Homer, Smart, Mega, Mercury, Guided, Flash, Shaker
@@ -1025,7 +1025,7 @@ void CHUD::DrawSecondaryAmmoList(char *pszList) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 char *CHUD::StrPrimaryWeapon(char *szLabel) {
     char szWeapon[100];
@@ -1081,7 +1081,7 @@ char *CHUD::StrPrimaryWeapon(char *szLabel) {
     return szLabel;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 char *CHUD::StrSecondaryWeapon(char *szLabel) {
     sprintf(
@@ -1092,7 +1092,7 @@ char *CHUD::StrSecondaryWeapon(char *szLabel) {
     return szLabel;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // convert '1' characters to special wide ones
 void CHUD::DrawWeapons(void) {
@@ -1186,7 +1186,7 @@ void CHUD::DrawWeapons(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawInvul(void) {
     if (cockpit->Hide())
@@ -1228,7 +1228,7 @@ void CHUD::DrawInvul(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawCloak(void) {
     if (cockpit->Hide())
@@ -1273,7 +1273,7 @@ void CHUD::DrawCloak(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // draw the icons for number of lives
 void CHUD::DrawLives(void) {
@@ -1294,7 +1294,7 @@ void CHUD::DrawLives(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawSlowMotion(void) {
     int32_t nLayout = gameStates.menus.nInMenu ? 0 : gameOpts->render.cockpit.nShipStateLayout;
@@ -1354,15 +1354,15 @@ void CHUD::DrawSlowMotion(void) {
     ScaleDown();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawStatic(int32_t nWindow) {}
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawKillList(void) { CGenericCockpit::DrawKillList(60, CCanvas::Current()->Height()); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::DrawCockpit(bool bAlphaTest) {
     // gameData.renderData.frame.SetLeft ((gameData.renderData.screen.Width () - gameData.renderData.frame.Width ()) /
@@ -1370,7 +1370,7 @@ void CHUD::DrawCockpit(bool bAlphaTest) {
     // ()) / 2);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CHUD::Setup(bool bScene, bool bRebuild) {
     if (bRebuild && !m_info.bRebuild)
@@ -1384,7 +1384,7 @@ bool CHUD::Setup(bool bScene, bool bRebuild) {
     return true;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::SetupWindow(int32_t nWindow) {
     static int32_t cockpitWindowScale[4] = {8, 6, 4, 3};
@@ -1426,13 +1426,13 @@ void CHUD::SetupWindow(int32_t nWindow) {
     glClear(GL_DEPTH_BUFFER_BIT);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CHUD::Toggle(void) { CGenericCockpit::Activate(CM_LETTERBOX, true); }
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool CWideHUD::Setup(bool bScene, bool bRebuild) {
     if (bRebuild && !m_info.bRebuild)
@@ -1449,15 +1449,15 @@ bool CWideHUD::Setup(bool bScene, bool bRebuild) {
     return true;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CWideHUD::DrawRecording(void) { CGenericCockpit::DrawRecording(7); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CWideHUD::Toggle(void) { CGenericCockpit::Activate(CM_FULL_COCKPIT, true); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CWideHUD::SetupWindow(int32_t nWindow) {
     CHUD::SetupWindow(nWindow);
@@ -1468,4 +1468,4 @@ gameData.renderData.frame.SetupPane (pCanvas, SW_x [nWindow], SW_y [nWindow], SW
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

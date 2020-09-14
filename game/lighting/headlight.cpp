@@ -60,11 +60,11 @@ void CHeadlightManager::Toggle(void) {
 
 //------------------------------------------------------------------------------
 
-//	Flag array of OBJECTS lit last frame.  Guaranteed to process this frame if lit last frame.
+// Flag array of OBJECTS lit last frame.  Guaranteed to process this frame if lit last frame.
 fix xBeamBrightness = (I2X(1) / 2); // global saying how bright the light beam is
 
 fix CHeadlightManager::ComputeLightOnObject(CObject *pObj) {
-    //	Let's just illuminate players and robots for speed reasons, ok?
+    // Let's just illuminate players and robots for speed reasons, ok?
     if ((pObj->info.nType != OBJ_ROBOT) && (pObj->info.nType != OBJ_PLAYER))
         return 0;
 
@@ -81,7 +81,7 @@ fix CHeadlightManager::ComputeLightOnObject(CObject *pObj) {
                 if (dot < I2X(1) / 2)
                     light += FixDiv(
                         HEADLIGHT_SCALE,
-                        FixMul(HEADLIGHT_SCALE, dist)); //	Do the Normal thing, but darken around headlight.
+                        FixMul(HEADLIGHT_SCALE, dist)); // Do the Normal thing, but darken around headlight.
                 else
                     light += FixMul(FixMul(dot, dot), HEADLIGHT_SCALE) / 8;
             }

@@ -463,7 +463,7 @@ int32_t CTGA::ReadData(CFile &cf, int32_t alpha, double brightness, int32_t bGra
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CTGA::WriteData(void) {
     int32_t i, j;
@@ -637,7 +637,7 @@ int32_t CTGA::Read(
     return r;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CBitmap *CTGA::CreateAndRead(char *pszFile) {
     if (!(m_pBm = CBitmap::Create(0, 0, 0, 4)))
@@ -656,7 +656,7 @@ CBitmap *CTGA::CreateAndRead(char *pszFile) {
     return m_pBm = NULL;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CTGA::Save(const char *pszFile, const char *pszFolder) {
     char szFolder[FILENAME_LEN], fn[FILENAME_LEN];
@@ -673,7 +673,7 @@ int32_t CTGA::Save(const char *pszFile, const char *pszFolder) {
     return r;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CTGA::Shrink(int32_t xFactor, int32_t yFactor, int32_t bRealloc) {
     int32_t bpp = m_pBm->BPP();
@@ -774,7 +774,7 @@ int32_t CTGA::Shrink(int32_t xFactor, int32_t yFactor, int32_t bRealloc) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 double CTGA::Brightness(void) {
     if (!m_pBm)
@@ -803,7 +803,7 @@ double CTGA::Brightness(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void CTGA::ChangeBrightness(double dScale, int32_t bInverse, int32_t nOffset, int32_t bSkipAlpha) {
     if (m_pBm) {

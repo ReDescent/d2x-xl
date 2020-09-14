@@ -70,7 +70,7 @@ int16_t nKilledObjNum = -1;
 
 //------------------------------------------------------------------------------
 
-//	Camera is less than size of player away from
+// Camera is less than size of player away from
 void SetCameraPos(CFixVector *vCameraPos, CObject *pObj) {
     CFixVector vPlayerCameraOffs = *vCameraPos - pObj->info.position.vPos;
     int32_t count = 0;
@@ -79,7 +79,7 @@ void SetCameraPos(CFixVector *vCameraPos, CObject *pObj) {
 
     xCameraPlayerDist = vPlayerCameraOffs.Mag();
     if (xCameraPlayerDist < xCameraToPlayerDistGoal) { // 2*pObj->info.xSize) {
-        //	Camera is too close to player CObject, so move it away.
+        // Camera is too close to player CObject, so move it away.
         CHitResult hitResult;
         CFixVector local_p1;
 
@@ -95,9 +95,9 @@ void SetCameraPos(CFixVector *vCameraPos, CObject *pObj) {
             vPlayerCameraOffs *= xCameraToPlayerDistGoal;
 
             closer_p1 = pObj->info.position.vPos +
-                        vPlayerCameraOffs; //	This is the actual point we want to put the camera at.
-            vPlayerCameraOffs *= xFarScale; //	...but find a point 50% further away...
-            local_p1 = pObj->info.position.vPos + vPlayerCameraOffs; //	...so we won't have to do as many cuts.
+                        vPlayerCameraOffs; // This is the actual point we want to put the camera at.
+            vPlayerCameraOffs *= xFarScale; // ...but find a point 50% further away...
+            local_p1 = pObj->info.position.vPos + vPlayerCameraOffs; // ...so we won't have to do as many cuts.
 
             CHitQuery hitQuery(0, &pObj->info.position.vPos, &local_p1, pObj->info.nSegment, pObj->Index());
 
@@ -177,7 +177,7 @@ void DeadPlayerFrame(void) {
     if (gameStates.app.bPlayerIsDead) {
         fix xTimeDead = gameData.timeData.xGame - gameStates.app.nPlayerTimeOfDeath;
 
-        //	If unable to create camera at time of death, create now.
+        // If unable to create camera at time of death, create now.
         if (!gameData.objData.deadPlayerCamera) {
             CObject *pPlayer = OBJECT(LOCALPLAYER.nObject);
             int32_t nObject = CreateCamera(pPlayer);
@@ -227,7 +227,7 @@ void DeadPlayerFrame(void) {
     }
 }
 
-//	------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 
 void StartPlayerDeathSequence(CObject *pPlayerObj) {
     gameData.objData.speedBoost[OBJ_IDX(gameData.objData.pConsole)].bBoosted = 0;
@@ -248,9 +248,9 @@ void StartPlayerDeathSequence(CObject *pPlayerObj) {
         HUDClearMessages();
     else {
         MultiSendKill(LOCALPLAYER.nObject);
-        //		If Hoard, increase number of orbs by 1
+        // 	If Hoard, increase number of orbs by 1
         //    Only if you haven't killed yourself
-        //		This prevents cheating
+        // 	This prevents cheating
         if (IsHoardGame)
             if (!gameStates.multi.bSuicide)
                 if (LOCALPLAYER.secondaryAmmo[PROXMINE_INDEX] < 12)
@@ -285,7 +285,7 @@ void StartPlayerDeathSequence(CObject *pPlayerObj) {
     nControlTypeSave = pPlayerObj->info.controlType;
     nRenderTypeSave = pPlayerObj->info.renderType;
     pPlayerObj->info.nFlags &= ~OF_SHOULD_BE_DEAD;
-    //	LOCALPLAYER.flags |= PLAYER_FLAGS_INVULNERABLE;
+    // LOCALPLAYER.flags |= PLAYER_FLAGS_INVULNERABLE;
     pPlayerObj->info.controlType = CT_NONE;
     if (!gameStates.entropy.bExitSequence) {
         pPlayerObj->SetShield(I2X(1000));

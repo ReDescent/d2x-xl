@@ -189,6 +189,6 @@ int32_t ReadPolyModels(CArray<CPolyModel> &models, int32_t nModels, CFile &cf, i
 
 CPolyModel *GetPolyModel(CObject *pObj, CFixVector *pos, int32_t nModel, int32_t flags, int32_t *bCustomModel = NULL);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #endif // _POLYOBJ_H

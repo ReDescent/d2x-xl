@@ -826,7 +826,7 @@ void CLightning::ComputeGlow(int32_t nDepth, int32_t nThread) {
         vPos[0] = vPos[1];
         vPos[1].Assign(pNode->m_vPos);
         // if (nThread < 0)
-        //	transformation.Transform (vPos [1], vPos [1]);
+        // transformation.Transform (vPos [1], vPos [1]);
         if (i) {
             vn = CFloatVector::Normal(vPos[0], vPos[1], vEye);
             vn *= fWidth;

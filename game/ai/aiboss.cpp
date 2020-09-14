@@ -39,8 +39,8 @@ int32_t maxSpewBots[NUM_D2_BOSSES] = {2, 1, 2, 3, 3, 3, 3, 3};
 // --------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------------------------------
-//	Return nObject if CObject created, else return -1.
-//	If pos == NULL, pick random spot in CSegment.
+// Return nObject if CObject created, else return -1.
+// If pos == NULL, pick random spot in CSegment.
 int32_t CObject::CreateGatedRobot(int16_t nSegment, uint8_t nObjId, CFixVector *vPos) {
     ENTER(0, 0);
     tRobotInfo *pRobotInfo = ROBOTINFO(nObjId);
@@ -79,7 +79,7 @@ int32_t CObject::CreateGatedRobot(int16_t nSegment, uint8_t nObjId, CFixVector *
         else
             vObjPos = *vPos;
 
-        //	See if legal to place CObject here.  If not, move about in CSegment and try again.
+        // See if legal to place CObject here.  If not, move about in CSegment and try again.
         if (CheckObjectObjectIntersection(&vObjPos, objsize, pSeg)) {
             if (!--nTries) {
                 gameData.bossData[nBoss].m_nLastGateTime =
@@ -101,7 +101,7 @@ int32_t CObject::CreateGatedRobot(int16_t nSegment, uint8_t nObjId, CFixVector *
     gameData.multigame.create.nObjNums[0] =
         nObject; // A convenient global to get nObject back to caller for multiplayer
     pObj->SetLife(
-        I2X(30) + (I2X(1) / 2) * (gameStates.app.nDifficultyLevel * 15)); //	Gated in robots only live 30 seconds.
+        I2X(30) + (I2X(1) / 2) * (gameStates.app.nDifficultyLevel * 15)); // Gated in robots only live 30 seconds.
     // Set polygon-CObject-specific data
     pObj->rType.polyObjInfo.nModel = pRobotInfo->nModel;
     pObj->rType.polyObjInfo.nSubObjFlags = 0;
@@ -110,13 +110,13 @@ int32_t CObject::CreateGatedRobot(int16_t nSegment, uint8_t nObjId, CFixVector *
     pObj->mType.physInfo.drag = pRobotInfo->drag;
     pObj->mType.physInfo.flags |= (PF_LEVELLING);
     pObj->SetShield(pRobotInfo->strength);
-    pObj->info.nCreator = BOSS_GATE_PRODUCER_NUM; //	flag this robot as having been created by the boss.
+    pObj->info.nCreator = BOSS_GATE_PRODUCER_NUM; // flag this robot as having been created by the boss.
     pRobotInfo = ROBOTINFO(pObj);
     default_behavior = pRobotInfo ? pRobotInfo->behavior : 0;
     InitAIObject(
         pObj->Index(),
         default_behavior,
-        -1); //	Note, -1 = CSegment this robot goes to to hide, should probably be something useful
+        -1); // Note, -1 = CSegment this robot goes to to hide, should probably be something useful
     CreateExplosion(nSegment, vObjPos, I2X(10), ANIM_MORPHING_ROBOT);
     audio.CreateSegmentSound(
         gameData.effectData.animations[0][ANIM_MORPHING_ROBOT].nSound,
@@ -132,8 +132,8 @@ int32_t CObject::CreateGatedRobot(int16_t nSegment, uint8_t nObjId, CFixVector *
     RETVAL(pObj->Index())
 }
 
-//	----------------------------------------------------------------------------------------------------------
-//	pObj points at a boss.  He was presumably just hit and he's supposed to create a bot at the hit location *pos.
+// ----------------------------------------------------------------------------------------------------------
+// pObj points at a boss.  He was presumably just hit and he's supposed to create a bot at the hit location *pos.
 int32_t CObject::BossSpewRobot(CFixVector *vPos, int16_t objType, int32_t bObjTrigger) {
     ENTER(0, 0);
     if (!bObjTrigger && FindObjTrigger(
@@ -171,7 +171,7 @@ int32_t CObject::BossSpewRobot(CFixVector *vPos, int16_t objType, int32_t bObjTr
                  (pRobotInfo->scoreValue < 700)); // avoid spawning a ... spawn nType bot
     }
     nObject = CreateGatedRobot(nSegment, (uint8_t)objType, vPos);
-    //	Make spewed robot come tumbling out as if blasted by a flash missile.
+    // Make spewed robot come tumbling out as if blasted by a flash missile.
     if (nObject != -1) {
         CObject *pNewObj = OBJECT(nObject);
         int32_t xForce = I2X(1) / (gameData.timeData.xFrame ? gameData.timeData.xFrame : 1);
@@ -182,7 +182,7 @@ int32_t CObject::BossSpewRobot(CFixVector *vPos, int16_t objType, int32_t bObjTr
             pNewObj->mType.physInfo.rotThrust.v.coord.z = (SRandShort() * xForce) / 16;
             pNewObj->mType.physInfo.flags |= PF_USES_THRUST;
 
-            //	Now, give a big initial velocity to get moving away from boss.
+            // Now, give a big initial velocity to get moving away from boss.
             pNewObj->mType.physInfo.velocity = *vPos - info.position.vPos;
             CFixVector::Normalize(pNewObj->mType.physInfo.velocity);
             pNewObj->mType.physInfo.velocity *= I2X(128);
@@ -192,10 +192,10 @@ int32_t CObject::BossSpewRobot(CFixVector *vPos, int16_t objType, int32_t bObjTr
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Make CObject pObj gate in a robot.
-//	The process of him bringing in a robot takes one second.
-//	Then a robot appears somewhere near the player.
-//	Return nObject if robot successfully created, else return -1
+// Make CObject pObj gate in a robot.
+// The process of him bringing in a robot takes one second.
+// Then a robot appears somewhere near the player.
+// Return nObject if robot successfully created, else return -1
 int32_t GateInRobot(int16_t nObject, uint8_t nType, int16_t nSegment) {
     ENTER(0, 0);
     if (!gameData.bossData.ToS())
@@ -263,7 +263,7 @@ void TeleportBoss(CObject *pObj) {
     int16_t i, nAttempts = 5, nRandSeg = 0, nRandIndex, nObject = pObj->Index();
     CFixVector vBossDir, vNewPos;
 
-    //	Pick a random CSegment from the list of boss-teleportable-to segments.
+    // Pick a random CSegment from the list of boss-teleportable-to segments.
     i = gameData.bossData.Find(nObject);
     if (i < 0)
         RETURN
@@ -289,7 +289,7 @@ void TeleportBoss(CObject *pObj) {
         RETURN
     pObj->RelinkToSeg(nRandSeg);
     gameData.bossData[i].m_nLastTeleportTime = gameData.timeData.xGame;
-    //	make boss point right at CPlayerData
+    // make boss point right at CPlayerData
     pObj->info.position.vPos = vNewPos;
     vBossDir = LOCALOBJECT->info.position.vPos - vNewPos;
     pObj->info.position.mOrient = CFixMatrix::CreateF(vBossDir);
@@ -309,14 +309,14 @@ void TeleportBoss(CObject *pObj) {
             pObj->Index(),
             1,
             I2X(1),
-            I2X(512)); //	I2X (512) means play twice as loud
-    //	After a teleport, boss can fire right away.
+            I2X(512)); // I2X (512) means play twice as loud
+    // After a teleport, boss can fire right away.
     gameData.aiData.localInfo[nObject].pNextrimaryFire = 0;
     gameData.aiData.localInfo[nObject].nextSecondaryFire = 0;
     RETURN
 }
 
-//	----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 void StartBossDeathSequence(CObject *pObj) {
     ENTER(0, 0);
@@ -333,7 +333,7 @@ void StartBossDeathSequence(CObject *pObj) {
     RETURN
 }
 
-//	----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 void DoBossDyingFrame(CObject *pObj) {
     ENTER(0, 0);
@@ -364,7 +364,7 @@ void DoBossDyingFrame(CObject *pObj) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-//	Do special stuff for a boss.
+// Do special stuff for a boss.
 void DoBossStuff(CObject *pObj, int32_t nTargetVisibility) {
     ENTER(0, 0);
     int32_t nBossId = pObj->BossId();
@@ -384,22 +384,22 @@ void DoBossStuff(CObject *pObj, int32_t nTargetVisibility) {
         gameData.bossData[i].m_xPrevShield = pObj->info.xShield;
     }
 #endif
-    //	New code, fixes stupid bug which meant boss never gated in robots if > 32767 seconds played.
+    // New code, fixes stupid bug which meant boss never gated in robots if > 32767 seconds played.
     if (gameData.bossData[i].m_nLastTeleportTime > gameData.timeData.xGame)
         gameData.bossData[i].m_nLastTeleportTime = gameData.timeData.xGame;
 
     if (gameData.bossData[i].m_nLastGateTime > gameData.timeData.xGame)
         gameData.bossData[i].m_nLastGateTime = gameData.timeData.xGame;
 
-    //	@mk, 10/13/95:  Reason:
-    //		Level 4 boss behind locked door.  But he's allowed to teleport out of there.  So he
-    //		teleports out of there right away, and blasts player right after first door.
+    // @mk, 10/13/95:  Reason:
+    // 	Level 4 boss behind locked door.  But he's allowed to teleport out of there.  So he
+    // 	teleports out of there right away, and blasts player right after first door.
     if (!gameData.aiData.nTargetVisibility && (gameData.timeData.xGame - gameData.bossData[i].m_nHitTime > I2X(2)))
         RETURN
 
     if (bossProps[gameStates.app.bD1Mission][nBossIndex].bTeleports) {
         if (pObj->cType.aiInfo.CLOAKED == 1) {
-            gameData.bossData[i].m_nHitTime = gameData.timeData.xGame; //	Keep the cloak:teleport process going.
+            gameData.bossData[i].m_nHitTime = gameData.timeData.xGame; // Keep the cloak:teleport process going.
             if ((gameData.timeData.xGame - gameData.bossData[i].m_nCloakStartTime > BOSS_CLOAK_DURATION / 3) &&
                 (gameData.bossData[i].m_nCloakEndTime - gameData.timeData.xGame > BOSS_CLOAK_DURATION / 3) &&
                 (gameData.timeData.xGame - gameData.bossData[i].m_nLastTeleportTime >
@@ -414,7 +414,7 @@ void DoBossStuff(CObject *pObj, int32_t nTargetVisibility) {
                             (pObj->BossSpewRobot(&spewPoint, -1, 0) != -1))
                             gameData.bossData[i].m_nLastGateTime = gameData.timeData.xGame -
                                                                    gameData.bossData[i].m_nGateInterval -
-                                                                   1; //	Force allowing spew of another bot.
+                                                                   1; // Force allowing spew of another bot.
                         pObj->BossSpewRobot(&spewPoint, -1, 0);
                     }
                 }
@@ -444,5 +444,5 @@ void DoBossStuff(CObject *pObj, int32_t nTargetVisibility) {
     RETURN
 }
 
-//	---------------------------------------------------------------
+// ---------------------------------------------------------------
 // eof

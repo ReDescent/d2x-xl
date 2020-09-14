@@ -1017,7 +1017,7 @@ int32_t ResendData(struct sockaddr_in *fromAddr, uint8_t *buf) {
     time_t t;
 
     // if (!extraGameInfo [0].bSafeUDP)
-    //	return 0;
+    // return 0;
     if (strncmp(buf, RESEND_ID, sizeof(RESEND_ID) - 1))
         return 0;
     if (clientManager.ClientCount() <= (i = clientManager.Find(fromAddr)))

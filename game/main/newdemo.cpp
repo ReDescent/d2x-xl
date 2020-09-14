@@ -132,7 +132,7 @@ void DemoError(void) { PrintLog(0, "Error in demo playback\n"); }
 CFile ndInFile;
 CFile ndOutFile;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t NDErrorMsg(const char *pszMsg1, const char *pszMsg2, const char *pszMsg3) {
     CMenu m(3);
@@ -146,7 +146,7 @@ int32_t NDErrorMsg(const char *pszMsg1, const char *pszMsg2, const char *pszMsg3
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void InitDemoData(void) {
     gameData.demoData.bAuto = 0;
@@ -161,7 +161,7 @@ void InitDemoData(void) {
     gameData.demoData.xJasonPlaybackTotal = 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 float NDGetPercentDone(void) {
     if (gameData.demoData.nState == ND_STATE_PLAYBACK)
@@ -171,7 +171,7 @@ float NDGetPercentDone(void) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define VEL_PRECISION 12
 
@@ -200,7 +200,7 @@ void my_extract_shortpos(CObject *pObj, tShortPos *spp) {
     pObj->mType.physInfo.velocity.v.coord.z = (spp->vel[2] << VEL_PRECISION);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t NDFindObject(int32_t nSignature) {
     int32_t i;
@@ -212,7 +212,7 @@ int32_t NDFindObject(int32_t nSignature) {
     return -1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if DBG
 
@@ -228,7 +228,7 @@ void CHK(void) {
 
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t NDWrite(void *buffer, int32_t elsize, int32_t nelem) {
     int32_t nWritten, nTotalSize = elsize * nelem;
@@ -253,7 +253,7 @@ int32_t NDWrite(void *buffer, int32_t elsize, int32_t nelem) {
  *  just a gamesave
  */
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDWriteByte(int8_t b) {
     gameData.demoData.nFrameBytesWritten += sizeof(b);
@@ -262,7 +262,7 @@ static inline void NDWriteByte(int8_t b) {
     ndOutFile.WriteByte(b);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDWriteShort(int16_t s) {
     gameData.demoData.nFrameBytesWritten += sizeof(s);
@@ -271,7 +271,7 @@ static inline void NDWriteShort(int16_t s) {
     ndOutFile.WriteShort(s);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static void NDWriteInt(int32_t i) {
     gameData.demoData.nFrameBytesWritten += sizeof(i);
@@ -280,7 +280,7 @@ static void NDWriteInt(int32_t i) {
     ndOutFile.WriteInt(i);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDWriteString(char *str) {
     int8_t l = (int32_t)strlen(str) + 1;
@@ -289,7 +289,7 @@ static inline void NDWriteString(char *str) {
     NDWrite(str, (int32_t)l, 1);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDWriteFix(fix f) {
     gameData.demoData.nFrameBytesWritten += sizeof(f);
@@ -298,7 +298,7 @@ static inline void NDWriteFix(fix f) {
     ndOutFile.WriteFix(f);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDWriteFixAng(fixang f) {
     gameData.demoData.nFrameBytesWritten += sizeof(f);
@@ -306,7 +306,7 @@ static inline void NDWriteFixAng(fixang f) {
     ndOutFile.WriteFixAng(f);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDWriteVector(const CFixVector &v) {
     gameData.demoData.nFrameBytesWritten += sizeof(v);
@@ -315,7 +315,7 @@ static inline void NDWriteVector(const CFixVector &v) {
     ndOutFile.WriteVector(v);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDWriteAngVec(const CAngleVector &v) {
     gameData.demoData.nFrameBytesWritten += sizeof(v);
@@ -324,7 +324,7 @@ static inline void NDWriteAngVec(const CAngleVector &v) {
     ndOutFile.WriteAngVec(v);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDWriteMatrix(const CFixMatrix &m) {
     gameData.demoData.nFrameBytesWritten += sizeof(m);
@@ -333,7 +333,7 @@ static inline void NDWriteMatrix(const CFixMatrix &m) {
     ndOutFile.WriteMatrix(m);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDWritePosition(CObject *pObj) {
     uint8_t renderType = pObj->info.renderType;
@@ -364,7 +364,7 @@ void NDWritePosition(CObject *pObj) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t NDRead(void *buffer, int32_t elsize, int32_t nelem) {
     int32_t nRead = (int32_t)ndInFile.Read(buffer, elsize, nelem);
@@ -375,7 +375,7 @@ int32_t NDRead(void *buffer, int32_t elsize, int32_t nelem) {
     return nRead;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline uint8_t NDReadByte(void) {
     if (bRevertFormat > 0) {
@@ -386,7 +386,7 @@ static inline uint8_t NDReadByte(void) {
     return ndInFile.ReadByte();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline int16_t NDReadShort(void) {
     if (bRevertFormat > 0) {
@@ -397,7 +397,7 @@ static inline int16_t NDReadShort(void) {
     return ndInFile.ReadShort();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline int32_t NDReadInt() {
     if (bRevertFormat > 0) {
@@ -408,7 +408,7 @@ static inline int32_t NDReadInt() {
     return ndInFile.ReadInt();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline char *NDReadString(char *str) {
     int8_t len;
@@ -418,7 +418,7 @@ static inline char *NDReadString(char *str) {
     return str;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline fix NDReadFix(void) {
     if (bRevertFormat > 0) {
@@ -429,7 +429,7 @@ static inline fix NDReadFix(void) {
     return ndInFile.ReadFix();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline fixang NDReadFixAng(void) {
     if (bRevertFormat > 0) {
@@ -440,7 +440,7 @@ static inline fixang NDReadFixAng(void) {
     return ndInFile.ReadFixAng();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDReadVector(CFixVector &v) {
     ndInFile.ReadVector(v);
@@ -448,7 +448,7 @@ static inline void NDReadVector(CFixVector &v) {
         NDWriteVector(v);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDReadAngVec(CAngleVector &v) {
     ndInFile.ReadAngVec(v);
@@ -456,7 +456,7 @@ static inline void NDReadAngVec(CAngleVector &v) {
         NDWriteAngVec(v);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline void NDReadMatrix(CFixMatrix &m) {
     ndInFile.ReadMatrix(m);
@@ -464,7 +464,7 @@ static inline void NDReadMatrix(CFixMatrix &m) {
         NDWriteMatrix(m);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static void NDReadPosition(CObject *pObj, int32_t bSkip) {
     tShortPos sp;
@@ -504,7 +504,7 @@ static void NDReadPosition(CObject *pObj, int32_t bSkip) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CObject *pPrevObj = NULL; // ptr to last CObject read in
 
@@ -780,7 +780,7 @@ void NDSetPowerupClip(CObject *pObj) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t NDWriteObject(CObject *pObj) {
     int32_t life;
@@ -979,7 +979,7 @@ int32_t NDWriteObject(CObject *pObj) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t bJustStartedRecording = 0, bJustStartedPlayback = 0;
 
@@ -1034,7 +1034,7 @@ void NDRecordStartDemo(void) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordStartFrame(int32_t nFrameNumber, fix xFrameTime) {
     if (gameStates.render.cameras.bActive)
@@ -1057,7 +1057,7 @@ void NDRecordStartFrame(int32_t nFrameNumber, fix xFrameTime) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordRenderObject(CObject *pObj) {
     if (gameStates.render.cameras.bActive)
@@ -1065,7 +1065,7 @@ void NDRecordRenderObject(CObject *pObj) {
     if (gameData.demoData.bViewWasRecorded[pObj->Index()])
         return;
     // if (obj==LOCALOBJECT && !gameStates.app.bPlayerIsDead)
-    //	return;
+    // return;
     StopTime();
     NDWriteByte(ND_EVENT_RENDER_OBJECT);
     if (!NDWriteObject(pObj))
@@ -1073,7 +1073,7 @@ void NDRecordRenderObject(CObject *pObj) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordViewerObject(CObject *pObj) {
     if (gameStates.render.cameras.bActive)
@@ -1085,7 +1085,7 @@ void NDRecordViewerObject(CObject *pObj) {
     if (h && (h - 1 == gameStates.render.nRenderingType))
         return;
     // if (gameData.demoData.bWasRecorded [pObj->Index ()])
-    //	return;
+    // return;
     if (gameData.demoData.bRenderingWasRecorded[gameStates.render.nRenderingType])
         return;
     gameData.demoData.bViewWasRecorded[i] = gameStates.render.nRenderingType + 1;
@@ -1098,7 +1098,7 @@ void NDRecordViewerObject(CObject *pObj) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordSound(int32_t soundno) {
     if (gameStates.render.cameras.bActive)
@@ -1109,7 +1109,7 @@ void NDRecordSound(int32_t soundno) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordCockpitChange(int32_t mode) {
     if (gameStates.render.cameras.bActive)
@@ -1120,7 +1120,7 @@ void NDRecordCockpitChange(int32_t mode) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordSound3D(int32_t soundno, int32_t angle, int32_t volume) {
     if (gameStates.render.cameras.bActive)
@@ -1133,7 +1133,7 @@ void NDRecordSound3D(int32_t soundno, int32_t angle, int32_t volume) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordSound3DOnce(int32_t soundno, int32_t angle, int32_t volume) {
     if (gameStates.render.cameras.bActive)
@@ -1146,7 +1146,7 @@ void NDRecordSound3DOnce(int32_t soundno, int32_t angle, int32_t volume) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordCreateObjectSound(
     int32_t soundno,
@@ -1168,7 +1168,7 @@ void NDRecordCreateObjectSound(
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordDestroySoundObject(int32_t nObject) {
     if (gameStates.render.cameras.bActive)
@@ -1179,7 +1179,7 @@ void NDRecordDestroySoundObject(int32_t nObject) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordWallHitProcess(int32_t nSegment, int32_t nSide, int32_t damage, int32_t playernum) {
     if (gameStates.render.cameras.bActive)
@@ -1197,7 +1197,7 @@ void NDRecordWallHitProcess(int32_t nSegment, int32_t nSide, int32_t damage, int
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordGuidedStart(void) {
     if (gameStates.render.cameras.bActive)
@@ -1205,7 +1205,7 @@ void NDRecordGuidedStart(void) {
     NDWriteByte(ND_EVENT_START_GUIDED);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordGuidedEnd(void) {
     if (gameStates.render.cameras.bActive)
@@ -1213,7 +1213,7 @@ void NDRecordGuidedEnd(void) {
     NDWriteByte(ND_EVENT_END_GUIDED);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordSecretExitBlown(int32_t truth) {
     if (gameStates.render.cameras.bActive)
@@ -1224,7 +1224,7 @@ void NDRecordSecretExitBlown(int32_t truth) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordTrigger(int32_t nSegment, int32_t nSide, int32_t nObject, int32_t bShot) {
     if (gameStates.render.cameras.bActive)
@@ -1238,7 +1238,7 @@ void NDRecordTrigger(int32_t nSegment, int32_t nSide, int32_t nObject, int32_t b
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordHostageRescued(int32_t hostage_number) {
     if (gameStates.render.cameras.bActive)
@@ -1249,7 +1249,7 @@ void NDRecordHostageRescued(int32_t hostage_number) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMorphFrame(tMorphInfo *md) {
     if (gameStates.render.cameras.bActive)
@@ -1260,7 +1260,7 @@ void NDRecordMorphFrame(tMorphInfo *md) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordWallToggle(int32_t nSegment, int32_t nSide) {
     if (gameStates.render.cameras.bActive)
@@ -1272,7 +1272,7 @@ void NDRecordWallToggle(int32_t nSegment, int32_t nSide) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordControlCenterDestroyed() {
     if (gameStates.render.cameras.bActive)
@@ -1283,7 +1283,7 @@ void NDRecordControlCenterDestroyed() {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordHUDMessage(char *message) {
     StopTime();
@@ -1292,7 +1292,7 @@ void NDRecordHUDMessage(char *message) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordPaletteEffect(int16_t r, int16_t g, int16_t b) {
     if (gameStates.render.cameras.bActive)
@@ -1305,7 +1305,7 @@ void NDRecordPaletteEffect(int16_t r, int16_t g, int16_t b) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordPlayerEnergy(int32_t old_energy, int32_t energy) {
     if (gameStates.render.cameras.bActive)
@@ -1317,7 +1317,7 @@ void NDRecordPlayerEnergy(int32_t old_energy, int32_t energy) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordPlayerAfterburner(fix old_afterburner, fix afterburner) {
     if (gameStates.render.cameras.bActive)
@@ -1329,7 +1329,7 @@ void NDRecordPlayerAfterburner(fix old_afterburner, fix afterburner) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordPlayerShield(int32_t old_shield, int32_t shield) {
     if (gameStates.render.cameras.bActive)
@@ -1341,7 +1341,7 @@ void NDRecordPlayerShield(int32_t old_shield, int32_t shield) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordPlayerFlags(uint32_t oflags, uint32_t flags) {
     if (gameStates.render.cameras.bActive)
@@ -1352,7 +1352,7 @@ void NDRecordPlayerFlags(uint32_t oflags, uint32_t flags) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordPlayerWeapon(int32_t nWeaponType, int32_t weapon_num) {
     if (gameStates.render.cameras.bActive)
@@ -1368,7 +1368,7 @@ void NDRecordPlayerWeapon(int32_t nWeaponType, int32_t weapon_num) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordEffectBlowup(int16_t CSegment, int32_t nSide, CFixVector &vPos) {
     if (gameStates.render.cameras.bActive)
@@ -1381,7 +1381,7 @@ void NDRecordEffectBlowup(int16_t CSegment, int32_t nSide, CFixVector &vPos) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordHomingDistance(fix distance) {
     if (gameStates.render.cameras.bActive)
@@ -1392,7 +1392,7 @@ void NDRecordHomingDistance(fix distance) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordLetterbox(void) {
     if (gameStates.render.cameras.bActive)
@@ -1402,7 +1402,7 @@ void NDRecordLetterbox(void) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordRearView(void) {
     if (gameStates.render.cameras.bActive)
@@ -1412,7 +1412,7 @@ void NDRecordRearView(void) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordRestoreCockpit(void) {
     if (gameStates.render.cameras.bActive)
@@ -1422,7 +1422,7 @@ void NDRecordRestoreCockpit(void) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordRestoreRearView(void) {
     if (gameStates.render.cameras.bActive)
@@ -1432,7 +1432,7 @@ void NDRecordRestoreRearView(void) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordWallSetTMapNum1(
     int16_t nSegment,
@@ -1459,7 +1459,7 @@ void NDRecordWallSetTMapNum1(
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordWallSetTMapNum2(
     int16_t nSegment,
@@ -1486,7 +1486,7 @@ void NDRecordWallSetTMapNum2(
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMultiCloak(int32_t nPlayer) {
     if (gameStates.render.cameras.bActive)
@@ -1497,7 +1497,7 @@ void NDRecordMultiCloak(int32_t nPlayer) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMultiDeCloak(int32_t nPlayer) {
     if (gameStates.render.cameras.bActive)
@@ -1508,7 +1508,7 @@ void NDRecordMultiDeCloak(int32_t nPlayer) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMultiDeath(int32_t nPlayer) {
     if (gameStates.render.cameras.bActive)
@@ -1519,7 +1519,7 @@ void NDRecordMultiDeath(int32_t nPlayer) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMultiKill(int32_t nPlayer, int8_t kill) {
     if (gameStates.render.cameras.bActive)
@@ -1531,7 +1531,7 @@ void NDRecordMultiKill(int32_t nPlayer, int8_t kill) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMultiConnect(int32_t nPlayer, int32_t nNewPlayer, char *pszNewCallsign) {
     if (gameStates.render.cameras.bActive)
@@ -1549,7 +1549,7 @@ void NDRecordMultiConnect(int32_t nPlayer, int32_t nNewPlayer, char *pszNewCalls
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMultiReconnect(int32_t nPlayer) {
     if (gameStates.render.cameras.bActive)
@@ -1560,7 +1560,7 @@ void NDRecordMultiReconnect(int32_t nPlayer) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMultiDisconnect(int32_t nPlayer) {
     if (gameStates.render.cameras.bActive)
@@ -1571,7 +1571,7 @@ void NDRecordMultiDisconnect(int32_t nPlayer) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordPlayerScore(int32_t score) {
     if (gameStates.render.cameras.bActive)
@@ -1582,7 +1582,7 @@ void NDRecordPlayerScore(int32_t score) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordMultiScore(int32_t nPlayer, int32_t score) {
     if (gameStates.render.cameras.bActive)
@@ -1594,7 +1594,7 @@ void NDRecordMultiScore(int32_t nPlayer, int32_t score) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordPrimaryAmmo(int32_t nOldAmmo, int32_t nNewAmmo) {
     if (gameStates.render.cameras.bActive)
@@ -1609,7 +1609,7 @@ void NDRecordPrimaryAmmo(int32_t nOldAmmo, int32_t nNewAmmo) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordSecondaryAmmo(int32_t nOldAmmo, int32_t nNewAmmo) {
     if (gameStates.render.cameras.bActive)
@@ -1624,7 +1624,7 @@ void NDRecordSecondaryAmmo(int32_t nOldAmmo, int32_t nNewAmmo) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordDoorOpening(int32_t nSegment, int32_t nSide) {
     if (gameStates.render.cameras.bActive)
@@ -1636,7 +1636,7 @@ void NDRecordDoorOpening(int32_t nSegment, int32_t nSide) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordLaserLevel(int8_t oldLevel, int8_t newLevel) {
     if (gameStates.render.cameras.bActive)
@@ -1648,7 +1648,7 @@ void NDRecordLaserLevel(int8_t oldLevel, int8_t newLevel) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRecordCloakingWall(
     int32_t nFrontWall,
@@ -1677,7 +1677,7 @@ void NDRecordCloakingWall(
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDSetNewLevel(int32_t level_num) {
     int32_t i;
@@ -1708,7 +1708,7 @@ void NDSetNewLevel(int32_t level_num) {
     StartTime(0);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t NDReadDemoStart(int32_t bRandom) {
     int8_t i, gameType, laserLevel;
@@ -1763,7 +1763,7 @@ int32_t NDReadDemoStart(int32_t bRandom) {
         N_PLAYERS = int32_t(NDReadByte());
         // changed this to above two lines -- breaks on the mac because of
         // endian issues
-        //		NDReadByte (reinterpret_cast<int8_t*> (&N_PLAYERS);
+        // 	NDReadByte (reinterpret_cast<int8_t*> (&N_PLAYERS);
         for (i = 0; i < N_PLAYERS; i++) {
             PLAYER(i).cloakTime = 0;
             PLAYER(i).invulnerableTime = 0;
@@ -1824,7 +1824,7 @@ int32_t NDReadDemoStart(int32_t bRandom) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDPopCtrlCenTriggers() {
     int16_t anim_num, n, i;
@@ -1847,7 +1847,7 @@ void NDPopCtrlCenTriggers() {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t NDUpdateSmoke(void) {
     if (!EGI_FLAG(bUseParticles, 0, 1, 0))
@@ -1871,7 +1871,7 @@ int32_t NDUpdateSmoke(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDRenderExtras(uint8_t, CObject *);
 void MultiApplyGoalTextures();
@@ -2780,7 +2780,7 @@ for (int32_t nObject = 1; nObject < gameData.objData.nLastObject [0]; nObject++)
     return bDone;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDGotoBeginning() {
     ndInFile.Seek(0, SEEK_SET);
@@ -2795,7 +2795,7 @@ void NDGotoBeginning() {
     gameData.demoData.bEof = 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDGotoEnd() {
     int16_t nFrameLength, byteCount;
@@ -2852,7 +2852,7 @@ void NDGotoEnd() {
         N_PLAYERS = (int32_t)c;
         // see newdemo_read_start_demo for explanation of
         // why this is commented out
-        //		NDReadByte (reinterpret_cast<int8_t*> (&N_PLAYERS);
+        // 	NDReadByte (reinterpret_cast<int8_t*> (&N_PLAYERS);
         for (i = 0; i < N_PLAYERS; i++) {
             NDReadString(PLAYER(i).callsign);
             CONNECT(i, NDReadByte());
@@ -2875,7 +2875,7 @@ void NDGotoEnd() {
     return;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline void NDBackOneFrame(void) {
     int16_t nPrevFrameLength;
@@ -2885,7 +2885,7 @@ inline void NDBackOneFrame(void) {
     ndInFile.Seek(8 - nPrevFrameLength, SEEK_CUR);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDBackFrames(int32_t nFrames) {
     int32_t i;
@@ -2902,7 +2902,7 @@ void NDBackFrames(int32_t nFrames) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 /*
  *  routine to interpolate the viewer position.  the current position is
@@ -3002,7 +3002,7 @@ void NDInterpolateFrame(fix d_play, fix d_recorded) {
     gameData.objData.nLastObject[0] = nCurObjs;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDPlayBackOneFrame(void) {
     int32_t nFramesBack, i, level;
@@ -3158,7 +3158,7 @@ void NDPlayBackOneFrame(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDStartRecording(void) {
     // free disk space shouldn't be an issue these days ...
@@ -3189,7 +3189,7 @@ void NDStartRecording(void) {
         NDRecordStartDemo();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDFinishRecording(void) {
     uint8_t cloaked = 0;
@@ -3251,7 +3251,7 @@ void NDFinishRecording(void) {
     ndOutFile.Close();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 char szAllowedDemoNameChars[] = "azAZ09_-";
 
@@ -3329,7 +3329,7 @@ void NDStopRecording(void) {
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // returns the number of demo files on the disk
 int32_t NDCountDemos(void) {
     FFS ffs;
@@ -3355,7 +3355,7 @@ int32_t NDCountDemos(void) {
     return nFiles;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDStartPlayback(char *filename) {
     FFS ffs;
@@ -3452,7 +3452,7 @@ void NDStartPlayback(char *filename) {
     NDPlayBackOneFrame(); // get all of the OBJECTS to renderb game
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void NDStopPlayback() {
     if (bRevertFormat > 0) {
@@ -3479,7 +3479,7 @@ void NDStopPlayback() {
     longjmp(gameExitPoint, 0); // Exit game loop
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #if DBG
 
@@ -3546,7 +3546,7 @@ void NDStripFrames(char *outname, int32_t bytes_to_strip) {
 
 #endif
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CObject demoRightExtra, demoLeftExtra;
 uint8_t nDemoDoRight = 0, nDemoDoLeft = 0;
@@ -3574,7 +3574,7 @@ void NDRenderExtras(uint8_t which, CObject *pObj) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void DoJasonInterpolate(fix xRecordedTime) {
     fix xDelay;
@@ -3595,11 +3595,11 @@ void DoJasonInterpolate(fix xRecordedTime) {
                 }
             // xDelay = gameData.demoData.xRecordedTotal - gameData.demoData.xJasonPlaybackTotal;
             // if (xDelay > 0)
-            //	TimerDelay (xDelay);
+            // TimerDelay (xDelay);
         }
     }
     gameData.demoData.bFirstTimePlayback = 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

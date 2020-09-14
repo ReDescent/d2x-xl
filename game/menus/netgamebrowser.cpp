@@ -117,7 +117,7 @@ int32_t NetworkJoinPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int32_t nSt
         sprintf(szTrackers, TXT_TRACKERS_FOUND, i, (i == 1) ? "" : "s");
         if (strcmp(menu[1].m_text, szTrackers)) {
             strcpy(menu[1].m_text, szTrackers);
-            //			menu [1].x = (int16_t) 0x8000;
+            // 		menu [1].x = (int16_t) 0x8000;
             menu[1].m_bRebuild = 1;
         }
     }

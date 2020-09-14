@@ -59,7 +59,7 @@ void scale_up_bitmap_rle(
 void rls_stretch_scanline_setup(int32_t XDelta, int32_t YDelta);
 void rls_stretch_scanline(void);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void decode_row(CBitmap *bmp, int32_t y) {
     int32_t i, offset = 4 + bmp->Height();
@@ -69,7 +69,7 @@ void decode_row(CBitmap *bmp, int32_t y) {
     gr_rle_decode(&bmp->Buffer()[offset], scale_rle_data);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void scale_up_bitmap(
     CBitmap *source_bmp,
@@ -120,7 +120,7 @@ void scale_up_bitmap(
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void scale_up_bitmap_rle(
     CBitmap *source_bmp,
@@ -173,7 +173,7 @@ void scale_up_bitmap_rle(
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void rls_stretch_scanline_setup(int32_t XDelta, int32_t YDelta) {
     scale_ydelta_minus_1 = YDelta - 1;
@@ -216,7 +216,7 @@ void rls_stretch_scanline_setup(int32_t XDelta, int32_t YDelta) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void rls_stretch_scanline() {
     uint8_t c, *src_ptr, *dest_ptr;
@@ -271,7 +271,7 @@ void rls_stretch_scanline() {
 
 // old stuff here...
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void scale_bitmap_c(
     CBitmap *source_bmp,
@@ -321,21 +321,9 @@ void scale_bitmap_c(
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void scale_row_asm_transparent(uint8_t *sbits, uint8_t *dbits, int32_t width, fix u, fix du) {
-#if 0
-	int32_t i;
-	uint8_t coord;
-
-	for (i=0; i<width; i++ ) {
-		coord = sbits[ u >> 16 ];
-		if ( coord!=TRANSPARENCY_COLOR)
-			*dbits = coord;
-		dbits++;
-		u += du;
-	}
-#endif
     int32_t i;
     uint8_t c;
     uint8_t *dbits_end = &dbits[width - 1];
@@ -396,7 +384,7 @@ void scale_row_asm_transparent(uint8_t *sbits, uint8_t *dbits, int32_t width, fi
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void scale_bitmap_c_rle(
     CBitmap *source_bmp,
@@ -413,7 +401,7 @@ void scale_bitmap_c_rle(
     fix du, dv, v;
     int32_t y, last_row = -1;
 
-    //	Rotation doesn't work because explosions are not square!
+    // Rotation doesn't work because explosions are not square!
     // -- 	if (orientation & 4) {
     // -- 		int32_t	t;
     // -- 		t = u0;	u0 = v0;	v0 = t;
@@ -459,7 +447,7 @@ void scale_bitmap_c_rle(
 
 #define FIND_SCALED_NUM(x, x0, x1, y0, y1) (FixMulDiv((x) - (x0), (y1) - (y0), (x1) - (x0)) + (y0))
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Scales bitmap, bp, into vertbuf[0] to vertbuf[1]
 void ScaleBitmap(CBitmap *pBm, grsPoint *vertbuf, int32_t orientation) {
     CBitmap *dbp = CCanvas::Current();
@@ -539,16 +527,16 @@ void ScaleBitmap(CBitmap *pBm, grsPoint *vertbuf, int32_t orientation) {
     if (dy1 <= dy0)
         return;
 
-    //	Assert( dx0>=0 );
-    //	Assert( dy0>=0 );
-    //	Assert( dx1<dbp->Width () );
-    //	Assert( dy1<dbp->Height () );
-    //	Assert( X2I(u0)<=X2I(u1) );
-    //	Assert( X2I(v0)<=X2I(v1) );
-    //	Assert( X2I(u0)>=0 );
-    //	Assert( X2I(v0)>=0 );
-    //	Assert( u1<I2X(pBm->Width ()) );
-    //	Assert( v1<I2X(pBm->Height ()) );
+    // Assert( dx0>=0 );
+    // Assert( dy0>=0 );
+    // Assert( dx1<dbp->Width () );
+    // Assert( dy1<dbp->Height () );
+    // Assert( X2I(u0)<=X2I(u1) );
+    // Assert( X2I(v0)<=X2I(v1) );
+    // Assert( X2I(u0)>=0 );
+    // Assert( X2I(v0)>=0 );
+    // Assert( u1<I2X(pBm->Width ()) );
+    // Assert( v1<I2X(pBm->Height ()) );
 
     dtemp = X2I(clipped_u1) - X2I(clipped_u0);
 
@@ -587,4 +575,4 @@ void ScaleBitmap(CBitmap *pBm, grsPoint *vertbuf, int32_t orientation) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

@@ -812,7 +812,7 @@ int32_t SegDistGaugeSize(void) { return PROGRESS_STEPS(gameData.segData.nSegment
 
 int32_t SortLightsGaugeSize(void) {
     // if (gameStates.app.bNostalgia)
-    //	return 0;
+    // return 0;
     if (gameStates.app.bMultiThreaded)
         return 0;
     return PROGRESS_STEPS(gameData.segData.nSegments) * 2 + PROGRESS_STEPS(gameData.segData.nVertices) +

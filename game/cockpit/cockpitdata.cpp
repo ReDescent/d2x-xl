@@ -41,13 +41,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define SHOW_PLAYER_IP 0
 
-#if 0
-CCanvas *Canv_LeftEnergyGauge;
-CCanvas *Canv_AfterburnerGauge;
-CCanvas *Canv_RightEnergyGauge;
-CCanvas *numericalGaugeCanv;
-#endif
-
 // store delta x values from left of box
 tSpan weaponWindowLeft[WEAPON_WINDOW_SIZE] = { // first tSpan 67, 151
     {8, 51},
@@ -159,14 +152,14 @@ tGaugeBox hudWindowAreas[8] = {
     {SB_SECONDARY_W_BOX_LEFT_H, SB_SECONDARY_W_BOX_TOP_H, SB_SECONDARY_W_BOX_RIGHT_H, SB_SECONDARY_W_BOX_BOT_H, NULL},
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CStaticCanvasColor<0, 0, 0, 255> gaugeFadeColors[2][4];
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t SW_drawn[2], SW_x[2], SW_y[2], SW_w[2], SW_h[2];
 
 int32_t nDbgGauge = -1;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

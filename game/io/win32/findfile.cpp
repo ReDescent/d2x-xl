@@ -4,7 +4,7 @@
 #include "findfile.h"
 #include "u_mem.h"
 
-//	Global Variables	----------------------------------------------------------
+// Global Variables	----------------------------------------------------------
 
 static HANDLE _FindFileHandle = INVALID_HANDLE_VALUE;
 

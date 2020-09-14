@@ -20,7 +20,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "text.h"
 #include "network.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define ESHAKER_SHAKE_TIME (I2X(2))
 #define MAX_ESHAKER_DETONATES 4
@@ -28,14 +28,14 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 fix eshakerDetonateTimes[MAX_ESHAKER_DETONATES];
 float eshakerDetonateScales[MAX_ESHAKER_DETONATES];
 
-//	Call this to initialize for a new level.
-//	Sets all super mega missile detonation times to 0 which means there aren't any.
+// Call this to initialize for a new level.
+// Sets all super mega missile detonation times to 0 which means there aren't any.
 void InitShakerDetonates(void) {
     memset(eshakerDetonateTimes, 0, sizeof(eshakerDetonateTimes));
     memset(eshakerDetonateScales, 0, sizeof(eshakerDetonateScales));
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static void RockPlayerShip(int32_t fc, float fScaleMod = 1.0f) {
     if (fc > 16)
@@ -51,20 +51,20 @@ static void RockPlayerShip(int32_t fc, float fScaleMod = 1.0f) {
     int32_t rz = (fix)FRound(SRandShort() * fScale);
     gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.x += rx;
     gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.z += rz;
-    //	Shake the buddy!
+    // Shake the buddy!
     if (gameData.escortData.nObjNum != -1) {
         OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.x += rx * 4;
         OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.z += rz * 4;
     }
-    //	Shake a guided missile!
+    // Shake a guided missile!
     gameStates.gameplay.seismic.nMagnitude += rx;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-//	If a smega missile been detonated, rock the mine!
-//	This should be called every frame.
-//	Maybe this should affect all robots, being called when they get their physics done.
+// If a smega missile been detonated, rock the mine!
+// This should be called every frame.
+// Maybe this should affect all robots, being called when they get their physics done.
 void RockTheMineFrame(void) {
     for (int32_t i = 0; i < MAX_ESHAKER_DETONATES; i++) {
         if (eshakerDetonateTimes[i] != 0) {
@@ -81,10 +81,10 @@ void RockTheMineFrame(void) {
 #if 1
                 RockPlayerShip((ESHAKER_SHAKE_TIME - deltaTime) / (ESHAKER_SHAKE_TIME / 16), eshakerDetonateScales[i]);
 #else
-                //	Control center destroyed, rock the player's ship.
+                // Control center destroyed, rock the player's ship.
                 int32_t fc, rx, rz;
                 // -- fc = abs(deltaTime - ESHAKER_SHAKE_TIME/2);
-                //	Changed 10/23/95 to make decreasing for super mega missile.
+                // Changed 10/23/95 to make decreasing for super mega missile.
                 fc = (ESHAKER_SHAKE_TIME - deltaTime) / (ESHAKER_SHAKE_TIME / 16);
                 if (fc > 16)
                     fc = 16;
@@ -99,58 +99,53 @@ void RockTheMineFrame(void) {
                 rz = (fix)FRound(SRandShort() * fScale);
                 gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.x += rx;
                 gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.z += rz;
-                //	Shake the buddy!
+                // Shake the buddy!
                 if (gameData.escortData.nObjNum != -1) {
                     OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.x += rx * 4;
                     OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.z += rz * 4;
                 }
-                //	Shake a guided missile!
+                // Shake a guided missile!
                 gameStates.gameplay.seismic.nMagnitude += rx;
 #endif
             }
         }
     }
-    //	Hook in the rumble sound effect here.
+    // Hook in the rumble sound effect here.
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define SEISMIC_DISTURBANCE_DURATION (I2X(5))
 
 int32_t SeismicLevel(void) { return gameStates.gameplay.seismic.nLevel; }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void InitSeismicDisturbances(void) {
     gameStates.gameplay.seismic.nStartTime = 0;
     gameStates.gameplay.seismic.nEndTime = 0;
 }
 
-//	-----------------------------------------------------------------------------
-//	Return true if time to start a seismic disturbance.
+// -----------------------------------------------------------------------------
+// Return true if time to start a seismic disturbance.
 int32_t StartSeismicDisturbance(void) {
     if (gameStates.gameplay.seismic.nShakeDuration < 1)
         return 0;
-#if 0
-int32_t rval = (2 * FixMul (RandShort (), gameStates.gameplay.seismic.nShakeFrequency)) < gameData.timeData.xFrame;
-if (rval)
-#endif
-    {
-        gameStates.gameplay.seismic.nStartTime = gameData.timeData.xGame;
-        gameStates.gameplay.seismic.nEndTime = gameData.timeData.xGame + gameStates.gameplay.seismic.nShakeDuration;
-        gameStates.gameplay.seismic.nShakeDuration = 0;
-        if (!gameStates.gameplay.seismic.bSound) {
-            audio.PlayLoopingSound((int16_t)gameStates.gameplay.seismic.nSound, I2X(1), -1, -1);
-            gameStates.gameplay.seismic.bSound = 1;
-            gameStates.gameplay.seismic.nNextSoundTime = gameData.timeData.xGame + RandShort() / 2;
-        }
-        if (IsMultiGame)
-            MultiSendSeismic(gameStates.gameplay.seismic.nStartTime, gameStates.gameplay.seismic.nEndTime);
+
+    gameStates.gameplay.seismic.nStartTime = gameData.timeData.xGame;
+    gameStates.gameplay.seismic.nEndTime = gameData.timeData.xGame + gameStates.gameplay.seismic.nShakeDuration;
+    gameStates.gameplay.seismic.nShakeDuration = 0;
+    if (!gameStates.gameplay.seismic.bSound) {
+        audio.PlayLoopingSound((int16_t)gameStates.gameplay.seismic.nSound, I2X(1), -1, -1);
+        gameStates.gameplay.seismic.bSound = 1;
+        gameStates.gameplay.seismic.nNextSoundTime = gameData.timeData.xGame + RandShort() / 2;
     }
-    return 1 /*rval*/;
+    if (IsMultiGame)
+        MultiSendSeismic(gameStates.gameplay.seismic.nStartTime, gameStates.gameplay.seismic.nEndTime);
+    return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void SeismicDisturbanceFrame(void) {
     if (gameStates.gameplay.seismic.nShakeFrequency) {
@@ -178,20 +173,20 @@ void SeismicDisturbanceFrame(void) {
             rz = FixMul(SRandShort(), h);
             gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.x += rx;
             gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.z += rz;
-            //	Shake the buddy!
+            // Shake the buddy!
             if (gameData.escortData.nObjNum != -1) {
                 OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.x += rx * 4;
                 OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.z += rz * 4;
             }
-            //	Shake a guided missile!
+            // Shake a guided missile!
             gameStates.gameplay.seismic.nMagnitude += rx;
 #endif
         }
     }
 }
 
-//	-----------------------------------------------------------------------------
-//	Call this when a smega detonates to start the process of rocking the mine.
+// -----------------------------------------------------------------------------
+// Call this when a smega detonates to start the process of rocking the mine.
 void ShakerRockStuff(CFixVector *vPos) {
 #if 1 //! DBG
     int32_t i;
@@ -218,8 +213,8 @@ void ShakerRockStuff(CFixVector *vPos) {
 #endif
 }
 
-//	---------------------------------------------------------------------------------------
-//	Do seismic disturbance stuff including the looping sounds with changing volume.
+// ---------------------------------------------------------------------------------------
+// Do seismic disturbance stuff including the looping sounds with changing volume.
 
 void DoSeismicStuff(void) {
     if (gameStates.limitFPS.bSeismic && !gameStates.app.tick40fps.bTick)
@@ -246,5 +241,5 @@ void DoSeismicStuff(void) {
     }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

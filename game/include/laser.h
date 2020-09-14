@@ -189,7 +189,7 @@ extern int nOmegaDuration[7];
 
 // NOTE: OMEGA_CHARGE_SCALE moved to laser.c to avoid long rebuilds if changed
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline int LaserPlayerFireSpread(
     CObject *objP,
@@ -203,7 +203,7 @@ static inline int LaserPlayerFireSpread(
     return LaserPlayerFireSpreadDelay(objP, laserType, nGun, spreadr, spreadu, 0, makeSound, harmless, nLightObj);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static int inline LaserPlayerFire(
     CObject *objP,
@@ -215,23 +215,23 @@ static int inline LaserPlayerFire(
     return LaserPlayerFireSpread(objP, laserType, nGun, 0, 0, makeSound, harmless, nLightObj);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline int WeaponIsPlayerMine(int nId) {
     return (nId == PROXMINE_ID) || (nId == SMARTMINE_ID) || (nId == SMALLMINE_ID);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline int WeaponIsMine(int nId) { return WeaponIsPlayerMine(nId) || (nId == ROBOT_SMARTMINE_ID); }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline int ObjIsPlayerMine(CObject *objP) {
     return (objP->info.nType == OBJ_WEAPON) && WeaponIsPlayerMine(objP->info.nId);
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 static inline int ObjIsMine(CObject *objP) { return (objP->info.nType == OBJ_WEAPON) && WeaponIsMine(objP->info.nId); }
 
@@ -240,6 +240,6 @@ static inline int ObjIsMine(CObject *objP) { return (objP->info.nType == OBJ_WEA
 #define MAX_OMEGA_CHARGE \
     (gameStates.app.bHaveExtraGameInfo[IsMultiGame] ? gameData.omega.xMaxCharge : DEFAULT_MAX_OMEGA_CHARGE)
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 #endif /* _LASER_H */

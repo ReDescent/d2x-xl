@@ -35,7 +35,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 fix AITurnTowardsVector(CFixVector *vGoal, CObject *pObj, fix rate) {
     ENTER(1, 0);
-    //	Not all robots can turn, eg, SPECIAL_REACTOR_ROBOT
+    // Not all robots can turn, eg, SPECIAL_REACTOR_ROBOT
     if (!ROBOTINFO(pObj))
         RETVAL(0)
     if (rate == 0)
@@ -61,7 +61,7 @@ fix AITurnTowardsVector(CFixVector *vGoal, CObject *pObj, fix rate) {
 #if TRACE
             console.printf(1, "Degenerate vector in AITurnTowardsVector (mag = %7.3f)\n", X2F(mag));
 #endif
-            fVecNew = *vGoal; //	if degenerate vector, go right to goal
+            fVecNew = *vGoal; // if degenerate vector, go right to goal
         }
     }
     if (gameStates.gameplay.seismic.nMagnitude) {
@@ -74,15 +74,15 @@ fix AITurnTowardsVector(CFixVector *vGoal, CObject *pObj, fix rate) {
 }
 
 // -----------------------------------------------------------------------------
-//	vGoalVec must be normalized, or close to it.
-//	if bDotBased set, then speed is based on direction of movement relative to heading
+// vGoalVec must be normalized, or close to it.
+// if bDotBased set, then speed is based on direction of movement relative to heading
 void MoveTowardsVector(CObject *pObj, CFixVector *vGoalVec, int32_t bDotBased) {
     ENTER(1, 0);
     tPhysicsInfo &physicsInfo = pObj->mType.physInfo;
     tRobotInfo *pRobotInfo = ROBOTINFO(pObj);
 
-    //	Trying to move towards player.  If forward vector much different than velocity vector,
-    //	bash velocity vector twice as much towards CPlayerData as usual.
+    // Trying to move towards player.  If forward vector much different than velocity vector,
+    // bash velocity vector twice as much towards CPlayerData as usual.
     if (!pRobotInfo)
         RETURN
     CFixVector v = physicsInfo.velocity;
@@ -93,15 +93,15 @@ void MoveTowardsVector(CObject *pObj, CFixVector *vGoalVec, int32_t bDotBased) {
         dot = (I2X(1) + dot) / 2;
 
     if (bDotBased && (dot < I2X(3) / 4))
-        //	This funny code is supposed to slow down the robot and move his velocity towards his direction
-        //	more quickly than the general code
+        // This funny code is supposed to slow down the robot and move his velocity towards his direction
+        // more quickly than the general code
         physicsInfo.velocity += *vGoalVec * (gameData.timeData.xFrame * 32);
     else
         physicsInfo.velocity +=
             *vGoalVec * ((gameData.timeData.xFrame * 64) * (5 * gameStates.app.nDifficultyLevel / 4));
     fix speed = physicsInfo.velocity.Mag();
     fix xMaxSpeed = pObj->MaxSpeed();
-    //	Green guy attacks twice as fast as he moves away.
+    // Green guy attacks twice as fast as he moves away.
     if ((pRobotInfo->attackType == 1) || pRobotInfo->thief || pRobotInfo->kamikaze)
         xMaxSpeed *= 2;
     if (speed > xMaxSpeed)
@@ -178,7 +178,7 @@ void MoveAwayFromOtherRobots(CObject *pObj, CFixVector &vVecToTarget) {
 // -----------------------------------------------------------------------------
 
 void MoveTowardsPlayer(CObject *pObj, CFixVector *vVecToTarget)
-//	gameData.aiData.target.vDir must be normalized, or close to it.
+// gameData.aiData.target.vDir must be normalized, or close to it.
 {
     ENTER(1, 0);
     MoveAwayFromOtherRobots(pObj, *vVecToTarget);
@@ -187,7 +187,7 @@ void MoveTowardsPlayer(CObject *pObj, CFixVector *vVecToTarget)
 }
 
 // -----------------------------------------------------------------------------
-//	I am ashamed of this: fastFlag == -1 means Normal slide about.  fastFlag = 0 means no evasion.
+// I am ashamed of this: fastFlag == -1 means Normal slide about.  fastFlag = 0 means no evasion.
 void MoveAroundPlayer(CObject *pObj, CFixVector *vVecToTarget, int32_t fastFlag) {
     ENTER(1, 0);
     tPhysicsInfo &physInfo = pObj->mType.physInfo;
@@ -244,17 +244,17 @@ void MoveAroundPlayer(CObject *pObj, CFixVector *vVecToTarget, int32_t fastFlag)
         Error("Function MoveAroundPlayer: Bad case.");
     }
 
-    //	Note: -1 means Normal circling about the player.  > 0 means fast evasion.
+    // Note: -1 means Normal circling about the player.  > 0 means fast evasion.
     if (fastFlag > 0) {
-        //	Only take evasive action if looking at player.
-        //	Evasion speed is scaled by percentage of shield left so wounded robots evade less effectively.
+        // Only take evasive action if looking at player.
+        // Evasion speed is scaled by percentage of shield left so wounded robots evade less effectively.
         fix dot = CFixVector::Dot(gameData.aiData.target.vDir, pObj->info.position.mOrient.m.dir.f);
         if ((dot > pRobotInfo->fieldOfView[gameStates.app.nDifficultyLevel]) && !TARGETOBJ->Cloaked()) {
             fix xDamageScale = (pRobotInfo->strength) ? FixDiv(pObj->info.xShield, pRobotInfo->strength) : I2X(1);
             if (xDamageScale > I2X(1))
-                xDamageScale = I2X(1); //	Just in cased:\temp\dm_test.
+                xDamageScale = I2X(1); // Just in cased:\temp\dm_test.
             else if (xDamageScale < 0)
-                xDamageScale = 0; //	Just in cased:\temp\dm_test.
+                xDamageScale = 0; // Just in cased:\temp\dm_test.
             vEvade *= (I2X(fastFlag) + xDamageScale);
         }
     }
@@ -275,7 +275,7 @@ void MoveAwayFromTarget(CObject *pObj, CFixVector *vVecToTarget, int32_t attackT
 
     physicsInfo.velocity -= gameData.aiData.target.vDir * ft;
     if (attackType) {
-        //	Get value in 0d:\temp\dm_test3 to choose evasion direction.
+        // Get value in 0d:\temp\dm_test3 to choose evasion direction.
         int32_t nObjRef = ((pObj->Index()) ^ ((gameData.appData.nFrameCount + 3 * (pObj->Index())) >> 5)) & 3;
         switch (nObjRef) {
         case 0:
@@ -291,7 +291,7 @@ void MoveAwayFromTarget(CObject *pObj, CFixVector *vVecToTarget, int32_t attackT
             physicsInfo.velocity += pObj->info.position.mOrient.m.dir.r * (-gameData.timeData.xFrame << 5);
             break;
         default:
-            Int3(); //	Impossible, bogus value on nObjRef, must be in 0d:\temp\dm_test3
+            Int3(); // Impossible, bogus value on nObjRef, must be in 0d:\temp\dm_test3
         }
     }
 
@@ -304,9 +304,9 @@ void MoveAwayFromTarget(CObject *pObj, CFixVector *vVecToTarget, int32_t attackT
 }
 
 // -----------------------------------------------------------------------------
-//	Move towards, away_from or around player.
-//	Also deals with evasion.
-//	If the flag bEvadeOnly is set, then only allowed to evade, not allowed to move otherwise (must have mode ==
+// Move towards, away_from or around player.
+// Also deals with evasion.
+// If the flag bEvadeOnly is set, then only allowed to evade, not allowed to move otherwise (must have mode ==
 // AIM_IDLING).
 void AIMoveRelativeToTarget(
     CObject *pObj,
@@ -321,7 +321,7 @@ void AIMoveRelativeToTarget(
 
     if (!pRobotInfo)
         RETURN
-    //	See if should take avoidance.
+    // See if should take avoidance.
 
     // New way, green guys don't evade:	if ((pRobotInfo->attackType == 0) && (pObj->cType.aiInfo.nDangerLaser != -1)) {
     CObject *pThreat = OBJECT(pObj->cType.aiInfo.nDangerLaser);
@@ -341,11 +341,11 @@ void AIMoveRelativeToTarget(
             fix dotLaserRobot;
             CFixVector vLaserToRobot;
 
-            //	The laser is seen by the robot, see if it might hit the robot.
-            //	Get the laser's direction.  If it's a polyobjP, it can be gotten cheaply from the orientation matrix.
+            // The laser is seen by the robot, see if it might hit the robot.
+            // Get the laser's direction.  If it's a polyobjP, it can be gotten cheaply from the orientation matrix.
             if (pThreat->info.renderType == RT_POLYOBJ)
                 fVecLaser = pThreat->info.position.mOrient.m.dir.f;
-            else { //	Not a polyobjP, get velocity and Normalize.
+            else { // Not a polyobjP, get velocity and Normalize.
                 fVecLaser = pThreat->mType.physInfo.velocity; // pThreat->info.position.mOrient.m.v.f;
                 CFixVector::Normalize(fVecLaser);
             }
@@ -362,19 +362,19 @@ void AIMoveRelativeToTarget(
         RETURN
     }
 
-    //	If only allowed to do evade code, then done.
-    //	Hmm, perhaps brilliant insight.  If want claw-nType guys to keep coming, don't return here after evasion.
+    // If only allowed to do evade code, then done.
+    // Hmm, perhaps brilliant insight.  If want claw-nType guys to keep coming, don't return here after evasion.
     if (!(pRobotInfo->attackType || pRobotInfo->thief) && bEvadeOnly)
         RETURN
-    //	If we fall out of above, then no CObject to be avoided.
+    // If we fall out of above, then no CObject to be avoided.
     pObj->cType.aiInfo.nDangerLaser = -1;
-    //	Green guy selects move around/towards/away based on firing time, not distance.
+    // Green guy selects move around/towards/away based on firing time, not distance.
     if (pRobotInfo->attackType == 1) {
         if (!gameStates.app.bPlayerIsDead &&
             ((pLocalInfo->pNextrimaryFire <= pRobotInfo->primaryFiringWait[gameStates.app.nDifficultyLevel] / 4) ||
              (xDistToTarget >= I2X(30))))
             MoveTowardsPlayer(pObj, &gameData.aiData.target.vDir);
-        //	1/4 of time, move around CPlayerData, 3/4 of time, move away from CPlayerData
+        // 1/4 of time, move around CPlayerData, 3/4 of time, move away from CPlayerData
         else if (RandShort() < 8192)
             MoveAroundPlayer(pObj, &gameData.aiData.target.vDir, -1);
         else
@@ -384,7 +384,7 @@ void AIMoveRelativeToTarget(
     else {
         int32_t objval = ((pObj->Index()) & 0x0f) ^ 0x0a;
 
-        //	Changes here by MK, 12/29/95.  Trying to get rid of endless circling around bots in a large room.
+        // Changes here by MK, 12/29/95.  Trying to get rid of endless circling around bots in a large room.
         if (pRobotInfo->kamikaze)
             MoveTowardsPlayer(pObj, &gameData.aiData.target.vDir);
         else if (xDistToTarget < circleDistance)
@@ -392,7 +392,7 @@ void AIMoveRelativeToTarget(
         else if ((xDistToTarget < (3 + objval) * circleDistance / 2) && (pLocalInfo->pNextrimaryFire > -I2X(1)))
             MoveAroundPlayer(pObj, &gameData.aiData.target.vDir, -1);
         else if ((-pLocalInfo->pNextrimaryFire > I2X(1) + (objval << 12)) && gameData.aiData.nTargetVisibility)
-            //	Usually move away, but sometimes move around player.
+            // Usually move away, but sometimes move around player.
             if ((((gameData.timeData.xGame >> 18) & 0x0f) ^ objval) > 4)
                 MoveAwayFromTarget(pObj, &gameData.aiData.target.vDir, 0);
             else
@@ -418,8 +418,8 @@ fix MoveObjectToLegalPoint(CObject *pObj, CFixVector *vGoal) {
 }
 
 // -----------------------------------------------------------------------------
-//	Move the CObject pObj to a spot in which it doesn't intersect a CWall.
-//	It might mean moving it outside its current CSegment.
+// Move the CObject pObj to a spot in which it doesn't intersect a CWall.
+// It might mean moving it outside its current CSegment.
 bool MoveObjectToLegalSpot(CObject *pObj, int32_t bMoveToCenter) {
     ENTER(1, 0);
     CFixVector vSegCenter, vOrigPos = pObj->info.position.vPos;
@@ -458,7 +458,7 @@ bool MoveObjectToLegalSpot(CObject *pObj, int32_t bMoveToCenter) {
     }
 
     if (pObj->IsBoss()) {
-        Int3(); //	Note: Boss is poking outside mine.  Will try to resolve.
+        Int3(); // Note: Boss is poking outside mine.  Will try to resolve.
         TeleportBoss(pObj);
         RETVAL(true)
     } else {
@@ -471,8 +471,8 @@ bool MoveObjectToLegalSpot(CObject *pObj, int32_t bMoveToCenter) {
 }
 
 // -----------------------------------------------------------------------------
-//	Move CObject one CObject radii from current position towards CSegment center.
-//	If CSegment center is nearer than 2 radii, move it to center.
+// Move CObject one CObject radii from current position towards CSegment center.
+// If CSegment center is nearer than 2 radii, move it to center.
 fix MoveTowardsPoint(CObject *pObj, CFixVector *vGoal, fix xMinDist) {
     ENTER(1, 0);
     fix xDistToGoal;
@@ -487,7 +487,7 @@ fix MoveTowardsPoint(CObject *pObj, CFixVector *vGoal, fix xMinDist) {
     vGoalDir = *vGoal - pObj->info.position.vPos;
     xDistToGoal = CFixVector::Normalize(vGoalDir);
     if (xDistToGoal - pObj->info.xSize <= xMinDist) {
-        //	Center is nearer than the distance we want to move, so move to center.
+        // Center is nearer than the distance we want to move, so move to center.
         if (!xMinDist) {
             pObj->info.position.vPos = *vGoal;
             if (ObjectIntersectsWall(pObj))
@@ -495,7 +495,7 @@ fix MoveTowardsPoint(CObject *pObj, CFixVector *vGoal, fix xMinDist) {
         }
         xDistToGoal = 0;
     } else {
-        //	Move one radius towards center.
+        // Move one radius towards center.
         vGoalDir *= Min(FixMul(pObj->MaxSpeed(), gameData.timeData.xFrame), xDistToGoal - xMinDist);
         pObj->info.position.vPos += vGoalDir;
         int32_t nNewSeg = FindSegByPos(pObj->info.position.vPos, pObj->info.nSegment, 1, 0);
@@ -509,8 +509,8 @@ fix MoveTowardsPoint(CObject *pObj, CFixVector *vGoal, fix xMinDist) {
 }
 
 // -----------------------------------------------------------------------------
-//	Move CObject one CObject radii from current position towards CSegment center.
-//	If CSegment center is nearer than 2 radii, move it to center.
+// Move CObject one CObject radii from current position towards CSegment center.
+// If CSegment center is nearer than 2 radii, move it to center.
 fix MoveTowardsSegmentCenter(CObject *pObj) {
     ENTER(1, 0);
     CFixVector vSegCenter = SEGMENT(pObj->info.nSegment)->Center();
@@ -519,5 +519,5 @@ fix MoveTowardsSegmentCenter(CObject *pObj) {
 
 // int32_t	Buddy_got_stuck = 0;
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

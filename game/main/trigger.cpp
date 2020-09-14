@@ -1705,7 +1705,7 @@ void V30TriggerRead(tTriggerV30 &trigger, CFile &cf) {
         trigger.sides[i] = cf.ReadShort();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t OpenExits(void) {
     CTrigger *pTrigger = GEOTRIGGERS.Buffer();
@@ -1724,7 +1724,7 @@ int32_t OpenExits(void) {
     return nExits;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t FindNextLevel(void) {
     missionManager.SetNextLevel(missionManager.nCurrentLevel + 1);

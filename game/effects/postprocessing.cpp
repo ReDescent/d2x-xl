@@ -151,7 +151,7 @@ bool CPostEffectShockwave::SetupShader(void) {
             return false;
     }
 #if DBG
-//	ogl.m_states.bDepthBuffer [1] = 0;
+// ogl.m_states.bDepthBuffer [1] = 0;
 #endif
 #if 1
     if (!ogl.CopyDepthTexture(1))

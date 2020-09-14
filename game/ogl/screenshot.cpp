@@ -246,7 +246,7 @@ void SavePictScreen(int32_t multiplayer) {
         if (err)
             goto end;
     } else {
-        //		parid = GetAppDirId ();
+        // 	parid = GetAppDirId ();
         err = FSMakeFSSpec(0, 0, pfilename, &spec);
         if (err == nsvErr)
             goto end;

@@ -93,40 +93,6 @@ static void OglCacheWeaponTextures(CWeaponInfo *pWeaponInfo) {
 
 //------------------------------------------------------------------------------
 
-#if 0
-
-static CBitmap *OglLoadFaceBitmap (int16_t nTexture, int16_t nFrameIdx, int32_t bLoadTextures)
-{
-	CBitmap*	pBm, * pBmo, * pBmf;
-	int32_t		nFrames;
-
-LoadTexture (gameData.pigData.tex.pBmIndex [nTexture].index, 0, gameStates.app.bD1Mission);
-pBm = gameData.pigData.tex.pBitmap + gameData.pigData.tex.pBmIndex [nTexture].index;
-pBm->SetStatic (1);
-if (!(pBmo = pBm->Override ()))
-	return pBm;
-pBmo->SetStatic (1);
-if (!pBmo->WallAnim ())
-	return pBmo;
-if (2 > (nFrames = pBmo->FrameCount ()))
-	return pBmo;
-pBmo->SetTranspType (3);
-pBmo->SetupTexture (1, bLoadTextures);
-if (!(pBmf = pBmo->Frames ()))
-	return pBmo;
-if ((nFrameIdx < 0) && (nFrames >= -nFrameIdx))
-	pBmf -= (nFrameIdx + 1);
-pBmo->SetCurFrame (pBmf);
-pBmf->SetTranspType (3);
-pBmf->SetupTexture (1, bLoadTextures);
-pBmf->SetStatic (1);
-return pBm;
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 static void CacheSideTextures(int32_t nSegment) {
     int16_t nSide, tMap1, tMap2;
     CBitmap *pBm, *bm2, *bmm;

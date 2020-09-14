@@ -347,7 +347,7 @@ void NetworkSendGameInfo(tPlayerSyncData *their) {
     }
     netGameInfo.m_info.nType = oldType;
     netGameInfo.m_info.gameStatus = oldStatus;
-    //	if (IsEntropyGame || extraGameInfo [0].bEnhancedCTF)
+    // if (IsEntropyGame || extraGameInfo [0].bEnhancedCTF)
     // make half-way sure the client gets this data ...
     NetworkSendExtraGameInfo(their);
     MultiSendMonsterball(1, 1);

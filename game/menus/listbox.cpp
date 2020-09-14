@@ -147,7 +147,7 @@ int32_t CListBox::ListBox(
 
     m_nWidth = 0;
     for (i = 0; i < int32_t(items.ToS()); i++) {
-        //	int32_t w, h, aw;
+        // int32_t w, h, aw;
         fontManager.Current()->StringSize(items[i], w, h, aw);
         if (w > m_nWidth)
             m_nWidth = w;
@@ -361,7 +361,7 @@ int32_t CListBox::ListBox(
                 y2 = y1 + h + 1;
                 if (((m_xMouse > x1) && (m_xMouse < x2)) && ((m_yMouse > y1) && (m_yMouse < y2))) {
                     // if (i == m_nChoice) {
-                    //	break;
+                    // break;
                     //}
                     // bDblClick = 0;
                     m_nChoice = i;

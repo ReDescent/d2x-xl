@@ -28,11 +28,11 @@ extern void MultiSendStolenItems();
 
 #define THIEF_ATTACK_TIME (I2X(10))
 
-//	-------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 #define THIEF_DEPTH 20
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 void _CDECL_ ThiefMessage(const char *format, ...) {
     char szMsg[128];
     va_list args;
@@ -53,8 +53,8 @@ void _CDECL_ ThiefMessage(const char *format, ...) {
     HUDInitMessage(szMsg);
 }
 
-//	------------------------------------------------------------------------------------------------------
-//	Choose CSegment to recreate thief in.
+// ------------------------------------------------------------------------------------------------------
+// Choose CSegment to recreate thief in.
 int32_t ChooseThiefRecreationSegment(void) {
     static int32_t nSegment = -1;
     int32_t nDepth, nDropDepth;
@@ -77,7 +77,7 @@ int32_t ChooseThiefRecreationSegment(void) {
     return (RandShort() * gameData.segData.nLastSegment) >> 15;
 }
 
-//	----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 void RecreateThief(CObject *pObj) {
     int32_t nSegment;
@@ -88,10 +88,10 @@ void RecreateThief(CObject *pObj) {
     vCenter = SEGMENT(nSegment)->Center();
     pNewObj = CreateMorphRobot(SEGMENT(nSegment), &vCenter, pObj->info.nId);
     InitAIObject(OBJ_IDX(pNewObj), AIB_SNIPE, -1);
-    gameData.thiefData.xReInitTime = gameData.timeData.xGame + I2X(10); //	In 10 seconds, re-initialize thief.
+    gameData.thiefData.xReInitTime = gameData.timeData.xGame + I2X(10); // In 10 seconds, re-initialize thief.
 }
 
-//	----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 void DoThiefFrame(CObject *pObj) {
     int32_t nObject = pObj->Index();
@@ -141,7 +141,7 @@ void DoThiefFrame(CObject *pObj) {
         if (connectedDistance < I2X(500)) {
             CreatePathToTarget(pObj, 30, 1);
             pLocalInfo->mode = AIM_THIEF_ATTACK;
-            pLocalInfo->nextActionTime = THIEF_ATTACK_TIME; //	have up to 10 seconds to find player.
+            pLocalInfo->nextActionTime = THIEF_ATTACK_TIME; // have up to 10 seconds to find player.
         }
         break;
 
@@ -164,11 +164,11 @@ void DoThiefFrame(CObject *pObj) {
                     pLocalInfo->targetAwarenessType = 0;
                     CreateNSegmentPath(pObj, 10, gameData.objData.pConsole->info.nSegment);
 
-                    //	If path is real int16_t, try again, allowing to go through player's CSegment
+                    // If path is real int16_t, try again, allowing to go through player's CSegment
                     if (pStaticInfo->nPathLength < 4) {
                         CreateNSegmentPath(pObj, 10, -1);
                     } else if (ROBOTINFO(pObj) && (pObj->info.xShield * 4 < ROBOTINFO(pObj)->strength)) {
-                        //	If robot really low on hits, will run through player with even longer path
+                        // If robot really low on hits, will run through player with even longer path
                         if (pStaticInfo->nPathLength < 8) {
                             CreateNSegmentPath(pObj, 10, -1);
                         }
@@ -181,9 +181,9 @@ void DoThiefFrame(CObject *pObj) {
 
         break;
 
-    //	This means the thief goes from wherever he is to the player.
-    //	Note: When thief successfully steals something, his action time is forced negative and his mode is changed
-    //			to retreat to get him out of attack mode.
+    // This means the thief goes from wherever he is to the player.
+    // Note: When thief successfully steals something, his action time is forced negative and his mode is changed
+    // 		to retreat to get him out of attack mode.
     case AIM_THIEF_ATTACK:
         if (pLocalInfo->targetAwarenessType >= PA_PLAYER_COLLISION) {
             pLocalInfo->targetAwarenessType = 0;
@@ -194,19 +194,19 @@ void DoThiefFrame(CObject *pObj) {
                 gameData.aiData.localInfo[pObj->Index()].mode = AIM_THIEF_RETREAT;
             }
         } else if (pLocalInfo->nextActionTime < 0) {
-            //	This forces him to create a new path every second.
+            // This forces him to create a new path every second.
             pLocalInfo->nextActionTime = I2X(1);
             CreatePathToTarget(pObj, 100, 0);
             pLocalInfo->mode = AIM_THIEF_ATTACK;
         } else {
             if (gameData.aiData.nTargetVisibility && (gameData.aiData.target.xDist < I2X(100))) {
-                //	If the player is close to looking at the thief, thief shall run away.
-                //	No more stupid thief trying to sneak up on you when you're looking right at him!
+                // If the player is close to looking at the thief, thief shall run away.
+                // No more stupid thief trying to sneak up on you when you're looking right at him!
                 if (gameData.aiData.target.xDist > I2X(60)) {
                     fix dot = CFixVector::Dot(
                         gameData.aiData.target.vDir,
                         OBJPOS(gameData.objData.pConsole)->mOrient.m.dir.f);
-                    if (dot < -I2X(1) / 2) { //	Looking at least towards thief, so thief will run!
+                    if (dot < -I2X(1) / 2) { // Looking at least towards thief, so thief will run!
                         CreateNSegmentPath(pObj, 10, gameData.objData.pConsole->info.nSegment);
                         gameData.aiData.localInfo[pObj->Index()].nextActionTime =
                             gameData.thiefData.xWaitTimes[gameStates.app.nDifficultyLevel] / 2;
@@ -217,7 +217,7 @@ void DoThiefFrame(CObject *pObj) {
                 MoveTowardsPlayer(pObj, &gameData.aiData.target.vDir);
             } else {
                 tAIStaticInfo *pStaticInfo = &pObj->cType.aiInfo;
-                //	If path length == 0, then he will keep trying to create path, but he is probably stuck in his
+                // If path length == 0, then he will keep trying to create path, but he is probably stuck in his
                 // closet.
                 if ((pStaticInfo->nPathLength > 1) || ((gameData.appData.nFrameCount & 0x0f) == 0)) {
                     AIFollowPath(
@@ -235,15 +235,15 @@ void DoThiefFrame(CObject *pObj) {
 #if TRACE
         console.printf(CON_DBG, "Thief mode (broken) = %d\n", pLocalInfo->mode);
 #endif
-        // -- Int3();	//	Oops, illegal mode for thief behavior.
+        // -- Int3();	// Oops, illegal mode for thief behavior.
         pLocalInfo->mode = AIM_THIEF_ATTACK;
         pLocalInfo->nextActionTime = I2X(1);
         break;
     }
 }
 
-//	----------------------------------------------------------------------------
-//	Return true if this item (whose presence is indicated by PLAYER (nPlayer).flags) gets stolen.
+// ----------------------------------------------------------------------------
+// Return true if this item (whose presence is indicated by PLAYER (nPlayer).flags) gets stolen.
 int32_t MaybeStealDevice(int32_t nPlayer, int32_t deviceFlag) {
     if (extraGameInfo[IsMultiGame].loadout.nDevice & deviceFlag)
         return 0;
@@ -295,20 +295,20 @@ int32_t MaybeStealDevice(int32_t nPlayer, int32_t deviceFlag) {
     return 0;
 }
 
-//	----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 int32_t MaybeStealSecondaryWeapon(int32_t nPlayer, int32_t nWeapon) {
     if ((PLAYER(nPlayer).secondaryWeaponFlags & HAS_FLAG(nWeapon)) && PLAYER(nPlayer).secondaryAmmo[nWeapon])
         if (RandShort() < THIEF_PROBABILITY) {
             if (nWeapon == PROXMINE_INDEX)
-                if (RandShort() > 8192) //	Come in groups of 4, only add 1/4 of time.
+                if (RandShort() > 8192) // Come in groups of 4, only add 1/4 of time.
                     return 0;
             PLAYER(nPlayer).secondaryAmmo[nWeapon]--;
-            //	Smart mines and proxbombs don't get dropped because they only come in 4 packs.
+            // Smart mines and proxbombs don't get dropped because they only come in 4 packs.
             if ((nWeapon != PROXMINE_INDEX) && (nWeapon != SMARTMINE_INDEX)) {
                 gameData.thiefData.stolenItems[gameData.thiefData.nStolenItem] = secondaryWeaponToPowerup[0][nWeapon];
             }
-            ThiefMessage(TXT_WPN_STOLEN, baseGameTexts[114 + nWeapon][0]); //	Danger! Danger! Use of literal!  Danger!
+            ThiefMessage(TXT_WPN_STOLEN, baseGameTexts[114 + nWeapon][0]); // Danger! Danger! Use of literal!  Danger!
             if (LOCALPLAYER.secondaryAmmo[nWeapon] == 0)
                 AutoSelectWeapon(1, 0);
             // -- compress_stolen_items();
@@ -318,7 +318,7 @@ int32_t MaybeStealSecondaryWeapon(int32_t nPlayer, int32_t nWeapon) {
     return 0;
 }
 
-//	----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 int32_t MaybeStealPrimaryWeapon(int32_t nPlayer, int32_t nWeapon) {
     if ((PLAYER(nPlayer).primaryWeaponFlags & HAS_FLAG(nWeapon)) && PLAYER(nPlayer).primaryAmmo[nWeapon] &&
@@ -334,7 +334,7 @@ int32_t MaybeStealPrimaryWeapon(int32_t nPlayer, int32_t nWeapon) {
                     }
                     ThiefMessage(
                         TXT_LVL_DECREASED,
-                        baseGameTexts[104 + nWeapon][0]); //	Danger! Danger! Use of literal!  Danger!
+                        baseGameTexts[104 + nWeapon][0]); // Danger! Danger! Use of literal!  Danger!
                     PLAYER(nPlayer).laserLevel--;
                     audio.PlaySound(SOUND_WEAPON_STOLEN);
                     return 1;
@@ -344,7 +344,7 @@ int32_t MaybeStealPrimaryWeapon(int32_t nPlayer, int32_t nWeapon) {
                 gameData.thiefData.stolenItems[gameData.thiefData.nStolenItem] = primaryWeaponToPowerup[nWeapon];
                 ThiefMessage(
                     TXT_WPN_STOLEN,
-                    baseGameTexts[104 + nWeapon][0]); //	Danger! Danger! Use of literal!  Danger!
+                    baseGameTexts[104 + nWeapon][0]); // Danger! Danger! Use of literal!  Danger!
                 AutoSelectWeapon(0, 0);
                 audio.PlaySound(SOUND_WEAPON_STOLEN);
                 return 1;
@@ -354,11 +354,11 @@ int32_t MaybeStealPrimaryWeapon(int32_t nPlayer, int32_t nWeapon) {
     return 0;
 }
 
-//	----------------------------------------------------------------------------
-//	Called for a thief-nType robot.
-//	If a item successfully stolen, returns true, else returns false.
-//	If a wapon successfully stolen, do everything, removing it from player,
-//	updating gameData.thiefData.stolenItems information, deselecting, etc.
+// ----------------------------------------------------------------------------
+// Called for a thief-nType robot.
+// If a item successfully stolen, returns true, else returns false.
+// If a wapon successfully stolen, do everything, removing it from player,
+// updating gameData.thiefData.stolenItems information, deselecting, etc.
 int32_t AttemptToStealItem3(CObject *pObj, int32_t nPlayer) {
     int32_t i;
     static int32_t nDevices[] = {
@@ -374,21 +374,21 @@ int32_t AttemptToStealItem3(CObject *pObj, int32_t nPlayer) {
 
     if (gameData.aiData.localInfo[pObj->Index()].mode != AIM_THIEF_ATTACK)
         return 0;
-    //	First, try to steal equipped items.
+    // First, try to steal equipped items.
     if (MaybeStealDevice(nPlayer, PLAYER_FLAGS_INVULNERABLE))
         return 1;
-    //	If primary weapon = laser, first try to rip away those nasty quad lasers!
+    // If primary weapon = laser, first try to rip away those nasty quad lasers!
     if (gameData.weaponData.nPrimary == 0)
         if (MaybeStealDevice(nPlayer, PLAYER_FLAGS_QUAD_LASERS))
             return 1;
-    //	Makes it more likely to steal primary than secondary.
+    // Makes it more likely to steal primary than secondary.
     for (i = 0; i < 2; i++)
         if (MaybeStealPrimaryWeapon(nPlayer, gameData.weaponData.nPrimary))
             return 1;
     if (MaybeStealSecondaryWeapon(nPlayer, gameData.weaponData.nSecondary))
         return 1;
-    //	See what the player has and try to snag something.
-    //	Try best things first.
+    // See what the player has and try to snag something.
+    // Try best things first.
 
     for (i = 0; nDevices[i] > 0; i++) {
         if (nDevices[i] == PLAYER_FLAGS_AMMO_RACK) {
@@ -401,7 +401,7 @@ int32_t AttemptToStealItem3(CObject *pObj, int32_t nPlayer) {
             return 1;
         }
     }
-    // --	if (MaybeStealDevice (nPlayer, PLAYER_FLAGS_AMMO_RACK))	//	Can't steal because what if have too many items,
+    // --	if (MaybeStealDevice (nPlayer, PLAYER_FLAGS_AMMO_RACK))	// Can't steal because what if have too many items,
     // say 15 homing missiles?
     // --		return 1;
 
@@ -414,23 +414,23 @@ int32_t AttemptToStealItem3(CObject *pObj, int32_t nPlayer) {
     return 0;
 }
 
-//	----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 int32_t AttemptToStealItem2(CObject *pObj, int32_t nPlayer) {
     int32_t rval = AttemptToStealItem3(pObj, nPlayer);
     if (rval) {
         gameData.thiefData.nStolenItem = (gameData.thiefData.nStolenItem + 1) % MAX_STOLEN_ITEMS;
-        if (RandShort() > 20000) //	Occasionally, boost the value again
+        if (RandShort() > 20000) // Occasionally, boost the value again
             gameData.thiefData.nStolenItem = (gameData.thiefData.nStolenItem + 1) % MAX_STOLEN_ITEMS;
     }
     return rval;
 }
 
-//	----------------------------------------------------------------------------
-//	Called for a thief-nType robot.
-//	If a item successfully stolen, returns true, else returns false.
-//	If a wapon successfully stolen, do everything, removing it from player,
-//	updating gameData.thiefData.stolenItems information, deselecting, etc.
+// ----------------------------------------------------------------------------
+// Called for a thief-nType robot.
+// If a item successfully stolen, returns true, else returns false.
+// If a wapon successfully stolen, do everything, removing it from player,
+// updating gameData.thiefData.stolenItems information, deselecting, etc.
 int32_t AttemptToStealItem(CObject *pObj, int32_t nPlayer) {
     int32_t i;
     int32_t rval = 0;
@@ -441,7 +441,7 @@ int32_t AttemptToStealItem(CObject *pObj, int32_t nPlayer) {
     for (i = 0; i < 3; i++) {
         if (rval && (RandShort() >= 11000))
             break;
-        //	about 1/3 of time, steal another item
+        // about 1/3 of time, steal another item
         rval += AttemptToStealItem2(pObj, nPlayer);
     }
     CreateNSegmentPath(pObj, 10, gameData.objData.pConsole->info.nSegment);
@@ -458,10 +458,10 @@ int32_t AttemptToStealItem(CObject *pObj, int32_t nPlayer) {
 }
 
 // --------------------------------------------------------------------------------------------------------------
-//	Indicate no items have been stolen.
+// Indicate no items have been stolen.
 void InitThiefForLevel(void) {
     gameData.thiefData.stolenItems.Clear(char(0xff));
-    Assert(MAX_STOLEN_ITEMS >= 3 * 2); //	Oops!  Loop below will overwrite memory!
+    Assert(MAX_STOLEN_ITEMS >= 3 * 2); // Oops!  Loop below will overwrite memory!
     if (!IsMultiGame)
         for (int32_t i = 0; i < 3; i++) {
             gameData.thiefData.stolenItems[2 * i] = POW_SHIELD_BOOST;

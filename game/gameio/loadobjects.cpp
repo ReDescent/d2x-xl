@@ -959,7 +959,7 @@ static void CheckAndFixTriggers(void) {
     int16_t nSegment, nSide, nWall;
 
     for (i = 0; i < gameData.trigData.m_nTriggers[0];) {
-        //	Find which CWall this CTrigger is connected to.
+        // Find which CWall this CTrigger is connected to.
         for (j = 0; j < gameData.wallData.nWalls; j++)
             if (WALL(j)->nTrigger == i)
                 break;
@@ -969,8 +969,8 @@ static void CheckAndFixTriggers(void) {
     for (i = 0; i < gameData.wallData.nWalls; i++)
         WALL(i)->controllingTrigger = -1;
 
-    //	MK, 10/17/95: Make walls point back at the triggers that control them.
-    //	Go through all triggers, stuffing controllingTrigger field in WALLS.
+    // MK, 10/17/95: Make walls point back at the triggers that control them.
+    // Go through all triggers, stuffing controllingTrigger field in WALLS.
 
     CTrigger *pTrigger = GEOTRIGGERS.Buffer();
     for (i = 0; i < gameData.trigData.m_nTriggers[0]; i++, pTrigger++) {

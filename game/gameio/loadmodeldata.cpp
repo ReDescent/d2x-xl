@@ -471,7 +471,7 @@ static CBitmap *LoadExitModelBitmap(const char *name) {
     if (!(i = bip->index))
         return NULL;
     // if (gameData.pigData.tex.bitmaps [0][i].Width () != 64 || gameData.pigData.tex.bitmaps [0][i].Height () != 64)
-    //	Error ("Bitmap <%s> is not 64x64", name);
+    // Error ("Bitmap <%s> is not 64x64", name);
     gameData.pigData.tex.pObjBmIndex[gameData.pigData.tex.nObjBitmaps] = gameData.pigData.tex.nObjBitmaps;
     gameData.pigData.tex.nObjBitmaps++;
     Assert(gameData.pigData.tex.nObjBitmaps < MAX_OBJ_BITMAPS);

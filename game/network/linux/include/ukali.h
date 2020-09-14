@@ -10,37 +10,37 @@
 
 // 4213 is the port that KaliNix is listening on
 //
-//		char code; // 1 == open, 2 == close, 3 == data, 5 == GetMyAddr
+// 	char code; // 1 == open, 2 == close, 3 == data, 5 == GetMyAddr
 //      acks       // 6 == open, 7 == close				4 == GetMyAddr
 
 // net data packets structure for send/recv
 // struct {
-//		char	code; == 3
-//		char	sa_nodenum[6];
-//		char	dport[2];
-//		char	sport[2];
-//		char data[];
+// 	char	code; == 3
+// 	char	sa_nodenum[6];
+// 	char	dport[2];
+// 	char	sport[2];
+// 	char data[];
 // }
 
 // net data packets for open/close socket
 //
 // process_name is a null terminated 8byte string
 // struct {
-//		char code; // 1/6 == open, 2/7 == close
-//		char socket[2];
-//		char pid[4];
-//		char	process_name[9];
+// 	char code; // 1/6 == open, 2/7 == close
+// 	char socket[2];
+// 	char pid[4];
+// 	char	process_name[9];
 // }
 
 // net myaddress struct which is returned after the GetMyAddress call
 // struct {
-//		char	code; == 4
-//		char	sa_nodenum[6];
+// 	char	code; == 4
+// 	char	sa_nodenum[6];
 // }
 
 // net data for GetMyAddress call
 // struct {
-//		char	code; == 5
+// 	char	code; == 5
 // }
 
 typedef struct kaliaddr_ipx_tag {
@@ -60,12 +60,12 @@ typedef struct kaliaddr_ipx_tag {
 #endif
 
 // struct ipx_helper ipx_kali = {
-//	ipx_kali_GetMyAddress,
-//	ipx_kali_OpenSocket,
-//	ipx_kali_CloseSocket,
-//	ipx_kali_SendPacket,
-//	ipx_kali_ReceivePacket,
-//	IPXGeneralPacketReady
+// ipx_kali_GetMyAddress,
+// ipx_kali_OpenSocket,
+// ipx_kali_CloseSocket,
+// ipx_kali_SendPacket,
+// ipx_kali_ReceivePacket,
+// IPXGeneralPacketReady
 // };
 
 int KaliGetNodeNum(kaliaddr_ipx *myaddr);

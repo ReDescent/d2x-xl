@@ -39,7 +39,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "visibility.h"
 #include "postprocessing.h"
 
-//	--------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------
 
 #if defined(_WIN32) && !DBG
 typedef int32_t(__fastcall *pWeaponHandler)(CObject *, int32_t, int32_t &, int32_t);
@@ -61,7 +61,7 @@ int32_t LaserHandler(CObject *pObj, int32_t nLevel, int32_t &nFlags, int32_t nRo
         nFired++;
     if (nFlags & LASER_QUAD) {
         nFired += 2;
-        //	hideous system to make quad laser 1.5x powerful as Normal laser, make every other quad laser bolt bHarmless
+        // hideous system to make quad laser 1.5x powerful as Normal laser, make every other quad laser bolt bHarmless
         if (0 <= LaserPlayerFire(pObj, nLaser, 2, 0, 0, nLightObj))
             nFired++;
         if (0 <= LaserPlayerFire(pObj, nLaser, 3, 0, 0, nLightObj))
@@ -82,7 +82,7 @@ int32_t VulcanHandler(CObject *pObj, int32_t nLevel, int32_t &nFlags, int32_t nR
 
     if (pFiringData->nDuration <= GATLING_DELAY)
         return 0;
-    //	Only make sound for 1/4 of vulcan bullets.
+    // Only make sound for 1/4 of vulcan bullets.
     if (0 <= LaserPlayerFireSpread(pObj, VULCAN_ID, 6, VULCAN_SPREAD, VULCAN_SPREAD, 1, 0, -1))
         nFired++;
     if (nRoundsPerShot > 1) {
@@ -195,7 +195,7 @@ int32_t SuperlaserHandler(CObject *pObj, int32_t nLevel, int32_t &nFlags, int32_
         nFired++;
 
     if (nFlags & LASER_QUAD) {
-        //	hideous system to make quad laser 1.5x powerful as Normal laser, make every other quad laser bolt bHarmless
+        // hideous system to make quad laser 1.5x powerful as Normal laser, make every other quad laser bolt bHarmless
         if (0 <= LaserPlayerFire(pObj, nSuperLevel, 2, 0, 0, nLightObj))
             nFired++;
         if (0 <= LaserPlayerFire(pObj, nSuperLevel, 3, 0, 0, nLightObj))
@@ -216,7 +216,7 @@ int32_t GaussHandler(CObject *pObj, int32_t nLevel, int32_t &nFlags, int32_t nRo
 
     if (pFiringData->nDuration <= GATLING_DELAY)
         return 0;
-    //	Only make sound for 1/4 of vulcan bullets.
+    // Only make sound for 1/4 of vulcan bullets.
     if (0 <= LaserPlayerFireSpread(
                  pObj,
                  GAUSS_ID,
@@ -319,8 +319,8 @@ pWeaponHandler weaponHandlers[] = {
     PhoenixHandler,
     OmegaHandler};
 
-//	--------------------------------------------------------------------------------------------------
-//	Object "nObject" fires weapon "weapon_num" of level "level". (Right now (9/24/94) level is used only for nType 0
+// --------------------------------------------------------------------------------------------------
+// Object "nObject" fires weapon "weapon_num" of level "level". (Right now (9/24/94) level is used only for nType 0
 // laser. 	Flags are the player flags.  For network mode, set to 0. 	It is assumed that this is a player CObject (as
 // in multiplayer), and therefore the gun positions are known. 	Returns number of times a weapon was fired.  This is
 // typically 1, but might be more for low frame rates. 	More than one shot is fired with a pseudo-delay so that players
@@ -344,5 +344,5 @@ int32_t FireWeapon(int16_t nObject, uint8_t nWeapon, int32_t nLevel, int32_t &nF
     return nRoundsPerShot;
 }
 
-//	-------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------
 // eof

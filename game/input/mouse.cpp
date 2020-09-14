@@ -125,7 +125,7 @@ void MouseGetPos(int32_t *x, int32_t *y) {
 #ifdef LANDSCAPE
     SDL_GetMouseState(&mouseData.y, &mouseData.x);
 #else
-    //	SDL_GetMouseState(&mouseData.x, &mouseData.y);
+    // SDL_GetMouseState(&mouseData.x, &mouseData.y);
 #endif
 #endif
     *x = mouseData.x;

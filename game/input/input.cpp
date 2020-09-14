@@ -76,7 +76,7 @@ static inline int32_t FastPitch(void) {
 
 #define PH_SCALE 1
 
-#define JOYSTICK_READ_TIME (I2X(1) / 40) //	Read joystick at 40 Hz.
+#define JOYSTICK_READ_TIME (I2X(1) / 40) // Read joystick at 40 Hz.
 
 fix LastReadTime = 0;
 
@@ -88,7 +88,7 @@ int32_t CControlsManager::AllowToToggle(int32_t i) {
     // used for keeping tabs of when its ok to toggle headlight,primary,and secondary
     if (Next_toggleTime[i] > gameData.timeData.xGame)
         if (Next_toggleTime[i] <
-            gameData.timeData.xGame + (I2X(1) / 8)) //	In case time is bogus, never wait > 1 second.
+            gameData.timeData.xGame + (I2X(1) / 8)) // In case time is bogus, never wait > 1 second.
             return 0;
     Next_toggleTime[i] = gameData.timeData.xGame + (I2X(1) / 8);
     return 1;
@@ -1389,15 +1389,15 @@ if (N_LOCALPLAYER > -1) {
     m_info[0].sidewaysThrustTime += FixMul(externalControls.m_info->sidewaysThrustTime, gameData.timeData.xFrame);
     m_info[0].bankTime += FixMul(externalControls.m_info->bankTime, gameData.timeData.xFrame);
     m_info[0].forwardThrustTime += FixMul(externalControls.m_info->forwardThrustTime, gameData.timeData.xFrame);
-    //	m_info [0].rearViewDownCount += externalControls.m_info->rearViewDownCount;
-    //	m_info [0].rearViewDownState |= externalControls.m_info->rearViewDownState;
+    // m_info [0].rearViewDownCount += externalControls.m_info->rearViewDownCount;
+    // m_info [0].rearViewDownState |= externalControls.m_info->rearViewDownState;
     m_info[0].firePrimaryDownCount += externalControls.m_info->firePrimaryDownCount;
     m_info[0].firePrimaryState |= externalControls.m_info->firePrimaryState;
     m_info[0].fireSecondaryState |= externalControls.m_info->fireSecondaryState;
     m_info[0].fireSecondaryDownCount += externalControls.m_info->fireSecondaryDownCount;
     m_info[0].fireFlareDownCount += externalControls.m_info->fireFlareDownCount;
     m_info[0].dropBombDownCount += externalControls.m_info->dropBombDownCount;
-    //	m_info [0].automapDownCount += externalControls.m_info->automapDownCount;
+    // m_info [0].automapDownCount += externalControls.m_info->automapDownCount;
     // 	m_info [0].automapState |= externalControls.m_info->automapState;
 }
 

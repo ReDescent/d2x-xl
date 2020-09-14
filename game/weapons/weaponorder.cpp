@@ -20,7 +20,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "text.h"
 #include "network.h"
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t POrderList(int32_t nWeapon) {
     int32_t i;
@@ -32,7 +32,7 @@ int32_t POrderList(int32_t nWeapon) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t SOrderList(int32_t nWeapon) {
     int32_t i;
@@ -44,7 +44,7 @@ int32_t SOrderList(int32_t nWeapon) {
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void ValidatePrios(uint8_t *order, uint8_t *defaultOrder, int32_t n) {
     uint8_t f[MAX_PRIMSEC_WEAPONS + 1];
@@ -64,7 +64,7 @@ void ValidatePrios(uint8_t *order, uint8_t *defaultOrder, int32_t n) {
         }
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 char szSeparator[] = "\x88\x88\x88\x88\x88\x88\x88 Never autoselect \x88\x88\x88\x88\x88\x88\x88";
 
@@ -87,7 +87,7 @@ void ReorderPrimary(void) {
         primaryOrder[i] = m[i].Value();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void ReorderSecondary(void) {
     CMenu m(MAX_SECONDARY_WEAPONS + 2);
@@ -108,7 +108,7 @@ void ReorderSecondary(void) {
         secondaryOrder[i] = m[i].Value();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CheckToUsePrimary(int32_t nWeaponIndex) {
     uint16_t oldFlags = LOCALPLAYER.primaryWeaponFlags;
@@ -127,5 +127,5 @@ int32_t CheckToUsePrimary(int32_t nWeaponIndex) {
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // eof

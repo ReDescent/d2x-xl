@@ -31,7 +31,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 int32_t SphereToFaceRelation(CFixVector *pRef, fix rad, CFixVector *vertList, int32_t nVerts, CFixVector *vNormal);
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // given largest component of Normal, return i & j
 // if largest component is negative, swap i & j
@@ -41,7 +41,7 @@ int32_t ijTable[3][2] = {
     {1, 0} // pos z biggest
 };
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // see if a point (pRef) is inside a triangle using barycentric method
 // return 0 if point inside triangle, otherwise sides point is behind as bit code
 
@@ -74,7 +74,7 @@ return false;
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // see if a point (pRef) is inside a triangle using barycentric method
 
 uint8_t PointIsOutsideFace(CFixVector *vRef, uint16_t *nVertIndex, int16_t nVerts) {
@@ -109,7 +109,7 @@ return false;
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // see if a point (pRef) is inside a triangle using barycentric method
 
 uint8_t PointIsOutsideFace(CFloatVector *vRef, uint16_t *nVertIndex, int16_t nVerts) {
@@ -201,7 +201,7 @@ float l = p.Mag ();
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 float DistToFace(CFloatVector3 vRef, int16_t nSegment, uint8_t nSide, CFloatVector3 *vHit) {
     CSide *pSide = SEGMENT(nSegment)->Side(nSide);
@@ -257,7 +257,7 @@ float DistToFace(CFloatVector3 vRef, int16_t nSegment, uint8_t nSide, CFloatVect
     return minDist;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t FindPlaneLineIntersectionf(
     CFloatVector &vIntersection,
@@ -291,7 +291,7 @@ int32_t FindPlaneLineIntersectionf(
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // find the vIntersection on the specified plane where the line intersects
 // returns true if vIntersection found, false if line parallel to plane
 // vIntersection is the found vIntersection on the plane
@@ -369,7 +369,7 @@ u *= FixDiv (num, den);
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t FindPlaneLineIntersection(
     CFloatVector &vIntersection,
@@ -402,7 +402,7 @@ int32_t FindPlaneLineIntersection(
     return 1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 uint32_t PointToFaceRelationf(CFloatVector &vRef, CFloatVector *vertList, int32_t nVerts, CFloatVector &vNormal) {
     // now do 2d check to see if pRef is in side
@@ -441,7 +441,7 @@ uint32_t PointToFaceRelationf(CFloatVector &vRef, CFloatVector *vertList, int32_
     return nEdgeMask;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // see if a point is inside a face by projecting into 2d
 uint32_t PointToFaceRelation(CFixVector *vRef, CFixVector *vertList, int32_t nVerts, CFixVector *vNormal) {
 #if FLOAT_COLLISION_MATH
@@ -501,7 +501,7 @@ uint32_t PointToFaceRelation(CFixVector *vRef, CFixVector *vertList, int32_t nVe
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // check if a sphere intersects a face
 int32_t SphereToFaceRelationf(CFloatVector &vr, float r, CFloatVector *vl, int32_t nVerts, CFloatVector &vn) {
 
@@ -544,7 +544,7 @@ int32_t SphereToFaceRelationf(CFloatVector &vr, float r, CFloatVector *vl, int32
     return IT_NONE;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // check if a sphere intersects a face
 int32_t SphereToFaceRelation(CFixVector *vRef, fix rad, CFixVector *vertList, int32_t nVerts, CFixVector *vNormal) {
 #if FLOAT_COLLISION_MATH
@@ -602,7 +602,7 @@ int32_t SphereToFaceRelation(CFixVector *vRef, fix rad, CFixVector *vertList, in
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // returns true if line intersects with face. fills in vIntersection with vIntersection
 // pRef on plane, whether or not line intersects CSide
 // iFace determines which of four possible faces we have
@@ -652,7 +652,7 @@ int32_t CheckLineToFaceRegular(
     return IT_NONE;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // computes the parameters of closest approach of two lines
 // fill in two parameters, t0 & t1.  returns 0 if lines are parallel, else 1
 int32_t CheckLineToLinef(float &t1, float &t2, CFloatVector &p1, CFloatVector &v1, CFloatVector &p2, CFloatVector &v2) {
@@ -671,7 +671,7 @@ int32_t CheckLineToLinef(float &t1, float &t2, CFloatVector &p1, CFloatVector &v
     return 1; // found pRef
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // computes the parameters of closest approach of two lines
 // fill in two parameters, t0 & t1.  returns 0 if lines are parallel, else 1
 int32_t CheckLineToLine(fix *t1, fix *t2, CFixVector *p1, CFixVector *v1, CFixVector *p2, CFixVector *v2) {
@@ -691,7 +691,7 @@ int32_t CheckLineToLine(fix *t1, fix *t2, CFixVector *p1, CFixVector *v1, CFixVe
     return 1; // found pRef
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // determine if and where a vector intersects with a sphere
 // vector defined by p0, p1
 // returns distance of sphere vIntersection to sphere center if intersects, and fills in intP
@@ -731,7 +731,7 @@ int32_t CheckVectorSphereCollisionf(CFloatVector &vi, CFloatVector &v0, CFloatVe
     return -1;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t CheckVectorSphereCollision(
     CFixVector &vIntersection,
@@ -801,7 +801,7 @@ int32_t CheckVectorSphereCollision(
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // determine if a vector intersects with an CObject
 // if no intersects, returns 0, else fills in intP and returns dist
 fix CheckVectorObjectCollision(
@@ -931,7 +931,7 @@ CreatePowerup (POW_SHIELD_BOOST, pThisObj->Index (), pOtherObj->info.nSegment, v
     RETVAL(dist);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t ObjectInList(int16_t nObject, int16_t *objListP) {
     int16_t t;
@@ -941,7 +941,7 @@ int32_t ObjectInList(int16_t nObject, int16_t *objListP) {
     return (t == nObject);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t ComputeObjectHitpoint(CHitData &hitData, CHitQuery &hitQuery, int32_t nCollisionModel, int32_t nThread) {
     ENTER(1, nThread);
@@ -1018,7 +1018,7 @@ int32_t ComputeObjectHitpoint(CHitData &hitData, CHitQuery &hitQuery, int32_t nC
             }
             int32_t nFudgedRad = hitQuery.radP1;
 
-            //	If this is a robot:robot collision, only do it if both of them have attackType != 0 (eg, green guy)
+            // If this is a robot:robot collision, only do it if both of them have attackType != 0 (eg, green guy)
             if (nThisType == OBJ_ROBOT) {
                 if ((hitQuery.flags & FQ_ANY_OBJECT) ? (nOtherType != OBJ_ROBOT) : (nOtherType == OBJ_ROBOT))
                     continue;
@@ -1075,7 +1075,7 @@ int32_t ComputeObjectHitpoint(CHitData &hitData, CHitQuery &hitQuery, int32_t nC
     RETVAL(dMin);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline int32_t PassThrough(CHitQuery &hitQuery, int16_t nSide, int16_t nFace, CFixVector &vHitPoint) {
     CSegment *pSeg = SEGMENT(hitQuery.nSegment);
@@ -1126,7 +1126,7 @@ static inline int32_t PassThrough(CHitQuery &hitQuery, int16_t nSide, int16_t nF
     return 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 static inline int16_t CopySegList(int16_t *dest, int16_t nDestLen, int16_t *src, int16_t nSrcLen, int32_t flags) {
     if (!(flags & FQ_GET_SEGLIST))
@@ -1136,7 +1136,7 @@ static inline int16_t CopySegList(int16_t *dest, int16_t nDestLen, int16_t *src,
     return nSrcLen;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #define FVI_NEWCODE 2
 
@@ -1354,7 +1354,7 @@ hitPointDone:
     RETVAL(bestHit.nType);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // Find out if a vector intersects with anything.
 // Fills in hitResult, an CHitResult structure (see header file).
@@ -1468,7 +1468,7 @@ int32_t FindHitpoint(CHitQuery &hitQuery, CHitResult &hitResult, int32_t nCollis
     RETVAL(curHit.nType);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // new function for Mike
 // note: gameData.collisionData.nSegsVisited [nThread] must be set to zero before this is called
 int32_t SphereIntersectsWall(CFixVector *vPoint, int16_t nSegment, fix rad) {
@@ -1516,7 +1516,7 @@ int32_t SphereIntersectsWall(CFixVector *vPoint, int16_t nSegment, fix rad) {
     RETVAL(0)
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Returns true if the CObject is through any walls
 int32_t ObjectIntersectsWall(CObject *pObj) {
 #if DBG
@@ -1737,7 +1737,7 @@ return gameData.segData.faceGrid.PointSeesPoint (*p0, *p1, nDestSeg, nDestSide);
 #endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 int32_t UseSphere(CObject *pObj) {
     int32_t nType = pObj->info.nType;
@@ -1746,6 +1746,6 @@ int32_t UseSphere(CObject *pObj) {
            (nType == OBJ_POWERUP) || pObj->IsMine();
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // eof

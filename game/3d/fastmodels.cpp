@@ -114,10 +114,6 @@ void G3LightModel(CObject *pObj, int32_t nModel, fix xModelLight, fix *xGlowValu
     if (pObj->Index() == nDbgObj)
         BRP;
 #endif
-#if 0
-if (xModelLight > I2X (1))
-	xModelLight = I2X (1);
-#endif
     if (SHOW_DYN_LIGHT &&
         (gameOpts->ogl.bObjLighting ||
          (gameOpts->ogl.bLightObjects &&
@@ -218,7 +214,8 @@ void G3GetThrusterPos(
     CFixVector *vNormal,
     int32_t nRad,
     int32_t bHires,
-    uint8_t nType = 255) {
+    uint8_t nType = 255
+) {
     ENTER(0, 0);
     RenderModel::CModel *pModel = gameData.modelData.renderModels[bHires] + nModel;
     RenderModel::CVertex *pModelVertex = NULL;
@@ -247,16 +244,10 @@ void G3GetThrusterPos(
     } else
         v.SetZero();
     v.v.coord.z -= 1.0f / 16.0f;
-#if 0
-transformation.Transform (&dir, &dir, 0);
-#else
-#if 1
     if (pvOffset) {
         vo.Assign(*pvOffset);
         v += vo;
     }
-#endif
-#endif
     if (nCount && (v.v.coord.x == pThruster->vPos[0].v.coord.x) && (v.v.coord.y == pThruster->vPos[0].v.coord.y) &&
         (v.v.coord.z == pThruster->vPos[0].v.coord.z))
         RETURN
@@ -594,11 +585,8 @@ void G3DrawSubModel(
     }
 
     bRestoreMatrix = G3AnimateSubModel(pObj, pSubModel, nModel);
-// render the faces
-#if 0
-pSubModel = pModel->m_subModels + nSubModel;
-if (pSubModel->m_bBillboard)
-#endif
+
+    // render the faces
     if ((nExclusive < 0) || (nSubModel == nExclusive)) {
         pSubModel = pModel->m_subModels + nSubModel;
         if (pSubModel->m_bBillboard) {
@@ -652,20 +640,13 @@ if (pSubModel->m_bBillboard)
                     else {
                         if (gameStates.render.bCloaked) {
                             pBm = shield[0].Bitmap();
-                            float c = 1.0f - gameStates.render.grAlpha *
-                                                 gameStates.render.grAlpha; // bBlur ? 1.0f - gameStates.render.grAlpha
-                                                                            // * gameStates.render.grAlpha : pBm ? 1.0f
-                                                                            // - gameStates.render.grAlpha : 0.0f;
-                            // ogl.SetBlendMode (bBlur ? OGL_BLEND_REPLACE : OGL_BLEND_MULTIPLY);
+                            float c = 1.0f - gameStates.render.grAlpha * gameStates.render.grAlpha;
                             glColor4f(c, c, c, gameStates.render.grAlpha);
                         } else if (!bHires)
                             pBm = modelBitmaps[nBitmap];
                         else {
                             pBm = pModel->m_textures + nBitmap;
-#if 0
-						if (!nPass)
-							ogl.SetBlendMode (pSubModel->m_bFlare);
-#endif
+
                             if (nTeamColor && pBm->Team() &&
                                 (0 <= (h = pModel->m_teamTextures[nTeamColor % MAX_PLAYER_COLORS]))) {
                                 nBitmap = h;
@@ -675,14 +656,6 @@ if (pSubModel->m_bBillboard)
                         if (!pBm)
                             ogl.SetTexturing(false);
                         else {
-#if 0
-						pBm->AvgColor ();
-						CRGBColor *pColor = pBm->GetAvgColor ();
-						if (!gameStates.render.bCloaked)
-							glColor4f ((float) pColor->Red () / 255.0f, (float) pColor->Green () / 255.0f, (float) pColor->Blue () / 255.0f, gameStates.render.grAlpha);
-						ogl.SetTexturing (false);
-						ogl.DisableClientState (GL_COLOR_ARRAY);
-#else
                             ogl.SelectTMU(GL_TEXTURE0, true);
                             ogl.SetTexturing(true);
                             pBm = pBm->Override(-1);
@@ -692,7 +665,6 @@ if (pSubModel->m_bBillboard)
                                 continue;
                             pBm->Texture()->Wrap(GL_REPEAT);
                             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-#endif
                         }
                     }
                 }
@@ -736,22 +708,6 @@ if (pSubModel->m_bBillboard)
 #ifdef _WIN32
                 if (glDrawRangeElements)
 #endif
-#if 0 // DBG
-				if (bUseVBO)
-#if 1
-					glDrawRangeElements ((nFaceVerts == 3) ? GL_TRIANGLES : (nFaceVerts == 4) ? GL_QUADS : GL_TRIANGLE_FAN,
-												0, pModel->m_nFaceVerts - 1, nVerts, GL_UNSIGNED_SHORT,
-												G3_BUFFER_OFFSET (nIndex * sizeof (int16_t)));
-#else
-					glDrawElements ((nFaceVerts == 3) ? GL_TRIANGLES : (nFaceVerts == 4) ? GL_QUADS : GL_TRIANGLE_FAN,
-										 nVerts, GL_UNSIGNED_SHORT,
-										 G3_BUFFER_OFFSET (nIndex * sizeof (int16_t)));
-#endif
-				else
-					glDrawRangeElements ((nFaceVerts == 3) ? GL_TRIANGLES : (nFaceVerts == 4) ? GL_QUADS : GL_TRIANGLE_FAN,
-												nIndex, nIndex + nVerts - 1, nVerts, GL_UNSIGNED_SHORT,
-												pModel->m_index [0] + nIndex);
-#else // DBG
                 if (bUseVBO)
                     glDrawRangeElements(
                         (nFaceVerts == 3) ? GL_TRIANGLES : (nFaceVerts == 4) ? GL_QUADS : GL_TRIANGLE_FAN,
@@ -768,7 +724,6 @@ if (pSubModel->m_bBillboard)
                         nVerts,
                         GL_UNSIGNED_SHORT,
                         pModel->m_index[0] + nIndex);
-#endif // DBG
 #ifdef _WIN32
                     else if (bUseVBO) glDrawElements(
                         (nFaceVerts == 3) ? GL_TRIANGLES : (nFaceVerts == 4) ? GL_QUADS : GL_TRIANGLE_FAN,
@@ -921,7 +876,7 @@ void G3DrawModel(
 #endif
                     hLight = GL_LIGHT0 + iLight++;
                     glEnable(hLight);
-                    //			sprintf (szLightSources + strlen (szLightSources), "%d ", (pLight->nObject >= 0) ?
+                    // 		sprintf (szLightSources + strlen (szLightSources), "%d ", (pLight->nObject >= 0) ?
                     //-pLight->nObject : pLight->nSegment);
                     fBrightness = pLight->info.fBrightness * fLightScale;
                     memcpy(&color.v.color, &pLight->info.color, sizeof(color.v.color));
@@ -940,10 +895,6 @@ void G3DrawModel(
                         glLightf(hLight, GL_QUADRATIC_ATTENUATION, 0.005f / fBrightness);
                     } else {
                         glLightf(hLight, GL_CONSTANT_ATTENUATION, 0.0f); // 0.1f / fBrightness);
-#if 0
-					glLightf (hLight, GL_LINEAR_ATTENUATION, 0.01f / fBrightness);
-					glLightf (hLight, GL_QUADRATIC_ATTENUATION, 0.001f / fBrightness);
-#else
                         if (X2F(CFixVector::Dist(pObj->info.position.vPos, pLight->info.vPos)) <= pLight->info.fRad) {
                             glLightf(hLight, GL_LINEAR_ATTENUATION, 0.01f / fBrightness);
                             glLightf(hLight, GL_QUADRATIC_ATTENUATION, 0.001f / fBrightness);
@@ -951,7 +902,6 @@ void G3DrawModel(
                             glLightf(hLight, GL_LINEAR_ATTENUATION, 0.05f / fBrightness);
                             glLightf(hLight, GL_QUADRATIC_ATTENUATION, 0.005f / fBrightness);
                         }
-#endif
                     }
                     nLights--;
                 }
@@ -1234,11 +1184,6 @@ int32_t G3RenderModel(
         }
 #if G3_SW_SCALING
         G3ScaleModel(nModel);
-#else
-#if 0
-if (bHires)
-	gameData.modelData.vScale.SetZero ();
-#endif
 #endif
         if (!(gameOpts->ogl.bObjLighting || gameStates.render.bCloaked))
             G3LightModel(pObj, nModel, xModelLight, xGlowValues, bHires);
@@ -1406,15 +1351,13 @@ if (bHires)
                     transformation.Begin(pObj->info.position.vPos, pObj->info.position.mOrient, __FILE__, __LINE__);
                     RenderModel::CSubModel *pSubModel = pModel->m_subModels.Buffer();
                     for (int32_t i = 0, j = pModel->m_nSubModels; i < j; i++, pSubModel++)
-                        if ((pSubModel->m_nParent == -1) &&
-                            !G3FilterSubModel(pObj, pSubModel, nGunId, nBombId, nMissileId, nMissiles))
+                        if (
+                            (pSubModel->m_nParent == -1) &&
+                            !G3FilterSubModel(pObj, pSubModel, nGunId, nBombId, nMissileId, nMissiles)
+                        ) {
                             G3RenderDamageLightning(pObj, nModel, i, animAnglesP, NULL, bHires);
-                    //	G3RenderDamageLightning (pObj, nModel, 0, animAnglesP, NULL, bHires);
+                        }
                     transformation.End(__FILE__, __LINE__);
-#if 0 // lightning is just pushed to the transparency renderer here and will be actually rendered in a subsequent render
-      // pass
-			glowRenderer.End ();
-#endif
                 }
             }
         }

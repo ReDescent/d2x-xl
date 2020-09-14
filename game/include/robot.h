@@ -141,11 +141,11 @@ typedef struct D1Robot_info {
     int16_t exp2_vclip_num;
     int16_t exp2Sound_num;
     int16_t weaponType;
-    int8_t contains_id; //	ID of powerup this robot can contain.
-    int8_t containsCount; //	Max number of things this instance can contain.
-    int8_t containsProb; //	Probability that this instance will contain something in N/16
-    int8_t containsType; //	Type of thing contained, robot or powerup, in bitmaps.tbl, !0=robot, 0=powerup
-    int32_t scoreValue; //	Score from this robot.
+    int8_t contains_id; // ID of powerup this robot can contain.
+    int8_t containsCount; // Max number of things this instance can contain.
+    int8_t containsProb; // Probability that this instance will contain something in N/16
+    int8_t containsType; // Type of thing contained, robot or powerup, in bitmaps.tbl, !0=robot, 0=powerup
+    int32_t scoreValue; // Score from this robot.
     fix lighting; // should this be here or with polygon model?
     fix strength; // Initial shield of robot
 
@@ -154,21 +154,21 @@ typedef struct D1Robot_info {
 
     fix fieldOfView[DIFFICULTY_LEVEL_COUNT]; // compare this value with forward_vector.dot.vector_to_player, if
                                              // fieldOfView <, then robot can see player
-    fix primaryFiringWait[DIFFICULTY_LEVEL_COUNT]; //	time in seconds between shots
+    fix primaryFiringWait[DIFFICULTY_LEVEL_COUNT]; // time in seconds between shots
     fix turnTime[DIFFICULTY_LEVEL_COUNT]; // time in seconds to rotate 360 degrees in a dimension
-    fix fire_power[DIFFICULTY_LEVEL_COUNT]; //	damage done by a hit from this robot
-    fix shield[DIFFICULTY_LEVEL_COUNT]; //	shield strength of this robot
-    fix xMaxSpeed[DIFFICULTY_LEVEL_COUNT]; //	maximum speed attainable by this robot
-    fix circleDistance[DIFFICULTY_LEVEL_COUNT]; //	distance at which robot circles player
+    fix fire_power[DIFFICULTY_LEVEL_COUNT]; // damage done by a hit from this robot
+    fix shield[DIFFICULTY_LEVEL_COUNT]; // shield strength of this robot
+    fix xMaxSpeed[DIFFICULTY_LEVEL_COUNT]; // maximum speed attainable by this robot
+    fix circleDistance[DIFFICULTY_LEVEL_COUNT]; // distance at which robot circles player
 
-    int8_t nRapidFireCount[DIFFICULTY_LEVEL_COUNT]; //	number of shots fired rapidly
-    int8_t evadeSpeed[DIFFICULTY_LEVEL_COUNT]; //	rate at which robot can evade shots, 0=none, 4=very fast
-    int8_t cloakType; //	0=never, 1=always, 2=except-when-firing
-    int8_t attackType; //	0=firing, 1=charge (like green guy)
-    int8_t bossFlag; //	0 = not boss, 1 = boss.  Is that surprising?
-    uint8_t seeSound; //	sound robot makes when it first sees the player
-    uint8_t attackSound; //	sound robot makes when it attacks the player
-    uint8_t clawSound; //	sound robot makes as it claws you (attackType should be 1)
+    int8_t nRapidFireCount[DIFFICULTY_LEVEL_COUNT]; // number of shots fired rapidly
+    int8_t evadeSpeed[DIFFICULTY_LEVEL_COUNT]; // rate at which robot can evade shots, 0=none, 4=very fast
+    int8_t cloakType; // 0=never, 1=always, 2=except-when-firing
+    int8_t attackType; // 0=firing, 1=charge (like green guy)
+    int8_t bossFlag; // 0 = not boss, 1 = boss.  Is that surprising?
+    uint8_t seeSound; // sound robot makes when it first sees the player
+    uint8_t attackSound; // sound robot makes when it attacks the player
+    uint8_t clawSound; // sound robot makes as it claws you (attackType should be 1)
 
     // animation info
     jointlist animStates[MAX_GUNS + 1][N_ANIM_STATES];

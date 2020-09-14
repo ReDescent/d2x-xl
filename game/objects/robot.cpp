@@ -18,12 +18,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "error.h"
 #include "interp.h"
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // Big array of joint positions.  All robots index into this array
 
 #define deg(a) ((int32_t)(a)*32768 / 180)
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // given an CObject and a gun number, return position in 3-space of gun
 // fills in gun_point
 int32_t CalcGunPoint(CFixVector *vGunPoint, CObject *pObj, int32_t nGun) {
@@ -57,7 +57,7 @@ int32_t CalcGunPoint(CFixVector *vGunPoint, CObject *pObj, int32_t nGun) {
     RETVAL(1)
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // fills in ptr to list of joints, and returns the number of joints in list
 // takes the robot nType (CObject id), gun number, and desired state
 int32_t RobotGetAnimState(tJointPos **jointPosP, int32_t robotType, int32_t nGun, int32_t state) {
@@ -75,7 +75,7 @@ int32_t RobotGetAnimState(tJointPos **jointPosP, int32_t robotType, int32_t nGun
     RETVAL(nJoints)
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // for test, set a robot to a specific state
 void SetRobotState(CObject *pObj, int32_t state) {
     ENTER(0, 0);
@@ -96,7 +96,7 @@ void SetRobotState(CObject *pObj, int32_t state) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // set the animation angles for this robot.  Gun fields of robot info must
 // be filled in.
 void SetRobotAngles(tRobotInfo *pRobotInfo, CPolyModel *pModel, CAngleVector angs[N_ANIM_STATES][MAX_SUBMODELS]) {
@@ -134,7 +134,7 @@ void SetRobotAngles(tRobotInfo *pRobotInfo, CPolyModel *pModel, CAngleVector ang
     RETURN
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void InitCamBots(int32_t bReset) {
     ENTER(0, 0);
@@ -182,7 +182,7 @@ void InitCamBots(int32_t bReset) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 void UnloadCamBot(void) {
     ENTER(0, 0);
@@ -193,7 +193,7 @@ void UnloadCamBot(void) {
     RETURN
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 /*
  * reads n jointlist structs from a CFile
@@ -212,7 +212,7 @@ static int32_t ReadJointLists(jointlist *jl, int32_t n, CFile &cf) {
     return i;
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 /*
  * reads n tRobotInfo structs from a CFile
  */
@@ -290,7 +290,7 @@ int32_t ReadRobotInfos(CArray<tRobotInfo> &botInfo, int32_t n, CFile &cf, int32_
     RETVAL(i)
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 /*
  * reads n tJointPos structs from a CFile
  */
@@ -304,5 +304,5 @@ int32_t ReadJointPositions(CArray<tJointPos> &jp, int32_t n, CFile &cf, int32_t 
     return i;
 }
 
-//	-----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // eof

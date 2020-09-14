@@ -404,9 +404,9 @@ int32_t CSubModel::Draw(CObject *pObj, CModel *po, float *fLight) {
             pFaceVertex = pFace->m_vertices;
             if (pFace->m_bTextured) {
                 // if (bTextured == 0) {
-                //	ogl.FlushBuffers ((nFaceVerts == 3) ? GL_TRIANGLES : /*(nFaceVerts == 4) ? GL_QUADS :*/
+                // ogl.FlushBuffers ((nFaceVerts == 3) ? GL_TRIANGLES : /*(nFaceVerts == 4) ? GL_QUADS :*/
                 // GL_TRIANGLE_FAN, nVerts, 3, 0, 0); 	nFaceVerts = pFace->m_nVerts; 	nVerts = 0;
-                //	}
+                // }
 
                 if (pBm != po->m_textures.m_bitmaps + pFace->m_texProps.nTexId) {
                     if (nVerts) {
@@ -579,7 +579,7 @@ int32_t CSubModel::Render(CObject *pObj, CModel *po, CFloatVector vo, int32_t nI
     vo += m_vOffset;
     Transform(vo);
 // if ((gameStates.render.nShadowPass != 2) && (bFacing != ((m_nFlags & OOF_SOF_FACING) != 0)))
-//	return 1;
+// return 1;
 #if 1
     for (i = 0; i < m_nChildren; i++) {
         pso = po->m_subModels + (j = m_children[i]);

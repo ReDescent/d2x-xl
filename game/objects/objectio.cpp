@@ -143,8 +143,8 @@ void CObject::Read(CFile &cf) {
         cType.aiInfo.nPathLength = cf.ReadShort();
         cType.aiInfo.nCurPathIndex = (char)cf.ReadShort();
         if (gameTopFileInfo.fileinfoVersion <= 25) {
-            cf.ReadShort(); //				cType.aiInfo.follow_path_start_seg	=
-            cf.ReadShort(); //				cType.aiInfo.follow_path_end_seg		=
+            cf.ReadShort(); // 			cType.aiInfo.follow_path_start_seg	=
+            cf.ReadShort(); // 			cType.aiInfo.follow_path_end_seg		=
         }
         break;
 
@@ -344,7 +344,7 @@ void CObject::Read(CFile &cf) {
 //------------------------------------------------------------------------------
 
 void CObject::LoadState(CFile &cf) {
-    //	int32_t fPos = cf.Tell ();
+    // int32_t fPos = cf.Tell ();
 
 #if DBG
     if (OBJ_IDX(this) == nDbgObj)
@@ -539,7 +539,7 @@ inline int16_t ObjId(int16_t nIndex) {
 //------------------------------------------------------------------------------
 
 void CObject::SaveState(CFile &cf) {
-//	int32_t fPos = cf.Tell ();
+// int32_t fPos = cf.Tell ();
 #if DBG
     if (Index() == nDbgObj)
         BRP;

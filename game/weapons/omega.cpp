@@ -6,28 +6,28 @@
 #include "omega.h"
 #include "slowmotion.h"
 
-//	-------------------------------------------------------------------------------------------------------------------------------
-//	***** HEY ARTISTS!!*****
-//	Here are the constants you're looking for!--MK
+// -------------------------------------------------------------------------------------------------------------------------------
+// ***** HEY ARTISTS!!*****
+// Here are the constants you're looking for!--MK
 
-//	Change the following constants to affect the look of the omega cannon.
-//	Changing these constants will not affect the damage done.
-//	WARNING: If you change DESIRED_OMEGA_DIST and MAX_OMEGA_BLOBS, you don't merely change the look of the cannon,
-//	you change its range.  If you decrease DESIRED_OMEGA_DIST, you decrease how far the gun can fire.
+// Change the following constants to affect the look of the omega cannon.
+// Changing these constants will not affect the damage done.
+// WARNING: If you change DESIRED_OMEGA_DIST and MAX_OMEGA_BLOBS, you don't merely change the look of the cannon,
+// you change its range.  If you decrease DESIRED_OMEGA_DIST, you decrease how far the gun can fire.
 
 #define OMEGA_ENERGY_RATE (I2X(190) / 17)
-//	Note, you don't need to change these constants.  You can control damage and energy consumption by changing the
-//	usual bitmaps.tbl parameters.
+// Note, you don't need to change these constants.  You can control damage and energy consumption by changing the
+// usual bitmaps.tbl parameters.
 #define OMEGA_DAMAGE_SCALE \
-    32 //	Controls how much damage is done.  This gets multiplied by gameData.timeData.xFrame and then again by the
+    32 // Controls how much damage is done.  This gets multiplied by gameData.timeData.xFrame and then again by the
        // damage specified in bitmaps.tbl in the $WEAPON line.
 #define OMEGA_ENERGY_CONSUMPTION \
-    16 //	Controls how much energy is consumed.  This gets multiplied by gameData.timeData.xFrame and then again by
+    16 // Controls how much energy is consumed.  This gets multiplied by gameData.timeData.xFrame and then again by
        // the energy parameter from bitmaps.tbl.
 
 #define MIN_OMEGA_CHARGE (DEFAULT_MAX_OMEGA_CHARGE / 8)
 #define OMEGA_CHARGE_SCALE \
-    4 //	gameData.timeData.xFrame / OMEGA_CHARGE_SCALE added to gameData.omegaData.xCharge [IsMultiGame] every frame.
+    4 // gameData.timeData.xFrame / OMEGA_CHARGE_SCALE added to gameData.omegaData.xCharge [IsMultiGame] every frame.
 
 // ---------------------------------------------------------------------------------
 
@@ -43,8 +43,8 @@ fix OmegaEnergy(fix xDeltaCharge) {
 }
 
 // ---------------------------------------------------------------------------------
-//	*pObj is the CObject firing the omega cannon
-//	*pos is the location from which the omega bolt starts
+// *pObj is the CObject firing the omega cannon
+// *pos is the location from which the omega bolt starts
 
 int32_t nOmegaDuration[7] = {1, 2, 3, 5, 7, 10, 15};
 
@@ -56,7 +56,7 @@ void SetMaxOmegaCharge(void) {
     }
 }
 
-//	-------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 
 void DeleteOldOmegaBlobs(CObject *pParentObj) {
     int32_t nParentObj = pParentObj->cType.laserInfo.parent.nObject;
@@ -108,33 +108,33 @@ void CreateOmegaBlobs(
     }
     vOmegaDelta = vGoal;
     vOmegaDelta *= xOmegaBlobDist;
-    //	Now, create all the blobs
+    // Now, create all the blobs
     vBlobPos = *vMuzzle;
     nLastSeg = nFiringSeg;
 
-    //	If nearby, don't perturb vector.  If not nearby, start halfway out.
+    // If nearby, don't perturb vector.  If not nearby, start halfway out.
     if (xGoalDist < MIN_OMEGA_DIST * 4) {
         for (i = 0; i < nOmegaBlobs; i++)
             xPerturbArray[i] = 0;
     } else {
-        vBlobPos += vOmegaDelta * (I2X(1) / 2); //	Put first blob half way out.
+        vBlobPos += vOmegaDelta * (I2X(1) / 2); // Put first blob half way out.
         for (i = 0; i < nOmegaBlobs / 2; i++) {
             xPerturbArray[i] = I2X(i) + I2X(1) / 4;
             xPerturbArray[nOmegaBlobs - 1 - i] = I2X(i);
         }
     }
 
-    //	Create Random perturbation vector, but favor _not_ going up in CPlayerData's reference.
+    // Create Random perturbation vector, but favor _not_ going up in CPlayerData's reference.
     vPerturb = CFixVector::Random();
     vPerturb += pParentObj->info.position.mOrient.m.dir.u * (-I2X(1) / 2);
     for (i = 0; i < nOmegaBlobs; i++) {
         CFixVector vTempPos;
         int16_t nBlobObj, nSegment;
 
-        //	This will put the last blob right at the destination CObject, causing damage.
+        // This will put the last blob right at the destination CObject, causing damage.
         if (i == nOmegaBlobs - 1)
-            vBlobPos += vOmegaDelta * (I2X(15) / 32); //	Move last blob another (almost) half section
-        //	Every so often, re-perturb blobs
+            vBlobPos += vOmegaDelta * (I2X(15) / 32); // Move last blob another (almost) half section
+        // Every so often, re-perturb blobs
         if (i % 4 == 3) {
             CFixVector vTemp;
 
@@ -154,7 +154,7 @@ void CreateOmegaBlobs(
             pObj = OBJECT(nBlobObj);
             pObj->SetLife(ONE_FRAME_TIME);
             pObj->mType.physInfo.velocity = vGoal;
-            //	Only make the last one move fast, else multiple blobs might collide with target.
+            // Only make the last one move fast, else multiple blobs might collide with target.
             pObj->mType.physInfo.velocity *= (I2X(4));
             pObj->SetSize(WI_BlobSize(pObj->info.nId));
             pObj->info.xShield = FixMul(
@@ -163,12 +163,12 @@ void CreateOmegaBlobs(
             pObj->cType.laserInfo.parent.nType = pParentObj->info.nType;
             pObj->cType.laserInfo.parent.nSignature = pParentObj->info.nSignature;
             pObj->cType.laserInfo.parent.nObject = OBJ_IDX(pParentObj);
-            pObj->info.movementType = MT_NONE; //	Only last one moves, that will get bashed below.
+            pObj->info.movementType = MT_NONE; // Only last one moves, that will get bashed below.
         }
         vBlobPos += vOmegaDelta;
     }
 
-    //	Make last one move faster, but it's already moving at speed = I2X (4).
+    // Make last one move faster, but it's already moving at speed = I2X (4).
     if (nLastCreatedObj != -1) {
         CObject *pObj = OBJECT(nLastCreatedObj);
         pObj->mType.physInfo.velocity *= WI_Speed(OMEGA_ID, gameStates.app.nDifficultyLevel) / 4;
@@ -177,7 +177,7 @@ void CreateOmegaBlobs(
 }
 
 // ---------------------------------------------------------------------------------
-//	Call this every frame to recharge the Omega Cannon.
+// Call this every frame to recharge the Omega Cannon.
 void OmegaChargeFrame(void) {
     fix xOldOmegaCharge;
 
@@ -199,7 +199,7 @@ void OmegaChargeFrame(void) {
         gameData.weaponData.nPrimary--;
         AutoSelectWeapon(0, 1);
     }
-    //	Don't charge while firing.
+    // Don't charge while firing.
     if ((gameData.omegaData.nLastFireFrame == gameData.appData.nFrameCount) ||
         (gameData.omegaData.nLastFireFrame == gameData.appData.nFrameCount - 1))
         return;
@@ -231,7 +231,7 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
         gameData.omegaData.xCharge[IsMultiGame] = MAX_OMEGA_CHARGE - 1;
 #endif
     if (nPlayer == N_LOCALPLAYER) {
-        //	If charge >= min, or (some charge and zero energy), allow to fire.
+        // If charge >= min, or (some charge and zero energy), allow to fire.
         if (((RandShort() > pParentObj->GunDamage()) || (gameData.omegaData.xCharge[IsMultiGame] < MIN_OMEGA_CHARGE)) &&
             (!gameData.omegaData.xCharge[IsMultiGame] || PLAYER(nPlayer).energy)) {
             ReleaseObject(OBJ_IDX(pWeaponObj));
@@ -241,7 +241,7 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
         gameData.omegaData.xCharge[IsMultiGame] -= gameData.timeData.xFrame;
         if (gameData.omegaData.xCharge[IsMultiGame] < 0)
             gameData.omegaData.xCharge[IsMultiGame] = 0;
-        //	Ensure that the lightning cannon can be fired next frame.
+        // Ensure that the lightning cannon can be fired next frame.
         gameData.laserData.xNextFireTime = gameData.timeData.xGame + 1;
         gameData.omegaData.nLastFireFrame = gameData.appData.nFrameCount;
     }
@@ -272,7 +272,7 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
         omegaLightning.Destroy(OBJ_IDX(pParentObj));
         return;
     }
-    //	Play sound.
+    // Play sound.
     CWeaponInfo *pWeaponInfo = WEAPONINFO(pWeaponObj);
     if (pWeaponInfo) {
         if (pParentObj == gameData.objData.pViewer)
@@ -286,11 +286,11 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
                 0,
                 I2X(1));
     }
-    //	Delete the original CObject.  Its only purpose in life was to determine which CObject to home in on.
+    // Delete the original CObject.  Its only purpose in life was to determine which CObject to home in on.
     ReleaseObject(OBJ_IDX(pWeaponObj));
     if (nTargetObj != -1)
         vTargetPos = OBJECT(nTargetObj)->info.position.vPos;
-    else { //	If couldn't lock on anything, fire straight ahead.
+    else { // If couldn't lock on anything, fire straight ahead.
         CFixVector vPerturb, perturbed_fvec;
 
         vPerturb = CFixVector::Random();
@@ -310,7 +310,7 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
         int32_t fate = FindHitpoint(hitQuery, hitResult);
         if (fate != HIT_NONE) {
             if (hitResult.nSegment !=
-                -1) //	How can this be?  We went from inside the mine to outside without hitting anything?
+                -1) // How can this be?  We went from inside the mine to outside without hitting anything?
                 vTargetPos = hitResult.vPoint;
             else {
 #if DBG
@@ -320,7 +320,7 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
             }
         }
     }
-    //	This is where we create a pile of omega blobs!
+    // This is where we create a pile of omega blobs!
     CreateOmegaBlobs(nFiringSeg, vMuzzle, &vTargetPos, pParentObj, (nTargetObj < 0) ? NULL : OBJECT(nTargetObj));
 }
 

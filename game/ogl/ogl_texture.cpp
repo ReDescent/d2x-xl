@@ -597,13 +597,7 @@ restart:
                             (b < ogl.m_states.nTransparencyLimit))
                             a = 0;
                         else if (nTranspType == 1) {
-#if 0 // non-linear formula
-							double da = (double) (r * 3 + g * 5 + b * 2) / (10.0 * 255.0);
-							da *= da;
-							vec = (uint8_t) (da * 255.0);
-#else
                             a = (r * 30 + g * 59 + b * 11) / 100; // transparency based on color intensity
-#endif
                         } else if (nTranspType == 2) // black is transparent
                             a = c ? 255 : 0;
                         else
@@ -911,12 +905,6 @@ GLuint CTexture::Create(int32_t w, int32_t h) {
 //------------------------------------------------------------------------------
 
 int32_t CTexture::Prepare(bool bCompressed) {
-#if 0 // TEXTURE_COMPRESSION
-if (bCompressed) {
-	m_info.SetWidth (w);
-	m_info.SetHeight (h);
-	}
-#endif
     // calculate u/v values that would make the resulting texture correctly sized
     m_info.u = (float)m_info.w / (float)m_info.tw;
     m_info.v = (float)m_info.h / (float)m_info.th;
@@ -983,10 +971,6 @@ int32_t CTexture::Load(uint8_t *buffer)
     else
         TextureError();
 #endif
-#if 0
-m_info.prio = m_info.bMipMaps ? (m_info.h == m_info.w) ? 1.0f : 0.5f : 0.1f;
-glPrioritizeTextures (1, (GLuint *) &m_info.handle, &m_info.prio);
-#endif
     Bind();
     glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GLint(m_info.bMipMaps && ogl.m_states.bNeedMipMaps));
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -1020,14 +1004,6 @@ glPrioritizeTextures (1, (GLuint *) &m_info.handle, &m_info.prio);
         } catch (...) {
             Release();
         }
-#if 0
-	try {
-		if (ogl.m_states.bLowMemory && m_info.bMipMaps && (!m_info.pBm->Static () || (m_info.format == GL_RGB)))
-			m_info.pBm->FreeData ();
-		}
-	catch (...) {
-		}
-#endif
 #if TEXTURE_COMPRESSION
         Compress();
 #endif
@@ -1035,53 +1011,6 @@ glPrioritizeTextures (1, (GLuint *) &m_info.handle, &m_info.prio);
     }
     RETVAL(0)
 }
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-#if 0
-
-void CBitmap::UnlinkTexture (void)
-{
-if (Texture () && (Texture ()->Handle () == -1)) {
-	Texture ()->SetHandle (0);
-	SetTexture (NULL);
-	}
-}
-
-//------------------------------------------------------------------------------
-
-void CBitmap::Unlink (int32_t bAddon)
-{
-	CBitmap	*pAltBm, *pBmf;
-	int32_t			i, j;
-
-if (bAddon || (Type () == BM_TYPE_STD)) {
-	if (Mask ())
-		Mask ()->UnlinkTexture ();
-	if (!(bAddon || Override ()))
-		UnlinkTexture ();
-	else {
-		pAltBm = bAddon ? this : Override ();
-		if (pAltBm->Mask ())
-			pAltBm->Mask ()->UnlinkTexture ();
-		pAltBm->UnlinkTexture ();
-		if ((pAltBm->Type () == BM_TYPE_ALT) && pAltBm->Frames ()) {
-			i = pAltBm->FrameCount ();
-			if (i > 1) {
-				for (j = i, pBmf = pAltBm->Frames (); j; j--, pBmf++) {
-					if (pBmf->Mask ())
-						pBmf->Mask ()->UnlinkTexture ();
-					pBmf->UnlinkTexture ();
-					}
-				}
-			}
-		}
-	}
-}
-
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -1173,7 +1102,7 @@ int32_t CBitmap::LoadTexture(int32_t dxo, int32_t dyo, int32_t superTransp) {
     if (strstr(m_info.szName, "door"))
         BRP;
 #endif
-        //	if (width!=twidth || height!=theight)
+        // if (width!=twidth || height!=theight)
 #if RENDER2TEXTURE
     if (!m_info.pTexture->IsRenderBuffer())
 #endif
@@ -1265,15 +1194,6 @@ int32_t CBitmap::PrepareTexture(int32_t bMipMap, int32_t bMask, tPixelBuffer *re
             m_info.pTexture
                 ->Setup(m_info.props.w, m_info.props.h, m_info.props.rowSize, m_info.nBPP, bMask, bMipMap, 0, this);
     }
-#if 0
-if (Flags () & BM_FLAG_RLE)
-	RLEExpand (NULL, 0);
-if (!bMask) {
-	CFloatVector3 color;
-	if (0 <= (AvgColor (&color)))
-		SetAvgColorIndex ((uint8_t) Palette ()->ClosestColor (&color));
-	}
-#endif
 #if DBG
     if (m_info.nId == nDbgTexture)
         BRP;
@@ -1306,11 +1226,7 @@ int32_t CBitmap::CreateFrames(int32_t bMipMaps, int32_t bLoad) {
 
         m_info.frames.nCurrent = 0;
         for (i = 0; i < nFrames; i++, pBmf++) {
-#if 0 // DBG
-		pBmf->InitChild (this, 0, 0, w, w);
-#else
             pBmf->InitChild(this, 0, i * w, w, w);
-#endif
             pBmf->SetType(BM_TYPE_FRAME);
             pBmf->SetTop(0);
             nFlags = BM_FLAG_TGA;
@@ -1439,9 +1355,6 @@ int32_t CBitmap::Bind(int32_t bMipMaps) {
     if (!m_info.pTexture)
         RETVAL(-1)
     m_info.pTexture->Bind();
-#if 0
-nDepth--;
-#endif
     RETVAL(0)
 }
 
@@ -1543,21 +1456,11 @@ bool CBitmap::SetupTexture(int32_t bMipMaps, int32_t bLoad) {
 
 void COGL::GenTextures(GLsizei n, GLuint *hTextures) {
     glGenTextures(n, hTextures);
-#if 0
-if ((*hTextures == DrawBuffer ()->ColorBuffer ()) &&
-	 (hTextures != &DrawBuffer ()->ColorBuffer ()))
-	DestroyDrawBuffers ();
-#endif
 }
 
 //------------------------------------------------------------------------------
 
 void COGL::DeleteTextures(GLsizei n, GLuint *hTextures) {
-#if 0
-if ((*hTextures == DrawBuffer ()->ColorBuffer ()) &&
-	 (hTextures != &DrawBuffer ()->ColorBuffer ()))
-	DestroyDrawBuffers ();
-#endif
 #if DBG
     for (int32_t i = 0; i < n;)
         if (int32_t(hTextures[i]) < 0)

@@ -54,7 +54,7 @@ if (((gameStates.render.cockpit.nType == CM_STATUS_BAR) || (gameStates.render.co
     szDisplayedBackgroundMsg[0][0] = 0;
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 void HUDClearMessages(void) {
     int32_t i, j;
@@ -99,7 +99,7 @@ void HUDRenderMessages(uint8_t nType) {
             if (!--pMsgs->nMessages)
                 nModexHUDMsgs = 2;
             temp = nLastMsgYCrd;
-            ClearBackgroundMessages(); //	If in status bar mode and no messages, then erase.
+            ClearBackgroundMessages(); // If in status bar mode and no messages, then erase.
             if (nModexHUDMsgs)
                 nLastMsgYCrd = temp;
         }
@@ -175,7 +175,7 @@ else if (CurrentGameScreen ()->Mode () == BM_MODEX) {
 	if (nModexHUDMsgs) {
 		int32_t temp = nLastMsgYCrd;
 		nModexHUDMsgs--;
-		ClearBackgroundMessages ();			//	If in status bar mode and no messages, then erase.
+		ClearBackgroundMessages ();			// If in status bar mode and no messages, then erase.
 		nLastMsgYCrd = temp;
 		}
 	}
@@ -184,7 +184,7 @@ else if (CurrentGameScreen ()->Mode () == BM_MODEX) {
 }
 
 // ----------------------------------------------------------------------------
-//	Writes a pszMsg on the HUD and checks its timer.
+// Writes a pszMsg on the HUD and checks its timer.
 void HUDRenderMessageFrame(void) {
     HUDRenderMessages(0);
     if (gameOpts->render.cockpit.bSplitHUDMsgs)

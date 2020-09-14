@@ -22,8 +22,8 @@ typedef struct tTexture {
     GLint internalFormat;
     GLenum format;
     int32_t w, h, tw, th, lw;
-    //	int32_t 				bytesu;
-    //	int32_t 				bytes;
+    // int32_t 				bytesu;
+    // int32_t 				bytes;
     GLfloat u, v;
     GLclampf prio;
     uint8_t bMipMaps;

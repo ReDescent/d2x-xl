@@ -334,7 +334,7 @@ void MorphDrawModel(
 //-------------------------------------------------------------
 
 void CObject::MorphDraw(void) {
-    //	int32_t save_light;
+    // int32_t save_light;
     CPolyModel *pModel;
     fix light;
     tMorphInfo *pMorphInfo;

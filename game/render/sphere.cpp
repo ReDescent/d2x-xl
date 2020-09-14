@@ -253,13 +253,6 @@ int32_t SetupColorEffectShader(float fRefY, float fColorScale, int32_t bMovingRi
         glUniform1i(glGetUniformLocation(shaderProg, "sphereTex"), 0);
         // if (shaderProg)
         {
-#if 0
-		COGLMatrix m;
-		m.Getf (GL_MODELVIEW_MATRIX);
-		glUniformMatrix4fv (glGetUniformLocation (shaderProg, "modelViewMatrix"), 1, GL_FALSE, m.Dataf ());
-		glUniform3fv (glGetUniformLocation (shaderProg, "center"), 3, reinterpret_cast<GLfloat*> (vCenter));
-		glUniform3fv (glGetUniformLocation (shaderProg, "viewDir"), 3, reinterpret_cast<GLfloat*> (vViewDir));
-#endif
             glUniform1f(glGetUniformLocation(shaderProg, "refY"), GLfloat(fRefY));
             glUniform1f(glGetUniformLocation(shaderProg, "colorScale"), GLfloat(fColorScale));
             glUniform1i(glGetUniformLocation(shaderProg, "bMovingRing"), GLboolean(bMovingRing));
@@ -493,9 +486,6 @@ int32_t CSphere::InitSurface(float red, float green, float blue, float alpha, fl
 #if SPHERE_ADDITIVE_BLENDING
         fScale *= coronaIntensities[gameOpts->render.coronas.nObjIntensity];
 #endif
-#if 0
-	if (m_pPulse && m_pPulse->fScale)
-#endif
         {
             red *= fScale;
             green *= fScale;
@@ -619,15 +609,6 @@ int32_t CSphere::Render(
 #if SPHERE_DRAW_OUTLINE && (SPHERE_WIREFRAME < 2)
     if (!bEffect /* && (gameOpts->render.textures.nQuality > 1)*/) {
         if (gameStates.render.CartoonStyle()) {
-#if SPHERE_SW_TRANSFORM
-#if 0 // DBG
-		transformation.End (__FILE__, __LINE__);
-		ogl.ResetTransform (1);
-		ogl.SetTransform (0);
-		CFixMatrix m = CFixMatrix::IDENTITY;
-		transformation.Begin (vPos, m, __FILE__, __LINE__);
-#endif
-#endif
             // gameStates.render.SetOutlineColor (0, 128, 255);
             RenderOutline(pObj, xScale);
             // gameStates.render.ResetOutlineColor ();
@@ -636,25 +617,6 @@ int32_t CSphere::Render(
             transformation.Begin(vPos, pPos->mOrient, __FILE__, __LINE__);
 #endif
         }
-#if 0
-	else if (alpha < 0.0f) {
-		float h = 1.0f / Max (red, Max (green, blue)) * 255.0f;
-		gameStates.render.SetOutlineColor (uint8_t (red * h), uint8_t (green * h), uint8_t (blue * h), 127);
-#if 1
-		RenderOutline (pObj, xScale);
-#else
-		if (gameOpts->render.effects.bGlow) {
-			glowRenderer.End ();
-			if (gameOpts->render.effects.bGlow <= 2) 
-				glowRenderer.Begin (BLUR_OUTLINE);
-			}
-		RenderOutline (pObj, xScale);
-		if (gameOpts->render.effects.bGlow)
-			glowRenderer.End ();
-#endif
-		gameStates.render.ResetOutlineColor ();
-		}
-#endif
     }
 #endif
 
@@ -748,15 +710,9 @@ void CSphereEdge::Transform(float fScale) {
 
 int32_t CSphereEdge::Prepare(CFloatVector vViewer, int32_t nFilter, float fScale) {
     Transform(fScale);
-#if 0
-CFloatVector v = (m_vertices [0][1] + m_vertices [1][1]) * 0.5f;
-if ((CFloatVector::Dot (v, m_faces [0].m_vNormal [1]) > 0.0f) == (CFloatVector::Dot (v, m_faces [1].m_vNormal [1]) > 0.0f))
-	return 0;
-#elif 1
     if ((CFloatVector::Dot(m_faces[0].m_vCenter[1], m_faces[0].m_vNormal[1]) > 0.0f) ==
         (CFloatVector::Dot(m_faces[1].m_vCenter[1], m_faces[1].m_vNormal[1]) > 0.0f))
         return 0;
-#endif
     gameData.segData.edgeVertexData[0].Add(m_vertices[0][SPHERE_SW_TRANSFORM]);
     gameData.segData.edgeVertexData[0].Add(m_vertices[1][SPHERE_SW_TRANSFORM]);
     return 1;
@@ -790,11 +746,7 @@ void CTesselatedSphere::Transform(float fScale) {
 // -----------------------------------------------------------------------------
 
 int32_t CTesselatedSphere::Quality(void) {
-#if 0 /*DBG && SPHERE_DEFAULT_QUALITY > -1*/
-return SPHERE_DEFAULT_QUALITY;
-#else
     return m_nQuality ? m_nQuality : Max(SPHERE_MIN_QUALITY, gameOpts->render.textures.nQuality + 1);
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -1060,20 +1012,6 @@ void CRingedSphere::RenderFaces(float fRadius, int32_t nFaces, int32_t bTextured
             ogl.SetCullMode(nCull ? GL_FRONT : GL_BACK);
             for (i = 0; i < h; i++) {
                 DrawFaces(i, nQuads, bTextured, GL_QUAD_STRIP, nCull ? 2 : 1);
-#if 0
-			if (!bTextured) {
-				for (i = 0; i < nQuads; i++, svP [1]++) {
-					p [i] = svP [1]->m_v;
-					if (bTextured) {
-						tc [i].dir.u = svP [1]->m_tc.dir.u * nFaces;
-						tc [i].dir.dir = svP [1]->m_tc.dir.dir * nFaces;
-						}
-					}
-				glLineWidth (2);
-				RenderSphereRing (p, tc, nQuads, 0, GL_LINE_STRIP);
-				glLineWidth (1);
-				}
-#endif
             }
         }
     } else {
@@ -1088,22 +1026,6 @@ void CRingedSphere::RenderFaces(float fRadius, int32_t nFaces, int32_t bTextured
                         tc[i] = svP[0]->m_tc;
                 }
                 DrawFaces(p, tc, nQuads, bTextured, GL_QUAD_STRIP, 3);
-#if 0
-			if (!bTextured) {
-				for (i = 0; i < nQuads; i++, svP [1]++) {
-					p [i] = svP [1]->m_v;
-					VmVecScale (p + i, p + i, fRadius);
-					transformation.Transform (p + i, p + i, 0);
-					if (bTextured) {
-						tc [i].dir.u = svP [1]->m_tc.dir.u * nFaces;
-						tc [i].dir.dir = svP [1]->m_tc.dir.dir * nFaces;
-						}
-					}
-				glLineWidth (2);
-				RenderSphereRing (p, tc, nQuads, 0, GL_LINE_STRIP);
-				glLineWidth (1);
-				}
-#endif
             }
         }
     }
@@ -1516,16 +1438,12 @@ int32_t DrawShieldSphere(CObject *pObj, float red, float green, float blue, floa
 #endif
     {
         if (!nSize) {
-#if 0 // DBG
-		nSize = pObj->info.xSize;
-#else
-                if (pObj->rType.polyObjInfo.nModel < 0)
-                    nSize = pObj->info.xSize;
-                else {
-                    CPolyModel *pModel = GetPolyModel(pObj, NULL, pObj->ModelId(), 0);
-                    nSize = pModel ? pModel->Rad() : pObj->info.xSize;
-                }
-#endif
+            if (pObj->rType.polyObjInfo.nModel < 0)
+                nSize = pObj->info.xSize;
+            else {
+                CPolyModel *pModel = GetPolyModel(pObj, NULL, pObj->ModelId(), 0);
+                nSize = pModel ? pModel->Rad() : pObj->info.xSize;
+            }
         }
         float r = X2F(nSize);
         if (gameStates.render.nType == RENDER_TYPE_TRANSPARENCY)

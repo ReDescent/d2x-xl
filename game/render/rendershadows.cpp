@@ -144,10 +144,6 @@ void RenderNeatShadows(fix xStereoSeparation, int32_t nWindow, int16_t nStartSeg
         RenderMine(nStartSeg, xStereoSeparation, nWindow);
         pLight->render.bExclusive = 0;
     }
-#if 0
-gameStates.render.nShadowPass = 4;
-RenderMine (nStartSeg, xStereoSeparation, nWindow);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -217,10 +213,6 @@ void RenderShadowTexture(void) {
     if (shadowBuf.Bind(0))
         return;
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-#if 0
-glUseProgramObject (shadowProg);
-glUniform1i (glGetUniformLocation (shadowProg, "shadowTex"), 0);
-#endif
     glBegin(GL_QUADS);
     glTexCoord2d(0, 0);
     glVertex2d(0, 0);
@@ -239,30 +231,6 @@ glUniform1i (glGetUniformLocation (shadowProg, "shadowTex"), 0);
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 }
-
-//------------------------------------------------------------------------------
-
-#if 0
-
-int32_t RenderShadowMap (CDynLight *pLight)
-{
-	CCamera	*pCamera;
-
-if (pLight->shadow.nFrame == gameData.renderData.shadows.nFrame)
-	return 0;
-if (gameData.renderData.shadows.nShadowMaps == MAX_SHADOW_MAPS)
-	return 0;
-pLight->shadow.nFrame = !pLight->shadow.nFrame;
-gameStates.render.nShadowPass = 2;
-pCamera = cameraManager.ShadowMap (gameData.renderData.shadows.nShadowMaps);
-//pCamera->Create (gameData.renderData.shadows.nShadowMaps++, pLight->info.nSegment, 
-//					  pLight->info.nSide, pLight->info.nSegment, pLight->info.nSide, NULL, 1, 0);
-pCamera->Render ();
-gameStates.render.nShadowPass = 2;
-return 1;
-}
-
-#endif
 
 //------------------------------------------------------------------------------
 // The following code is an attempt to find all objects that cast a shadow visible

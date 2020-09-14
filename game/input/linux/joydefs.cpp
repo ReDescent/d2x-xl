@@ -157,13 +157,13 @@ void joydef_menuset_1(int nitems, tMenuItem *items, int *last_key, int nCurItem)
 
     if (ocType != gameConfig.nControlType) {
         switch (gameConfig.nControlType) {
-            //		case	CONTROL_NONE:
+            // 	case	CONTROL_NONE:
         case CONTROL_JOYSTICK:
         case CONTROL_FLIGHTSTICK_PRO:
         case CONTROL_THRUSTMASTER_FCS:
         case CONTROL_GRAVIS_GAMEPAD:
-            //		case	CONTROL_MOUSE:
-            //		case	CONTROL_CYBERMAN:
+            // 	case	CONTROL_MOUSE:
+            // 	case	CONTROL_CYBERMAN:
             joydefs_calibrateFlag = 1;
         }
         KCSetControls(0);

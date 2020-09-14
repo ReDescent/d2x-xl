@@ -47,13 +47,13 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "addon_bitmaps.h"
 #include "marker.h"
 
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 bool GuidedMissileActive(void) { return gameData.objData.HasGuidedMissile(N_LOCALPLAYER); }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline float RadToDeg(float r) { return r * float(180.0 / PI); }
 
@@ -205,10 +205,6 @@ void DrawZoomCrosshairs(void) {
         0.5f /*1.0f - float (CCanvas::Current ()->Top () + y) / float (gameData.renderData.screen.Height ())*/,
         0.0f);
     glScalef(xScale, yScale, 1.0f);
-#if 0
-float fh = 2.0f * float (h) / float (sh);
-float fw = 2.0f * float (w) / float (cw);
-#endif
     glBegin(GL_LINES);
     glVertex2f(0.0f, -1.0f);
     glVertex2f(0.0f, -1.125f);
@@ -295,7 +291,7 @@ float fw = 2.0f * float (w) / float (cw);
     gameData.SetStereoOffsetType(nOffsetSave);
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CRGBColor playerColors[] =
     {{15, 15, 23}, {27, 0, 0}, {0, 23, 0}, {30, 11, 31}, {31, 16, 0}, {24, 17, 6}, {14, 21, 12}, {29, 29, 0}};
@@ -381,7 +377,7 @@ void CGenericCockpit::DrawReticle(int32_t bForceBig, fix xStereoSeparation) {
         float yStep = float(gameData.renderData.scene.Height()) / fov * 4;
         float xStep = yStep * float(CCanvas::Current()->AspectRatio());
         // if ((fabs (X2F (transformation.m_info.playerHeadAngles.v.coord.h)) > 0.1f) ||
-        //	 (fabs (X2F (transformation.m_info.playerHeadAngles.v.coord.p)) > 0.1f))
+        //  (fabs (X2F (transformation.m_info.playerHeadAngles.v.coord.p)) > 0.1f))
         {
             float fade = 1.0f - 2.0f * X2F(
                                            Max(abs(transformation.m_info.playerHeadAngles.v.coord.h),
@@ -466,11 +462,6 @@ void CGenericCockpit::DrawReticle(int32_t bForceBig, fix xStereoSeparation) {
         m_info.yScale *= 2.0f;
     }
     gameStates.render.grAlpha = 1.0f;
-#if 0
-if (m_info.xStereoSeparation) {
-	ogl.ColorMask (1,1,1,1,0);
-	}
-#endif
 }
 
-//	-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------

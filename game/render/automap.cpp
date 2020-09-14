@@ -172,7 +172,7 @@ void CAutomap::DrawPlayer(CObject *pObj) {
     CFixVector vArrowPos, vHeadPos;
     CRenderPoint spherePoint, arrowPoint, headPoint;
     int32_t size = pObj->info.xSize * (m_bRadar ? 2 : 1);
-    //	int32_t			bUseTransform = ogl.m_states.bUseTransform;
+    // int32_t			bUseTransform = ogl.m_states.bUseTransform;
 
     spherePoint.SetIndex(-1);
     // Draw Console CPlayerData -- shaped like a ellipse with an arrow.
@@ -562,9 +562,9 @@ void CAutomap::CreateNameCanvas(void) {
     strcat(m_szLevelName, szExplored);
 }
 
-//	-----------------------------------------------------------------------------
-//	Set the segment depth of all segments from nStartSeg in *segbuf.
-//	Returns maximum nDepth value.
+// -----------------------------------------------------------------------------
+// Set the segment depth of all segments from nStartSeg in *segbuf.
+// Returns maximum nDepth value.
 int32_t CAutomap::SetSegmentDepths(int32_t nStartSeg, uint16_t *depthBufP) {
     uint8_t bVisited[MAX_SEGMENTS_D2X];
     int16_t queue[MAX_SEGMENTS_D2X];

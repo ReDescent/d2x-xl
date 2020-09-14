@@ -356,7 +356,7 @@ do {
 	MIDIOUTCAPS devcaps;
 	midiOutGetDevCaps (i, &devcaps, sizeof (MIDIOUTCAPS));
 	if ((devcaps.wTechnology == MOD_FMSYNTH) || (devcaps.wTechnology==MOD_SYNTH))
-//			if ((devcaps.dwSupport & (MIDICAPS_VOLUME | MIDICAPS_STREAM)) == (MIDICAPS_VOLUME | MIDICAPS_STREAM))
+// 		if ((devcaps.dwSupport & (MIDICAPS_VOLUME | MIDICAPS_STREAM)) == (MIDICAPS_VOLUME | MIDICAPS_STREAM))
 		hmp->devid=i;
 	i++;
 	} while ((i < (int32_t)numdevs) && (hmp->devid == -1));
