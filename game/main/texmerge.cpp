@@ -100,14 +100,12 @@ CBitmap *TexMergeGetCachedBitmap(int32_t tMapBot, int32_t tMapTop, int32_t nOrie
     bmBot = gameData.pigData.tex.pBitmap[gameData.pigData.tex.pBmIndex[tMapBot].index].Override(-1);
 
     for (i = 0, pCache = &texCache[0]; i < nCacheEntries; i++, pCache++) {
-#if 1 //! DBG
         if ((pCache->nLastFrameUsed > -1) && (pCache->bmTop == bmTop) && (pCache->bmBot == bmBot) &&
             (pCache->nOrient == nOrient) && pCache->bitmap) {
             nCacheHits++;
             pCache->nLastFrameUsed = gameData.appData.nFrameCount;
             return pCache->bitmap;
         }
-#endif
         if (pCache->nLastFrameUsed < nLowestFrame) {
             nLowestFrame = pCache->nLastFrameUsed;
             nLRU = i;
@@ -298,8 +296,7 @@ void MergeTextures(int32_t nType, CBitmap *bmBot, CBitmap *bmTop, CBitmap *bmDes
     // h = bmBot->Height ();
     th = tw = bmTop->Width();
     dw = dh = bmDest->Width();
-// th = bmTop->Height ();
-#if 1
+
     // square textures assumed here, so no test for h!
     if (dw < tw) {
         topScale.c = tw / dw;
@@ -315,11 +312,7 @@ void MergeTextures(int32_t nType, CBitmap *bmBot, CBitmap *bmTop, CBitmap *bmDes
         btmScale.c = dw / bw;
         btmScale.d = 1;
     }
-#else
-    if (w > bmTop->Width())
-        w = h = bmBot->Width();
-    scale.pColor = scale.d = 1;
-#endif
+
     bTopBPP = bmTop->BPP();
     bBtmBPP = bmBot->BPP();
 #if DBG
@@ -494,15 +487,8 @@ int32_t SetupTexMergeShader(int32_t bColorKey, int32_t bColored, int32_t nType) 
     if (nType < 2)
         return -1;
 #endif
-#if 1
     if (nType == 3)
         nType = 1;
-#else
-    if ((nType == 3) && !gameStates.render.history.bmMask)
-        nType = 2;
-    else
-        nType = 1;
-#endif
 
     int32_t nShader = nType + bColored * 3;
 

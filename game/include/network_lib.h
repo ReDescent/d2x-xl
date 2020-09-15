@@ -24,7 +24,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define MAX_JOIN_REQUESTS (MAX_PLAYERS - 1)
 
-#if 1
 #define NW_SET_INT(_b, _loc, _i) \
     *(reinterpret_cast<int32_t *>((_b) + (_loc))) = INTEL_INT((int32_t)(_i)); \
     (_loc) += 4
@@ -37,20 +36,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define NW_GET_SHORT(_b, _loc, _i) \
     (_i) = INTEL_SHORT(*(reinterpret_cast<int16_t *>((_b) + (_loc)))); \
     (_loc) += 2
-#else
-#define NW_SET_INT(_b, _loc, _i) \
-    { \
-        int32_t tmpi = INTEL_INT(_i); \
-        memcpy((_b) + (_loc), &tmpi, 4); \
-        (_loc) += 4; \
-    }
-#define NW_SET_SHORT(_b, _loc, _i) \
-    { \
-        int32_t tmps = INTEL_SHORT(_i); \
-        memcpy((_b) + (_loc), &tmpi, 2); \
-        (_loc) += 2; \
-    }
-#endif
 #define NW_SET_BYTE(_b, _loc, _i) (_b)[(_loc)++] = (uint8_t)(_i)
 #define NW_SET_BYTES(_b, _loc, _p, _n) \
     memcpy((_b) + (_loc), _p, _n); \
@@ -469,12 +454,10 @@ extern CNetGameInfo tempNetInfo;
 extern const char *pszRankStrings[];
 
 extern int32_t nLastNetGameUpdate[MAX_ACTIVE_NETGAMES];
-#if 1
 extern CNetGameInfo activeNetGames[MAX_ACTIVE_NETGAMES];
 extern tExtraGameInfo activeExtraGameInfo[MAX_ACTIVE_NETGAMES];
 extern CAllNetPlayersInfo activeNetPlayers[MAX_ACTIVE_NETGAMES];
 extern CAllNetPlayersInfo *pPlayerInfo;
-#endif
 
 //------------------------------------------------------------------------------
 

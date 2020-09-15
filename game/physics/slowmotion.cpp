@@ -108,7 +108,7 @@ int32_t ToggleSlowMotion(void) {
     int32_t bBulletTime = bBulletTimeOk && (controls[0].bulletTimeCount > 0);
 
     controls[0].bulletTimeCount = controls[0].slowMotionCount = 0;
-#if 1 //! DBG
+
     if (SlowMotionActive()) {
         if (!gameStates.app.cheats.bSpeed)
             LOCALPLAYER.UpdateEnergy(
@@ -128,7 +128,7 @@ int32_t ToggleSlowMotion(void) {
             bBulletTime = 0;
         }
     }
-#endif
+
     if (!(bSlowMotion || bBulletTime))
         return 0;
     if (bBulletTime) { // toggle bullet time and slow motion

@@ -57,23 +57,7 @@ void CSide::ComputeCenter(void) {
     // make sure side center is inside segment
     CFixVector v0 = m_vCenter + m_normals[2];
     CFixVector v1 = m_vCenter - m_normals[2];
-#if 1
     FindPlaneLineIntersection(m_vCenter, &VERTICES[m_corners[0]], &m_normals[0], &v0, &v1, 0);
-#else
-    CFixVector c0, c1;
-    FindPlaneLineIntersection(c0, &VERTICES[m_corners[0]], &m_normals[0], &v0, &v1, 0);
-    FindPlaneLineIntersection(c1, &VERTICES[m_corners[3]], &m_normals[1], &v0, &v1, 0);
-    if (c0 == c1)
-        m_vCenter = c0;
-    else {
-        v0 = c0 - c1;
-        CFixVector::Normalize(v0);
-        if (CFixVector::Dot(v0, m_normals[2]) < 0)
-            m_vCenter = c0;
-        else
-            m_vCenter = c1;
-    }
-#endif
 }
 
 // ------------------------------------------------------------------------------------------
@@ -194,7 +178,6 @@ void CSide::SetupAsQuad(CFixVector &vNormal, CFloatVector &vNormalf, uint16_t *v
 // -------------------------------------------------------------------------------
 
 void CSide::FixNormals(void) {
-#if 1
 #if DBG
     if (((nDbgSeg > 0) && (nDbgSeg == m_nSegment)) &&
         ((nDbgSide < 0) || (this - SEGMENT(m_nSegment)->m_sides == nDbgSide)))
@@ -239,8 +222,6 @@ void CSide::FixNormals(void) {
         }
         m_normals[2] = CFixVector::Avg(m_normals[0], m_normals[1]);
     }
-
-#endif
 }
 
 // -------------------------------------------------------------------------------
@@ -354,7 +335,6 @@ void CSide::Setup(int16_t nSegment, uint16_t *verts, uint16_t *index, bool bSoli
     if (gameData.segData.nLevelVersion > 24)
         index = m_corners;
     SetupCorners(verts, index);
-#if 1
     if (m_nShape) {
         m_nType = SIDE_IS_TRI_02;
         SetupVertexList(verts, index);
@@ -374,34 +354,9 @@ void CSide::Setup(int16_t nSegment, uint16_t *verts, uint16_t *index, bool bSoli
         m_normals[2] = CFixVector::Avg(m_normals[0], m_normals[1]);
         m_fNormals[2] = CFloatVector::Avg(m_fNormals[0], m_fNormals[1]);
     }
-#else
-    fix xDistToPlane = m_nShape ? 0 : abs(VERTICES[vSorted[3]].DistToPlane(vNormal, VERTICES[vSorted[0]]));
-    if (!m_nShape)
-        SetupAsQuad(vNormal, vNormalf, verts, index);
-    if (PLANE_DIST_TOLERANCE < DEFAULT_PLANE_DIST_TOLERANCE) {
-        SetupAsTriangles(bSolid, verts, index);
-    } else {
-        if (xDistToPlane <= PLANE_DIST_TOLERANCE)
-            SetupAsQuad(vNormal, vNormalf, verts, index);
-        else {
-            SetupAsTriangles(bSolid, verts, index);
-            // this code checks to see if we really should be triangulated, and
-            // de-triangulates if we shouldn't be.
-            Assert(m_nFaces == 2);
-            fix dist0 = VERTICES[m_vertices[1]].DistToPlane(m_normals[1], VERTICES[m_nMinVertex[0]]);
-            fix dist1 = VERTICES[m_vertices[4]].DistToPlane(m_normals[0], VERTICES[m_nMinVertex[0]]);
-            int32_t s0 = sign(dist0);
-            int32_t s1 = sign(dist1);
-            if (s0 == 0 || s1 == 0 || s0 != s1)
-                SetupAsQuad(vNormal, vNormalf, verts, index);
-        }
-    }
-#endif
 
     ComputeCenter();
-#if 1 // DBG
     FixNormals();
-#endif
     m_bIsQuad = !m_nShape && (m_normals[0] == m_normals[1]);
     for (int32_t i = 0; i < m_nCorners; i++)
         AddToVertexNormal(m_corners[i], m_normals[2]);

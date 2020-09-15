@@ -402,25 +402,13 @@ int G3DrawTexPolyFlat(
 void OglDrawReticle(int cross, int primary, int secondary);
 void OglCachePolyModelTextures(int nModel);
 
-// whee
-//#define PAL2Tr(c) ((gr_palette [c*3]+gameData.render.bPaletteGamma)/63.0)
-//#define PAL2Tg(c) ((gr_palette [c*3+1]+gameData.render.bPaletteGamma)/63.0)
-//#define PAL2Tb(c) ((gr_palette [c*3+2]+gameData.render.bPaletteGamma)/63.0)
-//#define PAL2Tr(c) ((gr_palette [c*3])/63.0)
-//#define PAL2Tg(c) ((gr_palette [c*3+1])/63.0)
-//#define PAL2Tb(c) ((gr_palette [c*3+2])/63.0)
-#if 1
 #define CPAL2Tr(_p, _c) ((float)((_p)[(_c)*3]) / 63.0f)
 #define CPAL2Tg(_p, _c) ((float)((_p)[(_c)*3 + 1]) / 63.0f)
 #define CPAL2Tb(_p, _c) ((float)((_p)[(_c)*3 + 2]) / 63.0f)
 #define PAL2Tr(_p, _c) ((float)((_p)[(_c)*3]) / 63.0f)
 #define PAL2Tg(_p, _c) ((float)((_p)[(_c)*3 + 1]) / 63.0f)
 #define PAL2Tb(_p, _c) ((float)((_p)[(_c)*3 + 2]) / 63.0f)
-#endif
 #define CC2T(c) ((float)c / 255.0f)
-// inline GLfloat PAL2Tr(int c);
-// inline GLfloat PAL2Tg(int c);
-// inline GLfloat PAL2Tb(int c);
 
 GLuint EmptyTexture(int Xsize, int Ysize);
 char *LoadShader(char *fileName);

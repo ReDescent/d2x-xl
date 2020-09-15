@@ -28,17 +28,10 @@
 #define PPL_AMBIENT_LIGHT 0.3f
 #define PPL_DIFFUSE_LIGHT 0.7f
 
-#if 1
 #define GEO_LIN_ATT (gameData.renderData.fAttScale[0] * 0.25f)
 #define GEO_QUAD_ATT (gameData.renderData.fAttScale[1] * 0.25f)
 #define OBJ_LIN_ATT (gameData.renderData.fAttScale[0] * 0.25f)
 #define OBJ_QUAD_ATT (gameData.renderData.fAttScale[1] * 0.25f)
-#else
-#define GEO_LIN_ATT 0.05f
-#define GEO_QUAD_ATT 0.005f
-#define OBJ_LIN_ATT 0.05f
-#define OBJ_QUAD_ATT 0.005f
-#endif
 
 // ----------------------------------------------------------------------------------------------
 // per pixel lighting, no lightmaps

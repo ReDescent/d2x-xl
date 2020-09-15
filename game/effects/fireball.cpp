@@ -244,13 +244,7 @@ CObject *CreateExplosion(
                     pObj->mType.physInfo.flags |= PF_USES_THRUST;
                 }
             }
-#if 1
             vNegForce = vForce * xScale;
-#else
-            vNegForce.v.coord.x = vForce.v.coord.x * xScale;
-            vNegForce.v.coord.y = vForce.v.coord.y * xScale;
-            vNegForce.v.coord.z = vForce.v.coord.z * xScale;
-#endif
             pObj->ApplyRotForce(vNegForce);
             if (pObj->info.xShield >= 0) {
                 if (pObj->IsBoss() && bossProps[gameStates.app.bD1Mission][pObj->BossId() - BOSS_D2].bInvulKinetic)
@@ -351,8 +345,7 @@ CObject *CObject::ExplodeSplashDamageWeapon(CFixVector &vImpact, CObject *pTarge
     if (!pWeaponInfo)
         RETVAL(NULL)
 
-// adjust the impact location in case it is inside the object
-#if 1
+    // adjust the impact location in case it is inside the object
     if (pTarget) {
         CFixVector vRelImpact = vImpact - pTarget->Position(); // impact relative to object center
         fix xDist = vRelImpact.Mag();
@@ -362,7 +355,6 @@ CObject *CObject::ExplodeSplashDamageWeapon(CFixVector &vImpact, CObject *pTarge
             vImpact = pTarget->Position() + vRelImpact;
         }
     }
-#endif
     if ((info.nId == EARTHSHAKER_ID) || (info.nId == ROBOT_EARTHSHAKER_ID))
         ShakerRockStuff(&vImpact);
     audio.CreateObjectSound(

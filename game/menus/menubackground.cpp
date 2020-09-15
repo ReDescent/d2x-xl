@@ -113,7 +113,6 @@ static inline void SetBoxFillColor(CRGBColor &color) {
 //------------------------------------------------------------------------------
 
 static inline void DrawBox(CCanvas &canvas, CRGBColor &boxColor) {
-#if 1
     gameStates.render.nFlashScale = 0;
     CCanvasColor fontColors[2] = {canvas.FontColor(0), canvas.FontColor(1)};
     SetBoxFillColor(boxColor);
@@ -127,7 +126,6 @@ static inline void DrawBox(CCanvas &canvas, CRGBColor &boxColor) {
     glLineWidth(1.0f);
     canvas.SetFontColor(fontColors[0], 0);
     canvas.SetFontColor(fontColors[1], 1);
-#endif
 }
 
 //------------------------------------------------------------------------------

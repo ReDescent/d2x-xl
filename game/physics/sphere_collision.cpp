@@ -633,12 +633,7 @@ int32_t CheckVectorSphereCollision(
         fix nShorten = FixSqrt(radius2 - dist2);
         intDist = wDist - nShorten;
         if (intDist > vecLen) {
-#if 1
             return -1;
-#else
-            vIntersection = *p0; // don't move at all
-            return 1;
-#endif
         }
         if (intDist < 0) {
             // paste one or the other end of vector, which means we're inside
@@ -702,31 +697,17 @@ fix CheckVectorObjectCollision(
         vPos = pThisObj->info.position.vPos;
     if ((CollisionModel(nCollisionModel) || pThisObj->IsStatic() || pOtherObj->IsStatic()) &&
         !(UseSphere(pThisObj) || UseSphere(pOtherObj)) && (bThisPoly || bOtherPoly)) {
-#if 1 // DBG
+
         FindPointLineIntersection(vHit, *p0, *p1, vPos, 0);
         dist = VmLinePointDist(*p0, *p1, OBJPOS(pThisObj)->vPos);
         if (dist > pThisObj->ModelRadius(0) + pOtherObj->ModelRadius(0))
             RETVAL(0)
-#endif
+
         // check hitbox collisions for all polygonal objects
         if (bThisPoly && bOtherPoly) {
-#if 1
             dist = CheckHitboxCollision(vHit, vNormal, pOtherObj, pThisObj, p0, p1, nModel);
             if ((dist == 0x7fffffff) /*|| (dist > pThisObj->info.xSize)*/)
                 RETVAL(0)
-#else
-            // check whether one object is stuck inside the other
-            if (!(dist = CheckHitboxCollision(vHit, vNormal, pOtherObj, pThisObj, p0, p1, nModel))) {
-                if (!CFixVector::Dist(*p0, *p1))
-                    RETVAL(0)
-                // check whether objects collide at all
-                dist = CheckVectorHitboxCollision(vHit, vNormal, p0, p1, NULL, pThisObj, 0, nModel);
-                if ((dist == 0x7fffffff) || (dist > pThisObj->info.xSize))
-                    RETVAL(0)
-            }
-            CheckHitboxCollision(vHit, vNormal, pOtherObj, pThisObj, p0, p1, nModel);
-            FindPointLineIntersection(vHit, *p0, *p1, vHit, 1);
-#endif
         } else {
             if (bThisPoly) {
                 // *pThisObj (stationary) has hitboxes, *pOtherObj (moving) a hit sphere. To detect whether the sphere
@@ -805,7 +786,7 @@ int32_t ComputeObjectHitpoint(CHitData &hitData, CHitQuery &hitQuery, int32_t nC
     if (hitQuery.nSegment == nDbgSeg)
         BRP;
 #endif
-#if 1
+
     CSegment *pSeg = SEGMENT(hitQuery.nSegment);
     for (int32_t nSide = 0; nSide < 6; nSide++) {
         int16_t nSegment = pSeg->m_children[nSide];
@@ -821,7 +802,7 @@ int32_t ComputeObjectHitpoint(CHitData &hitData, CHitQuery &hitQuery, int32_t nC
         if (i == gameData.collisionData.nSegsVisited[nThread])
             nObjSegList[nObjSegs++] = nSegment;
     }
-#endif
+
     for (int32_t iObjSeg = 0; iObjSeg < nObjSegs; iObjSeg++) {
         int16_t nSegment = nObjSegList[iObjSeg];
         pSeg = SEGMENT(nSegment);
@@ -934,14 +915,12 @@ static inline int32_t PassThrough(CHitQuery &hitQuery, int16_t nSide, int16_t nF
     if (widResult & WID_PASSABLE_FLAG) // check whether side can be passed through
         return 1;
 
-#if 1
     if (!pSeg->Masks(*hitQuery.p0, 0).m_center && !pSeg->Masks(*hitQuery.p1, hitQuery.radP1).m_center) {
         CFixVector vMoved = *hitQuery.p1 - *hitQuery.p0;
         CFixVector::Normalize(vMoved);
         if (CFixVector::Dot(pSeg->m_sides[nSide].m_normals[nFace], vMoved) > 0) // moving away from face
             return 1;
     }
-#endif
 
     if ((widResult & WID_TRANSPARENT_WALL) == WID_TRANSPARENT_WALL) { // check whether side can be seen through
         if (hitQuery.flags & FQ_TRANSWALL)
@@ -1009,13 +988,12 @@ int32_t ComputeHitpoint(
         *segList = hitQuery.nSegment;
     *nSegments = 1;
     gameData.collisionData.hitResult.nNestCount++;
-// first, see if vector hit any objects in this CSegment
-#if 1
+
+    // first, see if vector hit any objects in this CSegment
     if (hitQuery.flags & FQ_CHECK_OBJS) {
         // PrintLog (1, "checking objects...");
         dMin = ComputeObjectHitpoint(bestHit, hitQuery, nCollisionModel, nThread);
     }
-#endif
 
     CSegment *pSeg = SEGMENT(hitQuery.nSegment);
     if ((hitQuery.nObject > -1) &&
@@ -1067,10 +1045,10 @@ int32_t ComputeHitpoint(
                                                  hitQuery.radP1,
                                                  nSide,
                                                  iFace);
-#if 1
+
                 if (bCheckVisibility && !nFaceHitType)
                     continue;
-#endif
+
 #if DBG
                 if ((hitQuery.nSegment == nDbgSeg) && ((nDbgSide < 0) || (nDbgSide == nSide))) {
                     BRP;
@@ -1250,14 +1228,14 @@ int32_t FindHitpoint(CHitQuery &hitQuery, CHitResult &hitResult, int32_t nCollis
     if (hitQuery.flags & FQ_VISIBILITY)
         extraGameInfo[IsMultiGame].nHitboxes = 0;
     ComputeHitpoint(curHit, hitQuery, hitResult.segList, &hitResult.nSegments, -2, nCollisionModel, nThread);
-#if 1 // DBG
+
     if (curHit.nSegment >= gameData.segData.nSegments) {
         PrintLog(0, "Invalid hit segment in collision detection\n");
         ComputeHitpoint(curHit, hitQuery, hitResult.segList, &hitResult.nSegments, -2, nCollisionModel, nThread);
         if (curHit.nSegment > gameData.segData.nSegments)
             curHit.nSegment = -1;
     }
-#endif
+
     extraGameInfo[IsMultiGame].nHitboxes = nHitboxes;
 
     if ((curHit.nSegment < 0) || SEGMENT(curHit.nSegment)->Masks(curHit.vPoint, 0).m_center)

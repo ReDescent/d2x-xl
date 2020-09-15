@@ -160,15 +160,13 @@ void NetworkProcessSyncPacket(CNetGameInfo *pNetGameInfo, int32_t rsinit) {
     N_PLAYERS = pNetGameInfo->m_info.nNumPlayers;
     gameStates.app.nDifficultyLevel = pNetGameInfo->m_info.difficulty;
     networkData.nStatus = pNetGameInfo->m_info.gameStatus;
-// Assert (gameStates.app.nFunctionMode != FMODE_GAME);
-// New code, 11/27
-#if 1
+
     console.printf(
         1,
         "netGameInfo.m_info.checksum = %d, calculated checksum = %d.\n",
         netGameInfo.GetSegmentCheckSum(),
-        networkData.nSegmentCheckSum);
-#endif
+        networkData.nSegmentCheckSum
+    );
     if (netGameInfo.GetSegmentCheckSum() != networkData.nSegmentCheckSum) {
         if (extraGameInfo[0].bAutoDownload)
             networkData.nStatus = NETSTAT_AUTODL;
@@ -179,9 +177,7 @@ void NetworkProcessSyncPacket(CNetGameInfo *pNetGameInfo, int32_t rsinit) {
             InfoBox(TXT_ERROR, NULL, BG_STANDARD, 1, TXT_OK, TXT_NETLEVEL_MISMATCH);
             gameStates.menus.nInMenu = nInMenu;
         }
-#if 1 //! DBG
         return;
-#endif
     }
     // Discover my player number
     if (SetLocalPlayer(pPlayerInfo, N_PLAYERS, -1) < -1)
@@ -274,7 +270,6 @@ void NetworkTrackPackets(int32_t nPlayer, int32_t nPackets) {
         networkData.nMissedPackets = nPackets - pPlayer->nPacketsGot;
         if (nPackets - pPlayer->nPacketsGot > 0)
             networkData.nTotalMissedPackets += nPackets - pPlayer->nPacketsGot;
-#if 1
         if (networkData.nMissedPackets > 0)
             console.printf(
                 0,
@@ -289,7 +284,6 @@ void NetworkTrackPackets(int32_t nPlayer, int32_t nPackets) {
                 pPlayer->nPacketsGot - nPackets,
                 nPlayer,
                 networkData.nMissedPackets);
-#endif
         pPlayer->nPacketsGot = nPackets;
     }
 }
@@ -341,9 +335,7 @@ void NetworkReadLongPlayerDataPacket(tFrameInfoLong *pd) {
     }
     PLAYER(nPlayer).m_nLevel = pd->data.nLevel;
     if ((int8_t)pd->data.nLevel != missionManager.nCurrentLevel) {
-#if 1
         console.printf(CON_DBG, "Got frame packet from CPlayerData %d wrong level %d!\n", nPlayer, pd->data.nLevel);
-#endif
         return;
     }
 
@@ -451,9 +443,7 @@ void NetworkReadShortPlayerDataPacket(tFrameInfoShort *pd) {
     }
     PLAYER(nPlayer).m_nLevel = pd->data.nLevel;
     if ((int8_t)pd->data.nLevel != missionManager.nCurrentLevel) {
-#if 1
         console.printf(CON_DBG, "Got frame packet from player %d wrong level %d!\n", nPlayer, pd->data.nLevel);
-#endif
         return;
     }
     pObj = OBJECT(nObject);
@@ -706,16 +696,7 @@ int32_t CObjectSynchronizer::Sync(void) {
             pObj->LinkToSeg(nSegment);
         if ((pObj->info.nType == OBJ_PLAYER) || (pObj->info.nType == OBJ_GHOST))
             RemapLocalPlayerObject(m_nLocalObj, m_nRemoteObj);
-#if 1
         SetObjNumMapping(m_nLocalObj, m_nRemoteObj, m_nObjOwner);
-#else
-        if (m_nObjOwner == m_nPlayer)
-            SetLocalObjNumMapping(m_nLocalObj);
-        else if (m_nObjOwner != -1)
-            SetObjNumMapping(m_nLocalObj, m_nRemoteObj, m_nObjOwner);
-        else
-            gameData.multigame.m_nObjOwner[m_nLocalObj] = -1;
-#endif
         if (pObj->Type() == OBJ_MONSTERBALL) {
             gameData.hoardData.pMonsterBall = pObj;
             gameData.hoardData.nMonsterballSeg = nSegment;

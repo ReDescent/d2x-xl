@@ -88,15 +88,9 @@ void CModelEdge::Transform(void) {
 //------------------------------------------------------------------------------
 
 int32_t CModelEdge::IsFacingViewer(int16_t nFace) {
-#if 1
     // return CFloatVector::Dot (m_vertices [1][nFace]/*m_faces [nFace].m_vCenter [1]*/, m_faces [nFace].m_vNormal [1])
     // < 0.0f;
     return CFloatVector::Dot(m_faces[nFace].m_vCenter[1], m_faces[nFace].m_vNormal[1]) < 0.0f;
-#else
-    CFloatVector v = m_faces[nFace].m_vCenter[1];
-    CFloatVector::Normalize(v);
-    return CFloatVector::Dot(v, m_faces[nFace].m_vNormal[1]) < 0.0f;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -681,44 +675,7 @@ void CModel::Setup(int32_t bHires, int32_t bSort) {
 //------------------------------------------------------------------------------
 
 int32_t CModel::Shift(CObject *pObj, int32_t bHires, CFloatVector3 *vOffsetfP) {
-#if 1
     return 0;
-#else
-    CRenderSubModel *pSubModel;
-    int32_t i;
-    CFloatVector3 vOffsetf;
-    CVertex *pModelVertex;
-
-    if (pObj->info.nType == OBJ_PLAYER) {
-        if (IsMultiGame && !IsCoopGame)
-            return 0;
-    } else if (
-        (pObj->info.nType != OBJ_ROBOT) && (pObj->info.nType != OBJ_HOSTAGE) && (pObj->info.nType != OBJ_POWERUP))
-        return 0;
-    if (vOffsetfP)
-        vOffsetf = *vOffsetfP;
-    else
-        vOffsetf.Assign(gameData.modelData.offsets[m_nModel]);
-    if (!(vOffsetf.dir.coord.x || vOffsetf.dir.coord.y || vOffsetf.dir.coord.z))
-        return 0;
-    if (vOffsetfP) {
-        for (i = m_nFaceVerts, pModelVertex = m_faceVerts; i; i--, pModelVertex++) {
-            pModelVertex->m_vertex.dir.coord.x += vOffsetf.dir.coord.x;
-            pModelVertex->m_vertex.dir.coord.y += vOffsetf.dir.coord.y;
-            pModelVertex->m_vertex.dir.coord.z += vOffsetf.dir.coord.z;
-        }
-    } else {
-        for (i = m_nSubModels, pSubModel = m_subModels; i; i--, pSubModel++) {
-            pSubModel->m_vMin.dir.coord.x += vOffsetf.dir.coord.x;
-            pSubModel->m_vMin.dir.coord.y += vOffsetf.dir.coord.y;
-            pSubModel->m_vMin.dir.coord.z += vOffsetf.dir.coord.z;
-            pSubModel->m_vMax.dir.coord.x += vOffsetf.dir.coord.x;
-            pSubModel->m_vMax.dir.coord.y += vOffsetf.dir.coord.y;
-            pSubModel->m_vMax.dir.coord.z += vOffsetf.dir.coord.z;
-        }
-    }
-    return 1;
-#endif
 }
 
 //------------------------------------------------------------------------------

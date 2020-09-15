@@ -101,10 +101,9 @@ int32_t ResetMonsterball(bool bCreate) {
     gameData.hoardData.vMonsterballPos = OBJPOS(pObj)->vPos;
     RemoveMonsterball();
 
-#if 1 //! DBG
     if (!IAmGameHost())
         return 0;
-#endif
+
     if (bCreate) {
         if (!CreateMonsterball())
             return 0;

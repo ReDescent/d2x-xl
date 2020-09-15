@@ -12,7 +12,6 @@
 
 // -----------------------------------------------------------------------------------
 
-#if 1
 static CFloatVector lineColors[3] = {
     {{{0.5f, 0.0f, 1.0f, 0.5f}}},
     {{{1.0f, 0.5f, 0.0f, 0.5f}}},
@@ -28,7 +27,7 @@ static CFloatVector radarColors[3][3] = {
     {{{{0.4f, 0.4f, 0.0f, 0.5f}}}, {{{0.6f, 0.6f, 0.0f, 0.5f}}}, {{{0.8f, 0.8f, 0.0f, 0.5f}}}},
     {{{{0.0f, 0.2f, 0.4f, 0.5f}}}, {{{0.0f, 0.4f, 0.6f, 0.5f}}}, {{{0.0f, 0.6f, 0.8f, 0.5f}}}},
 };
-#endif
+
 CRadar radar;
 
 // -----------------------------------------------------------------------------------
@@ -97,17 +96,7 @@ void CRadar::ComputeCenter(void) {
 // -----------------------------------------------------------------------------------
 
 void CRadar::RenderSetup(void) {
-#if 1
     memcpy(ogl.VertexBuffer().Buffer(), m_vertices, sizeof(m_vertices));
-#else
-    CFloatVector *pv = &ogl.VertexBuffer()[0];
-    for (int32_t i = 0; i < RADAR_SLICES; i++, pv++) {
-        double ang = 2.0 * PI * i / RADAR_SLICES;
-        pv->v.coord.x = float(cos(ang));
-        pv->v.coord.y = float(sin(ang));
-        pv->v.coord.z = 0.0f;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------------------

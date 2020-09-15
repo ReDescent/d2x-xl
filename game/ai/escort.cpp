@@ -1079,14 +1079,9 @@ void DoEscortMenu(void) {
     }
 
     if (!IS_OBJECT(pObj, pObj->Index())) {
-#if 1 // DBG - always allow buddy bot creation
       // If no buddy bot, create one!
         HUDInitMessage(TXT_GB_CREATE);
         CreateBuddyBot();
-#else
-        HUDInitMessage(TXT_GB_NONE);
-        return;
-#endif
     }
 
     BuddyMayTalk(); // Needed here or we might not know buddy can talk when he can.

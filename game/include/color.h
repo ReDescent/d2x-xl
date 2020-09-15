@@ -134,21 +134,7 @@ template <uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha> class CStatic
 
 //-----------------------------------------------------------------------------
 
-#if 1
-
 #define DEFAULT_TRANSPARENCY_COLOR 255 // palette entry of transparency color -- 255 on the PC
-
-#else
-
-#ifdef MACDATA
-#define SWAP_TRANSPARENCY_COLOR // swap black and transparency color codes in palettes
-#define DEFAULT_TRANSPARENCY_COLOR 0 // palette entry of transparency color -- 255 on the PC
-#else
-//#undef  SWAP_TRANSPARENCY_COLOR         // no swapping for PC people
-#define DEFAULT_TRANSPARENCY_COLOR 255 // palette entry of transparency color -- 255 on the PC
-#endif /* MACDATA */
-
-#endif
 
 #define TRANSPARENCY_COLOR gameData.renderData.transpColor // palette entry of transparency color -- 255 on the PC
 #define SUPER_TRANSP_COLOR 254 // palette entry of super transparency color

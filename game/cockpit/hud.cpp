@@ -785,11 +785,7 @@ void CHUD::DrawPrimaryWeaponList(void) {
             }
             if (nState[1] != nState[0])
                 SetWeaponStateColor(bHave && bAvailable, bActive);
-#if 1
             szLabel[0] = 'L';
-#else
-            szLabel[0] = (LOCALPLAYER.flags & PLAYER_FLAGS_QUAD_LASERS) ? 'Q' : 'L';
-#endif
         } else if (k == 0) { // 5 == super laser, handled above
             continue;
         } else {
@@ -949,11 +945,7 @@ int32_t CHUD::DrawAmmoCount(char *szLabel, int32_t x, int32_t y, int32_t j, int3
     else if (nAmmo)
         szAmmo[0] = char(48 + nAmmo);
     else
-#if 1
         szAmmo[0] = '-';
-#else
-        return x + wt; // leave ammo count of unavailable weapons blank
-#endif
     int32_t dx = Max((wt - fontManager.Current()->GetCharWidth(szAmmo)) / 2, 0);
     GrPrintF(NULL, x + dx, y, szAmmo);
     return x + wt;

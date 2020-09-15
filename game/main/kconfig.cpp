@@ -844,20 +844,7 @@ void CControlConfig::Render(void) {
 
     backgroundManager.Activate(m_background);
     DrawTitle();
-#if 1
     DrawCloseBox(Scaled(gameStates.menus.bHires ? 15 : 7), Scaled(gameStates.menus.bHires ? 15 : 7));
-#else
-    m_closeX = m_closeY = gameStates.menus.bHires ? 15 : 7;
-    m_closeSize = gameStates.menus.bHires ? 10 : 5;
-    CCanvas::Current()->SetColorRGB(0, 0, 0, 255);
-    OglDrawFilledRect(m_closeX, m_closeY, m_closeX + m_closeSize, m_closeY + m_closeSize);
-    CCanvas::Current()->SetColorRGBi(RGBA_PAL2(21, 21, 21));
-    OglDrawFilledRect(
-        m_closeX + LHX(1),
-        m_closeY + LHX(1),
-        m_closeX + m_closeSize - LHX(1),
-        m_closeY + m_closeSize - LHX(1));
-#endif
 
     DrawHeader();
     DrawTable();

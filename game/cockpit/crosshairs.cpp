@@ -78,15 +78,12 @@ void DrawGuidedCrosshairs(fix xStereoSeparation) {
     int32_t y = gameData.renderData.scene.Height() / 2;
     glLineWidth(float(gameData.renderData.frame.Width()) / 640.0f);
     x = gameData.X(x);
-#if 1
+
     w /= 2 << ogl.IsOculusRift();
     h /= 2 << ogl.IsOculusRift();
     OglDrawLine(x - w, y, x + w, y);
     OglDrawLine(x, y - h, x, y + h);
-#else
-    OglDrawLine(I2X(x - w / 2), I2X(y), I2X(x + w / 2), I2X(y));
-    OglDrawLine(I2X(x), I2X(y - h / 2), I2X(x), I2X(y + h / 2));
-#endif
+
     glLineWidth(1.0f);
     if (xStereoSeparation) {
         ogl.ColorMask(1, 1, 1, 1, 0);
@@ -245,9 +242,7 @@ void DrawZoomCrosshairs(void) {
     w -= w >> 1;
     h -= h >> 1;
     glLineWidth(float(floor(2 * float(cw) / 640.0f)));
-#if 1
-    // float xScale = float (w << 5) / float (cw);
-    // float yScale = float (h << 5) / float (gameData.renderData.screen.Height ());
+
     OglDrawEllipse(
         sizeofa(sinCos),
         GL_LINE_LOOP,
@@ -255,20 +250,8 @@ void DrawZoomCrosshairs(void) {
         0.5f - fStereoOffset,
         yScale,
         1.0f - float(/*CCanvas::Current ()->Top () +*/ y) / float(gameData.renderData.screen.Height()),
-        sinCos);
-#else
-    glPushMatrix();
-    ogl.SetLineSmooth(true);
-    if (bHaveTarget)
-        glColor4f(1.0f, 0.0f, 0.0f, 0.25f);
-    else
-        glColor4f(0.0f, 1.0f, 0.0f, 0.25f);
-    glTranslatef(0.5f, 0.5f, 0.5f);
-    glScalef(float(w << 5) / float(cw), float(h << 5) / float(ch), 0.1f);
-    OglDrawEllipse(sizeofa(sinCos), GL_LINE_LOOP, 1.0f, 0, 1.0f, 0, sinCos);
-    ogl.SetLineSmooth(false);
-    glPopMatrix();
-#endif
+        sinCos
+    );
 
     char szZoom[20];
     int32_t r, aw;

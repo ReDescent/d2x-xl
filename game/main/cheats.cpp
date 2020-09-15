@@ -51,11 +51,9 @@ extern int32_t MarkPlayerPathToSegment(int32_t nSegment);
 //------------------------------------------------------------------------------
 
 void DoCheatPenalty() {
-#if 1 //! DBG
     audio.PlaySound(SOUND_CHEATER, SOUNDCLASS_PLAYER, I2X(1));
     gameStates.app.cheats.bEnabled = 1;
     LOCALPLAYER.score = 0;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -518,12 +516,10 @@ void InvulCheat(int32_t bVerbose) {
 void LoadGameBackground();
 
 void JohnHeadCheat(int32_t bVerbose) {
-#if 1
     gameStates.app.cheats.bJohnHeadOn = !gameStates.app.cheats.bJohnHeadOn;
     LoadGameBackground();
     if (bVerbose)
         HUDInitMessage(gameStates.app.cheats.bJohnHeadOn ? TXT_HI_JOHN : TXT_BYE_JOHN);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -667,16 +663,9 @@ void TurboCheat(int32_t bVerbose) {
 //------------------------------------------------------------------------------
 
 void UnlockAllCheat(int32_t bVerbose) {
-#if 1 // DBG
     UnlockAllWalls(!gameStates.app.cheats.nUnlockLevel);
     if (bVerbose)
         HUDInitMessage(!gameStates.app.cheats.nUnlockLevel ? TXT_ROBBING_BANK : TXT_LET_ME_OVER);
-#else
-    UnlockAllWalls(gameStates.app.bD1Mission || !gameStates.app.cheats.nUnlockLevel);
-    if (bVerbose)
-        HUDInitMessage(
-            (gameStates.app.bD1Mission || !gameStates.app.cheats.nUnlockLevel) ? TXT_ROBBING_BANK : TXT_LET_ME_OVER);
-#endif
     gameStates.app.cheats.nUnlockLevel = 1;
 }
 

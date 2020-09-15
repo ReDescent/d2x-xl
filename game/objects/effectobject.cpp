@@ -46,28 +46,26 @@ void ConvertSmokeObject(CObject *pObj) {
     pObj->SetType(OBJ_EFFECT);
     pObj->info.nId = PARTICLE_ID;
     pObj->info.renderType = RT_PARTICLES;
+
     pTrigger = FindObjTrigger(pObj->Index(), TT_SMOKE_LIFE, -1);
-#if 1
     j = (pTrigger && pTrigger->m_info.value) ? pTrigger->m_info.value : 5;
     pObj->rType.particleInfo.nLife = (j * (j + 1)) / 2;
-#else
-    pObj->rType.particleInfo.nLife = (pTrigger && pTrigger->m_info.value) ? pTrigger->m_info.value : 5;
-#endif
+
     pTrigger = FindObjTrigger(pObj->Index(), TT_SMOKE_BRIGHTNESS, -1);
     pObj->rType.particleInfo.nBrightness = (pTrigger && pTrigger->m_info.value) ? pTrigger->m_info.value * 10 : 75;
+
     pTrigger = FindObjTrigger(pObj->Index(), TT_SMOKE_SPEED, -1);
     j = (pTrigger && pTrigger->m_info.value) ? pTrigger->m_info.value : 5;
-#if 1
     pObj->rType.particleInfo.nSpeed = (j * (j + 1)) / 2;
-#else
-    pObj->rType.particleInfo.nSpeed = j;
-#endif
+
     pTrigger = FindObjTrigger(pObj->Index(), TT_SMOKE_DENS, -1);
     pObj->rType.particleInfo.nParts =
         j * ((pTrigger && pTrigger->m_info.value) ? pTrigger->m_info.value * 50 : STATIC_SMOKE_MAX_PARTS);
+
     pTrigger = FindObjTrigger(pObj->Index(), TT_SMOKE_DRIFT, -1);
     pObj->rType.particleInfo.nDrift =
         (pTrigger && pTrigger->m_info.value) ? j * pTrigger->m_info.value * 50 : pObj->rType.particleInfo.nSpeed * 50;
+
     pTrigger = FindObjTrigger(pObj->Index(), TT_SMOKE_SIZE, -1);
     j = (pTrigger && pTrigger->m_info.value) ? pTrigger->m_info.value : 5;
     pObj->rType.particleInfo.nSize[0] = j + 1;
@@ -96,19 +94,15 @@ void CObject::SetupSmoke(void) {
 
     info.renderType = RT_PARTICLES;
     nLife = psi->nLife ? psi->nLife : 5;
-#if 1
+
     psi->nLife = (nLife * (nLife + 1)) / 2;
-#else
-    psi->nLife = psi->value ? psi->value : 5;
-#endif
+
     psi->nBrightness = psi->nBrightness ? psi->nBrightness * 10 : 50;
     if (!(nSpeed = psi->nSpeed))
         nSpeed = 5;
-#if 1
+
     psi->nSpeed = (nSpeed * (nSpeed + 1)) / 2;
-#else
-    psi->nSpeed = i;
-#endif
+
     if (!(nParts = psi->nParts))
         nParts = 5;
     psi->nDrift = psi->nDrift ? nSpeed * psi->nDrift * 75 : psi->nSpeed * 50;
@@ -129,11 +123,9 @@ void CObject::SetupSmoke(void) {
             // psi->nSize [1] /= 2;
         }
     }
-#if 1
     if (psi->nType == SMOKE_TYPE_BUBBLES) {
         psi->nParts *= 2;
     }
-#endif
 }
 
 //------------------------------------------------------------------------------

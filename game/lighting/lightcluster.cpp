@@ -68,12 +68,11 @@ void CLightClusterManager::Set(void) {
                     pObj->info.position.vPos.v.coord.x /= h;
                     pObj->info.position.vPos.v.coord.y /= h;
                     pObj->info.position.vPos.v.coord.z /= h;
-#if 1
+
                     pObj->cType.lightInfo.color.Red() /= h;
                     pObj->cType.lightInfo.color.Green() /= h;
                     pObj->cType.lightInfo.color.Blue() /= h;
                     pObj->cType.lightInfo.color.Alpha() /= h;
-#endif
                 }
                 if (1 || (pObj->cType.lightInfo.nSegment < 0)) {
                     int16_t nSegment =

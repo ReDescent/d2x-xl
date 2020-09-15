@@ -171,12 +171,11 @@ void RenderTerrain(CFixVector *vOrgPoint, int32_t org_2dx, int32_t org_2dy) {
     CRenderPoint p, p2, pLast, p2Last, pLowSave, pHighSave;
     int32_t i, j, iLow, iHigh, jLow, jHigh, iViewer, jViewer;
 
-#if 1
     memset(&p, 0, sizeof(CRenderPoint));
     memset(&p2, 0, sizeof(CRenderPoint));
     memset(&pLast, 0, sizeof(CRenderPoint));
     memset(&p2Last, 0, sizeof(CRenderPoint));
-#endif
+
     gameData.renderData.terrain.nMineTilesDrawn = 0; // clear flags
     gameData.renderData.terrain.orgI = org_2dy;
     gameData.renderData.terrain.orgJ = org_2dx;

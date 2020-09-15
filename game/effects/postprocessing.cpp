@@ -153,10 +153,8 @@ bool CPostEffectShockwave::SetupShader(void) {
 #if DBG
 // ogl.m_states.bDepthBuffer [1] = 0;
 #endif
-#if 1
     if (!ogl.CopyDepthTexture(1))
         return false;
-#endif
     ogl.SelectTMU(GL_TEXTURE0);
     m_shaderProg = GLhandleARB(shaderManager.Deploy(hShockwaveShader /*[direction]*/));
     if (!m_shaderProg) {
@@ -230,7 +228,6 @@ bool CPostEffectShockwave::Update(void) {
             s[i].y += gameData.renderData.frame.Height() - CCanvas::Current()->Height();
     }
 
-#if 1
     fix xMin = 0x7FFFFFFF, yMin = 0x7FFFFFFF, xMax = -0x7FFFFFFF, yMax = -0x7FFFFFFF;
     for (int32_t i = 1; i < 5; i++) {
         if (xMin > s[i].x)
@@ -248,20 +245,6 @@ bool CPostEffectShockwave::Update(void) {
     m_screenRad = (float)_hypot(double(xMax), double(yMax)) * 0.125f;
 #else
     m_screenRad = (float)hypot(double(xMax), double(yMax)) * 0.125f;
-#endif
-#else
-    int32_t d = 0;
-    int32_t n = 0;
-    for (int32_t i = 1; i < 5; i++) {
-        if ((s[i].x >= 0) && (s[i].x < gameData.renderData.screen.Width()) && (s[i].y >= 0) &&
-            (s[i].y < gameData.renderData.screen.Height())) {
-            d += labs(s[0].x - s[i].x) + labs(s[0].y - s[i].y);
-            n += 4;
-        }
-    }
-    if (n == 0)
-        return false;
-    m_screenRad = /*sqrt*/ (float(d) / float(n));
 #endif
 
     m_renderPos.v.coord.x = float(s[0].x);

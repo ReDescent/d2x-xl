@@ -58,13 +58,13 @@ void NetworkStopResync(tPlayerSyncData *their) {
                 networkData.syncInfo[i].player[1].player.callsign,
                 their->player.callsign,
                 &networkData.syncInfo[i].player[1].player.network,
-                &their->player.network)) {
-#if 1
+                &their->player.network)
+        ) {
             console.printf(CON_DBG, "Aborting resync for player %s.\n", their->player.callsign);
-#endif
             DeleteSyncData(i);
-        } else
+        } else {
             i++;
+        }
 }
 
 //------------------------------------------------------------------------------
@@ -269,9 +269,7 @@ void NetworkSyncPlayer(tNetworkSyncInfo *pSyncInfo) {
 void NetworkSyncExtras(tNetworkSyncInfo *pSyncInfo) {
     Assert(pSyncInfo->nExtrasPlayer > -1);
     if (!IAmGameHost()) {
-#if 1
         console.printf(CON_DBG, "Hey! I'm not the master and I was gonna send info!\n");
-#endif
     }
     if (pSyncInfo->nExtras == 1)
         NetworkSendFlyThruTriggers(pSyncInfo->nExtrasPlayer);
@@ -456,9 +454,7 @@ int32_t NetworkSyncPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int32_t nSt
         return nCurItem;
     }
     if (networkData.toSyncPoll.Expired()) { // Poll time expired, re-send request
-#if 1
         console.printf(CON_DBG, "Re-sending join request.\n");
-#endif
 #if DBG
         audio.PlaySound(SOUND_HUD_MESSAGE, SOUNDCLASS_GENERIC, I2X(1) / 2);
 #endif
@@ -480,7 +476,7 @@ int32_t NetworkWaitForSync(void) {
     m.AddText("", text);
     m.AddText("", const_cast<char *>(TXT_NET_LEAVE));
     networkData.nJoinState = 0;
-#if 1
+
     i = NetworkSendRequest();
     if (i < 0) {
 #if DBG
@@ -489,7 +485,6 @@ int32_t NetworkWaitForSync(void) {
         return -1;
     }
 
-#endif
     sprintf(m[0].m_text, "%s\n'%s' %s", TXT_NET_WAITING, NETPLAYER(i).callsign, TXT_NET_TO_ENTER);
     ResetSyncTimeout(true);
     do {
@@ -513,9 +508,8 @@ int32_t NetworkWaitForSync(void) {
         }
     }
 
-#if 1
     console.printf(CON_DBG, "Aborting join.\n");
-#endif
+
     me.nType = PID_QUIT_JOINING;
     memcpy(me.player.callsign, LOCALPLAYER.callsign, CALLSIGN_LEN + 1);
     if (gameStates.multi.nGameType >= IPX_GAME) {
@@ -600,10 +594,8 @@ int32_t NetworkWaitForPlayerInfo(void) {
         return 0;
     if ((gameStates.multi.nGameType < IPX_GAME) || !networkData.bActive)
         return 0;
-#if 1
     if (!IsNetworkGame && (gameStates.app.nFunctionMode == FMODE_GAME))
         console.printf(CON_DBG, "Calling NetworkWaitForPlayerInfo () when not in net game.\n");
-#endif
     if (networkData.nStatus == NETSTAT_PLAYING) {
         Int3(); // MY GOD! Get Jason...this is the source of many problems
         return 0;
@@ -678,13 +670,12 @@ void NetworkDoBigWait(int32_t choice) {
                 if (NetworkWaitForPlayerInfo()) {
                     networkData.bHaveSync = 1;
                     // NetworkProcessSyncPacket (&tempNetInfo, 0);
-#if 1
                     console.printf(
                         CON_DBG,
                         "HUH? Game=%d Player=%d\n",
                         networkData.nSecurityNum,
-                        pPlayerInfo->m_info.nSecurity);
-#endif
+                        pPlayerInfo->m_info.nSecurity
+                    );
                     activeNetGames[choice] = tempNetInfo;
                     activeNetPlayers[choice] = *pPlayerInfo;
                     networkData.nSecurityCheck = -1;

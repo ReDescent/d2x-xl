@@ -297,9 +297,7 @@ int32_t CObject::UpdateMovement(void) {
             mType.physInfo.rotThrust.SetZero();
             Unstick();
             DoAnyRobotDyingFrame(this);
-#if 1 //! DBG
             RETVAL(1)
-#endif
         } else if (USE_D1_AI)
             DoD1AIFrame(this);
         else
@@ -400,11 +398,8 @@ void CObject::UpdatePosition(void) {
     case MT_PHYSICS:
         DoPhysicsSim();
         lightManager.SetPos(OBJ_IDX(this));
-#if 1
         RequestEffects(MOVE_LIGHTNING);
-#else
-        lightningManager.MoveForObject(this);
-#endif
+
         if (info.nType == OBJ_PLAYER)
             UpdateShipSound();
         break; // move by physics
@@ -497,14 +492,13 @@ void CObject::CheckAfterburnerBlobDrop(void) {
     int32_t bSmoke;
     fix delay, lifetime, nSize;
 
-#if 1
     if (IsMissile()) {
         if (SHOW_SMOKE && gameOpts->render.particles.bMissiles)
             RETURN;
         if ((gameStates.app.bNostalgia || EGI_FLAG(bThrusterFlames, 1, 1, 0)) && (info.nId != MERCURYMSL_ID))
             RETURN;
     }
-#endif
+
     fix vel = mType.physInfo.velocity.Mag();
 
     if (vel > I2X(200))
@@ -599,13 +593,7 @@ int32_t CObject::Update(void) {
     if (info.nType == OBJ_ROBOT) {
         if (gameOpts->gameplay.bNoThief && (!IsMultiGame || IsCoopGame) && ROBOTINFO(info.nId) &&
             ROBOTINFO(info.nId)->thief) {
-#if 1
             ApplyDamageToRobot(info.xShield + I2X(1), -1);
-#else
-            SetShield(0);
-            UpdateLife(0);
-            Die();
-#endif
         } else {
             fix xMaxShield = RobotDefaultShield(this);
             if (info.xShield > xMaxShield)

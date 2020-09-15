@@ -47,7 +47,7 @@ int FileFindFirst(const char *pszFilter, FILEFINDSTRUCT *ffsP, int nFlags) {
         return -1;
     // PrintLog (1, "FileFindFirst (%s)\n", pszFilter);
     memset(ffsP, 0, sizeof(*ffsP));
-#if 1
+
     if (*pszFilter && (*pszFilter != '.') && (*pszFilter != '/'))
         strcpy(
             ffsP->szDir,
@@ -55,9 +55,7 @@ int FileFindFirst(const char *pszFilter, FILEFINDSTRUCT *ffsP, int nFlags) {
     else
         *ffsP->szDir = '\0';
     strcat(ffsP->szDir, pszFilter);
-#else
-    strcpy(ffsP->szDir, pszFilter);
-#endif
+
     for (i = (int)strlen(ffsP->szDir), j = (int)strlen(pszFilter); i; j--)
         if (ffsP->szDir[--i] == '/')
             break;

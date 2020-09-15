@@ -597,13 +597,11 @@ static char *FindHiresBitmap(const char *bmName, int32_t &nFile, int32_t bD1, in
 
     strcpy(baseName, bmName);
     for (int32_t i = 0; i < 2; i++) {
-#if 1
         if (i) {
             char *p = strchr(baseName, '#');
             if (p)
                 strcpy(p + 1, "0");
         }
-#endif
         if (*gameFolders.mods.szTextures[0]) {
             sprintf(
                 gameFolders.mods.szTextures[1],
@@ -1117,13 +1115,11 @@ bool BitmapLoaded(int32_t bmi, int32_t nFrame, int32_t bD1) {
 
     if (!pBm)
         return false;
-#if 1
     if (/*nFrame &&*/ gameData.pigData.tex.bitmaps[bD1][bmi - nFrame].Override()) {
         pBm->DelFlags(BM_FLAG_PAGED_OUT);
         pBm->SetOverride(gameData.pigData.tex.bitmaps[bD1][bmi - nFrame].Override());
         return true;
     }
-#endif
     if (pBm->Flags() & BM_FLAG_PAGED_OUT)
         return false;
     if ((pBmo = pBm->Override(-1)))

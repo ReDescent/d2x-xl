@@ -146,9 +146,7 @@ int32_t NetworkJoinPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int32_t nSt
                 (gameStates.multi.nGameType == IPX_GAME) ? "IPX" : "UDP",
                 networkData.nPortOffset);
             menu[0].m_bRebuild = 1;
-#if 1
             console.printf(0, TXT_CHANGE_SOCK, networkData.nPortOffset);
-#endif
             NetworkListen();
             IpxChangeDefaultSocket((uint16_t)(IPX_DEFAULT_SOCKET + networkData.nPortOffset));
             RestartNetSearching(menu);
@@ -172,9 +170,7 @@ int32_t NetworkJoinPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int32_t nSt
     if (networkData.bGamesChanged || (networkData.nActiveGames != networkData.nLastActiveGames)) {
         networkData.bGamesChanged = 0;
         networkData.nLastActiveGames = networkData.nActiveGames;
-#if 1
         console.printf(CON_DBG, "Found %d netgames.\n", networkData.nActiveGames);
-#endif
         // Copy the active games data into the menu options
         for (i = 0; i < networkData.nActiveGames; i++, h++) {
             int32_t gameStatus = activeNetGames[i].m_info.gameStatus;

@@ -582,14 +582,7 @@ void CHUDIcons::DrawInventory(void) {
     static int32_t nIdItems[NUM_INV_ITEMS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     dy = 0; //(gameData.renderData.frame.Height () - gameData.renderData.scene.Height ());
-#if 1
     y = nIconPos ? CCanvas::Current()->Height() - dy - oy : oy + hIcon + 12;
-#else
-    if (gameStates.render.cockpit.nType != CM_STATUS_BAR) //(!cockpit->Always ())
-        y = nIconPos ? CCanvas::Current()->Height() - dy - oy : oy + hIcon + 12;
-    else
-        y = oy + hIcon + 12;
-#endif
     n = (gameOpts->gameplay.bInventory && (!IsMultiGame || IsCoopGame)) ? NUM_INV_ITEMS : NUM_INV_ITEMS - 2;
     firstItem = gameStates.app.bD1Mission ? INV_ITEM_QUADLASERS : 0;
     x = (CCanvas::Current()->Width() - (n - firstItem) * wIcon - (n - 1 - firstItem) * ox - nDmgIconWidth) / 2;
@@ -627,7 +620,6 @@ void CHUDIcons::DrawInventory(void) {
         } else
             bHave = LOCALPLAYER.flags & nInvFlags[j];
         bAvailable = (LOCALPLAYER.Energy() > nEnergyType[j]);
-#if 1
         if (bHave) {
             if (bAvailable)
                 if (bActive)
@@ -664,7 +656,6 @@ void CHUDIcons::DrawInventory(void) {
             nIdItems[j] = GrString(x + wIcon + 2 - fw, y - fh, szCount, nIdItems + j);
             fontManager.SetColorRGBi(MEDGREEN_RGBA, 1, 0, 0);
         }
-#endif
         gameStates.render.grAlpha = 1.0f;
         x += wIcon + ox;
     }

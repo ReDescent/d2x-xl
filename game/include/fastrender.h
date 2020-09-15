@@ -6,7 +6,6 @@
 
 //------------------------------------------------------------------------------
 
-void QSortFaces(int32_t left, int32_t right);
 int32_t SetupDepthBuffer(int32_t nType);
 void RenderFaceList(int32_t nType);
 void ComputeDynamicQuadLight(int32_t nStart, int32_t nEnd, int32_t nThread);

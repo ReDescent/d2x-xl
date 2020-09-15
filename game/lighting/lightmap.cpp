@@ -1194,57 +1194,21 @@ static int32_t CreatePoll(CMenu &menu, int32_t &key, int32_t nCurItem, int32_t n
     if (nState)
         return nCurItem;
 
-#if 1
-
     lightmapManager.SetupProgress();
     lightmapManager.BuildAll(-1);
     lightmapManager.ResetProgress();
     key = -2;
-    return nCurItem;
-
-#else
-
-    if (nFace < FACES.nFaces) {
-        if (!lightmapManager.BuildAll(nFace)) {
-            key = -2;
-            return nCurItem;
-        }
-        nFace += PROGRESS_INCR;
-    } else {
-        key = -2;
-        return nCurItem;
-    }
-    menu[0].Value()++;
-    menu[0].Rebuild();
-    key = 0;
-
-#endif
     return nCurItem;
 }
 
 //------------------------------------------------------------------------------
 
 char *CLightmapManager::Filename(char *pszFilename, int32_t nLevel) {
-#if 1
     return GameDataFilename(
         pszFilename,
         "lmap",
         nLevel,
         (gameOpts->render.nLightmapQuality + 1) * (gameOpts->render.nLightmapPrecision + 1) - 1);
-#else
-    if (gameOpts->render.color.nLevel == 2)
-        return GameDataFilename(
-            pszFilename,
-            "lmap",
-            nLevel,
-            (gameOpts->render.nLightmapQuality + 1) * (gameOpts->render.nLightmapPrecision + 1) - 1);
-    else
-        return GameDataFilename(
-            pszFilename,
-            "bw.lmap",
-            nLevel,
-            (gameOpts->render.nLightmapQuality + 1) * (gameOpts->render.nLightmapPrecision + 1) - 1);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1362,14 +1326,10 @@ int32_t CLightmapManager::Load(int32_t nLevel) {
                 PrintLog(0, "error reading lightmap data\n");
         }
         cf.Close();
-#if 1
         if (gameOpts->render.color.nLevel < 2)
             ToGrayScale();
-#endif
-#if 1
         if (gameStates.render.CartoonStyle())
             Posterize();
-#endif
     }
     return bOk;
 }
@@ -1431,13 +1391,9 @@ int32_t CLightmapManager::Create(int32_t nLevel) {
             gameStates.render.bBuildLightmaps = 1;
             if (!gameStates.app.bPrecomputeLightmaps && gameStates.app.bProgressBars && gameOpts->menus.nStyle) {
                 nFace = 0;
-#if 1
                 ResetProgress();
                 SetupProgress();
                 ProgressBar(TXT_CALC_LIGHTMAPS, 1, 0, /*PROGRESS_STEPS*/ (FACES.nFaces), CreatePoll);
-#else
-                ProgressBar(TXT_CALC_LIGHTMAPS, 1, 0, PROGRESS_STEPS(FACES.nFaces), CreatePoll);
-#endif
             } else {
                 if (!gameStates.app.bPrecomputeLightmaps)
                     messageBox.Show(TXT_CALC_LIGHTMAPS);
@@ -1497,10 +1453,10 @@ int32_t SetupLightmap(CSegFace *pFace) {
     if (!lightmapManager.Bind(i))
         return 0;
     GLuint h = lightmapManager.Buffer(i)->m_handle;
-#if 1 //! DBG
+
     if (0 <= ogl.IsBound(h))
         return 1;
-#endif
+
     ogl.SelectTMU(GL_TEXTURE0, true);
     ogl.SetTexturing(true);
     // glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

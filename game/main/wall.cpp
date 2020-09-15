@@ -689,15 +689,7 @@ bool DoCloakingWallFrame(int32_t nCloakingWall) {
         audio.Update();
     } else if (SHOW_DYN_LIGHT || (pCloakWall->time > CLOAKING_WALL_TIME / 2)) {
         int32_t oldType = pFrontWall->nType;
-#if 1
         pFrontWall->cloakValue = int8_t(float(FADE_LEVELS) * X2F(pCloakWall->time));
-#else
-        if (SHOW_DYN_LIGHT)
-            pFrontWall->cloakValue = (fix)FRound(FADE_LEVELS * X2F(pCloakWall->time));
-        else
-            pFrontWall->cloakValue =
-                ((pCloakWall->time - CLOAKING_WALL_TIME / 2) * (FADE_LEVELS - 2)) / (CLOAKING_WALL_TIME / 2);
-#endif
         if (pBackWall)
             pBackWall->cloakValue = pFrontWall->cloakValue;
         if (oldType != WALL_CLOAKED) { // just switched

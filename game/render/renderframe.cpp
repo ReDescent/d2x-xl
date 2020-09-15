@@ -125,18 +125,12 @@ int32_t FadeInMine(void) {
     if (LOCALOBJECT->AppearanceStage() > -1)
         return 0;
     int32_t t = LOCALOBJECT->AppearanceTimer();
-#if 1
     int32_t d = I2X(1);
     int32_t a = APPEARANCE_DELAY - d;
     if (t > -a)
         return 0;
     t += a;
     FadeMine(X2F(d + t) / X2F(d));
-#else
-    if (t > -APPEARANCE_DELAY / 2)
-        return 0;
-    FadeMine(X2F(2 * (APPEARANCE_DELAY + t)));
-#endif
     return 1;
 }
 
@@ -154,7 +148,6 @@ void Draw2DFrameElements(void) {
         ogl.SetStereoSeparation(0);
     }
 
-#if 1
     if (gameStates.app.bGameRunning) {
         if (automap.Active())
             automap.RenderInfo();
@@ -164,14 +157,11 @@ void Draw2DFrameElements(void) {
             PROF_END(ptCockpit)
         }
     }
-#if 1
     if (xStereoSeparation >= 0) {
         paletteManager.RenderEffect();
         if (!FadeInMine())
             FlashMine();
     }
-#endif
-#endif
 
     console.Draw();
     if (gameStates.app.bShowVersionInfo || gameStates.app.bSaveScreenShot ||
@@ -396,7 +386,6 @@ void RenderFrame(fix xStereoSeparation, int32_t nWindow) {
                 RenderMine(nStartSeg, xStereoSeparation, nWindow);
             }
         }
-#if 1
         // The following code is a hack resetting the blur buffers, because otherwise certain stuff rendered to it
         // doesn't get properly blended and colored. I have not been able to determine why this is so.
         if (glowRenderer.Available(0xFFFFFFFF)) {
@@ -406,7 +395,6 @@ void RenderFrame(fix xStereoSeparation, int32_t nWindow) {
                 ogl.SelectBlurBuffer(1);
             ogl.ChooseDrawBuffer();
         }
-#endif
     }
     ogl.StencilOff();
 #endif

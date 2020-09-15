@@ -1180,24 +1180,7 @@ int32_t FreeObjectSlots(int32_t nRequested) {
             case OBJ_DEBRIS:
                 candidates[nCandidates++] = i;
                 break;
-#if 1
             default:
-#else
-            case OBJ_FLARE:
-            case OBJ_ROBOT:
-            case OBJ_HOSTAGE:
-            case OBJ_PLAYER:
-            case OBJ_REACTOR:
-            case OBJ_CLUTTER:
-            case OBJ_GHOST:
-            case OBJ_LIGHT:
-            case OBJ_CAMERA:
-            case OBJ_POWERUP:
-            case OBJ_MONSTERBALL:
-            case OBJ_SMOKE:
-            case OBJ_EXPLOSION:
-            case OBJ_EFFECT:
-#endif
                 break;
             }
     }
@@ -1986,12 +1969,10 @@ CObject *CObjectIterator::Step(void) {
         return NULL;
     m_pObj = m_pObj->Links(m_nLink).next;
     ++m_i;
-#if 1 // DBG // disable code for release builds once it has proven stable
     if (m_pObj ? m_i >= Size() : m_i < Size()) { // error! stop anyway
         RebuildObjectLists();
         m_pObj = NULL;
     }
-#endif
     return m_pObj;
 }
 

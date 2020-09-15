@@ -749,11 +749,9 @@ void InitHeadlightShaders(int32_t nLights) {
         gameStates.render.bHaveDynLights = 1;
         for (i = 0; i < 2; i++) {
             for (j = 0; j < HEADLIGHT_SHADER_COUNT / 2; j++) {
-#if 1 //! DBG
                 if (nLights == 1)
                     pszFS = const_cast<char *>(headlightFS[i][h = j]);
                 else
-#endif
                     pszFS = BuildLightingShader(headlightFS[i][h = j + HEADLIGHT_SHADER_COUNT / 2], nLights);
                 bOk =
                     (pszFS != NULL) && (0 <= shaderManager.Build(headlightShaderProgs[i][j], pszFS, headlightVS[i][h]));

@@ -247,10 +247,8 @@ void NetworkSendEndLevelShortSub(int32_t nSrcPlayer, int32_t nDestPlayer) {
         return;
     if (nDestPlayer == nSrcPlayer)
         return;
-#if 1
     if ((gameStates.multi.nGameType == UDP_GAME) && (nSrcPlayer != N_LOCALPLAYER) && !IAmGameHost())
         return;
-#endif
 
     tEndLevelInfoShort eli;
 
@@ -634,9 +632,7 @@ void NetworkSendPlayerNames(tPlayerSyncData *their) {
     char buf[80];
 
     if (!their) {
-#if 1
         console.printf(CON_DBG, "Got a player name without a return address! Get Jason\n");
-#endif
         return;
     }
     buf[0] = PID_NAMES_RETURN;

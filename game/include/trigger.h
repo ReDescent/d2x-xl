@@ -246,14 +246,8 @@ inline int32_t operator-(CTrigger *t, CArray<CTrigger> &a) { return a.Index(t); 
 //------------------------------------------------------------------------------
 
 typedef struct tObjTriggerRef {
-#if 1
     uint8_t nFirst;
     uint8_t nCount;
-#else
-    int16_t prev;
-    int16_t next;
-    int16_t nObject;
-#endif
 } __pack__ tObjTriggerRef;
 
 void TriggerInit();

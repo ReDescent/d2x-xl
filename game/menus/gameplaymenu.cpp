@@ -501,9 +501,9 @@ void GameplayOptionsMenu(void) {
             SetChaseCam(0);
             SetFreeCam(0);
             SetRearView(0);
-#if 1 // DBG
+
             LOCALPLAYER.lives++;
-#endif
+
             gameStates.gameplay.xInitialShield[1] = LOCALPLAYER.Shield(false);
             gameStates.gameplay.xInitialEnergy[1] = LOCALPLAYER.Energy(false);
             LOCALPLAYER.SetShield(-1);

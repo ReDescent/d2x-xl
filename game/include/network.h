@@ -354,8 +354,6 @@ extern tExtraGameInfo extraGameInfo[3];
 
 // -----------------------------------------------------------------------------
 
-#if 1
-
 static inline int32_t
 EGIFlag(char bLocalFlag, char bMultiFlag, char bDefault, int32_t bAllowLocalFlagOn, int32_t bAllowLocalFlagOff) {
     if (!IsMultiGame || IsCoopGame)
@@ -376,16 +374,6 @@ EGIFlag(char bLocalFlag, char bMultiFlag, char bDefault, int32_t bAllowLocalFlag
 
 #define EGI_FLAG(_bFlag, _bAllowLocalOn, _bAllowLocalOff, _bDefault) \
     EGIFlag(extraGameInfo[0]._bFlag, extraGameInfo[1]._bFlag, _bDefault, _bAllowLocalOn, _bAllowLocalOff)
-
-#else
-
-#define EGI_FLAG(_bFlag, _bAllocLocalOn, _bAllowLocalOff, _bDefault) \
-    (IsMultiGame ? gameStates.app.bHaveExtraGameInfo[1] \
-                       ? extraGameInfo[1]._bFlag ? _bLocal ? extraGameInfo[0]._bFlag : extraGameInfo[1]._bFlag : 0 \
-                       : _bDefault \
-                 : extraGameInfo[0]._bFlag)
-
-#endif
 
 // -----------------------------------------------------------------------------
 

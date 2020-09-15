@@ -190,13 +190,8 @@ void CMeshEdge::Setup(void) {
                     m_fSplit = 0.0f;
                     m_vOffset = Vertex(1);
                     m_vOffset -= Vertex(0);
-#if 1
                     if (Rand(2) == 0)
                         m_fOffset = 1.0f - m_fScale;
-#else
-                    m_fOffset = (1.0f - m_fScale) * 0.25f;
-                    m_fOffset *= m_fOffset + (2.0f * m_fOffset) * RandFloat();
-#endif
                     m_vOffset *= m_fOffset;
                 }
             }

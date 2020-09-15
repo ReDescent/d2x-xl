@@ -44,10 +44,8 @@ int32_t AddFaceListItem(CSegFace *pFace, int32_t nThread) {
     ENTER(1, 0);
     if (!(pFace->m_info.widFlags & WID_VISIBLE_FLAG))
         RETVAL(0)
-#if 1
     if (pFace->m_info.nFrame == gameData.appData.nMineRenderCount)
         RETVAL(0)
-#endif
 #if DBG
     if (pFace - FACES.faces >= FACES.nFaces)
         RETVAL(0)
@@ -198,111 +196,6 @@ static inline bool RenderMineFace(CSegment *pSeg, CSegFace *pFace, int32_t nType
 #endif
     RETVAL(renderHandlers[nType](pSeg, pFace))
 }
-
-//------------------------------------------------------------------------------
-
-typedef struct tFaceRef {
-    int16_t nSegment;
-    CSegFace *pFace;
-} tFaceRef;
-
-static tFaceRef faceRef[2][MAX_SEGMENTS_D2X * 6];
-
-int32_t QCmpFaces(CSegFace *fp, CSegFace *mp) {
-    if (!fp->m_info.bOverlay && mp->m_info.bOverlay)
-        return -1;
-    if (fp->m_info.bOverlay && !mp->m_info.bOverlay)
-        return 1;
-    if (!fp->m_info.bTextured && mp->m_info.bTextured)
-        return -1;
-    if (fp->m_info.bTextured && !mp->m_info.bTextured)
-        return 1;
-    if (!fp->m_info.nOvlTex && mp->m_info.nOvlTex)
-        return -1;
-    if (fp->m_info.nOvlTex && !mp->m_info.nOvlTex)
-        return 1;
-    if (fp->m_info.nBaseTex < mp->m_info.nBaseTex)
-        return -1;
-    if (fp->m_info.nBaseTex > mp->m_info.nBaseTex)
-        return -1;
-    if (fp->m_info.nOvlTex < mp->m_info.nOvlTex)
-        return -1;
-    if (fp->m_info.nOvlTex > mp->m_info.nOvlTex)
-        return -1;
-    return 0;
-}
-
-//------------------------------------------------------------------------------
-
-void QSortFaces(int32_t left, int32_t right) {
-    int32_t l = left, r = right;
-    tFaceRef *pf = faceRef[0];
-    CSegFace m = *pf[(l + r) / 2].pFace;
-
-    do {
-        while (QCmpFaces(pf[l].pFace, &m) < 0)
-            l++;
-        while (QCmpFaces(pf[r].pFace, &m) > 0)
-            r--;
-        if (l <= r) {
-            if (l < r) {
-                tFaceRef h = pf[l];
-                pf[l] = pf[r];
-                pf[r] = h;
-            }
-            l++;
-            r--;
-        }
-    } while (l < r);
-    if (l < right)
-        QSortFaces(l, right);
-    if (left < r)
-        QSortFaces(left, r);
-}
-
-//------------------------------------------------------------------------------
-
-#if 1
-
-#define SortFaces() 0
-
-#else
-
-int32_t SortFaces(void) {
-    tSegFaces *pSegFace;
-    CSegFace *pFace;
-    tFaceRef *ph, *pi, *pj;
-    int32_t h, i, j;
-    int16_t nSegment;
-
-    for (h = i = 0, ph = faceRef[0]; i < gameData.renderData.mine.visibility[0].nSegments; i++) {
-        if (0 > (nSegment = gameData.renderData.mine.visibility[0].segments[i]))
-            continue;
-        pSegFace = SEGFACES + nSegment;
-        for (j = pSegFace->nFaces, pFace = pSegFace->pFace; j; j--, pFace++, h++, ph++) {
-            ph->BRP;
-            ph->pFace = pFace;
-        }
-    }
-    tiRender.nFaces = h;
-    if (h > 1) {
-        if (RunRenderThreads(rtSortFaces)) {
-            for (i = h / 2, j = h - i, ph = faceRef[1], pi = faceRef[0], pj = pi + h / 2; h; h--) {
-                if (i && (!j || (QCmpFaces(pi->pFace, pj->pFace) <= 0))) {
-                    *ph++ = *pi++;
-                    i--;
-                } else if (j) {
-                    *ph++ = *pj++;
-                    j--;
-                }
-            }
-        } else
-            QSortFaces(0, h - 1);
-    }
-    return tiRender.nFaces;
-}
-
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -545,10 +438,8 @@ int16_t RenderFaceList(CFaceListIndex &flx, int32_t nType, int32_t bHeadlight) {
     int32_t i, j, nFaces = 0, nSegment = -1;
     int32_t bAutomap = (nType == RENDER_TYPE_GEOMETRY);
 
-#if 1
     if (automap.Active())
         flx.usedKeys.SortAscending(0, flx.nUsedKeys - 1);
-#endif
     for (i = 0; i < flx.nUsedKeys; i++) {
         for (j = flx.roots[flx.usedKeys[i]]; j >= 0; j = fliP[j].nNextItem) {
             pFace = fliP[j].pFace;
@@ -798,13 +689,11 @@ static int16_t RenderFogFaces(int16_t nSegment, int32_t nFogType, int32_t nMode)
                 }
             }
         }
-#if 1
         else {
             ogl.SetCullMode(GL_FRONT);
             DrawFace(pFace);
             ogl.SetCullMode(GL_BACK);
         }
-#endif
     }
     RETVAL(nFaces)
 }
@@ -845,7 +734,6 @@ void InitFogVolumeShader(void) {
 //------------------------------------------------------------------------------
 
 void RenderFogSegments(void) {
-#if 1
     memset(gameStates.render.bHaveFog, 0, sizeof(gameStates.render.bHaveFog));
     if (ogl.m_features.bDepthBlending < 0)
         return;
@@ -878,7 +766,6 @@ void RenderFogSegments(void) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
         if (gameData.segData.nFogSegments[nFogType]) {
-#if 1
             for (int32_t nMode = 0; nMode < 2; nMode++) {
                 if (nMode) {
                     if (nFogType & 1) {
@@ -904,7 +791,6 @@ void RenderFogSegments(void) {
                     RenderFogFaces(pSegList[--i], nFogType + 1, nMode);
                 glColorMask(1, 1, 1, 1);
             }
-#endif
         }
     }
     ogl.SetDepthTest(true);
@@ -914,7 +800,6 @@ void RenderFogSegments(void) {
     glBlendEquation(GL_FUNC_ADD);
     shaderManager.Deploy(-1);
     ogl.ChooseDrawBuffer();
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -976,7 +861,7 @@ int32_t SetupDepthBuffer(int32_t nType) {
     BeginRenderFaces(RENDER_TYPE_GEOMETRY);
     RenderSegments(nType, 0);
     EndRenderFaces();
-    RETVAL(SortFaces())
+    RETVAL(0)
 }
 
 //------------------------------------------------------------------------------

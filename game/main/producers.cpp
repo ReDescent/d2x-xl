@@ -881,26 +881,8 @@ int32_t CSegment::CheckFlagDrop(int32_t nTeamId, int32_t nFlagId, int32_t nGoalI
 void CSegment::CheckForGoal(void) {
     Assert(gameData.appData.GameMode(GM_CAPTURE));
 
-#if 1
     CheckFlagDrop(TEAM_BLUE, POW_REDFLAG, SEGMENT_FUNC_GOAL_BLUE);
     CheckFlagDrop(TEAM_RED, POW_BLUEFLAG, SEGMENT_FUNC_GOAL_RED);
-#else
-    if (!(LOCALPLAYER.flags & PLAYER_FLAGS_FLAG))
-        return;
-    if (pSeg->m_function == SEGMENT_FUNC_GOAL_BLUE) {
-        if (GetTeam(N_LOCALPLAYER) == TEAM_BLUE) && FlagAtHome (POW_BLUEFLAG)) {
-                MultiSendCaptureBonus(N_LOCALPLAYER);
-        LOCALPLAYER.flags &= (~(PLAYER_FLAGS_FLAG);
-		MaybeDropNetPowerup (-1, POW_REDFLAG, FORCE_DROP);
-            }
-    } else if (pSeg->m_function == SEGMENT_FUNC_GOAL_RED) {
-        if (GetTeam(N_LOCALPLAYER) == TEAM_RED) && FlagAtHome (POW_REDFLAG)) {
-                MultiSendCaptureBonus(N_LOCALPLAYER);
-        LOCALPLAYER.flags &= (~(PLAYER_FLAGS_FLAG);
-		MaybeDropNetPowerup (-1, POW_BLUEFLAG, FORCE_DROP);
-            }
-    }
-#endif
 }
 
 //--------------------------------------------------------------------

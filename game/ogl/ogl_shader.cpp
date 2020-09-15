@@ -40,8 +40,6 @@
 
 //------------------------------------------------------------------------------
 
-#if 1
-
 const char *progVS[] = {
     "void TexMergeVS ();"
     "void main (void) {TexMergeVS ();}",
@@ -62,8 +60,6 @@ const char *progFS[] = {
 
 GLhandleARB mainVS = 0;
 GLhandleARB mainFS = 0;
-
-#endif
 
 CShaderManager shaderManager;
 

@@ -64,11 +64,7 @@ void DefaultRenderSettings(bool bSetup = false);
 
 //------------------------------------------------------------------------------
 
-#if 1 // DBG
-static int32_t fpsTable[] = {-1, 0, 10, 20, 30, 60, 120}; // 40, 50, 60, 70, 80, 90, 100, 125, 150, 200, 250};
-#else
-static int32_t fpsTable[] = {0, 60};
-#endif
+static int32_t fpsTable[] = {-1, 0, 10, 20, 30, 60, 120, 144, 240};
 
 static const char *pszRendQual[4];
 static const char *pszRendStyle[2];
@@ -344,7 +340,6 @@ int32_t RenderOptionsCallback(CMenu &menu, int32_t &key, int32_t nCurItem, int32
                 m->m_bRebuild = -1;
             }
         }
-#if 1 // DBG
         if ((m = menu["FOV"])) {
             v = m->Value();
             if (gameOpts->render.stereo.nRiftFOV != v) {
@@ -353,7 +348,6 @@ int32_t RenderOptionsCallback(CMenu &menu, int32_t &key, int32_t nCurItem, int32
                 m->m_bRebuild = -1;
             }
         }
-#endif
         if ((m = menu["anaglyph color"])) {
             v = m->Value();
             if (nAnaglyphColor != v) {
@@ -845,7 +839,6 @@ void RenderOptionsMenu(void) {
 
             if (EXPERTMODE && stereoDeviceMap[nStereoDevice]) {
                 if (stereoDeviceMap[nStereoDevice] == GLASSES_OCULUS_RIFT) {
-#if 1 // DBG
                     sprintf(szSlider + 1, TXT_RIFT_FOV, pszFOV[gameOpts->render.stereo.nRiftFOV]);
                     *szSlider = *(TXT_RIFT_FOV - 1);
                     m.AddSlider(
@@ -857,7 +850,6 @@ void RenderOptionsMenu(void) {
                         KEY_F,
                         HTX_STEREO_FOV
                     );
-#endif
                     m.AddCheck(
                         "chromAbCorr",
                         TXT_CHROM_AB_CORR,

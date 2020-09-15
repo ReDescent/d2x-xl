@@ -961,11 +961,6 @@ void CControlsManager::DoTrackIR(void) {
     float fDeadzone, fScale;
 
     if (gameOpts->input.trackIR.nMode == 0) {
-#if 1
-#else
-        dx = (int32_t)tirInfo.fvRot.z * (gameOpts->input.trackIR.sensitivity[0] + 1);
-        dy = (int32_t)tirInfo.fvRot.y * (gameOpts->input.trackIR.sensitivity[1] + 1);
-#endif
         x = gameData.trackIR.x;
         y = gameData.trackIR.y;
         if (abs(dx - x) > gameOpts->input.trackIR.nDeadzone * 4) {

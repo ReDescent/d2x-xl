@@ -561,12 +561,9 @@ void CNetworkThread::Start(void) {
 void CNetworkThread::Stop(void) {
     if (m_thread) {
         m_bRunning = false;
-#if 1
         int nStatus;
         SDL_WaitThread(m_thread, &nStatus);
-#else
-        SDL_KillThread(m_thread);
-#endif
+
         m_thread = NULL;
         m_rxPacketQueue.Destroy();
         m_txPacketQueue.Destroy();
@@ -963,12 +960,7 @@ void CNetworkThread::SendLifeSign(bool bImmediately) {
                 if (nPlayer == N_LOCALPLAYER)
                     continue;
                 if (PLAYER(nPlayer).Connected(CONNECT_END_MENU) || PLAYER(nPlayer).Connected(CONNECT_ADVANCE_LEVEL)) {
-#if 1
                     NetworkSendEndLevelPacket();
-#else
-                    pingStats[nPlayer].launchTime = -1;
-                    NetworkSendPing(nPlayer);
-#endif
                 } else if (bDownloading || bImmediately) {
                     pingStats[nPlayer].launchTime = -1;
                     NetworkSendPing(nPlayer);

@@ -66,11 +66,7 @@ int32_t PixelTranspType(int16_t nTexture, int16_t nOrient, int16_t nFrame, fix u
             RETVAL(0)
         p = pBm->Buffer() + offs * pBm->BPP();
         // check super transparency color
-#if 1
         if ((p[0] == 120) && (p[1] == 88) && (p[2] == 128))
-#else
-        if ((gameOpts->ogl.bGlTexMerge) ? (p[3] == 1) : ((p[0] == 120) && (p[1] == 88) && (p[2] == 128)))
-#endif
             RETVAL(-1)
         // check alpha
         if (!p[3])
@@ -127,14 +123,15 @@ int32_t CanSeePoint(
     int16_t nSegment,
     fix xRad,
     float fov,
-    int32_t nThread) {
+    int32_t nThread
+) {
     ENTER(2, nThread);
     CHitQuery hitQuery(FQ_TRANSWALL | FQ_VISIBILITY, pvSource, pvDest, -1, pObj ? pObj->Index() : -1, 1, xRad);
     CHitResult hitResult;
-#if 1
+
     if (!hitQuery.InFoV(pObj, fov))
         RETVAL(0)
-#endif
+
     hitQuery.nSegment = FindSegByPos(OBJPOS(pObj)->vPos, pObj->info.nSegment, 1, 0);
     int32_t nHitType = FindHitpoint(hitQuery, hitResult, 0, nThread);
     RETVAL(nHitType != HIT_WALL)

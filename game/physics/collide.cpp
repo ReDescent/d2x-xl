@@ -388,82 +388,14 @@ BumpTwoObjects(CObject *pThis, CObject *pOther, int32_t bDamage, CFixVector &vHi
                 f0.m_mass *= nMonsterballPyroForce;
         }
 
-#if 1
         f0.Compute(vDist, vNormal, pOther);
         vDist.Neg();
         f1.Compute(vDist, vNormal, pThis);
-#else
-        CFixVector vDistNorm, vVelNorm;
-
-        if (f0.m_vVel.IsZero())
-            f0.m_vForce.SetZero(), f0.m_vRotForce.SetZero();
-        else {
-            if (vNormal && pOther->IsStatic())
-                vDistNorm = *vNormal;
-            else {
-                vDistNorm = vDist;
-                CFixVector::Normalize(vDistNorm);
-            }
-            vVelNorm = f0.m_vVel;
-            fix mag = CFixVector::Normalize(vVelNorm);
-            fix dot = CFixVector::Dot(
-                vVelNorm,
-                vDistNorm); // angle between objects movement vector and vector to other object
-            if (dot < 0) // moving parallel to or away from other object
-                f0.m_vForce.SetZero(), f0.m_vRotForce.SetZero();
-            else {
-                if (dot > I2X(1))
-                    dot = I2X(1);
-                f0.m_vForce = vDistNorm * FixMul(dot, mag); // scale objects movement vector with the angle to calculate
-                                                            // the impulse on the other object
-                f0.m_vRotForce = vVelNorm * FixMul(I2X(1) - dot, mag);
-                f0.m_vVel -= f0.m_vForce;
-            }
-        }
-
-        if (f1.m_vVel.IsZero())
-            f1.m_vForce.SetZero(), f1.m_vRotForce.SetZero();
-        else {
-            if (vNormal && pThis->IsStatic())
-                vDistNorm = *vNormal;
-            else {
-                vDistNorm = vDist;
-                CFixVector::Normalize(vDistNorm);
-            }
-            vDistNorm.Neg();
-            vVelNorm = f1.m_vVel;
-            fix mag = CFixVector::Normalize(vVelNorm);
-            fix dot = CFixVector::Dot(vVelNorm, vDistNorm);
-            if (dot < 0)
-                f1.m_vForce.SetZero(), f1.m_vRotForce.SetZero();
-            else {
-                if (dot > I2X(1))
-                    dot = I2X(1);
-                f1.m_vForce = vDistNorm * FixMul(dot, mag);
-                f1.m_vRotForce = vVelNorm * FixMul(I2X(1) - dot, mag);
-                f1.m_vVel -= f1.m_vForce;
-            }
-        }
-#endif
 
         fix massSum = f0.m_mass + f1.m_mass, massDiff = f0.m_mass - f1.m_mass;
 
-#if 1
         f0.Bump(f1, massSum, massDiff, bDamage);
         f1.Bump(f0, massSum, -massDiff, bDamage);
-#else
-        CFixVector vRes0 = (f0.m_vForce * massDiff + f1.m_vForce * (2 * f1.m_mass)) / massSum;
-        CFixVector vRes1 = (f1.m_vForce * -massDiff + f0.m_vForce * (2 * f0.m_mass)) / massSum;
-        // don't divide by the total mass here or ApplyRotForce() will scale down the forces too much
-        CFixVector vRot0 = (f0.m_vRotForce * massDiff + f1.m_vRotForce * (2 * f1.m_mass)) /*/ massSum*/;
-        CFixVector vRot1 = (f1.m_vRotForce * -massDiff + f0.m_vRotForce * (2 * f0.m_mass)) /*/ massSum*/;
-        if (pThis->info.nType == OBJ_PLAYER)
-            vRes0 *= (I2X(1) / 4);
-        else if (pOther->info.nType == OBJ_PLAYER)
-            vRes1 *= (I2X(1) / 4);
-        pThis->Bump(pOther, f0.m_vVel + vRes0, vRot0, bDamage);
-        pOther->Bump(pThis, f1.m_vVel + vRes1, vRot1, bDamage);
-#endif
     } else {
         CFixVector vForce = f0.m_vVel - f1.m_vVel;
         float mass0 = X2F(pThis->mType.physInfo.mass);

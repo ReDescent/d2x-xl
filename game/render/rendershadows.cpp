@@ -61,11 +61,9 @@ void RenderShadowQuad(void) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-#if 1
+
     glOrtho(0, 1, 1, 0, 0, 1);
-#else
-    glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
-#endif
+
     ogl.SetTexturing(false);
     ogl.SetDepthTest(false);
     ogl.SetStencilTest(true);
@@ -104,12 +102,12 @@ void RenderFastShadows(fix xStereoSeparation, int32_t nWindow, int16_t nStartSeg
 
     gameStates.render.nShadowPass = 3;
     ogl.StartFrame(0, 0, xStereoSeparation);
-#if 1
+
     if (glowRenderer.Available(BLUR_SHADOW)) {
         gameStates.render.nShadowBlurPass = 1;
         glowRenderer.Begin(BLUR_SHADOW, 2 /*gameOpts->render.ShadowQuality ()*/, true, 1.0f);
     }
-#endif
+
     RenderShadowQuad();
     if (gameStates.render.nShadowBlurPass) {
         glowRenderer.End();
@@ -131,13 +129,13 @@ void RenderNeatShadows(fix xStereoSeparation, int32_t nWindow, int16_t nStartSeg
             continue;
         gameData.renderData.shadows.pLight = pLight;
         pLight->render.bExclusive = 1;
-#if 1
+
         gameStates.render.nShadowPass = 2;
         ogl.StartFrame(0, 0, xStereoSeparation);
         memcpy(&gameData.renderData.shadows.vLightPos, pLight->render.vPosf + 1, sizeof(CFloatVector));
         gameData.renderData.shadows.nFrame = !gameData.renderData.shadows.nFrame;
         RenderMine(nStartSeg, xStereoSeparation, nWindow);
-#endif
+
         gameStates.render.nShadowPass = 3;
         ogl.StartFrame(0, 0, xStereoSeparation);
         gameData.renderData.shadows.nFrame = !gameData.renderData.shadows.nFrame;
@@ -166,11 +164,7 @@ void CreateShadowTexture(void) {
         shadowBuf.PrepareTexture(0, 0, NULL);
         bHaveShadowBuf = 1;
     }
-#if 1
     glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, CCanvas::Current()->Width(), CCanvas::Current()->Height(), 0);
-#else
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 128, 128);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -201,12 +195,7 @@ void RenderShadowTexture(void) {
     glOrtho(0, 1, 1, 0, 0, 1);
     ogl.SetDepthTest(false);
     ogl.SetDepthWrite(false);
-#if 1
     ogl.SetBlending(false);
-#else
-    ogl.SetBlending(true);
-    SetBlendMode(OGL_BLEND_ALPHA);
-#endif
     ogl.SetTexturing(true);
     ogl.SelectTMU(GL_TEXTURE0);
     shadowBuf.SetTranspType(0);
@@ -288,7 +277,6 @@ void ApplyShadowMaps(int16_t nStartSeg, fix xStereoSeparation, int32_t nWindow) 
     int32_t i;
     CCamera *pCamera;
 
-#if 1
     ogl.SelectTMU(GL_TEXTURE0);
     ogl.SetTexturing(true);
 
@@ -315,9 +303,9 @@ void ApplyShadowMaps(int16_t nStartSeg, fix xStereoSeparation, int32_t nWindow) 
         glMultMatrixf(mModelView.m.vec);
     }
     glMatrixMode(GL_MODELVIEW);
-#endif
+
     RenderMine(nStartSeg, xStereoSeparation, nWindow);
-#if 1
+
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
@@ -327,7 +315,6 @@ void ApplyShadowMaps(int16_t nStartSeg, fix xStereoSeparation, int32_t nWindow) 
     glDisable(GL_TEXTURE_GEN_Q);
     ogl.SelectTMU(GL_TEXTURE0);
     ogl.SetTexturing(false);
-#endif
 }
 
 #endif

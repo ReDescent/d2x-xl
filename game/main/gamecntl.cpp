@@ -200,43 +200,7 @@ int32_t DoGamePause(void) {
         pszToken = strtok(NULL, "\n");
     }
 
-#if 1
-
     key = m.Menu(NULL, "PAUSE");
-
-#else
-
-    int32_t bScreenChanged;
-
-    SetPopupScreenMode();
-    if (!gameOpts->menus.nStyle) {
-        gameStates.menus.nInMenu++;
-        GameRenderFrame();
-        gameStates.menus.nInMenu--;
-    }
-    messageBox.Show(pszPauseMsg = szPauseMsg, false);
-    GrabMouse(0, 0);
-    while (gameData.appData.bGamePaused) {
-        if (!(gameOpts->menus.nStyle && gameStates.app.bGameRunning))
-            key = KeyGetChar();
-        else {
-            gameStates.menus.nInMenu++;
-            while (!(key = KeyInKey())) {
-                GameRenderFrame();
-                messageBox.Render();
-                G3_SLEEP(1);
-            }
-            gameStates.menus.nInMenu--;
-        }
-        bScreenChanged = HandleSystemKey(key);
-        if (bScreenChanged) {
-            GameRenderFrame();
-            messageBox.Render();
-        }
-    }
-    messageBox.Clear();
-
-#endif
 
     GrabMouse(1, 0);
     ResumeGame();

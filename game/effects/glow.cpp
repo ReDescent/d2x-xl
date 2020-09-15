@@ -16,8 +16,6 @@ CGlowRenderer glowRenderer;
 
 //------------------------------------------------------------------------------
 
-#if 1
-
 int32_t hBlurShader = -1;
 
 #define DISCRETE_SAMPLING 1
@@ -70,59 +68,6 @@ const char *blurFS = "uniform sampler2D glowSource;\r\n"
                      "tc += texture2D (glowSource, uv - v).rgb * 0.0162162162;\r\n"
                      "gl_FragColor = vec4 (tc, 1.0) * brightness;\r\n"
                      "}\r\n";
-
-#endif
-
-#else
-
-int32_t hBlurShader[2] = {-1, -1};
-
-const char *blurFS[2] = {
-    "uniform sampler2D glowSource;\r\n"
-    "uniform float scale; // render target width/height\r\n"
-    "uniform float brightness; // render target width/height\r\n"
-    "float offset[5] = float[](0.0, 1.0, 2.0, 3.0, 4.0);\r\n"
-    "float weight[5] = float[](0.18, 0.15, 0.12, 0.09, 0.05);\r\n"
-    "void main() {\r\n"
-    "vec2 uv = gl_TexCoord[0].xy;\r\n"
-    "vec3 tc = texture2D(glowSource, uv).rgb * weight[0];\r\n"
-    "vec2 v = vec2 (0.0, offset[1]*scale);\r\n"
-    "tc += texture2D(glowSource, uv + v).rgb * weight[1];\r\n"
-    "tc += texture2D(glowSource, uv - v).rgb * weight[1];\r\n"
-    "v = vec2 (0.0, offset[2]*scale);\r\n"
-    "tc += texture2D(glowSource, uv + v).rgb * weight[2];\r\n"
-    "tc += texture2D(glowSource, uv - v).rgb * weight[2];\r\n"
-    "v = vec2 (0.0, offset[3]*scale);\r\n"
-    "tc += texture2D(glowSource, uv + v).rgb * weight[3];\r\n"
-    "tc += texture2D(glowSource, uv - v).rgb * weight[3];\r\n"
-    "v = vec2 (0.0, offset[4]*scale);\r\n"
-    "tc += texture2D(glowSource, uv + v).rgb * weight[4];\r\n"
-    "tc += texture2D(glowSource, uv - v).rgb * weight[4];\r\n"
-    "gl_FragColor = vec4(tc, 1.0) * brightness;\r\n"
-    "}\r\n",
-    "uniform sampler2D glowSource;\r\n"
-    "uniform float scale; // render target width/height\r\n"
-    "uniform float brightness; // render target width/height\r\n"
-    "float offset[5] = float[](0.0, 1.0, 2.0, 3.0, 4.0);\r\n"
-    "float weight[5] = float[](0.18, 0.15, 0.12, 0.09, 0.05);\r\n"
-    "void main() {\r\n"
-    "vec2 uv = gl_TexCoord[0].xy;\r\n"
-    "vec3 tc = texture2D(glowSource, uv).rgb * weight[0];\r\n"
-    "vec2 v = vec2 (offset[1]*scale, 0.0);\r\n"
-    "tc += texture2D(glowSource, uv + v).rgb * weight[1];\r\n"
-    "tc += texture2D(glowSource, uv - v).rgb * weight[1];\r\n"
-    "v = vec2 (offset[2]*scale, 0.0);\r\n"
-    "tc += texture2D(glowSource, uv + v).rgb * weight[2];\r\n"
-    "tc += texture2D(glowSource, uv - v).rgb * weight[2];\r\n"
-    "v = vec2 (offset[3]*scale, 0.0);\r\n"
-    "tc += texture2D(glowSource, uv + v).rgb * weight[3];\r\n"
-    "tc += texture2D(glowSource, uv - v).rgb * weight[3];\r\n"
-    "v = vec2 (offset[4]*scale, 0.0);\r\n"
-    "tc += texture2D(glowSource, uv + v).rgb * weight[4];\r\n"
-    "tc += texture2D(glowSource, uv - v).rgb * weight[4];\r\n"
-    "gl_FragColor = vec4(tc, 1.0) * brightness;\r\n"
-    "}\r\n"
-};
 
 #endif
 
@@ -666,10 +611,8 @@ bool CGlowRenderer::End(float fAlpha) {
             (m_nType >= BLUR_OUTLINE) ? OGL_BLEND_MULTIPLY : (fAlpha < 1.0f) ? OGL_BLEND_ALPHA : OGL_BLEND_ADD);
         glColor4f(1.0f, 1.0f, 1.0f, fAlpha);
         Render(1, -1, radius); // Glow -> back buffer
-#if 1
         if (!m_bReplace)
             Render(-1, -1, radius); // render the unblurred stuff on top of the blur
-#endif
 #else
         ogl.SetBlendMode(
             (m_nType > BLUR_OUTLINE) ? OGL_BLEND_MULTIPLY : (fAlpha < 1.0f) ? OGL_BLEND_ALPHA : OGL_BLEND_ADD);

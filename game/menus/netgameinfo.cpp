@@ -48,10 +48,8 @@ extern CNetworkAddress ipx_MyAddress;
 
 //------------------------------------------------------------------------------
 
-#if 1
 extern CNetGameInfo activeNetGames[];
 extern tExtraGameInfo activeExtraGameInfo[];
-#endif
 
 char szHighlight[] = {1, (char)255, (char)192, (char)128, 0};
 
@@ -289,11 +287,7 @@ char *XMLPlayerInfo(char *xmlGameInfo) {
             PLAYER(i).score,
             PLAYER(i).netKillsTotal,
             PLAYER(i).netKilledTotal,
-#if 1
             CountryFromIP(ip));
-#else
-            CountryFromIP(*((uint32_t *)NETPLAYER(N_LOCALPLAYER).network.Node())));
-#endif
     }
     strcat(xmlGameInfo, "  </PlayerInfo>\n");
     return xmlGameInfo;

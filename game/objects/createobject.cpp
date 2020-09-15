@@ -325,7 +325,6 @@ int32_t CreateObject(
     pObj->StopSync();
 
     memset(&pObj->HitInfo(), 0, sizeof(CObjHitInfo));
-#if 1
     if (IsMultiGame && IsCoopGame && (nType == OBJ_WEAPON) && CObject::IsMissile(int16_t(nId)) && pCreator &&
         (pCreator->info.nType == OBJ_PLAYER)) {
         extern char powerupToObject[MAX_POWERUP_TYPES];
@@ -335,7 +334,6 @@ int32_t CreateObject(
                 gameData.multiplayer.maxPowerupsAllowed[i]--;
         }
     }
-#endif
     pObj->ResetDamage();
     pObj->SetTarget(NULL);
     RETVAL(nObject)
@@ -584,7 +582,6 @@ int32_t CreatePowerup(
         RETVAL(-1)
     }
     if (!bIgnoreLimits && TooManyPowerups((int32_t)nId)) {
-#if 1 // DBG
         PrintLog(
             0,
             "Deleting excess powerup %d (in mine: %d, on ships: %d, max: %d)\n",
@@ -596,7 +593,6 @@ int32_t CreatePowerup(
         HUDInitMessage("%c%c%c%cDiscarding excess %s!", 1, 127 + 128, 64 + 128, 128, pszPowerup[nId]);
 #endif
         TooManyPowerups(nId);
-#endif
         RETVAL(-2)
     }
     if (gameStates.gameplay.bMineMineCheat && !bForce && (CObject::IsEquipment(nId) < 2))

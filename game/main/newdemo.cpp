@@ -2911,12 +2911,7 @@ void NDInterpolateFrame(fix d_play, fix d_recorded) {
     if (factor > I2X(1))
         factor = I2X(1);
     nCurObjs = gameData.objData.nLastObject[0];
-#if 1
     memcpy(curObjs, OBJECTS.Buffer(), OBJECTS.Size());
-#else
-    for (i = 0; i <= nCurObjs; i++)
-        memcpy(&(curObjs[i]), OBJECT(i), sizeof(CObject));
-#endif
     gameData.demoData.nVcrState = ND_STATE_PAUSED;
     if (NDReadFrameInfo() == -1) {
         NDStopPlayback();

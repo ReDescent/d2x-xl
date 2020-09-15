@@ -39,9 +39,7 @@ typedef struct tTexture {
 
 class CTexture {
     private:
-#if 1
     uint32_t m_nRegistered;
-#endif
     tTexture m_info;
 
     public:

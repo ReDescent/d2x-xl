@@ -387,21 +387,12 @@ bool CTexture::IsBound(void) { return m_info.handle && (m_info.handle == ogl.Bou
 
 int32_t CTexture::BindRenderBuffer(void) {
 #if RENDER2TEXTURE == 1
-#if 1
     ogl.BindTexture(m_info.pbuffer.texId);
-#if 1
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR /*GL_LINEAR_MIPMAP_LINEAR*/);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-#else
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-#endif
     ogl.BindTexture(m_info.pbuffer.texId);
-#endif
 #ifdef _WIN32
 #if DBG
     if (!m_info.pbo.Bind()) {
@@ -478,14 +469,12 @@ restart:
     GLubyte *pBuffer = ogl.m_data.buffer[0];
     CRGBColor *pColor;
     int32_t transparencyColor, superTranspColor;
-#if 1
     if (pBm) {
         pColor = pBm->Palette()->Color();
         transparencyColor = pBm->Palette()->TransparentColor();
         superTranspColor = pBm->Palette()->SuperTranspColor();
-    } else
-#endif
-    {
+    }
+    else {
         pColor = paletteManager.Texture()->Color();
         transparencyColor = paletteManager.Texture()->TransparentColor();
         superTranspColor = paletteManager.Texture()->SuperTranspColor();
@@ -1096,13 +1085,11 @@ int32_t CBitmap::LoadTexture(int32_t dxo, int32_t dyo, int32_t superTransp) {
     m_info.pTexture->Prepare();
 #endif
 
-#if 1 // DBG
     if (strstr(m_info.szName, "targ"))
         BRP;
     if (strstr(m_info.szName, "door"))
         BRP;
-#endif
-        // if (width!=twidth || height!=theight)
+
 #if RENDER2TEXTURE
     if (!m_info.pTexture->IsRenderBuffer())
 #endif

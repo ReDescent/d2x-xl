@@ -888,11 +888,9 @@ void CFaceListIndex::Destroy(bool bRebuild) {
 //------------------------------------------------------------------------------
 
 void CFaceListIndex::Init(void) {
-#if 1
     roots.Clear(0xff);
     tails.Clear(0xff);
     usedKeys.Clear(0);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -2177,16 +2175,7 @@ void DefaultCoronaSettings(void) {
     gameOptions[0].render.coronas.bWeapons = 0;
     gameOptions[0].render.coronas.bAdditive = 1;
     gameOptions[0].render.coronas.bAdditiveObjs = 1;
-#if 1
     gameOptions[0].render.coronas.nIntensity = 1;
-#else
-    if (gameOptions[0].render.coronas.nStyle == 2)
-        gameOptions[0].render.coronas.nIntensity = 1;
-    else if (gameOptions[0].render.coronas.nStyle == 1)
-        gameOptions[0].render.coronas.nIntensity = 1;
-    else
-        gameOptions[0].render.coronas.nIntensity = 1;
-#endif
     gameOptions[0].render.coronas.nObjIntensity = 1;
 }
 

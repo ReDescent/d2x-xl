@@ -697,20 +697,12 @@ int32_t CObject::ProcessWallCollision(CPhysSimData &simData) {
             if (info.nType == OBJ_PLAYER)
                 xWallPart *= 2; // CPlayerData bounce twice as much
         }
-#if 1
         if (mType.physInfo.flags & PF_BOUNCES_TWICE) {
             if (mType.physInfo.flags & PF_BOUNCED_ONCE)
                 mType.physInfo.flags &= ~(PF_BOUNCES | PF_BOUNCED_ONCE | PF_BOUNCES_TWICE);
             else
                 mType.physInfo.flags |= PF_BOUNCED_ONCE;
         }
-#else
-        if (mType.physInfo.flags & PF_BOUNCES_TWICE) {
-            mType.physInfo.flags &= ~PF_BOUNCES_TWICE;
-            mType.physInfo.flags |= PF_BOUNCED_ONCE;
-        } else if (mType.physInfo.flags & PF_BOUNCES)
-            mType.physInfo.flags &= ~(PF_BOUNCES | PF_BOUNCED_ONCE);
-#endif
         simData.bBounced = 1; // this CObject simData.bBounced
         Velocity() /*simData.velocity*/ -= simData.hitResult.vNormal * xWallPart;
     } else {
@@ -789,9 +781,7 @@ int32_t CObject::ProcessObjectCollision(CPhysSimData &simData) {
     CFixVector vOldVel = Velocity() /*simData.velocity*/;
     if (!pHitObj->IsPowerup() && (CollisionModel() || pHitObj->IsStatic())) {
         CollideTwoObjects(this, pHitObj, simData.hitResult.vPoint, &simData.hitResult.vNormal);
-#if 1 // unstick objects
         UnstickFromObject(simData, vOldVel);
-#endif
     } else {
         CFixVector &pos0 = pHitObj->info.position.vPos;
         CFixVector &pos1 = info.position.vPos;
@@ -1098,25 +1088,21 @@ void CObject::DoPhysicsSim(void) {
 #if UNSTICK_OBJS
         Unstick();
 #endif
-        if (IsWeapon()) { // actually this indicates a bug, but a workaround is needed. Alternatively, the weapon object
-                          // could (and probably should) be killed
-#if 1
+        if (IsWeapon()) {
+            /*
+             * NOTE: actually this indicates a bug, but a workaround is needed.
+             * Alternatively, the weapon object could (and probably should) be killed
+             */
             CreateWeaponSpeed(this, true);
             if (Velocity().IsZero()) {
                 Die();
                 RETURN
             }
-#else
-            Die();
-            RETURN
-#endif
         } else {
             if (this == gameData.objData.pConsole)
                 gameData.objData.speedBoost[simData.nObject].bBoosted = (simData.bSpeedBoost = 0);
-#if 1
             if (mType.physInfo.thrust.IsZero())
                 RETURN
-#endif
         }
     }
     PROF_END(ptPhysics)
@@ -1452,10 +1438,9 @@ void CObject::DoPhysicsSimOld(void) {
 #endif
         if (this == gameData.objData.pConsole)
             gameData.objData.speedBoost[simData.nObject].bBoosted = (simData.speedBoost.bBoosted = 0);
-#if 1
+
         if (mType.physInfo.thrust.IsZero())
             RETURN
-#endif
     }
 
 #if DBG

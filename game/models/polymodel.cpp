@@ -675,27 +675,7 @@ int32_t CPolyModel::LoadTextures(tBitmapIndex *altTextures) {
 //------------------------------------------------------------------------------
 
 void CSubModelData::Create(void) {
-#if 1
     memset(this, 0, sizeof(*this));
-#else
-    ptrs.Create(MAX_SUBMODELS);
-    offsets.Create(MAX_SUBMODELS);
-    norms.Create(MAX_SUBMODELS);
-    pnts.Create(MAX_SUBMODELS);
-    rads.Create(MAX_SUBMODELS);
-    parents.Create(MAX_SUBMODELS);
-    mins.Create(MAX_SUBMODELS);
-    maxs.Create(MAX_SUBMODELS);
-
-    ptrs.Clear();
-    offsets.Clear();
-    norms.Clear();
-    pnts.Clear();
-    rads.Clear();
-    parents.Clear();
-    mins.Clear();
-    maxs.Clear();
-#endif
 }
 
 //------------------------------------------------------------------------------

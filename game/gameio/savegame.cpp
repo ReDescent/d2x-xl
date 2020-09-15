@@ -672,10 +672,10 @@ void CSaveGameManager::SavePlayer(CPlayerData *pPlayer) {
         m_cf.WriteShort((int16_t)pPlayer->primaryAmmo[i]); // How much ammo of each nType.
     for (i = 0; i < MAX_SECONDARY_WEAPONS; i++)
         m_cf.WriteShort((int16_t)pPlayer->secondaryAmmo[i]); // How much ammo of each nType.
-#if 1 // for inventory system
+
     m_cf.WriteByte((int8_t)pPlayer->nInvuls);
     m_cf.WriteByte((int8_t)pPlayer->nCloaks);
-#endif
+
     m_cf.WriteInt(pPlayer->lastScore); // Score at beginning of current level.
     m_cf.WriteInt(pPlayer->score); // Current score.
     m_cf.WriteFix(pPlayer->timeLevel); // Level time played
@@ -1469,10 +1469,10 @@ void CSaveGameManager::LoadPlayer(CPlayerData *pPlayer) {
         pPlayer->primaryAmmo[i] = (uint16_t)m_cf.ReadShort(); // How much ammo of each nType.
     for (i = 0; i < MAX_SECONDARY_WEAPONS; i++)
         pPlayer->secondaryAmmo[i] = (uint16_t)m_cf.ReadShort(); // How much ammo of each nType.
-#if 1 // for inventory system
+
     pPlayer->nInvuls = (uint8_t)m_cf.ReadByte();
     pPlayer->nCloaks = (uint8_t)m_cf.ReadByte();
-#endif
+
     pPlayer->lastScore = m_cf.ReadInt(); // Score at beginning of current level.
     pPlayer->score = m_cf.ReadInt(); // Current score.
     pPlayer->timeLevel = m_cf.ReadFix(); // Level time played
@@ -1620,14 +1620,12 @@ int32_t CSaveGameManager::LoadUniFormat(int32_t bMulti, fix xOldGameTime, int32_
         return 0;
     }
 
-#if 1
     if (m_nVersion >= 39) {
         if (gameData.segData.nSegments > gameData.segData.nMaxSegments) {
             Warning(TXT_MAX_SEGS_WARNING, gameData.segData.nSegments);
             return 0;
         }
     }
-#endif
 
     nLocalObjNum = LOCALPLAYER.nObject;
     if (m_bSecret != 1) // either no secret restore, or player died in scret level
@@ -1777,30 +1775,13 @@ int32_t CSaveGameManager::LoadUniFormat(int32_t bMulti, fix xOldGameTime, int32_
                 OBJTRIGGERS[i].LoadState(m_cf, true);
             if (m_nVersion < 51) {
                 for (i = 0; i < gameData.trigData.m_nTriggers[1]; i++) {
-#if 1
                     m_cf.Seek(2 * sizeof(int16_t), SEEK_CUR);
                     OBJTRIGGERS[i].m_info.nObject = m_cf.ReadShort();
-#else
-                    CSaveGameManager::LoadObjTriggerRef(gameData.trigData.objTriggerRefs + i);
-#endif
                 }
                 if (m_nVersion < 36) {
-#if 1
                     m_cf.Seek(((m_nVersion < 35) ? 700 : MAX_OBJECTS_D2X) * sizeof(int16_t), SEEK_CUR);
-#else
-                    j = (m_nVersion < 35) ? 700 : MAX_OBJECTS_D2X;
-                    for (i = 0; i < j; i++)
-                        m_cf.ReadShort();
-#endif
                 } else {
-#if 1
                     m_cf.Seek(m_cf.ReadShort() * 2 * sizeof(int16_t), SEEK_CUR);
-#else
-                    for (i = m_cf.ReadShort(); i; i--) {
-                        m_cf.ReadShort();
-                        m_cf.ReadShort();
-                    }
-#endif
                 }
             }
             BuildObjTriggerRef();

@@ -32,7 +32,6 @@
 //------------------------------------------------------------------------------
 
 void CPaletteManager::RenderEffect(void) {
-#if 1
     if (m_data.nSuspended)
         return;
     UpdateEffect();
@@ -49,7 +48,6 @@ void CPaletteManager::RenderEffect(void) {
     ogl.RenderScreenQuad();
     ogl.SetDepthTest(bDepthTest);
     ogl.SetBlendMode(OGL_BLEND_ALPHA);
-#endif
 }
 
 //------------------------------------------------------------------------------

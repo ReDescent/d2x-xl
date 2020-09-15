@@ -297,7 +297,7 @@ int32_t CTGA::ReadData(CFile &cf, int32_t alpha, double brightness, int32_t bGra
     m_pBm->SetTranspType(-1);
     memset(m_pBm->TransparentFrames(), 0, 4 * sizeof(int32_t));
     memset(m_pBm->SuperTranspFrames(), 0, 4 * sizeof(int32_t));
-#if 1
+
     if (bReverse)
         m_pBm->Read(cf);
     else {
@@ -310,156 +310,6 @@ int32_t CTGA::ReadData(CFile &cf, int32_t alpha, double brightness, int32_t bGra
         }
     }
     SetProperties(alpha, bGrayScale, brightness, bReverse == 0);
-#else
-    int32_t i, j, n, nAlpha = 0, nVisible = 0, nFrames;
-    int32_t h = m_pBm->Height();
-    int32_t w = m_pBm->Width();
-    CFloatVector3 avgColor;
-    CRGBColor avgColorb;
-    float vec, avgAlpha = 0;
-
-    avgColor.Red() = avgColor.Green() = avgColor.Blue() = 0;
-    m_pBm->DelFlags(BM_FLAG_SEE_THRU | BM_FLAG_TRANSPARENT | BM_FLAG_SUPER_TRANSPARENT);
-    if (m_header.Bits() == 24) {
-        tBGRA coord;
-        CRGBColor *p = reinterpret_cast<CRGBColor *>(m_pBm->Buffer()) + w * (h - 1);
-
-        for (i = h; i; i--) {
-            for (j = w; j; j--, p++) {
-                if (cf.Read(&coord, 1, 3) != (size_t)3)
-                    return 0;
-                if (bGrayScale) {
-                    p->Red() = p->Green() = p->Blue() =
-                        (uint8_t)(((int32_t)coord.r + (int32_t)coord.g + (int32_t)coord.b) / 3 * brightness);
-                } else {
-                    p->Red() = (uint8_t)(coord.r * brightness);
-                    p->Green() = (uint8_t)(coord.g * brightness);
-                    p->Blue() = (uint8_t)(coord.b * brightness);
-                }
-                avgColor.Red() += p->Red();
-                avgColor.Green() += p->Green();
-                avgColor.Blue() += p->Blue();
-                // p->Alpha () = (alpha < 0) ? 255 : alpha;
-            }
-            p -= 2 * w;
-            nVisible = w * h * 255;
-        }
-    } else {
-        m_pBm->AddFlags(BM_FLAG_SEE_THRU | BM_FLAG_TRANSPARENT);
-        if (bReverse) {
-            tRGBA coord;
-            CRGBAColor *p = reinterpret_cast<CRGBAColor *>(m_pBm->Buffer());
-            int32_t nSuperTransp;
-
-            nFrames = h / w - 1;
-            for (i = 0; i < h; i++) {
-                n = nFrames - i / w;
-                nSuperTransp = 0;
-                for (j = w; j; j--, p++) {
-                    if (cf.Read(&coord, 1, 4) != (size_t)4)
-                        return 0;
-                    if (bGrayScale) {
-                        p->Red() = p->Green() = p->Blue() =
-                            (uint8_t)(((int32_t)coord.r + (int32_t)coord.g + (int32_t)coord.b) / 3 * brightness);
-                    } else if (coord.vec) {
-                        p->Red() = (uint8_t)(coord.r * brightness);
-                        p->Green() = (uint8_t)(coord.g * brightness);
-                        p->Blue() = (uint8_t)(coord.b * brightness);
-                    }
-                    if ((coord.r == 120) && (coord.g == 88) && (coord.b == 128)) {
-                        nSuperTransp++;
-                        p->Alpha() = 0;
-                    } else {
-                        p->Alpha() = (alpha < 0) ? coord.vec : alpha;
-                        if (!p->Alpha())
-                            p->Red() = // avoid colored transparent areas interfering with visible image edges
-                                p->Green() = p->Blue() = 0;
-                    }
-                    if (p->Alpha() < MIN_OPACITY) {
-                        if (!n) {
-                            m_pBm->AddFlags(BM_FLAG_TRANSPARENT);
-                            if (p->Alpha())
-                                m_pBm->DelFlags(BM_FLAG_SEE_THRU);
-                        }
-                        if (pBm)
-                            m_pBm->TransparentFrames()[n / 32] |= (1 << (n % 32));
-                        avgAlpha += p->Alpha();
-                        nAlpha++;
-                    }
-                    nVisible += p->Alpha();
-                    vec = (float)p->Alpha() / 255;
-                    avgColor.Red() += p->Red() * vec;
-                    avgColor.Green() += p->Green() * vec;
-                    avgColor.Blue() += p->Blue() * vec;
-                }
-                if (nSuperTransp > 50) {
-                    if (!n)
-                        m_pBm->AddFlags(BM_FLAG_SUPER_TRANSPARENT);
-                    m_pBm->SuperTranspFrames()[n / 32] |= (1 << (n % 32));
-                }
-            }
-        } else {
-            tBGRA coord;
-            CRGBAColor *p = reinterpret_cast<CRGBAColor *>(m_pBm->Buffer()) + w * (h - 1);
-            int32_t nSuperTransp;
-
-            nFrames = h / w - 1;
-            for (i = 0; i < h; i++) {
-                n = nFrames - i / w;
-                nSuperTransp = 0;
-                for (j = w; j; j--, p++) {
-                    if (cf.Read(&coord, 1, 4) != (size_t)4)
-                        return 0;
-                    if (bGrayScale) {
-                        p->Red() = p->Green() = p->Blue() =
-                            (uint8_t)(((int32_t)coord.r + (int32_t)coord.g + (int32_t)coord.b) / 3 * brightness);
-                    } else {
-                        p->Red() = (uint8_t)(coord.r * brightness);
-                        p->Green() = (uint8_t)(coord.g * brightness);
-                        p->Blue() = (uint8_t)(coord.b * brightness);
-                    }
-                    if ((coord.r == 120) && (coord.g == 88) && (coord.b == 128)) {
-                        nSuperTransp++;
-                        p->Alpha() = 0;
-                    } else {
-                        p->Alpha() = (alpha < 0) ? coord.vec : alpha;
-                        if (!p->Alpha())
-                            p->Red() = // avoid colored transparent areas interfering with visible image edges
-                                p->Green() = p->Blue() = 0;
-                    }
-                    if (p->Alpha() < MIN_OPACITY) {
-                        if (!n) {
-                            m_pBm->AddFlags(BM_FLAG_TRANSPARENT);
-                            if (p->Alpha())
-                                m_pBm->DelFlags(BM_FLAG_SEE_THRU);
-                        }
-                        m_pBm->TransparentFrames()[n / 32] |= (1 << (n % 32));
-                        avgAlpha += p->Alpha();
-                        nAlpha++;
-                    }
-                    nVisible += p->Alpha();
-                    vec = (float)p->Alpha() / 255;
-                    avgColor.Red() += p->Red() * vec;
-                    avgColor.Green() += p->Green() * vec;
-                    avgColor.Blue() += p->Blue() * vec;
-                }
-                if (nSuperTransp > w * w / 2000) {
-                    if (!n)
-                        m_pBm->AddFlags(BM_FLAG_SUPER_TRANSPARENT);
-                    m_pBm->SuperTranspFrames()[n / 32] |= (1 << (n % 32));
-                }
-                p -= 2 * w;
-            }
-        }
-    }
-    vec = (float)nVisible / 255.0f;
-    avgColorb.Red() = (uint8_t)(avgColor.Red() / vec);
-    avgColorb.Green() = (uint8_t)(avgColor.Green() / vec);
-    avgColorb.Blue() = (uint8_t)(avgColor.Blue() / vec);
-    m_pBm->SetAvgColor(avgColorb);
-    if (!nAlpha)
-        ConvertToRGB(pBm);
-#endif
     return 1;
 }
 
@@ -553,19 +403,10 @@ CTGA::ReadImage(const char *pszFile, const char *pszFolder, int32_t alpha, doubl
     int32_t l = int32_t(strlen(szFolder));
     if (l && ((szFolder[l - 1] == '/') || (szFolder[l - 1] == '\\')))
         szFolder[l - 1] = '\0';
-#if 1
+
     sprintf(szImage, "%s/%s.png", szFolder, szFile);
     if (!m_cf.Exist(szImage, NULL, 0)) {
         return 0;
-#else
-    sprintf(szImage, "%s/%s%s", szFolder, szFile, *szExt ? szExt : ".png");
-    if (!m_cf.Exist(szImage, NULL, 0)) {
-        if (*szExt)
-            return 0;
-        sprintf(szImage, "%s/%s%s", szFolder, szFile, *szExt ? szExt : ".tga");
-        if (!m_cf.Exist(szImage, NULL, 0))
-            return 0;
-#endif
     }
 
     SDL_Surface *pImage;
@@ -888,7 +729,6 @@ int32_t CTGA::Interpolate(int32_t nScale) {
         pDest += nFrameSize * nScale;
         srcP1 += nFrameSize;
     }
-#if 1
     while (nScale > 1) {
         nStride = nFrameSize * nScale;
         for (i = 0; i < nFrames; i++) {
@@ -904,7 +744,6 @@ int32_t CTGA::Interpolate(int32_t nScale) {
         nScale >>= 1;
         nFrames <<= 1;
     }
-#endif
     m_pBm->DestroyBuffer();
     m_pBm->SetBuffer(pBuffer);
     return nFrames;

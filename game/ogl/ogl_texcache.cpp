@@ -167,7 +167,6 @@ int32_t OglCacheTextures(void) {
 //------------------------------------------------------------------------------
 
 static void CacheAddonTextures(void) {
-#if 1
     if (!gameStates.app.bNostalgia) {
         for (int32_t i = 0; i < MAX_ADDON_BITMAP_FILES; i++) {
             PageInAddonBitmap(-i - 1);
@@ -180,8 +179,6 @@ static void CacheAddonTextures(void) {
         }
         CAddonBitmap::Prepare();
     }
-
-#endif
 }
 
 //------------------------------------------------------------------------------

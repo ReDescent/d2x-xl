@@ -233,9 +233,7 @@ int32_t NetworkSelectPlayers(int32_t bAutoRun) {
         NETPLAYER(i).versionMinor = 0;
         NETPLAYER(i).rank = 0;
     }
-#if 1
     console.printf(CON_DBG, "Select teams: Game mode is %d\n", netGameInfo.m_info.gameMode);
-#endif
     if (netGameInfo.m_info.gameMode == NETGAME_TEAM_ANARCHY || netGameInfo.m_info.gameMode == NETGAME_CAPTURE_FLAG ||
         netGameInfo.m_info.gameMode == NETGAME_TEAM_HOARD || netGameInfo.m_info.gameMode == NETGAME_ENTROPY ||
         netGameInfo.m_info.gameMode == NETGAME_MONSTERBALL)

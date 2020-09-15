@@ -42,17 +42,10 @@
 #define ONLY_HEADLIGHT 0
 #endif
 
-#if 1
 #define GEO_LIN_ATT (gameData.renderData.fAttScale[0])
 #define GEO_QUAD_ATT (gameData.renderData.fAttScale[1])
 #define OBJ_LIN_ATT (gameData.renderData.fAttScale[0])
 #define OBJ_QUAD_ATT (gameData.renderData.fAttScale[1])
-#else
-#define GEO_LIN_ATT (gameData.renderData.fAttScale[0] * 0.5f)
-#define GEO_QUAD_ATT (gameData.renderData.fAttScale[1] * 0.5f)
-#define OBJ_LIN_ATT (gameData.renderData.fAttScale[0] * 0.5f)
-#define OBJ_QUAD_ATT (gameData.renderData.fAttScale[1] * 0.5f)
-#endif
 
 #define ATTENUATION_TYPE 0
 #define MAX_LIGHT_DIST float(MAX_LIGHT_RANGE)
@@ -325,11 +318,7 @@ int32_t ComputeVertexColor(
     nSelf = 0;
     bSelf = 0;
     for (j = 0; (i > 0) && (nLights > 0); pActiveLights++, i--) {
-#if 1
         if (!(pLight = pActiveLights->pLight))
-#else
-        if (!(pLight = GetActiveRenderLight(pActiveLights, nThread)))
-#endif
             continue;
         nLights--;
 #if DBG
@@ -461,33 +450,17 @@ int32_t ComputeVertexColor(
             if (fLightDist > float(MAX_LIGHT_DIST))
                 continue;
 #if ATTENUATION_TYPE == 0
-#if 1
             fAttenuation = 1.0f + GEO_LIN_ATT * fLightDist + GEO_QUAD_ATT * fLightDist * fLightDist;
-#else
-            if (gameStates.render.bBuildLightmaps)
-                fAttenuation = 1.0f + GEO_LIN_ATT * 2.0f * fLightDist + GEO_QUAD_ATT * 2.0f * fLightDist * fLightDist;
-            else
-                fAttenuation = 1.0f + GEO_LIN_ATT * fLightDist + GEO_QUAD_ATT * fLightDist * fLightDist;
-#endif
 #elif ATTENUATION_TYPE == 1
-#if 1 // DBG
-#if 1
             float a = /*sqrt*/ (1.0f - 1.0f / pow(1.0f + fLightDist, 0.5f));
-#else
-            float a = pow(fLightDist / float(MAX_LIGHT_DIST), 0.25f);
-#endif
             a *= float(PI);
             float c = (1.0f + cos(a)) * 0.5f;
             float l = fLightDist * (1.0f - c);
-#else
-            float l = fLightDist * (1.0f - (1.0f + cos((1.0f - 1.0f / (1.0f + sqrt(fLightDist))) * float(PI)) * 0.5f));
-#endif
             fAttenuation = 1.0f + GEO_LIN_ATT * l + GEO_QUAD_ATT * l * l;
 #elif ATTENUATION_TYPE == 2
             fAttenuation = fLightDist / float(MAX_LIGHT_DIST);
             fAttenuation = 1.0f / (1.0f - fAttenuation * fAttenuation);
 #else
-#if 1 // DBG
             fLightDist *= 1.0f - (1.0f + cos(fLightDist / float(MAX_LIGHT_DIST))) * 0.5f;
             fAttenuation = 1.0f + GEO_LIN_ATT * fLightDist + GEO_QUAD_ATT * fLightDist * fLightDist;
             fAttenuation = pow(fLightDist / float(MAX_LIGHT_DIST), 0.0625f);
@@ -495,9 +468,6 @@ int32_t ComputeVertexColor(
             fAttenuation = cos(fAttenuation);
             fAttenuation += 1.0f;
             fAttenuation *= 0.5f;
-#else
-            fAttenuation = (1.0f + cos(pow(fLightDist / float(MAX_LIGHT_DIST), 0.125f) * float(PI))) * 0.5f;
-#endif
             fAttenuation = 1.0f / fAttenuation;
 #endif
         }
@@ -526,7 +496,6 @@ int32_t ComputeVertexColor(
                 if (NdotL < -0.01f)
                     NdotL = 0.0f;
                 else {
-#if 1
                     // increase brightness for nearby points regardless of the angle between the light direction and the
                     // point's normal to prevent big faces with small light textures on them being much brighter than
                     // their adjacent faces because D2X-XL will in such cases consider the entire face to be emitting
@@ -535,11 +504,9 @@ int32_t ComputeVertexColor(
                         NdotL = 1.0f;
                     else
                         NdotL += (1.0f - NdotL) / fLightDist;
-#endif
                     vertColor += (*gameData.renderData.vertColor.matDiffuse.XYZ() * /*sqrt*/ (NdotL));
                 }
             }
-#if 1
             if (bSpecular && bDiffuse && (NdotL > 0.0f) && (fLightDist > 0.0f)) {
                 if (!pLight->info.bSpot) // need direction from light to vertex now
                     lightRayDir.Neg();
@@ -554,33 +521,12 @@ int32_t ComputeVertexColor(
                     vertColor += (lightColor * (float)pow(RdotE, colorData.fMatShininess));
                 }
             }
-#endif
         }
 
         vertColor *= lightColor;
         vertColor /= fAttenuation;
 
-#if 1
         colorSum[bSelf] += vertColor;
-#else
-        if ((nSaturation < 2) || gameStates.render.bHaveLightmaps) // sum up color components
-            colorSum += vertColor;
-        else { // use max. color components
-            int32_t nBrightness = sqri((int32_t)(vertColor.Red() * 1000)) + sqri((int32_t)(vertColor.Green() * 1000)) +
-                                  sqri((int32_t)(vertColor.Blue() * 1000));
-            if (nMaxBrightness < nBrightness) {
-                nMaxBrightness = nBrightness;
-                colorSum = vertColor;
-            } else if (nMaxBrightness == nBrightness) {
-                if (colorSum.Red() < vertColor.Red())
-                    colorSum.Red() = vertColor.Red();
-                if (colorSum.Green() < vertColor.Green())
-                    colorSum.Green() = vertColor.Green();
-                if (colorSum.Blue() < vertColor.Blue())
-                    colorSum.Blue() = vertColor.Blue();
-            }
-        }
-#endif
         j++;
     }
 
@@ -671,7 +617,8 @@ void GetVertexColor(
         fScale *= gameStates.render.bHeadlightOn ? 0.4f : 0.3f;
     if (fScale > 1)
         fScale = 1;
-#if 1 //! DBG //cache light values per frame
+
+    //cache light values per frame
     if (!(gameStates.render.nState || colorData.bExclusive || colorData.bMatEmissive) && (nVertex >= 0)) {
         pColor = gameData.renderData.color.vertices + nVertex;
         if (pColor->index == gameStates.render.nFrameFlipFlop + 1) {
@@ -696,7 +643,7 @@ void GetVertexColor(
             return;
         }
     }
-#endif
+
 #if DBG
     if (!gameStates.render.nState && (nVertex == nDbgVertex))
         BRP;

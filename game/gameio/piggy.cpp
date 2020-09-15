@@ -371,9 +371,7 @@ void PiggyInitPigFile(char *filename) {
 int32_t ReadHamFile(int32_t nType) // 0: default, 1: level, 2: mod
 {
     CFile cf;
-#if 1
     char szD1PigFileName[FILENAME_LEN];
-#endif
     int32_t nHAMId;
     int32_t nSoundOffset = 0;
     char szFile[FILENAME_LEN];
@@ -486,11 +484,10 @@ int32_t PiggyInit(void) {
         bSoundOk = LoadD2Sounds();
         PrintLog(-1);
     }
-// if (gameStates.app.bFixModels)
-#if 1 //! DBG
+
     gameStates.app.bAltModels = gameStates.app.bFixModels =
         gameStates.app.bDemoData ? 0 : LoadRobotReplacements("d2x-xl", NULL, 0, 1) > 0;
-#endif
+
     LoadTextureBrightness("descent2", gameData.pigData.tex.defaultBrightness[0].Buffer());
     LoadTextureBrightness("descent", gameData.pigData.tex.defaultBrightness[1].Buffer());
     LoadTextureColors("descent2", gameData.renderData.color.defaultTextures[0].Buffer());
@@ -580,43 +577,8 @@ int32_t PiggyBitmapReadD1(
 
     cf.Seek(nBmDataOffs + bmh->offset, SEEK_SET);
 
-#if 1
-
     if (ReadBitmap(&cf, pBm, pBm->FrameSize(), 1) < 0)
         return 0;
-
-#else
-
-    int32_t zSize;
-
-    if (bmh->flags & BM_FLAG_RLE)
-        zSize = cf.ReadInt() - 4;
-    else
-        zSize = pBm->Width() * pBm->Width();
-
-    if (pNextBmP) {
-        pBm->SetBuffer(*pNextBmP);
-        *pNextBmP += zSize;
-    } else {
-        if (pBm->CreateBuffer())
-            UseBitmapCache(pBm, (int32_t)pBm->FrameSize());
-        else
-            return 0;
-    }
-    pBm->Read(cf, zSize);
-    int32_t bSwapTranspColor = 0;
-    switch (cf.Length()) {
-    case D1_MAC_PIGSIZE:
-    case D1_MAC_SHARE_PIGSIZE:
-        if (bmh->flags & BM_FLAG_RLE)
-            bSwapTranspColor = 1;
-        else
-            pBm->SwapTransparencyColor();
-    }
-    if (bmh->flags & BM_FLAG_RLE)
-        pBm->RLEExpand(NULL, bSwapTranspColor);
-
-#endif
 
     pBm->SetPalette(paletteManager.D1(), TRANSPARENCY_COLOR, -1);
     return 1;

@@ -138,13 +138,11 @@ void CStatusBar::DrawAddedScore(void) {
         SetFontScale(floor(float(CCanvas::Current()->Width()) / 640.0f));
         nIdTotalScore = DrawHUDText(&nIdTotalScore, x, SB_SCORE_ADDED_Y, szScore);
     }
-#if 1
     else {
         // erase old score
         cockpit->SetScoreTime(0);
         cockpit->SetAddedScore(0, 0);
     }
-#endif
 }
 
 // -----------------------------------------------------------------------------

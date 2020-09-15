@@ -187,7 +187,6 @@ int16_t CDialHeap::RouteLength(int16_t nNode) {
 
     int16_t h = nNode, i = 1;
 
-#if 1
     for (; i; i++) {
         h = m_pred[h];
         if (h >= m_nNodes) {
@@ -199,10 +198,6 @@ int16_t CDialHeap::RouteLength(int16_t nNode) {
         if (h < 0)
             RETVAL(i);
     }
-#else
-    while (0 <= (h = m_pred[h]))
-        i++;
-#endif
     RETVAL(i)
 }
 

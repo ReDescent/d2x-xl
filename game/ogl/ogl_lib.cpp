@@ -215,7 +215,6 @@ int32_t CircleListInit(int32_t nSides, int32_t nType, int32_t mode) {
 void G3Normal(CRenderPoint **pointList, CFixVector *pvNormal) {
     CFixVector vNormal;
 
-#if 1
     if (pvNormal) {
         if (ogl.UseTransform())
             glNormal3f(
@@ -230,7 +229,6 @@ void G3Normal(CRenderPoint **pointList, CFixVector *pvNormal) {
                 (GLfloat)X2F(vNormal.v.coord.z));
         }
     } else
-#endif
     {
         uint16_t v[4], vSorted[4];
 
@@ -449,18 +447,11 @@ void COGL::SetupProjection(CTransformation &transformation) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity(); // clear matrix
     float aspectRatio = IsOculusRift() ? 0.8f : 1.0f;
-#if 1
-#if 1 // DBG
+
     gameStates.render.glFOV = IsOculusRift() ? gameData.renderData.rift.m_fov + gameOpts->render.stereo.nRiftFOV * 5
                                              : gameStates.render.nShadowMap ? 90.0 : 105.0;
-#else
-    gameStates.render.glFOV =
-        IsOculusRift() ? gameData.renderData.rift.m_fov : gameStates.render.nShadowMap ? 90.0 : 105.0;
-#endif
     ZFAR = gameStates.render.nShadowMap ? 400.0f : 5000.0f;
-#else
-    gameStates.render.glFOV = 180.0;
-#endif
+
     if (!StereoSeparation())
         gluPerspective(
             gameStates.render.glFOV * X2D(transformation.m_info.zoom),
@@ -487,13 +478,8 @@ void COGL::SetupProjection(CTransformation &transformation) {
     m_data.depthScale.v.coord.x = float(ZFAR / (ZFAR - ZNEAR));
     m_data.depthScale.v.coord.y = float(ZNEAR * ZFAR / (ZNEAR - ZFAR));
     m_data.depthScale.v.coord.z = float(ZFAR - ZNEAR);
-#if 1
     m_data.windowScale.dim.x = 1.0f / float(gameData.renderData.screen.Width());
     m_data.windowScale.dim.y = 1.0f / float(gameData.renderData.screen.Height());
-#else
-    m_data.windowScale.dim.x = 1.0f / float(CCanvas::Current()->Width());
-    m_data.windowScale.dim.y = 1.0f / float(CCanvas::Current()->Height());
-#endif
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     transformation.SetupProjection(aspectRatio);
     glMatrixMode(GL_MODELVIEW);
@@ -720,10 +706,8 @@ void COGL::StartFrame(int32_t bFlat, int32_t bResetColorBuf, fix xStereoSeparati
             glFrontFace(GL_CW); // Weird, huh? Well, D2 renders everything reverse ...
 #if MAX_SHADOWMAPS > 0
             if (gameStates.render.nShadowMap) {
-#if 1
                 ogl.SetPolyOffsetFill(true);
                 glPolygonOffset(1.0f, 2.0f);
-#endif
                 SetCullMode((gameStates.render.bRearView < 0) ? GL_BACK : GL_FRONT);
             } else
 #endif
@@ -743,11 +727,8 @@ void COGL::StartFrame(int32_t bFlat, int32_t bResetColorBuf, fix xStereoSeparati
 //------------------------------------------------------------------------------
 
 void COGL::EndFrame(int32_t nWindow) {
-// SetViewport (0, 0, gameData.renderData.screen.Width (), gameData.renderData.screen.Height ());
-#if 1
     if ((nWindow == 0) && (ogl.StereoSeparation() <= 0))
         postProcessManager.Update();
-#endif
 
     CCanvas::Current()->Deactivate();
     if ((nWindow >= 0) && !(gameStates.render.cameras.bActive || gameStates.render.bBriefing)) {

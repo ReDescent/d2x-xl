@@ -571,10 +571,10 @@ int32_t LoadExitModels(void) {
         return 0;
     }
     atexit(FreeObjExtensionBitmaps);
-#if 1
+
     OglCachePolyModelTextures(gameData.endLevelData.exit.nModel);
     OglCachePolyModelTextures(gameData.endLevelData.exit.nDestroyedModel);
-#endif
+
     return 1;
 }
 

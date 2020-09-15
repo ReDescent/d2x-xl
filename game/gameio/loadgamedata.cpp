@@ -2826,10 +2826,9 @@ typedef struct tD1SoundHeader {
 
 void BMReadGameDataD1(CFile &cf) {
     int32_t h, i, j;
-#if 1
     tTexMapInfoD1 t; // only needed for sizeof term below
     // D1Robot_info	r;
-#endif
+
     tWallEffect *pw;
     tTexMapInfo *pt;
     tRobotInfo *pr;

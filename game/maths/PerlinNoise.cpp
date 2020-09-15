@@ -96,12 +96,9 @@ double CPerlinNoise::SmoothedNoise(double x, double y) {
 //------------------------------------------------------------------------------
 
 double CPerlinNoise::InterpolatedNoise(double x, double y) {
-#if 1
     int32_t xInt = FastFloor(x), yInt = FastFloor(y);
     double xFrac = x - xInt, yFrac = y - yInt;
-#else
-    double xInt, yInt, xFrac = modf(x, &xInt), yFrac = modf(x, &yInt);
-#endif
+
     double v1 = SmoothedNoise(xInt, yInt);
     double v2 = SmoothedNoise(xInt + 1, yInt);
     double v3 = SmoothedNoise(xInt, yInt + 1);

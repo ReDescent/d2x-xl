@@ -309,19 +309,9 @@ void BEReceiveNetGamePacket(uint8_t *data, CNetGameInfo *netGame, int32_t bLiteD
     for (i = 0; i < MAX_NUM_NET_PLAYERS; i++) {
         BE_GET_INT(*netGame->Locations(i));
     }
-#if 1
     for (i = MAX_NUM_NET_PLAYERS * MAX_NUM_NET_PLAYERS, ps = netGame->Kills(); i; i--, ps++) {
         BE_GET_SHORT(*ps);
     }
-#else
-    {
-        int32_t j;
-        for (i = 0; i < MAX_NUM_NET_PLAYERS; i++)
-            for (j = 0; j < MAX_NUM_NET_PLAYERS; j++) {
-                BE_GET_SHORT(netGame->Kills(i, j));
-            }
-    }
-#endif
     netGame->SetSegmentCheckSum(BEGetShort(nmBufI));
     BE_GET_SHORT(*netGame->TeamKills(0));
     BE_GET_SHORT(*netGame->TeamKills(1));

@@ -49,12 +49,8 @@ void TraceCallStack(
 void PrintCallStack(void);
 void Int3();
 
-#if 1 // DBG
-
 extern int16_t nDbgSeg, nDbgSide, nDbgFace, nDbgObj, nDbgObjType, nDbgObjId, nDbgModel, nDbgSound, nDbgChannel;
 extern int32_t nDbgVertex, nDbgBaseTex, nDbgOvlTex, nDbgTexture, nDbgLight;
-
-#endif
 
 #define TrapSeg (int16_t nSegment)
 #define TrapSegSide (int16_t nSegment, int16_t nSide)

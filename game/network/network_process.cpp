@@ -76,9 +76,7 @@ void NetworkProcessGameInfo(uint8_t *data) {
     Assert(pPlayerInfo != NULL);
     int32_t i = FindActiveNetGame(newGame.m_info.szGameName, newGame.m_info.nSecurity);
     if (i == MAX_ACTIVE_NETGAMES) {
-#if 1
         console.printf(CON_DBG, "Too many netgames.\n");
-#endif
         return;
     }
     if (i == networkData.nActiveGames) {
@@ -242,9 +240,7 @@ void NetworkProcessMineData(uint8_t *data, int32_t len) {
     Assert(data[0] == PID_MINE_DATA);
 
     if (nPlayer < 0) {
-#if 1
         console.printf(CON_DBG, "Naked packet is bad!\n");
-#endif
         Int3(); // This packet is bogus!!
         return;
     }
@@ -275,14 +271,13 @@ void NetworkProcessNamesReturn(uint8_t *data) {
 
     memset(mText, 0, sizeof(mText));
     if (networkData.nNamesInfoSecurity != *reinterpret_cast<int32_t *>(data + 1)) {
-#if 1
         console.printf(CON_DBG, "Bad security on names return!\n");
         console.printf(
             CON_DBG,
             "NIS=%d data=%d\n",
             networkData.nNamesInfoSecurity,
-            *reinterpret_cast<int32_t *>(data + 1));
-#endif
+            *reinterpret_cast<int32_t *>(data + 1)
+        );
         return;
     }
     nPlayers = data[count++];

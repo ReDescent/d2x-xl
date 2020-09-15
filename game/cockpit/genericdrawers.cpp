@@ -52,40 +52,13 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 // -----------------------------------------------------------------------------
 
 int32_t CGenericCockpit::AdjustCockpitY(int32_t y) {
-#if 1
     return y;
-#else
-    int32_t h = CCanvas::Current()->Height() / 2;
-    int32_t fh = fontManager.Current()->Height() + 1;
-    int32_t l = (y - h) / fh - 3 * h / fh / 4;
-    return h + l * fh;
-#endif
 }
 
 // -----------------------------------------------------------------------------
 
 int32_t CGenericCockpit::AdjustCockpitXY(char *s, int32_t &x, int32_t &y) {
-#if 1
     return gameData.renderData.nStereoOffsetType;
-#else
-    int32_t h;
-
-    if (m_info.bAdjustCoords && ogl.IsOculusRift()) {
-        h = CCanvas::Current()->Width() / 2;
-        if (x >= h)
-            x = h + 15;
-        else {
-            int32_t sw, sh, aw;
-            fontManager.Current()->StringSize(s, sw, sh, aw);
-            x = h - sw - 15;
-        }
-        y = AdjustCockpitY(y);
-        h = gameData.SetStereoOffsetType(STEREO_OFFSET_FIXED);
-    } else
-        h = gameData.renderData.nStereoOffsetType;
-    m_info.bAdjustCoords = false;
-    return h;
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -1227,11 +1200,7 @@ void CGenericCockpit::DrawModuleDamage(void) {
         ScaleUp();
         for (i = 0; i < 3; i++) {
             nDamage[i] = (int32_t)FRound(X2F(m_info.nDamage[i]) * 200.0f);
-#if 1
             sprintf(szDamage[i], "%d ", nDamage[i]);
-#else
-            sprintf(szDamage[i], "%c:%d ", szId[i], nDamage[i]);
-#endif
         }
         x[0] = gameData.renderData.scene.Width() / 2 - ScaleX(X_GAUGE_OFFSET(0)) - StringWidth(szDamage[0]);
         x[1] = gameData.renderData.scene.Width() / 2 - StringWidth(szDamage[1]) / 2;

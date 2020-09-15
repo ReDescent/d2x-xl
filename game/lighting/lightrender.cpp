@@ -237,9 +237,9 @@ void CLightManager::SetNearestToVertex(
                 if (!bStatic)
                     continue;
             }
-#if 1
             CSegment *pLightSeg = SEGMENT(pLight->info.nSegment);
-            if (!pLight->Contribute(
+            if (
+                !pLight->Contribute(
                     nSegment,
                     nSide,
                     nVertex,
@@ -248,25 +248,11 @@ void CLightManager::SetNearestToVertex(
                     xMaxLightRange,
                     1.0f,
                     pLightSeg ? -pLightSeg->AvgRad() : 0,
-                    nThread))
+                    nThread
+                )
+            ) {
                 continue;
-#else
-            CFixVector vLightToVertex = vVertex - pLight->info.vPos;
-            fix xLightDist = CFixVector::Normalize(vLightToVertex.Mag());
-            if ((pLight->info.bDiffuse[nThread] = gameData.segData.LightVis(pLight->Index(), nSegment) &&
-                                                  pLight->SeesPoint(vNormal, &vLightToVertex)) ||
-                (nSegment < 0))
-                pLight->render.xDistance[nThread] = fix(xLightDist / pLight->info.fRange);
-            else if (nSegment >= 0) {
-                pLight->render.xDistance[nThread] = pLight->LightPathLength(nSegment, vVertex);
-                if (pLight->render.xDistance[nThread] < 0)
-                    continue;
             }
-            if (pLight->info.nSegment >= 0)
-                pLight->render.xDistance[nThread] -= SEGMENT(pLight->info.nSegment)->AvgRad();
-            if (pLight->render.xDistance[nThread] > xMaxLightRange)
-                continue;
-#endif
             if (SetActive(pActiveLights, pLight, 2, nThread)) {
                 pLight->render.nType = nType;
                 // pLight->render.bState = 1;
@@ -419,7 +405,6 @@ CLightManager::SetNearestToSegment(int32_t nSegment, int32_t nFace, int32_t bVar
                     BRP;
 #endif
             }
-#if 1
             if (!pLight->Contribute(
                     nSegment,
                     -1,
@@ -431,31 +416,6 @@ CLightManager::SetNearestToSegment(int32_t nSegment, int32_t nFace, int32_t bVar
                     0,
                     nThread))
                 continue;
-#else
-            int16_t nLightSeg = pLight->info.nSegment;
-            if (nLightSeg >= 0)
-                pLight->info.bDiffuse[nThread] = (pLight->info.nSide >= 0)
-                                                     ? gameData.segData.LightVis(pLight->Index(), nSegment)
-                                                     : gameData.segData.SegVis(pLight->info.nSegment, nSegment);
-            else if (
-                (pLight->info.nObject >= 0) &&
-                ((pLight->info.nSegment = OBJECT(pLight->info.nObject)->info.nSegment) >= 0))
-                pLight->info.bDiffuse[nThread] = gameData.segData.SegVis(pLight->info.nSegment, nSegment);
-            else
-                continue;
-            pLight->render.xDistance[nThread] = (fix)(
-                (float)CFixVector::Dist(vDestPos, pLight->info.vPos) /
-                (pLight->info.fRange * Max(pLight->info.fRad, 1.0f)));
-            if (pLight->render.xDistance[nThread] > xMaxLightRange)
-                continue;
-            if (pLight->info.bDiffuse[nThread])
-                pLight->info.bDiffuse[nThread] = pLight->SeesPoint(&vDestPos, NULL);
-            if (!pLight->info.bDiffuse[nThread]) {
-                pLight->render.xDistance[nThread] = pLight->LightPathLength(nSegment, vDestPos);
-                if (pLight->render.xDistance[nThread] > xMaxLightRange)
-                    continue;
-            }
-#endif
 #if DBG
             if (SetActive(pActiveLights, pLight, 1, nThread)) {
                 if ((nSegment == nDbgSeg) && (nDbgObj >= 0) && (pLight->info.nObject == nDbgObj))
@@ -534,7 +494,6 @@ int16_t CLightManager::SetNearestToPixel(
                 continue;
             if ((bForce = (pLight->info.nSegment == nSegment) && (pLight->info.nSide == nSide)))
                 pLight->info.bDiffuse[nThread] = 1;
-#if 1
             else if (!pLight->Contribute(
                          nSegment,
                          nSide,
@@ -546,27 +505,6 @@ int16_t CLightManager::SetNearestToPixel(
                          0,
                          nThread))
                 continue;
-#else
-            else {
-                pLight->info.bDiffuse[nThread] = gameData.segData.LightVis(pLight->Index(), nSegment);
-                CFixVector vLightToPixel = *vPixelPos - pLight->info.vPos;
-                fix xLightDist = CFixVector::Normalize(vLightToPixel);
-                pLight->render.xDistance[nThread] = (fix)(float(xLightDist) / pLight->info.fRange);
-                if (pLight->render.xDistance[nThread] > xMaxLightRange)
-                    continue;
-                if (pLight->info.bDiffuse[nThread]) {
-                    vLightToPixel /= xLightDist;
-                    pLight->info.bDiffuse[nThread] = pLight->SeesPoint(nSegment, nSide, &vLightToPixel);
-                }
-                if (!pLight->info.bDiffuse[nThread]) {
-                    pLight->render.xDistance[nThread] =
-                        pLight
-                            ->LightPathLength(pLight->info.nSegment, nSegment, *vPixelPos, xMaxLightRange, 1, nThread);
-                    if ((pLight->render.xDistance[nThread] < 0) || (pLight->render.xDistance[nThread] > xMaxLightRange))
-                        continue;
-                }
-            }
-#endif
 #if DBG
             if (pLight->info.bDiffuse[nThread]) {
                 BRP;
@@ -596,12 +534,10 @@ int32_t CLightManager::SetNearestToSgmAvg(int16_t nSegment, int32_t nThread) {
     lightManager
         .SetNearestToSegment(nSegment, -1, 0, 0, nThread); // only get light emitting objects here (variable geometry
                                                            // lights are caught in lightManager.SetNearestToVertex ())
-#if 1
     for (int32_t i = 0; i < 8; i++) {
         if (pSeg->m_vertices[i] != 0xFFFF)
             lightManager.SetNearestToVertex(-1, -1, pSeg->m_vertices[i], NULL, 0, 1, 1, 0);
     }
-#endif
     RETVAL(m_data.index[0][0].nActive);
 }
 

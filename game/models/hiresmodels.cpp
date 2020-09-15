@@ -338,7 +338,6 @@ int16_t LoadHiresModel(int16_t nModel, int32_t bCustom, const char *filename) {
             PrintLog(-1);
         return j;
     }
-#if 1
     if (bCustom && (j = LoadOOFModel(
                         gameData.modelData.oofModels[bCustom != 0] + gameData.modelData.nHiresModels,
                         nModel,
@@ -347,7 +346,6 @@ int16_t LoadHiresModel(int16_t nModel, int32_t bCustom, const char *filename) {
             PrintLog(-1);
         return j;
     }
-#endif
     if (bLog)
         PrintLog(-1);
     return bCustom ? ++nModel : LoadLoresModel(nModel);

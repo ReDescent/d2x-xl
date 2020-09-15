@@ -121,7 +121,6 @@ static int32_t FindLinePlaneIntersection(
     CFixVector *p1,
     fix rad
 ) {
-#if 1
     CFloatVector n, u, w;
 
     u.Assign(*p1 - *p0);
@@ -145,20 +144,6 @@ static int32_t FindLinePlaneIntersection(
     u *= s;
     intersection.Assign(u);
     intersection += *p0;
-#else
-    CFixVector d = *p1 - *p0;
-    double den = double(CFixVector::Dot(*vNormal, d)) / 65536.0;
-    if (fabs(den) < 1e-10)
-        return 0;
-    CFixVector w = *p0 - *vPlane;
-    double num = double(CFixVector::Dot(*vNormal, w) - rad) / 65536.0;
-    if (fabs(num) > fabs(den))
-        return 0;
-    num /= den;
-    intersection.v.coord.x = fix(double(p0->v.coord.x) + double(d.v.coord.x) * num);
-    intersection.v.coord.y = fix(double(p0->v.coord.y) + double(d.v.coord.y) * num);
-    intersection.v.coord.z = fix(double(p0->v.coord.z) + double(d.v.coord.z) * num);
-#endif
     return 1;
 }
 
@@ -282,10 +267,8 @@ static int32_t FindHitboxIntersection(
     // be used multiple times
     for (i = 0, pf1 = phb1->faces; i < 6; i++, pf1++) {
         for (j = 0, pf2 = phb2->faces; j < 6; j++, pf2++) {
-#if 1
             if (CFixVector::Dot(pf1->n[1], pf2->n[1]) >= 0)
                 continue;
-#endif
             nHits += FindQuadQuadIntersection(intersection, normal, pf1->v, pf1->n + 1, pf2->v, pf2->n + 1, vRef, dMin);
 #if DBG
             pf1->t = pf2->t = gameStates.app.nSDLTicks[0];
@@ -465,22 +448,14 @@ CSegMasks CheckFaceHitboxCollision(
     int16_t nSide,
     CFixVector *p0,
     CFixVector *p1,
-    CObject *pObj) {
+    CObject *pObj
+) {
     int32_t iModel, nModels, nHits = 0;
     fix dMin = 0x7fffffff;
     CSegMasks masks;
 
-#if 1 // always only use the primary hitbox (containing the entire object) here
     iModel = nModels = 1;
-#else
-    CModelHitboxList *pmhb = gameData.modelData.hitboxes + pObj->ModelId();
-    if (CollisionModel() == 1) {
-        iModel = nModels = 1;
-    } else {
-        iModel = 1;
-        nModels = pmhb->nHitboxes;
-    }
-#endif
+
     if (!p1)
         p1 = &OBJPOS(pObj)->vPos;
     intersection.Create(0x7fffffff, 0x7fffffff, 0x7fffffff);

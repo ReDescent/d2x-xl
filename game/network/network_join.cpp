@@ -45,7 +45,7 @@ int32_t NetworkFindPlayer(tNetPlayerInfo *pPlayer) {
 
 //------------------------------------------------------------------------------
 
-int32_t GetNewPlayerNumber(tPlayerSyncData *their) {
+int32_t GetNewPlayerNumber() {
     int32_t i;
 
     if ((N_PLAYERS < gameData.multiplayer.nMaxPlayers) && (N_PLAYERS < gameData.multiplayer.nPlayerPositions))
@@ -75,23 +75,17 @@ int32_t CanJoinNetGame(CNetGameInfo *game, CAllNetPlayersInfo *people) {
     if (game->m_info.gameStatus == NETSTAT_STARTING)
         return 1;
     if (game->m_info.gameStatus != NETSTAT_PLAYING) {
-#if 1
         console.printf(CON_DBG, "Error: Cannot join because gameStatus !=NETSTAT_PLAYING\n");
-#endif
         return 0;
     }
 
     if ((game->m_info.versionMajor == 0) && (D2X_MAJOR > 0)) {
-#if 1
         console.printf(CON_DBG, "Error: Cannot join because version majors don't match!\n");
-#endif
         return 0;
     }
 
     if ((game->m_info.versionMajor > 0) && (D2X_MAJOR == 0)) {
-#if 1
         console.printf(CON_DBG, "Error: Cannot join because version majors2 don't match!\n");
-#endif
         return 0;
     }
     // Game is in progress, figure out if this guy can re-join it
@@ -120,9 +114,7 @@ int32_t CanJoinNetGame(CNetGameInfo *game, CAllNetPlayersInfo *people) {
                 &networkData.pThislayer.player.network,
                 &people->m_info.players[i].network))
             return 1;
-#if 1
     console.printf(CON_DBG, "Error: Can't join because at end of list!\n");
-#endif
     return 0;
 }
 
@@ -323,18 +315,14 @@ void DeleteSyncData(int16_t nConnection) {
 static tNetworkSyncInfo *AcceptJoinRequest(tPlayerSyncData *player) {
     // Don't accept new players if we're ending this level.  Its safe to ignore since they'll request again later
     if (gameStates.app.bEndLevelSequence || gameData.reactorData.bDestroyed) {
-#if 1
         console.printf(CON_DBG, "Ignored request from new player to join during endgame.\n");
-#endif
         if (gameStates.multi.nGameType >= IPX_GAME)
             NetworkDumpPlayer(player->player.network.Network(), player->player.network.Node(), DUMP_ENDLEVEL);
         return NULL;
     }
 
     if (player->player.connected != missionManager.nCurrentLevel) {
-#if 1
         console.printf(CON_DBG, "Dumping player due to old level number.\n");
-#endif
         if (gameStates.multi.nGameType >= IPX_GAME)
             NetworkDumpPlayer(player->player.network.Network(), player->player.network.Node(), DUMP_LEVEL);
         return NULL;
@@ -498,7 +486,7 @@ void DoRefuseStuff(tPlayerSyncData *their) {
         return;
     if (!networkData.refuse.bWaitForAnswer) {
         audio.PlaySound(SOUND_HUD_JOIN_REQUEST, SOUNDCLASS_GENERIC, I2X(2));
-#if 1
+
         if (IsTeamGame) {
             if (gameOpts->multi.bNoRankings)
                 HUDInitMessage("%s joining", their->player.callsign);
@@ -510,8 +498,7 @@ void DoRefuseStuff(tPlayerSyncData *their) {
                 netGameInfo.m_info.szTeamName[1]);
         } else
             HUDInitMessage(TXT_JOIN_ACCEPT, their->player.callsign);
-#endif
-#if 1
+
         if (IsTeamGame) {
             char szRank[20];
 
@@ -539,7 +526,7 @@ void DoRefuseStuff(tPlayerSyncData *their) {
         gameData.messages[1].nEndTime = gameStates.app.nSDLTicks[0] + 5000;
         gameData.messages[1].textBuffer = NULL;
         gameData.messages[1].pBm = NULL;
-#endif
+
         strcpy(networkData.refuse.szPlayer, their->player.callsign);
         networkData.refuse.xTimeLimit = TimerGetApproxSeconds();
         networkData.refuse.bThisPlayer = 0;
@@ -552,7 +539,7 @@ void DoRefuseStuff(tPlayerSyncData *their) {
             networkData.refuse.bThisPlayer = 0;
             networkData.refuse.bWaitForAnswer = 0;
             if (IsTeamGame) {
-                nNewPlayer = GetNewPlayerNumber(their);
+                nNewPlayer = GetNewPlayerNumber();
                 Assert(networkData.refuse.bTeam == 1 || networkData.refuse.bTeam == 2);
                 if (networkData.refuse.bTeam == 1)
                     netGameInfo.m_info.RemoveTeamPlayer(nNewPlayer);

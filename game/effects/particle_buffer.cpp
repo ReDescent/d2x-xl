@@ -250,15 +250,8 @@ bool CParticleBuffer::Flush(float fBrightness, bool bForce) {
 #endif
 #if ENABLE_FLUSH
     PROF_START
-#if 1
     ogl.ResetClientStates(1);
     ogl.EnableClientStates(1, 1, 0, GL_TEXTURE0);
-#else
-    if (!Init()) {
-        Reset();
-        return false;
-    }
-#endif
 
 #if LAZY_RENDER_SETUP
     Setup();

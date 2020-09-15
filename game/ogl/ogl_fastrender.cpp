@@ -405,30 +405,11 @@ int32_t RenderFace(CSegFace *pFace, CBitmap *bmBot, CBitmap *bmTop, int32_t bTex
             BRP;
 #endif
         transparencyRenderer.AddFace(pFace);
-#if 1 //! DBG
         if (!(pFace->m_info.nSegColor && bmBot))
-#endif
             RETVAL(0)
     }
 
-#if 1
     SetRenderStates(pFace, bmBot, bmTop, bTextured, bColorKey, bColored, bLightmaps);
-#else
-    SetRenderStates(
-        pFace,
-        bmBot,
-        bmTop,
-        ((gameStates.render.nType == RENDER_TYPE_ZCULL) && !(bColorKey || (bmBot->Flags() & BM_FLAG_SEE_THRU)))
-            ? 0
-            : bTextured,
-        bColorKey,
-        bColored,
-        bLightmaps);
-    if (gameStates.render.nType == RENDER_TYPE_ZCULL) {
-        DrawFace(pFace);
-        RETVAL(1)
-    }
-#endif
 
     G3SetBlendMode(pFace);
     if (bMonitor)

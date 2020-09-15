@@ -112,7 +112,6 @@ CFixVector *DirectedRandomVector(CFixVector *vRand, CFixVector *vDir, int32_t nM
     CFixVector vr, vd = *vDir;
 
     CFixVector::Normalize(vd);
-#if 1
     do {
         VmRandomVector(&vr);
     } while (CFixVector::Dot(vr, vd) > I2X(9) / 10);
@@ -127,13 +126,6 @@ CFixVector *DirectedRandomVector(CFixVector *vRand, CFixVector *vDir, int32_t nM
     }
 #if DBG
     dot = CFixVector::Dot(vd, vr);
-#endif
-#else
-    fix nDot;
-    do {
-        VmRandomVector(&vr);
-        nDot = CFixVector::Dot(vr, vd);
-    } while (((nDot > nMaxDot) || (nDot < nMinDot)) && (++i < 100));
 #endif
     *vRand = vr;
     return vRand;
@@ -766,21 +758,7 @@ float CLightning::ComputeAvgDist(CFloatVector3 *pVertex, int32_t nVerts) {
 //------------------------------------------------------------------------------
 
 float CLightning::ComputeDistScale(float zPivot) {
-#if 1
     return m_fDistScale = pow(1.0f - m_fAvgDist / (float)ZRANGE, 50.0f);
-#else
-    if (zPivot < 0.0f) {
-        zPivot = -zPivot;
-        if (m_fAvgDist <= zPivot)
-            return m_fDistScale = sqrt((zPivot - m_fAvgDist) / zPivot);
-    } else {
-        if (m_fAvgDist <= zPivot)
-            return m_fDistScale = 1.0f + sqrt((zPivot - m_fAvgDist) /*/ zPivot * 10.0f*/);
-        if (m_fAvgDist <= 4 * zPivot)
-            return m_fDistScale = sqrt((zPivot - m_fAvgDist * 0.25f) / zPivot);
-    }
-    return m_fDistScale = 0.0f; // sqrt (((float) ZRANGE - zPivot - m_fAvgDist)) / ((float) ZRANGE - zPivot);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -920,16 +898,7 @@ void CLightning::RenderGlow(CFloatVector *pColor, int32_t nDepth, int32_t nThrea
             pTexCoord = m_plasmaTexCoord.Buffer();
             pVertex = m_plasmaVerts.Buffer();
             for (int32_t i = 0; i < m_nNodes - 1; i++) {
-#if 1
                 OglDrawArrays(GL_LINE_LOOP, i * 4, 4);
-#else
-                glBegin(GL_LINE_LOOP);
-                for (int32_t j = 0; j < 4; j++) {
-                    glTexCoord2fv(reinterpret_cast<GLfloat *>(pTexCoord++));
-                    glVertex3fv(reinterpret_cast<GLfloat *>(pVertex++));
-                }
-                glEnd();
-#endif
             }
 #endif
         }

@@ -97,13 +97,11 @@ void DrawOutline(int32_t nVertices, CRenderPoint **pointList) {
     CRenderPoint center, normal;
     CFixVector n;
 
-#if 1 //! DBG
     if (gameStates.render.bQueryOcclusion) {
         CFloatVector outlineColor = {{{1, 1, 0, -1}}};
         G3DrawPolyAlpha(nVertices, pointList, &outlineColor, 1, -1);
         return;
     }
-#endif
 
     glGetIntegerv(GL_DEPTH_FUNC, &depthFunc);
     ogl.SetDepthMode(GL_ALWAYS);
@@ -163,14 +161,7 @@ char IsColoredSegFace(int16_t nSegment, int16_t nSide) {
     int32_t nOtherFogType = pConnSeg->FogType();
     if (nFogType != nOtherFogType)
         return (nFogType ? nFogType : nOtherFogType) + 2;
-#if 1
     return 0;
-#else
-    if (pSeg->m_function == pConnSeg->m_function)
-        return 0;
-    return (pSeg->m_function == SEGMENT_FUNC_TEAM_BLUE) || (pSeg->m_function == SEGMENT_FUNC_TEAM_RED) ||
-           (pConnSeg->m_function == SEGMENT_FUNC_TEAM_BLUE) || (pConnSeg->m_function == SEGMENT_FUNC_TEAM_RED);
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -206,13 +197,13 @@ CFloatVector *ColoredSegmentColor(int32_t nSegment, int32_t nSide, char nColor) 
         char nFogType = pSeg->FogType();
         char nOtherFogType = pConnSeg ? pConnSeg->FogType() : 0;
         if (nFogType != nOtherFogType) {
-#if 1 // no colored segment faces of colored segments if volumetric fog is enabled
+            // no colored segment faces of colored segments if volumetric fog is enabled
             if ((ogl.m_features.bDepthBlending >= 0) && gameOpts->render.effects.bEnabled &&
                 gameOpts->render.effects.bFog && (gameOptions[0].render.nQuality > 1))
                 return NULL;
             if (!nFogType)
                 return NULL;
-#endif
+
             if (nFogType > 1)
                 return NULL;
             if (!missionConfig.m_bColoredSegments)
@@ -859,14 +850,10 @@ void ToggleRadar(void) { gameOpts->render.cockpit.nRadarRange = (gameOpts->rende
 extern kcItem kcMouse[];
 
 inline int32_t ZoomKeyPressed(void) {
-#if 1
     int32_t v;
 
     return gameStates.input.keys.pressed[kcKeyboard[52].value] || gameStates.input.keys.pressed[kcKeyboard[53].value] ||
            (((v = kcMouse[30].value) < 255) && MouseButtonState(v));
-#else
-    return (controls[0].zoomDownCount > 0);
-#endif
 }
 
 //------------------------------------------------------------------------------

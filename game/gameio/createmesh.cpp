@@ -221,25 +221,8 @@ tTriangle *CTriMeshBuilder::AddTriangle(tTriangle *pTriangle, uint16_t index[], 
 
 void CTriMeshBuilder::DeleteEdge(tEdge *pEdge) {
     ENTER(0, 0);
-#if 1
     pEdge->nNext = m_nFreeEdges;
     m_nFreeEdges = m_edges.Index(pEdge);
-#else
-    tTriangle *pTriangle;
-    int32_t h = pEdge - m_edges, i, j;
-
-    if (h < --m_nEdges) {
-        *pEdge = m_edges[m_nEdges];
-        for (i = 0; i < 2; i++) {
-            if (pEdge->tris[i] >= 0) {
-                pTriangle = m_triangles + pEdge->tris[i];
-                for (j = 0; j < 3; j++)
-                    if (pTriangle->lines[j] == m_nEdges)
-                        pTriangle->lines[j] = h;
-            }
-        }
-    }
-#endif
     RETURN
 }
 
@@ -726,11 +709,9 @@ void CTriMeshBuilder::CreateFaceVertLists(void) {
         }
     }
     delete[] bTags;
-#if 1
     // sort each face's vertex index list
     for (i = FACES.nFaces, pFace = FACES.faces.Buffer(); i; i--, pFace++)
         SortFaceVertList(pFace->triIndex, 0, pFace->m_info.nVerts - 1);
-#endif
     RETURN
 }
 
@@ -1198,19 +1179,8 @@ void CQuadMeshBuilder::SplitIn1or2Tris(void) {
 //------------------------------------------------------------------------------
 
 int32_t CQuadMeshBuilder::CompareFaceKeys(const CSegFace **pf, const CSegFace **pm) {
-#if 1
     int32_t i = (*pf)->m_info.nKey;
     int32_t m = (*pm)->m_info.nKey;
-#else
-    int16_t i = (*pf)->m_info.nBaseTex;
-    int16_t mat = (*pm)->m_info.nBaseTex;
-    if (i < mat)
-        RETVAL(-1)
-    if (i > mat)
-        return 1;
-    i = (*pf)->m_info.nOvlTex;
-    mat = (*pm)->m_info.nOvlTex;
-#endif
     return (i < m) ? -1 : (i > m) ? 1 : 0;
 }
 

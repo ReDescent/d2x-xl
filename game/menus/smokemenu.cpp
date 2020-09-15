@@ -346,14 +346,14 @@ void SmokeDetailsMenu(void) {
             AddSmokeSliders(m, 4);
 
         m.AddText("", "");
-#if 1
+
         m.AddCheck(
             "check collisions",
             TXT_SMOKE_COLLISION,
             gameOpts->render.particles.bCollisions,
             KEY_I,
             HTX_ADVRND_SMOKECOLL);
-#endif
+
         m.AddCheck("disperse", TXT_SMOKE_DISPERSE, gameOpts->render.particles.bDisperse, KEY_D, HTX_ADVRND_SMOKEDISP);
         m.AddCheck("rotate", TXT_ROTATE_SMOKE, gameOpts->render.particles.bRotate, KEY_R, HTX_ROTATE_SMOKE);
         m.AddCheck("aux views", TXT_SMOKE_AUXVIEWS, gameOpts->render.particles.bAuxViews, KEY_W, HTX_SMOKE_AUXVIEWS);
@@ -367,11 +367,7 @@ void SmokeDetailsMenu(void) {
         GET_VAL(gameOpts->render.particles.bRobots, "robots");
         GET_VAL(gameOpts->render.particles.bMissiles, "missiles");
         GET_VAL(gameOpts->render.particles.bDebris, "debris");
-#if 1
         GET_VAL(gameOpts->render.particles.bCollisions, "check collisions");
-#else
-        gameOpts->render.particles.bCollisions = 0;
-#endif
         GET_VAL(gameOpts->render.particles.bDisperse, "disperse");
         GET_VAL(gameOpts->render.particles.bRotate, "rotate");
         GET_VAL(gameOpts->render.particles.bDecreaseLag, "reduce lag");

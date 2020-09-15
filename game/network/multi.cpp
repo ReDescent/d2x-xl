@@ -375,15 +375,7 @@ void SetObjNumMapping(int32_t nLocalObj, int32_t nRemoteObj, int32_t nObjOwner) 
 // Add a mapping for our locally created OBJECTS
 
 void SetLocalObjNumMapping(int32_t nLocalObj) {
-#if 1
     SetObjNumMapping(nLocalObj, nLocalObj, N_LOCALPLAYER);
-#else
-    if ((nLocalObj > -1) && (nLocalObj < LEVEL_OBJECTS)) {
-        gameData.multigame.nObjOwner[nLocalObj] = N_LOCALPLAYER;
-        gameData.multigame.remoteToLocal[N_LOCALPLAYER][nLocalObj] = nLocalObj;
-        gameData.multigame.localToRemote[nLocalObj] = nLocalObj;
-    }
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -468,13 +460,9 @@ static void CheckScoreGoal(int32_t nPlayer, bool bForce = false) {
 
 void MultiSetFlagPos(void) {
     CPlayerData *pPlayer = gameData.multiplayer.players;
-#if 1 //! DBG
     for (int32_t i = 0; i < N_PLAYERS; i++, pPlayer++)
         if (pPlayer->flags & PLAYER_FLAGS_FLAG)
             gameData.pigData.flags[!GetTeam(i)].path.Update(OBJECT(pPlayer->nObject));
-#else
-    SetPathPoint(&gameData.pigData.flags[0].path, OBJECT(pPlayer->nObject));
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1196,12 +1184,10 @@ void MultiDoFrame(void) {
 
 void MultiSendData(uint8_t *buf, int32_t len, int32_t bUrgent) {
     if (IsNetworkGame && buf[0]) {
-#if 1 // DBG
         if (len != MultiMsgLen(buf[0])) {
             PrintLog(0, "Network message %d sent with wrong size %d!\n", buf[0], len);
             len = MultiMsgLen(buf[0]);
         }
-#endif
         NetworkSendData(reinterpret_cast<uint8_t *>(buf), len, bUrgent);
     }
 }
@@ -2297,7 +2283,7 @@ void MultiSendPlayerExplode(uint8_t nType) {
     pBuffer += 2;
     PUT_INTEL_INT(gameData.multigame.msg.buf + pBuffer, LOCALPLAYER.flags);
     pBuffer += 4;
-#if 1
+
     if (gameStates.multi.nGameType == UDP_GAME) {
         gameData.multigame.msg.buf[pBuffer++] = uint8_t(LOCALPLAYER.m_laserLevels[0]);
         gameData.multigame.msg.buf[pBuffer++] = uint8_t(LOCALPLAYER.m_laserLevels[1]);
@@ -2318,7 +2304,7 @@ void MultiSendPlayerExplode(uint8_t nType) {
         PUT_INTEL_SHORT(gameData.multigame.msg.buf + pBuffer, LOCALOBJECT->Segment());
         pBuffer += 2;
     }
-#endif
+
     gameData.multigame.msg.buf[pBuffer++] = gameData.multigame.create.nCount;
     memset(gameData.multigame.msg.buf + pBuffer, -1, MAX_NET_CREATE_OBJECTS * sizeof(int16_t));
     for (i = 0; i < gameData.multigame.create.nCount; i++) {
@@ -3110,112 +3096,9 @@ void MultiPrepLevel(void) {
                 else
                     pObj->BashToShield(true);
                 break;
-#if 1
             default:
                 if (!powerupFilter[pObj->info.nId])
                     pObj->BashToShield(true);
-#else
-            case POW_KEY_BLUE:
-            case POW_KEY_RED:
-            case POW_KEY_GOLD:
-                if (!IsCoopGame)
-                    break;
-            case POW_AFTERBURNER:
-                pObj->BashToShield(!netGameInfo.m_info.DoAfterburner);
-                break;
-            case POW_FUSION:
-                pObj->BashToShield(!netGameInfo.m_info.DoFusions);
-                break;
-            case POW_PHOENIX:
-                pObj->BashToShield(!netGameInfo.m_info.DoPhoenix);
-                break;
-            case POW_HELIX:
-                pObj->BashToShield(!netGameInfo.m_info.DoHelix);
-                break;
-            case POW_MEGAMSL:
-                pObj->BashToShield(!netGameInfo.m_info.DoMegas);
-                break;
-            case POW_SMARTMSL:
-                pObj->BashToShield(!netGameInfo.m_info.DoSmarts);
-                break;
-            case POW_GAUSS:
-                pObj->BashToShield(!netGameInfo.m_info.DoGauss);
-                break;
-            case POW_VULCAN:
-                pObj->BashToShield(!netGameInfo.m_info.DoVulcan);
-                break;
-            case POW_PLASMA:
-                pObj->BashToShield(!netGameInfo.m_info.DoPlasma);
-                break;
-            case POW_OMEGA:
-                pObj->BashToShield(!netGameInfo.m_info.DoOmega);
-                break;
-            case POW_SUPERLASER:
-                pObj->BashToShield(!netGameInfo.m_info.DoSuperLaser);
-                break;
-            case POW_PROXMINE:
-                pObj->BashToShield(
-                    !netGameInfo.m_info.DoProximity || (gameData.appData.nGameMode & (GM_HOARD | GM_ENTROPY)));
-                break;
-            case POW_SMARTMINE:
-                pObj->BashToShield(!netGameInfo.m_info.DoSmartMine || IsEntropyGame);
-                break;
-            case POW_VULCAN_AMMO:
-                pObj->BashToShield(!(netGameInfo.m_info.DoVulcan || netGameInfo.m_info.DoGauss));
-                break;
-            case POW_SPREADFIRE:
-                pObj->BashToShield(!netGameInfo.m_info.DoSpread);
-                break;
-            case POW_FLASHMSL_1:
-                pObj->BashToShield(!netGameInfo.m_info.DoFlash);
-                break;
-            case POW_FLASHMSL_4:
-                pObj->BashToShield(!netGameInfo.m_info.DoFlash);
-                break;
-            case POW_GUIDEDMSL_1:
-                pObj->BashToShield(!netGameInfo.m_info.DoGuided);
-                break;
-            case POW_GUIDEDMSL_4:
-                pObj->BashToShield(!netGameInfo.m_info.DoGuided);
-                break;
-            case POW_EARTHSHAKER:
-                pObj->BashToShield(!netGameInfo.m_info.DoEarthShaker);
-                break;
-            case POW_MERCURYMSL_1:
-                pObj->BashToShield(!netGameInfo.m_info.DoMercury);
-                break;
-            case POW_MERCURYMSL_4:
-                pObj->BashToShield(!netGameInfo.m_info.DoMercury);
-                break;
-            case POW_CONVERTER:
-                pObj->BashToShield(!netGameInfo.m_info.DoConverter);
-                break;
-            case POW_AMMORACK:
-                pObj->BashToShield(!netGameInfo.m_info.DoAmmoRack);
-                break;
-            case POW_HEADLIGHT:
-                pObj->BashToShield(
-                    !netGameInfo.m_info.DoHeadlight ||
-                    (EGI_FLAG(bDarkness, 0, 0, 0) && !EGI_FLAG(headlight.bAvailable, 0, 1, 0)));
-                break;
-            case POW_LASER:
-                pObj->BashToShield(!netGameInfo.m_info.DoLaserUpgrade);
-                break;
-            case POW_HOMINGMSL_1:
-                pObj->BashToShield(!netGameInfo.m_info.DoHoming);
-                break;
-            case POW_HOMINGMSL_4:
-                pObj->BashToShield(!netGameInfo.m_info.DoHoming);
-                break;
-            case POW_QUADLASER:
-                pObj->BashToShield(!netGameInfo.m_info.DoQuadLasers);
-                break;
-            case POW_BLUEFLAG:
-                pObj->BashToShield(!(gameData.appData.GameMode(GM_CAPTURE)));
-                break;
-            case POW_REDFLAG:
-                pObj->BashToShield(!(gameData.appData.GameMode(GM_CAPTURE)));
-#endif
             }
         }
     }
@@ -3880,7 +3763,6 @@ void MultiDoHeartBeat(uint8_t *buf) {
 //-----------------------------------------------------------------------------
 
 void MultiCheckForEntropyWinner() {
-#if 1 //! DBG
     CSegment *pSeg;
     int32_t h, i, t;
     char bGotRoom[2] = {0, 0};
@@ -3889,13 +3771,11 @@ void MultiCheckForEntropyWinner() {
 
     if (!IsEntropyGame)
         return;
-#if 1 //! DBG
     if (gameData.reactorData.bDestroyed) {
         if (gameStates.app.nSDLTicks[0] - countDown >= 5000)
             StopEndLevelSequence();
         return;
     }
-#endif
     countDown = -1;
     gameStates.entropy.bExitSequence = 0;
     for (i = 0, pSeg = SEGMENTS.Buffer(); i <= gameData.segData.nLastSegment; i++, pSeg++)
@@ -3928,18 +3808,8 @@ void MultiCheckForEntropyWinner() {
         if ((GetTeam(i) != t) && (PLAYER(i).Shield() >= 0))
             return;
     countDown = gameStates.app.nSDLTicks[0];
-#if 1 //! DBG
     gameData.reactorData.bDestroyed = 1;
     gameData.reactorData.countdown.nTimer = -1;
-#endif
-#else
-    if (gameData.reactorData.bDestroyed)
-        StopEndLevelSequence();
-    else {
-        gameData.reactorData.bDestroyed = 1;
-        gameData.reactorData.countdown.nTimer = -1;
-    }
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -4910,145 +4780,7 @@ int32_t MultiPowerupIs4Pack(int32_t id) {
 //-----------------------------------------------------------------------------
 
 int32_t MultiPowerupIsAllowed(int32_t nId) {
-#if 1
     return powerupFilter[nId];
-#else
-    switch (nId) {
-    case POW_INVUL:
-        if (!netGameInfo.m_info.DoInvulnerability)
-            return (0);
-        break;
-    case POW_CLOAK:
-        if (!netGameInfo.m_info.DoCloak)
-            return (0);
-        break;
-    case POW_AFTERBURNER:
-        if (!netGameInfo.m_info.DoAfterburner)
-            return (0);
-        break;
-    case POW_FUSION:
-        if (!netGameInfo.m_info.DoFusions)
-            return (0);
-        break;
-    case POW_PHOENIX:
-        if (!netGameInfo.m_info.DoPhoenix)
-            return (0);
-        break;
-    case POW_HELIX:
-        if (!netGameInfo.m_info.DoHelix)
-            return (0);
-        break;
-    case POW_MEGAMSL:
-        if (!netGameInfo.m_info.DoMegas)
-            return (0);
-        break;
-    case POW_SMARTMSL:
-        if (!netGameInfo.m_info.DoSmarts)
-            return (0);
-        break;
-    case POW_GAUSS:
-        if (!netGameInfo.m_info.DoGauss)
-            return (0);
-        break;
-    case POW_VULCAN:
-        if (!netGameInfo.m_info.DoVulcan)
-            return (0);
-        break;
-    case POW_PLASMA:
-        if (!netGameInfo.m_info.DoPlasma)
-            return (0);
-        break;
-    case POW_OMEGA:
-        if (!netGameInfo.m_info.DoOmega)
-            return (0);
-        break;
-    case POW_SUPERLASER:
-        if (!netGameInfo.m_info.DoSuperLaser)
-            return (0);
-        break;
-    case POW_PROXMINE:
-        if (!netGameInfo.m_info.DoProximity)
-            return (0);
-        break;
-    case POW_VULCAN_AMMO:
-        if (!(netGameInfo.m_info.DoVulcan || netGameInfo.m_info.DoGauss))
-            return (0);
-        break;
-    case POW_SPREADFIRE:
-        if (!netGameInfo.m_info.DoSpread)
-            return (0);
-        break;
-    case POW_SMARTMINE:
-        if (!netGameInfo.m_info.DoSmartMine)
-            return (0);
-        break;
-    case POW_FLASHMSL_1:
-        if (!netGameInfo.m_info.DoFlash)
-            return (0);
-        break;
-    case POW_FLASHMSL_4:
-        if (!netGameInfo.m_info.DoFlash)
-            return (0);
-        break;
-    case POW_GUIDEDMSL_1:
-        if (!netGameInfo.m_info.DoGuided)
-            return (0);
-        break;
-    case POW_GUIDEDMSL_4:
-        if (!netGameInfo.m_info.DoGuided)
-            return (0);
-        break;
-    case POW_EARTHSHAKER:
-        if (!netGameInfo.m_info.DoEarthShaker)
-            return (0);
-        break;
-    case POW_MERCURYMSL_1:
-        if (!netGameInfo.m_info.DoMercury)
-            return (0);
-        break;
-    case POW_MERCURYMSL_4:
-        if (!netGameInfo.m_info.DoMercury)
-            return (0);
-        break;
-    case POW_CONVERTER:
-        if (!netGameInfo.m_info.DoConverter)
-            return (0);
-        break;
-    case POW_AMMORACK:
-        if (!netGameInfo.m_info.DoAmmoRack)
-            return (0);
-        break;
-    case POW_HEADLIGHT:
-        if (!netGameInfo.m_info.DoHeadlight)
-            return (0);
-        break;
-    case POW_LASER:
-        if (!netGameInfo.m_info.DoLaserUpgrade)
-            return (0);
-        break;
-    case POW_HOMINGMSL_1:
-        if (!netGameInfo.m_info.DoHoming)
-            return (0);
-        break;
-    case POW_HOMINGMSL_4:
-        if (!netGameInfo.m_info.DoHoming)
-            return (0);
-        break;
-    case POW_QUADLASER:
-        if (!netGameInfo.m_info.DoQuadLasers)
-            return (0);
-        break;
-    case POW_BLUEFLAG:
-        if (!(gameData.appData.GameMode(GM_CAPTURE)))
-            return (0);
-        break;
-    case POW_REDFLAG:
-        if (!(gameData.appData.GameMode(GM_CAPTURE)))
-            return (0);
-        break;
-    }
-    return 1;
-#endif
 }
 
 //-----------------------------------------------------------------------------

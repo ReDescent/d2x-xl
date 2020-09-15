@@ -572,9 +572,7 @@ void NetworkPing(uint8_t flag, uint8_t nPlayer) {
 
 void NetworkHandlePingReturn(uint8_t nPlayer) {
     if ((nPlayer >= N_PLAYERS) || !pingStats[nPlayer].launchTime) {
-#if 1
         console.printf(CON_DBG, "Got invalid PING RETVAL from %s!\n", PLAYER(nPlayer).callsign);
-#endif
         return;
     }
     if (pingStats[nPlayer].launchTime > 0) { // negative value suppresses display of returned ping on HUD
@@ -639,9 +637,7 @@ int32_t GetMyNetRanking(void) {
     else if (rank > 8)
         rank = 8;
 
-#if 1
     console.printf(CON_DBG, "Rank is %d (%s)\n", rank + 1, pszRankStrings[rank + 1]);
-#endif
     return rank + 1;
 }
 

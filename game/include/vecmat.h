@@ -42,7 +42,6 @@ class CFloatMatrix;
  */
 #pragma pack(push, 1)
 class CFixVector {
-#if 1
     public:
     union {
         struct {
@@ -50,10 +49,6 @@ class CFixVector {
         } coord;
         fix vec[3];
     } v;
-#else
-    private:
-    fix dir[3];
-#endif
 
     public:
     static const CFixVector ZERO;
@@ -159,7 +154,6 @@ class CFixVector {
  * A 4 element floating point vector class
  */
 class CFloatVector {
-#if 1
     public:
     union {
         struct {
@@ -170,10 +164,6 @@ class CFloatVector {
         } color;
         float vec[4];
     } v;
-#else
-    private:
-    float dir[4];
-#endif
 
     public:
     static const CFloatVector ZERO;
@@ -269,7 +259,6 @@ class CFloatVector {
  * A 3 element floating point vector class
  */
 class CFloatVector3 {
-#if 1
     public:
     union {
         struct {
@@ -280,10 +269,6 @@ class CFloatVector3 {
         } color;
         float vec[3];
     } v;
-#else
-    private:
-    float dir[3];
-#endif
     public:
     static const CFloatVector3 ZERO;
     static const CFloatVector3 XVEC;

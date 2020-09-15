@@ -931,39 +931,13 @@ const float VmLineLineIntersection(
 // interpreted as distance unit "1").
 
 float TriangleSize(const CFixVector &p0, const CFixVector &p1, const CFixVector &p2) {
-#if 1
     CFloatVector pa, pb;
     pa.Assign(p1 - p0);
     pb.Assign(p2 - p0);
-#if DBG
     CFloatVector px = CFloatVector::Cross(pa, pb);
     float m = px.Mag();
     float s = m / 800.0f;
     return s;
-#else
-    return CFloatVector::Cross(pa, pb).Mag() / 800.0f;
-#endif
-#else
-    fix lMax, l, i = 0;
-
-    lMax = CFixVector::Dist(p0, p1);
-    l = CFixVector::Dist(p1, p2);
-    if (lMax < l) {
-        lMax = l;
-        i = 1;
-    }
-    l = CFixVector::Dist(p2, p0);
-    if (lMax < l) {
-        lMax = l;
-        i = 2;
-    }
-    if (i == 2)
-        return X2F(lMax) * X2F(VmLinePointDist(p2, p0, p1)) / 800;
-    else if (i == 1)
-        return X2F(lMax) * X2F(VmLinePointDist(p1, p2, p0)) / 800;
-    else
-        return X2F(lMax) * X2F(VmLinePointDist(p0, p1, p2)) / 800;
-#endif
 }
 
 // ------------------------------------------------------------------------

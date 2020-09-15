@@ -408,8 +408,6 @@ int32_t CSegment::HasOpenableDoor(void) {
 }
 //-----------------------------------------------------------------
 
-#if 1
-
 int32_t CSegment::IsPassable(int32_t nSide, CObject *pObj, bool bIgnoreDoors) {
     int32_t nChildSeg = m_children[nSide];
 
@@ -450,43 +448,6 @@ int32_t CSegment::IsPassable(int32_t nSide, CObject *pObj, bool bIgnoreDoors) {
     }
     return pWall ? pWall->IsPassable(pObj, bIgnoreDoors) : WID_PASSABLE_FLAG | WID_TRANSPARENT_FLAG;
 }
-
-#else
-
-int32_t CSegment::IsPassable(int32_t nSide, CObject *pObj, bool bIgnoreDoors) {
-    int32_t nChild = m_children[nSide];
-
-    if (nChild == -1)
-        return WID_VISIBLE_FLAG;
-    if (nChild == -2)
-        return WID_EXTERNAL_FLAG;
-
-    CWall *pWall = m_sides[nSide].Wall();
-    CSegment *pChild = SEGMENT(nChild);
-
-#if DBG
-    if ((SEG_IDX(this) == nDbgSeg) && ((nDbgSide < 0) || (nSide == nDbgSide)))
-        BRP;
-#endif
-
-    if ((pObj == gameData.objData.pConsole) && (gameData.objData.speedBoost[pObj->Index()].bBoosted > 0) &&
-        (m_function == SEGMENT_FUNC_SPEEDBOOST) && (pChild->m_function != SEGMENT_FUNC_SPEEDBOOST) &&
-        (!pWall || (GEOTRIGGER(pWall->nTrigger)->m_info.nType != TT_SPEEDBOOST)))
-        return WID_VISIBLE_FLAG;
-
-    if (pChild->HasBlockedProp())
-        return (pObj && ((pObj->info.nType == OBJ_PLAYER) || (pObj->info.nType == OBJ_ROBOT) ||
-                         (pObj->info.nType == OBJ_POWERUP)))
-                   ? WID_VISIBLE_FLAG
-                   : pWall ? pWall->IsPassable(pObj, bIgnoreDoors) : WID_PASSABLE_FLAG | WID_TRANSPARENT_FLAG;
-
-    if (!pWall)
-        return WID_PASSABLE_FLAG | WID_TRANSPARENT_FLAG;
-
-    return pWall->IsPassable(pObj, bIgnoreDoors);
-}
-
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -1237,13 +1198,10 @@ int32_t CSegment::SeesConnectedSide(int16_t nSide, int16_t nChildSeg, int16_t nC
     if (pSeg->ChildId(nChildSide) == Index())
         return 0;
     CSide *pSide = Side(nSide);
-#if 1
+
     if (ConnectedSide(SEGMENT(nChildSeg)) != nChildSide)
         return 1;
     return pSide->SeesSide(nChildSeg, nChildSide);
-#else
-    return !pSide->IsConnected(nChildSeg, nChildSide) || pSide->SeesSide(nChildSeg, nChildSide);
-#endif
 }
 
 //------------------------------------------------------------------------------

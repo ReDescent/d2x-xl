@@ -292,11 +292,9 @@ void COGL::SwapBuffers(int32_t bForce, int32_t bClear) {
 void COGL::FlushEffectsSideBySide(void) {
     int32_t nDevice = StereoDevice();
 
-#if 1
     if (nDevice == -GLASSES_SHUTTER_HDMI)
         SetDrawBuffer(GL_BACK, 0);
     else
-#endif
         SelectBlurBuffer(0);
     ogl.BindTexture(DrawBuffer(0)->ColorBuffer());
     for (int32_t i = 0; i < 2; i++) {

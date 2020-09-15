@@ -159,10 +159,10 @@ void SetDynColor(
     int32_t bForce) {
     if (!color)
         return;
-#if 1
+
     if (!bForce && (color->Red() == 1.0) && (color->Green() == 1.0) && (color->Blue() == 1.0))
         return;
-#endif
+
     if (gameData.renderData.lights.bStartDynColoring) {
         InitDynColoring();
     }
@@ -764,7 +764,7 @@ fix ComputeObjectLight(CObject *pObj, CFixVector *vTransformed) {
 #endif
     // First, get static light for this CSegment
     fix light;
-#if 1
+
     if (gameStates.render.nLightingMethod && (pObj->info.renderType != RT_POLYOBJ)) {
         int32_t nState = gameStates.render.nState;
         gameStates.render.nState = -1;
@@ -772,9 +772,8 @@ fix ComputeObjectLight(CObject *pObj, CFixVector *vTransformed) {
         gameStates.render.nState = nState;
         light = I2X(1);
     } else
-#endif
         light = SEGMENT(pObj->info.nSegment)->m_xAvgSegLight;
-    // return light;
+
     // Now, maybe return different value to smooth transitions
     if (!bResetLightingHack && (gameData.objData.nLightSig[nObject] == pObj->info.nSignature)) {
         fix xDeltaLight, xFrameDelta;

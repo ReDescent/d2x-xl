@@ -413,7 +413,6 @@ void CAutomap::DrawLevelId(void) {
 //------------------------------------------------------------------------------
 
 void CAutomap::Render(fix xStereoSeparation) {
-#if 1
     PROF_START
     int32_t bAutomapFrame = !m_bRadar && (gameStates.render.cockpit.nType != CM_FULL_SCREEN) &&
                             (gameStates.render.cockpit.nType != CM_LETTERBOX);
@@ -490,7 +489,7 @@ void CAutomap::Render(fix xStereoSeparation) {
     }
     gameData.appData.nFrameCount++;
     PROF_END(ptRenderFrame)
-#endif
+
     FlushFrame(xStereoSeparation);
     if (gameStates.app.bSaveScreenShot)
         SaveScreenShot(NULL, 1);
@@ -713,16 +712,8 @@ int32_t CAutomap::Update(void) {
             InitView();
         float fZoomScale = X2F(m_data.nViewDist) / X2F(ZOOM_DEFAULT);
         if (controls[0].forwardThrustTime)
-#if 1
             m_data.viewTarget +=
                 m_data.viewer.mOrient.m.dir.f * fix(float(controls[0].forwardThrustTime) * float(ZOOM_SPEED_FACTOR));
-#else
-            m_data.nViewDist = Clamp(
-                m_data.nViewDist - fix(float(controls[0].forwardThrustTime) * float(ZOOM_SPEED_FACTOR) * fZoomScale),
-                ZOOM_MIN_VALUE,
-                ZOOM_MAX_VALUE);
-#endif
-        // fZoomScale = pow (fZoomScale, 2.0f / 3.0f);
         m = CFixMatrix::Create(m_vTAngles);
         if (controls[0].verticalThrustTime || controls[0].sidewaysThrustTime) {
             m_data.viewer.mOrient = pPlayer->info.position.mOrient * m;

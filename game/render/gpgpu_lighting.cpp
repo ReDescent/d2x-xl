@@ -252,7 +252,7 @@ int32_t CGPGPULighting::Compute(int32_t nVertex, int32_t nState, CFaceColor *pCo
         glPushAttrib(GL_VIEWPORT_BIT);
         glViewport(0, 0, GPGPU_LIGHT_BUF_WIDTH, GPGPU_LIGHT_BUF_WIDTH);
         lightManager.FBO().Enable();
-#if 1
+
         GLhandleARB shaderProg = GLhandleARB(shaderManager.Deploy(m_nShaderProg));
         shaderManager.Rebuild(shaderProg);
         if (!shaderProg)
@@ -265,7 +265,7 @@ int32_t CGPGPULighting::Compute(int32_t nVertex, int32_t nState, CFaceColor *pCo
             }
         }
         glUniform1f(glGetUniformLocation(shaderProg, "lightRange"), ogl.m_states.fLightRange);
-#endif
+
         ogl.SetDrawBuffer(GL_COLOR_ATTACHMENT0_EXT, 0);
         ogl.SetReadBuffer(GL_COLOR_ATTACHMENT0_EXT, 0);
         ogl.SetFaceCulling(false);

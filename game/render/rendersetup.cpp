@@ -83,12 +83,8 @@ static void ComputeShadowTransformation(int32_t nLight) {
     ogl.ResetTransform(1);
     glMatrixMode(GL_TEXTURE);
     glActiveTexture(GL_TEXTURE1 + nLight);
-#if 1
     bias.Set();
     projection.Mul();
-#else
-    projection.Set();
-#endif
     modelView.Mul();
     transformation.SystemMatrix(nLight).Get(GL_TEXTURE_MATRIX);
     glMatrixMode(matrixMode);

@@ -649,8 +649,6 @@ static int32_t ReadReactorInfo(CFile &cf) {
 
 static int32_t
 AssignProducer(tObjectProducerInfo &producerInfo, int32_t nObjProducer, int32_t nFunction, int8_t bFlag) {
-#if 1
-
     CSegment *pSeg = SEGMENT(0);
 
     for (int32_t i = 0, j = gameData.segData.nSegments; i < j; i++, pSeg++) {
@@ -669,57 +667,6 @@ AssignProducer(tObjectProducerInfo &producerInfo, int32_t nObjProducer, int32_t 
         }
     }
     return -1;
-
-#elif 0
-
-    CSegment *pSeg = SEGMENT(producerInfo.nSegment);
-    if (pSeg->m_function != nFunction)
-        return -1;
-    producerInfo.nProducer = pSeg->m_nObjProducer;
-    tObjectProducerInfo &objProducer = (nFunction == SEGMENT_FUNC_ROBOTMAKER)
-                                           ? gameData.producerData.robotMakers[producerInfo.nProducer]
-                                           : gameData.producerData.equipmentMakers[producerInfo.nProducer];
-    if (objProducer.bAssigned)
-        return -1;
-    int32_t nProducer = objProducer.nProducer;
-    tProducerInfo &producer = gameData.producerData.producers[nProducer];
-    if (!(producer.bFlag & bFlag)) // this segment already has an object producer assigned
-        return -1;
-    memcpy(objProducer.objFlags, producerInfo.objFlags, sizeof(objProducer.objFlags));
-    objProducer.bAssigned = true;
-    producer.bFlag = 0;
-    return pSeg->m_nObjProducer = producerInfo.nProducer;
-
-#else
-
-    if (producerInfo.nProducer < 0)
-        return -1;
-    if (producerInfo.nProducer >= ((nFunction == SEGMENT_FUNC_ROBOTMAKER) ? gameData.producerData.nRobotMakers
-                                                                          : gameData.producerData.nEquipmentMakers))
-        return -1;
-
-    tObjectProducerInfo &objProducer = (nFunction == SEGMENT_FUNC_ROBOTMAKER)
-                                           ? gameData.producerData.robotMakers[producerInfo.nProducer]
-                                           : gameData.producerData.equipmentMakers[producerInfo.nProducer];
-    if (objProducer.bAssigned)
-        return -1;
-    int32_t nProducer = objProducer.nProducer;
-    tProducerInfo &producer = gameData.producerData.producers[nProducer];
-    if (producer.nSegment < 0)
-        return -1;
-    CSegment *pSeg = SEGMENT(producer.nSegment);
-    if (pSeg->m_value != nProducer)
-        return -1;
-    if (pSeg->m_function != nFunction) // this object producer has an invalid segment
-        return -1;
-    if (!(producer.bFlag & bFlag)) // this segment already has an object producer assigned
-        return -1;
-    memcpy(objProducer.objFlags, producerInfo.objFlags, sizeof(objProducer.objFlags));
-    objProducer.bAssigned = true;
-    producer.bFlag = 0;
-    return pSeg->m_nObjProducer = producerInfo.nProducer;
-
-#endif
 }
 
 // -----------------------------------------------------------------------------

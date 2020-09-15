@@ -498,15 +498,11 @@ void TraceCallStack(
             if (nDirection > 0) {
                 f.m_pszFile = pszFile;
                 f.m_nLine = nLine;
-#if 1 // DBG
                 if (!callStack.Push(f)) {
                     PrintCallStack();
                     callStack.Reset();
                     callStack.Push(f);
                 }
-#else
-                callStack.Push(f);
-#endif
             } else {
                 for (int32_t i = int32_t(callStack.ToS()) - 1; i >= 0; i--)
                     if (callStack[i] == f)
@@ -565,8 +561,6 @@ int32_t _CDECL_ error_init(void (*func)(const char *), const char *fmt, ...) {
 
 //------------------------------------------------------------------------------
 
-#if 1 // DBG
-
 int16_t nDbgSeg = -1;
 int16_t nDbgSide = -1;
 int16_t nDbgFace = -1;
@@ -582,8 +576,6 @@ int16_t nDbgSound = -1;
 int16_t nDbgChannel = -1;
 int32_t nDbgLight = -1;
 CBitmap *pDbgBm = NULL;
-
-#endif
 
 //------------------------------------------------------------------------------
 

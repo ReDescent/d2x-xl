@@ -96,12 +96,8 @@ void COGL::FlushShadowMaps(int32_t nEffects) {
                 SetTexturing(true);
                 glMatrixMode(GL_TEXTURE);
                 transformation.SystemMatrix(i).Set(); // light's projection * modelview
-#if 1
                 transformation.SystemMatrix(-3).Mul(); // inverse of camera's modelview * inverse of camera's projection
-#else
-                transformation.SystemMatrix(-1).Mul(); // inverse of camera's modelview
-                transformation.SystemMatrix(-2).Mul(); // inverse of camera's projection
-#endif
+
                 glMatrixMode(matrixMode);
                 BindTexture(cameraManager.ShadowMap(i)->FrameBuffer().DepthBuffer());
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // NEAREST);

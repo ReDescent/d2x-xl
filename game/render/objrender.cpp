@@ -227,13 +227,7 @@ void UpdateSpin(CObject *pObj) {
         break;
     }
 
-#if 1
     pObj->info.position.mOrient = CFixMatrix::Create(a);
-#else
-    // Make powerups align to player orientation. Makes them look quite fake.
-    CFixMatrix mOrient = CFixMatrix::Create(a);
-    pObj->info.position.mOrient = gameData.objData.pViewer->Orientation() * mOrient;
-#endif
     pObj->mType.physInfo.rotVel.SetZero(); // better safe than sorry ...
 }
 
@@ -961,10 +955,8 @@ static int32_t RenderRobotModel(CObject *pObj, int32_t bSpectate) {
     if (pObj->Index() == nDbgObj)
         BRP;
 #endif
-#if 1 //! RENDER_HITBOX
     if (!DrawPolygonObject(pObj, 0))
         RETVAL(0)
-#endif
     if (pObj->info.controlType) {
         thrusterFlames.Render(pObj);
         if (gameStates.render.nShadowPass != 2) {

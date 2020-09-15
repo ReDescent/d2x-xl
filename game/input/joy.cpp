@@ -280,32 +280,7 @@ void JoySetCalVals(tJoyAxisCal *cal, int32_t nAxes) {
 //------------------------------------------------------------------------------
 
 int32_t JoyGetScaledReading(int32_t raw, int32_t nAxis) {
-#if 1
     return (raw + 128) / 256;
-#else
-    int32_t d, x;
-
-    raw -= joyInfo.axes[nAxis].cal.nCenter;
-    if (raw < 0)
-        d = joyInfo.axes[nAxis].cal.nCenter - joyInfo.axes[nAxis].cal.nMin;
-    else if (raw > 0)
-        d = joyInfo.axes[nAxis].cal.nMax - joyInfo.axes[nAxis].cal.nCenter;
-    else
-        d = 0;
-    if (d)
-        x = ((raw << 7) / d);
-    else
-        x = 0;
-    if (x < -128)
-        x = -128;
-    if (x > 127)
-        x = 127;
-    d = (joyDeadzone[nAxis % 4]) * 6;
-    if ((x > (-d)) && (x < d))
-        x = 0;
-
-    return x;
-#endif
 }
 
 //------------------------------------------------------------------------------

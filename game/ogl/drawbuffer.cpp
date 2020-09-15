@@ -81,20 +81,17 @@ void COGL::CreateDrawBuffer(int32_t nType) {
 //------------------------------------------------------------------------------
 
 void COGL::DestroyDrawBuffer(void) {
-#if 1
     static int32_t bSemaphore = 0;
 
     if (bSemaphore)
         return;
     bSemaphore++;
-#endif
+
     if (m_features.bRenderToTexture && DrawBuffer() && DrawBuffer()->Handle()) {
         SetDrawBuffer(GL_BACK, 0);
         DrawBuffer()->Destroy();
     }
-#if 1
     bSemaphore--;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -111,13 +108,11 @@ void COGL::DestroyDrawBuffers(void) {
 //------------------------------------------------------------------------------
 
 void COGL::SetDrawBuffer(int32_t nBuffer, int32_t bFBO) {
-#if 1
     static int32_t bSemaphore = 0;
 
     if (bSemaphore)
         return;
     bSemaphore++;
-#endif
 
     if (bFBO && (nBuffer == GL_BACK) && m_features.bRenderToTexture && DrawBuffer()->Handle()) {
         if (DrawBuffer()->Active())
@@ -133,9 +128,7 @@ void COGL::SetDrawBuffer(int32_t nBuffer, int32_t bFBO) {
         glDrawBuffer(m_states.nDrawBuffer = nBuffer);
     }
 
-#if 1
     bSemaphore--;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -194,12 +187,7 @@ void COGL::ChooseDrawBuffer(void) {
         gameStates.render.bRenderIndirect = 0;
     } else {
         gameStates.render.bRenderIndirect =
-#if 1
             !gameStates.app.bNostalgia && m_features.bShaders && (m_features.bRenderToTexture > 0);
-#else
-            (postProcessManager.Effects() != NULL) || (m_data.xStereoSeparation && (i > 0)) ||
-            (glowRenderer.Available(BLUR_SHADOW) && (EGI_FLAG(bShadows, 0, 1, 0) != 0));
-#endif
         if (gameStates.render.bRenderIndirect <= 0) {
             gameOpts->render.stereo.nGlasses = 0;
             m_data.xStereoSeparation = 0;

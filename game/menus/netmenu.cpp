@@ -484,19 +484,11 @@ void NetworkMoreGameOptions(void) {
             m.AddText("", TXT_SOCKET2, KEY_N);
             m.AddInput("socket", szSocket, 5, HTX_MULTI2_SOCKET);
         }
-#if 1
         m.AddText("", "");
         sprintf(szSlider + 1, TXT_PPS2, mpParams.nMinPPS);
         strupr(szSlider + 1);
         *szSlider = *(TXT_PPS2 - 1);
         m.AddSlider("pps", szSlider + 1, FindNearestPPS(), 0, sizeof(ppsTable) - 1, KEY_O, HTX_SPOTSIZE);
-#else
-        char szPPS[20], szPPSLabel[40];
-        sprintf(szPPS, "%d", mpParams.nMinPPS);
-        sprintf(szPPSLabel, TXT_PPS, MIN_PPS, MAX_PPS);
-        m.AddText("", szPPSLabel, KEY_P);
-        m.AddInput("PPS", szPPS, 3, HTX_MULTI2_PPS);
-#endif
         nLastScoreGoal = netGameInfo.GetScoreGoal();
         nLastPlayTime = mpParams.nMaxTime;
 
@@ -530,10 +522,6 @@ void NetworkMoreGameOptions(void) {
     mpParams.bShowPlayersOnAutomap = m.Value("show players on map");
     if (gameStates.app.bNostalgia)
         mpParams.bShortPackets = m.Value("short packets");
-#if 1
-#else
-    mpParams.nMinPPS = Clamp(m.ToInt("PPS"), MIN_PPS, MAX_PPS);
-#endif
 
     if (gameStates.multi.nGameType >= IPX_GAME) {
         int32_t newSocket = atoi(szSocket);
@@ -1709,7 +1697,6 @@ void IpxSetDriver(int32_t ipx_driver) {
     if ((nIpxError = IpxInit(IPX_DEFAULT_SOCKET + socket)) == IPX_INIT_OK)
         networkData.bActive = 1;
     else {
-#if 1 // TRACE
         switch (nIpxError) {
         case IPX_NOT_INSTALLED:
             console.printf(CON_VERBOSE, "%s\n", TXT_NO_NETWORK);
@@ -1724,7 +1711,6 @@ void IpxSetDriver(int32_t ipx_driver) {
             console.printf(CON_VERBOSE, "%s %d", TXT_ERROR_IPX, nIpxError);
         }
         console.printf(CON_VERBOSE, "%s\n", TXT_NETWORK_DISABLED);
-#endif
         networkData.bActive = 0; // Assume no network
     }
     if (gameStates.multi.nGameType != UDP_GAME) {

@@ -218,12 +218,7 @@ int32_t CParticleEmitter::Update(int32_t nCurTime, int32_t nThread) {
         m_nTicks += t;
         if ((m_nPartsPerPos = (int32_t)(m_fPartsPerTick * m_nTicks)) >= 1) {
             if ((m_nType == BUBBLE_PARTICLES) || (m_nType == RAIN_PARTICLES) || (m_nType == SNOW_PARTICLES)) {
-#if 1
                 m_nPartsPerPos = Rand(m_nPartsPerPos) + 1;
-#else
-                if (Rand(4)) // create some irregularity in bubble appearance
-                    goto funcExit;
-#endif
             }
             m_nTicks = 0;
             if (IsAlive(nCurTime)) {
@@ -297,7 +292,6 @@ int32_t CParticleEmitter::Render(int32_t nThread) {
     } else
 #endif
     {
-#if 1
         PROF_START
 
         float fBrightness = Brightness();
@@ -316,7 +310,6 @@ int32_t CParticleEmitter::Render(int32_t nThread) {
                 h++;
         PROF_END(ptParticles)
         return h;
-#endif
     }
     return 0;
 }

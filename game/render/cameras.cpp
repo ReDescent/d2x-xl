@@ -414,12 +414,10 @@ void CCamera::Rotate(void) {
     fixang curAngle = m_data.curAngle;
     fixang curDelta = m_data.curDelta;
 
-#if 1
     time_t t0 = m_data.t0;
     time_t t = gameStates.app.nSDLTicks[0];
 
     if ((t0 < 0) || (t - t0 >= 1000 / 90))
-#endif
         if (m_data.pObj->cType.aiInfo.behavior == AIB_NORMAL) {
             CAngleVector a;
             CFixMatrix r;
@@ -430,9 +428,7 @@ void CCamera::Rotate(void) {
 
             if (h != d)
                 curDelta = s * d;
-#if 1
             m_data.pObj->mType.physInfo.brakes = (fix)t;
-#endif
             if ((curAngle >= DEG45) || (curAngle <= -DEG45)) {
                 if (curAngle * s - DEG45 >= curDelta * s)
                     curAngle = s * DEG45 + curDelta - s;

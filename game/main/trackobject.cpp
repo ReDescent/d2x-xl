@@ -77,11 +77,7 @@ void CHomingTargetData::Add(CObject *pTarget, float dotScale) {
     if (dot < m_xBestDot)
         RETURN;
 #if NEW_TARGETTING
-#if 1
     m_targets.Push(CTarget(dot, pTarget));
-#else
-    m_targets.Push(CTarget(fix(dist * (1.0f - X2F(dot) / 2.0f)), pTarget));
-#endif
 #else
     // Note: This uses the constant, not-scaled-by-frametime value, because it is only used
     // to determine if an CObject is initially trackable.  FindHomingTarget is called on subsequent

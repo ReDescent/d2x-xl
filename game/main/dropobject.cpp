@@ -214,10 +214,8 @@ int32_t ChooseDropSegment(CObject *pObj, int32_t *pbFixedPos, int32_t nDropState
                 nPlayer = N_LOCALPLAYER;
         }
         nSegment = PickConnectedSegment(OBJECT(PLAYER(nPlayer).nObject), nDepth, &nDropDepth);
-#if 1
         if (nDropDepth < BASE_NET_DROP_DEPTH / 2)
             RETVAL(-1)
-#endif
 #if TRACE
         console.printf(CON_DBG, " %d", nSegment);
 #endif

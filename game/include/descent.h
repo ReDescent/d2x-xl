@@ -1195,11 +1195,10 @@ class CApplicationStates {
     public:
     tSlowTick tick40fps;
     tSlowTick tick60fps;
-#if 1 // MULTI_THREADED
     int32_t bExit;
     int32_t bMultiThreaded;
     int32_t nThreads;
-#endif
+
     int32_t bDemoData;
     int32_t bCheckAndFixSetup;
 #ifdef __unix__

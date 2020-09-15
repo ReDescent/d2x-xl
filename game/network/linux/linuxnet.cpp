@@ -168,8 +168,6 @@ void IpxClose() {
     bIpxInstalled = 0;
 }
 
-#if 1
-
 //------------------------------------------------------------------------------
 
 // IPXRecvData_t networkData.packetSource;
@@ -222,53 +220,6 @@ void IPXSendPacketData(uint8_t *data, int32_t dataSize, uint8_t *network, uint8_
         driver->SendPacket(&ipxSocketData, &ipxHeader, buf, dataSize + (gameStates.multi.bTrackerCall ? 0 : 4));
     }
 }
-
-#else
-
-int32_t IpxGetPacketData(uint8_t *data) {
-    IPXRecvData_t rd;
-    uint8_t buf[MAX_PACKETSIZE];
-    int32_t size;
-    int32_t best_size = 0;
-
-    while (driver->PacketReady(&ipxSocketData)) {
-        if ((size = driver->ReceivePacket(&ipxSocketData, buf, sizeof(buf), &rd)) > 4) {
-            if (!memcmp(rd.src_network, ipx_MyAddress, 10))
-                continue; // don't get own pkts
-            memcpy(data, buf + 4, size - 4);
-            return size - 4;
-        }
-    }
-    return best_size;
-}
-
-//------------------------------------------------------------------------------
-
-void IPXSendPacketData(
-    uint8_t *data,
-    int32_t dataSize,
-    uint8_t *network,
-    uint8_t *address,
-    uint8_t *immediate_address) {
-    if (dataSize > MAX_PAYLOAD_SIZE)
-        PrintLog(0, "IpxSendPacketData: packet too large (%d bytes)\n", dataSize);
-    else {
-        uint8_t buf[MAX_PACKET_SIZE];
-        IPXPacket_t ipxHeader;
-
-        memcpy(ipxHeader.Destination.Network, network, 4);
-        memcpy(ipxHeader.Destination.Node, immediate_address, 6);
-        *reinterpret_cast<u_short *>(ipxHeader.Destination.Socket) = htons(ipxSocketData.socket);
-        ipxHeader.PacketType = 4; /* Packet Exchange */
-        u_int32_t i = INTEL_INT(nIpxPacket);
-        memcpy(buf, i, sizeof(i));
-        nIpxPacket++;
-        memcpy(buf + 4, data, dataSize);
-        driver->SendPacket(&ipxSocketData, &ipxHeader, buf, dataSize + 4);
-    }
-}
-
-#endif
 
 void IpxGetLocalTarget(uint8_t *server, uint8_t *node, uint8_t *local_target) {
     // let's hope Linux knows how to route it
@@ -365,7 +316,7 @@ void IpxReadUserFile(const char *filename) {
             *p1 = '\0';
         if ((p1 = strchr(szTemp, ';')))
             *p1 = '\0';
-#if 1 // adb: replaced sscanf (..., "%2x...", (char *) (...) with better, but longer code
+
         if (strlen(szTemp) < 21 || szTemp[8] != '/')
             continue;
         for (n = 0; n < 4; n++) {
@@ -382,23 +333,6 @@ void IpxReadUserFile(const char *filename) {
         }
         if (n != 6)
             continue;
-#else
-        n = sscanf(
-            szTemp,
-            "%2x%2x%2x%2x/%2x%2x%2x%2x%2x%2x",
-            &tmp.network[0],
-            &tmp.network[1],
-            &tmp.network[2],
-            &tmp.network[3],
-            &tmp.node[0],
-            &tmp.node[1],
-            &tmp.node[2],
-            &tmp.node[3],
-            &tmp.node[4],
-            &tmp.node[5]);
-        if (n != 10)
-            continue;
-#endif
         if (nIpxUsers < MAX_USERS) {
             // uint8_t * ipx_real_buffer = reinterpret_cast<uint8_t*> (&tmp);
             IpxGetLocalTarget(tmp.network, tmp.node, tmp.address);

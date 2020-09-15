@@ -496,23 +496,7 @@ void CBriefing::RenderBitmapFrame(int32_t bRedraw) {
         RenderElement(8);
         // paletteManager.ResumeEffect ();
         if (!(bRedraw || m_info.nDoorDivCount)) {
-#if 1
             m_info.nDoorDivCount = DOOR_DIV_INIT;
-#else
-            switch (m_info.nAnimatingBitmapType) {
-            case 0:
-                if (nFrame == EXIT_DOOR_MAX) {
-                    m_info.nDoorDir = -1;
-                    m_info.nDoorDivCount = DOOR_DIV_INIT;
-                } else if (nFrame == 0) {
-                    m_info.nDoorDir = 1;
-                    m_info.nDoorDivCount = DOOR_DIV_INIT;
-                }
-                break;
-            case 1:
-                break;
-            }
-#endif
         }
     }
 }

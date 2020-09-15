@@ -159,13 +159,7 @@ tDetailData detailData = {
 void GameFlushInputs(void) {
     int32_t dx, dy;
 
-#if 1
     controls.FlushInput();
-#else
-    KeyFlush();
-    JoyFlush();
-    MouseFlush();
-#endif
 #ifdef MACINTOSH
     if ((gameStates.app.nFunctionMode != FMODE_MENU) &&
         !joydefs_calibrating) // only reset mouse when not in menu or not calibrating
@@ -353,7 +347,6 @@ void DoAfterburnerStuff(void) {
             audio.FindObjectSound(LOCALPLAYER.nObject, SOUND_AFTERBURNER_IGNITE);
             if (nSoundObj >=
                 0) { // gameStates.gameplay.xLastAfterburnerCharge || gameStates.gameplay.bLastAfterburnerState) {
-#if 1
                 audio.DeleteSoundObject(nSoundObj);
                 audio.CreateObjectSound(
                     (int16_t)SOUND_AFTERBURNER_PLAY,
@@ -365,7 +358,6 @@ void DoAfterburnerStuff(void) {
                     MultiSendSoundFunction(0, 0);
                 }
             }
-#endif
         }
     }
     gameStates.gameplay.bLastAfterburnerState = controls[0].afterburnerState;

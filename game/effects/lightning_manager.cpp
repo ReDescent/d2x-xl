@@ -465,11 +465,7 @@ void CLightningManager::DestroyForAllObjects(int32_t nType, int32_t nId) {
 
     FORALL_OBJS(pObj) {
         if ((pObj->Type() == nType) && ((nId < 0) || (pObj->Id() == nId)))
-#if 1
             pObj->RequestEffects(DESTROY_LIGHTNING);
-#else
-            DestroyObjectLightnings(pObj);
-#endif
     }
     RETURN
 }
@@ -742,16 +738,8 @@ void CLightningManager::SetLights(void) {
             pLight->color.Green() /= n;
             pLight->color.Blue() /= n;
 
-#if 1
             pLight->nBrightness = F2X(sqrt(
                 10 * (pLight->color.Red() + pLight->color.Green() + pLight->color.Blue()) * pLight->color.Alpha()));
-#else
-            if (gameStates.render.bPerPixelLighting == 2)
-                pLight->nBrightness =
-                    F2X(sqrt(10 * (pLight->Red() + pLight->Green() + pLight->Blue()) * pLight->Alpha()));
-            else
-                pLight->nBrightness = F2X(10 * (pLight->Red() + pLight->Green() + pLight->Blue()) * pLight->Alpha());
-#endif
             if (bDynLighting) {
                 pLight->nDynLight =
                     lightManager
@@ -1159,10 +1147,8 @@ int32_t CLightningManager::RenderForDamage(
             nFrameFlipFlop = gameStates.render.nFrameFlipFlop;
             fDamage = (0.5f - pObj->Damage()) / 500.0f;
         }
-#if 1
         if (RandDouble() > fDamage)
             RETVAL(0)
-#endif
         if (pointList) {
             vPos = pointList[0]->WorldPos();
             vEnd = pointList[1 + Rand(nVertices - 1)]->WorldPos();

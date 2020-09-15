@@ -85,14 +85,7 @@ CFloatVector *OOF_CalcFacePerp(CSubModel *pso, CFace *pFace) {
 
 int32_t OOF_LitFace(CSubModel *pso, CFace *pFace) {
     // OOF_CalcFacePerp (pso, pFace);
-    return pFace->m_bFacingLight =
-#if 1
-               OOF_FacingLight(&pFace->m_vRotCenter, &pFace->m_vRotNormal);
-#else
-               OOF_FacingLight(
-                   pso->m_rotVerts + pFace->m_vertices->m_nIndex,
-                   &pFace->m_vRotNormal); // OOF_CalcFacePerp (pso, pFace));
-#endif
+    return pFace->m_bFacingLight = OOF_FacingLight(&pFace->m_vRotCenter, &pFace->m_vRotNormal);
 }
 
 //------------------------------------------------------------------------------
@@ -308,12 +301,7 @@ int32_t OOF_DrawShadowCaps(CModel *po, CSubModel *pso, int32_t bCullFront) {
 //------------------------------------------------------------------------------
 
 int32_t OOF_DrawShadow(CModel *po, CSubModel *pso) {
-#if 1
     return 1; // D2 oof models aren't 'shadow proof'
-#else
-    return OOF_DrawShadowVolume(po, pso, 0) && OOF_DrawShadowVolume(po, pso, 1) && OOF_DrawShadowCaps(po, pso, 0) &&
-           OOF_DrawShadowCaps(po, pso, 1);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -566,9 +554,7 @@ int32_t CSubModel::Render(CObject *pObj, CModel *po, CFloatVector vo, int32_t nI
 
     vo += m_vOffset;
     Transform(vo);
-// if ((gameStates.render.nShadowPass != 2) && (bFacing != ((m_nFlags & OOF_SOF_FACING) != 0)))
-// return 1;
-#if 1
+
     for (i = 0; i < m_nChildren; i++) {
         pso = po->m_subModels + (j = m_children[i]);
         Assert(j >= 0 && j < po->m_nSubModels);
@@ -576,7 +562,6 @@ int32_t CSubModel::Render(CObject *pObj, CModel *po, CFloatVector vo, int32_t nI
             if (!pso->Render(pObj, po, vo, j, fLight))
                 return 0;
     }
-#endif
     if (gameStates.render.nShadowPass == 2)
         OOF_DrawShadow(po, po->m_subModels + nIndex);
     else

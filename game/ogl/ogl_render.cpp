@@ -224,14 +224,7 @@ int32_t G3DrawSphere(CRenderPoint *pnt, fix rad, int32_t bBigSphere) {
     r = X2F(rad);
     glScaled(r, r, r);
     if (bBigSphere) {
-#if 1
         OglDrawCircle(20, GL_POLYGON);
-#else
-        if (hBigSphere)
-            glCallList(hBigSphere);
-        else
-            hBigSphere = CircleListInit(20, GL_POLYGON, GL_COMPILE_AND_EXECUTE);
-#endif
     } else {
         if (hSmallSphere)
             glCallList(hSmallSphere);

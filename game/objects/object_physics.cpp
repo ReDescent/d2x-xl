@@ -83,26 +83,9 @@ void CObject::Wiggle(void) {
 // ----------------------------------------------------------------------------
 
 static void AdjustThrust(CFixVector &vThrust, fix maxThrust) {
-#if 1
-
-#if 1
     fix ftMin = (maxThrust >> 15) + 1;
     fix ft = (gameData.timeData.xFrame < ftMin) ? ftMin : gameData.timeData.xFrame;
-#else
-    fix ft = gameData.timeData.xFrame;
-    if ((ft < I2X(1) / 2) && ((ft << 15) <= maxThrust))
-        ft = (maxThrust >> 15) + 1;
-#endif
     vThrust *= FixDiv(maxThrust, ft);
-
-#else
-
-    float fScale = float(maxThrust) / float(gameData.timeData.xFrame);
-    vThrust.v.coord.x = fix(float(vThrust.v.coord.x) * fScale);
-    vThrust.v.coord.y = fix(float(vThrust.v.coord.y) * fScale);
-    vThrust.v.coord.z = fix(float(vThrust.v.coord.z) * fScale);
-
-#endif
 }
 
 // ----------------------------------------------------------------------------

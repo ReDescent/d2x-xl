@@ -135,15 +135,8 @@ void ComputeSingleSegmentDistance(int32_t nSegment, int32_t nThread) {
         nMaxSeg = i;
     }
     // find constant factor to scale all distances from current segment down to 16 bits
-#if 1
     if (xMaxDist > 0xFFFE) // 0xFFFF is reserved and means "not reachable"
         scale = (float)xMaxDist / (float)0xFFFE;
-#else
-    while (xMaxDist & 0xFFFF0000) {
-        xMaxDist >>= 1;
-        ++scale;
-    }
-#endif
 
     CSegDistList &segDist = gameData.segData.segDistTable[nSegment];
     segDist.offset = nMinSeg;
@@ -743,11 +736,9 @@ static void ComputeSingleLightVisibility(int32_t nLight, int32_t nThread) {
         for (int32_t i = 1; i <= 5; i++)
             ComputeSingleSegmentVisibility(nThread, pLight->Index(), pLight->info.nSide, pLight->info.nSide, i);
 #endif
-#if 1
         fix xLightRange = fix(MAX_LIGHT_RANGE * pLight->info.fRange);
         for (int32_t i = 0; i < gameData.segData.nSegments; i++)
             CheckLightVisibility(pLight->Index(), i, xLightRange, pLight->info.fRange, nThread);
-#endif
     }
     RETURN
 }

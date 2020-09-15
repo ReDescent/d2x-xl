@@ -816,7 +816,6 @@ void SetSpeedBoostVelocity(
         }
 
         sbd.vVel = n * I2X(v);
-#if 1
         h.v.coord.x = h.v.coord.y = h.v.coord.z = I2X(60);
         sbd.vMinVel = sbd.vVel - h;
         sbd.vMaxVel = sbd.vVel + h;
@@ -835,7 +834,6 @@ void SetSpeedBoostVelocity(
             sbd.vMinVel.v.coord.z = sbd.vMaxVel.v.coord.z;
             sbd.vMaxVel.v.coord.z = h;
         }
-#endif
         pObj->mType.physInfo.velocity = sbd.vVel;
         if (bSetOrient) {
             TriggerSetObjOrient(nObject, nDestSeg, nDestSide, 0, -1);
@@ -1365,7 +1363,6 @@ void CTrigger::Read(CFile &cf, int32_t bObjTrigger) {
     m_nLinks = (int16_t)cf.ReadByte();
     cf.ReadByte();
     SetValue(cf.ReadFix());
-#if 1
     if (Type() == TT_MASTER) { // patch master trigger value (which acts as semaphore)
         if (bObjTrigger || (gameTopFileInfo.fileinfoVersion < 39))
             SetValue(0);
@@ -1376,7 +1373,6 @@ void CTrigger::Read(CFile &cf, int32_t bObjTrigger) {
                 ClearFlags(TF_PERMANENT);
         }
     }
-#endif
     SetTime(0, cf.ReadFix());
     if (bObjTrigger && (Type() != TT_COUNTDOWN) && (Type() != TT_MESSAGE) && (Type() != TT_SOUND))
         SetTime(0, -1);
@@ -1408,11 +1404,9 @@ void CTrigger::LoadState(CFile &cf, bool bObjTrigger) {
         SetFlags(uint16_t(cf.ReadByte()));
     m_nLinks = (int16_t)cf.ReadByte();
     SetValue(cf.ReadFix());
-#if 1
     if ((saveGameManager.Version() < 50) &&
         (Type() == TT_MASTER)) // patch master trigger value (which acts as semaphore)
         SetValue(0);
-#endif
     SetTime(0, cf.ReadFix());
     SetTime(1, -1);
     CTriggerTargets::LoadState(cf);

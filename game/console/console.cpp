@@ -519,13 +519,9 @@ void CConsole::DrawCommandLine(void) {
     }
 
     if (bBlink) {
-#if 1
         int32_t w, h, aw;
         fontManager.Current()->StringSize(m_VCommand, w, h, aw);
         x = CON_CHAR_BORDER + w;
-#else
-        x = CON_CHAR_BORDER + m_canvas.Font()->Width() * (m_CursorPos - m_Offset + (int32_t)strlen(m_Prompt));
-#endif
         if (m_InsMode)
             GrString(x, m_canvas.Height() - m_canvas.Font()->Height(), CON_INS_CURSOR);
         else

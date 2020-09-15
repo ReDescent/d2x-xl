@@ -347,20 +347,16 @@ void CMarkerManager::Delete(int32_t bForce) {
 
 void CMarkerManager::Teleport(void) {
     if (!IsMultiGame || IsCoopGame) {
-#if 1 //! DBG
         if ((LOCALPLAYER.Energy() < I2X(101) / 2) || (LOCALPLAYER.Shield() < I2X(51) / 2))
             HUDMessage(0, TXT_CANNOT_TELEPORT);
         else
-#endif
             if ((m_data.nHighlight > -1) && (m_data.objects[m_data.nHighlight] != -1)) {
             gameData.SetViewer(OBJECT(m_data.objects[m_data.nHighlight]));
             if (!InfoBox(NULL, NULL, BG_STANDARD, 2, TXT_YES, TXT_NO, TXT_JUMP_TO_MARKER)) {
                 CObject *pMarker = OBJECT(m_data.objects[m_data.nHighlight]);
 
-#if 1 //! DBG
                 LOCALPLAYER.UpdateEnergy(-I2X(101) / 2);
                 LOCALPLAYER.UpdateShield(-I2X(51) / 2);
-#endif
                 LOCALOBJECT->info.position.vPos = pMarker->info.position.vPos;
                 LOCALOBJECT->RelinkToSeg(pMarker->info.nSegment);
                 if (!IsMultiGame || IsCoopGame)

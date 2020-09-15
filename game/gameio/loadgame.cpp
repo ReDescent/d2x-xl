@@ -936,14 +936,12 @@ int32_t LoadLevel(int32_t nLevel, bool bLoadTextures, bool bRestore) {
     lightManager.SetMethod();
 
     if (!gameStates.app.bPrecomputeLightmaps) {
-#if 1
         if (LoadModData(NULL, 0, 0) < 0) {
             gameStates.app.bBetweenLevels = 0;
             missionManager.nCurrentLevel = nCurrentLevel;
             PrintLog(-1);
             RETVAL(-1);
         }
-#endif
         songManager.PlayLevelSong(missionManager.nCurrentLevel, 1);
         /*---*/ PrintLog(1, "Initializing particle manager\n");
         InitObjectSmoke();
@@ -1009,22 +1007,17 @@ int32_t LoadLevel(int32_t nLevel, bool bLoadTextures, bool bRestore) {
     if (!gameStates.app.bPrecomputeLightmaps) {
         if (!gameStates.app.bProgressBars)
             messageBox.Show(TXT_LOADING);
-        paletteManager.SetGame(paletteManager.Load(szCurrentLevelPalette, pszLevelName, 1, 1, 1)); // don't change
-                                                                                                   // screen
-#if 1
+        paletteManager.SetGame(paletteManager.Load(szCurrentLevelPalette, pszLevelName, 1, 1, 1)); // don't change screen
         if (LoadModData(pszLevelName, bLoadTextures, 1) < 0) {
             gameStates.app.bBetweenLevels = 0;
             missionManager.nCurrentLevel = nCurrentLevel;
             RETVAL(-1);
         }
-#endif
     }
-#if 1
     if (!lightManager.Setup(nLevel)) {
         PrintLog(-1, "Not enough memory for light data\n");
         RETVAL(-1);
     }
-#endif
     if (!gameStates.app.bPrecomputeLightmaps) {
         /*---*/ PrintLog(1, "loading endlevel data\n");
         LoadEndLevelData(nLevel);

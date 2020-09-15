@@ -178,12 +178,8 @@ class CPlayerInfo {
     uint16_t secondaryWeaponFlags; // bit set indicates the player has this weapon.
     uint16_t primaryAmmo[MAX_PRIMARY_WEAPONS]; // How much ammo of each nType.
     uint16_t secondaryAmmo[MAX_SECONDARY_WEAPONS]; // How much ammo of each nType.
-#if 1 // for inventory system
     uint8_t nInvuls;
     uint8_t nCloaks;
-#else
-    uint16_t pad; // Pad because increased weaponFlags from byte to int16_t -YW 3/22/95
-#endif
     //  -- make sure you're 4 byte aligned now
 
     // Statistics...
@@ -266,7 +262,6 @@ class CPlayerData : public CPlayerInfo {
     inline int8_t ObservedPlayer(void) { return m_nObservedPlayer; }
     inline void SetObservedPlayer(int8_t nPlayer) { m_nObservedPlayer = nPlayer; }
 
-#if 1
     inline fix InitialShield(void) { return m_shield.Initial(); }
     inline fix InitialEnergy(void) { return m_energy.Initial(); }
     inline fix Shield(bool bScale = true) { return m_shield.Get(bScale); }
@@ -348,7 +343,6 @@ class CPlayerData : public CPlayerInfo {
         else
             SetLaserLevels(nLevel, 0);
     }
-#endif
     CObject *Object(void);
     void SetObject(int16_t n);
     bool IsLocalPlayer(void);

@@ -218,10 +218,8 @@ int32_t SortObjList(int32_t nSegment) {
             BRP;
 #endif
     }
-#if 1
     if (j > 1)
         QSortObjRenderList(0, j - 1);
-#endif
     RETVAL(j)
 }
 

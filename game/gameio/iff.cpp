@@ -231,12 +231,7 @@ int32_t CIFF::ParseBody(int32_t len, tIFFBitmapHeader *bmHeader) {
     data_end = p + width * bmHeader->h * depth;
     if (bmHeader->compression == cmpNone) { /* no compression */
         for (int32_t y = bmHeader->h; y; y--) {
-#if 1
             p += GetBytes((char *)p, width * depth);
-#else
-            for (int32_t x = 0; x < width * depth; x++)
-                *p++ = Data()[NextPos()];
-#endif
             if (bmHeader->masking == mskHasMask)
                 SetPos(Pos() + width); // skip mask!
             if (bmHeader->w & 1)
@@ -411,19 +406,12 @@ int32_t CIFF::Parse(int32_t formType, tIFFBitmapHeader *bmHeader, int32_t formLe
             break;
 
         case cmap_sig: {
-#if 1
             tPalEntry *p = bmHeader->palette;
             for (int32_t i = len / 3; i; i--, p++) {
                 p->r = Data()[NextPos()] / 4;
                 p->g = Data()[NextPos()] / 4;
                 p->b = Data()[NextPos()] / 4;
             }
-#else
-            char *p = (char *)&bmHeader->palette;
-            len = GetBytes(p, len);
-            for (int32_t i = len; i; i--)
-                *p++ /= 4;
-#endif
             if (len & 1)
                 NextPos();
             break;
@@ -604,7 +592,6 @@ int32_t CIFF::ParseBitmap(CBitmap *pBm, int32_t bitmapType, CBitmap *pPrevBm) {
 //------------------------------------------------------------------------------
 // returns error codes - see IFF.H.  see GR[HA] for bitmapType
 int32_t CIFF::ReadBitmap(const char *cfname, CBitmap *pBm, int32_t bitmapType) {
-#if 1
     char *p, fn[FILENAME_LEN];
 
     strcpy(fn, cfname);
@@ -613,7 +600,7 @@ int32_t CIFF::ReadBitmap(const char *cfname, CBitmap *pBm, int32_t bitmapType) {
         *p = '\0';
     if (ReadHiresBitmap(&gameData.endLevelData.terrain.bmInstance, fn, 0x7FFFFFFF, 1) > 0)
         return IFF_NO_ERROR;
-#endif
+
     int32_t ret = Open(cfname); // read in entire file
     if (ret == IFF_NO_ERROR) {
         ret = ParseBitmap(pBm, bitmapType, NULL);
