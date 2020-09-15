@@ -231,9 +231,6 @@ void UseNetPlayerStats(CPlayerInfo *ps, tNetPlayerStats *pd);
 //-----------------------------------------------------------------------------
 
 int32_t MultiMsgLen(uint8_t nMsg) {
-#if 0
-return multiMessageLengths [nMsg][0];
-#else
 #if DBG
     if (nMsg > MULTI_MAX_TYPE)
         return 0;
@@ -241,7 +238,6 @@ return multiMessageLengths [nMsg][0];
     int32_t l = multiMessageLengths[nMsg][gameStates.multi.nGameType == UDP_GAME];
 
     return (l > 0) ? l : multiMessageLengths[nMsg][0];
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -805,13 +801,6 @@ void MultiNewGame(void) {
 //-----------------------------------------------------------------------------
 
 void MultiTurnPlayerToGhost(int32_t nPlayer) {
-#if 0
-if ((nPlayer == N_LOCALPLAYER) || (nPlayer >= MAX_NUM_NET_PLAYERS) || (nPlayer < 0)) {
-	Int3 (); // Non-terminal, see Rob
-	return;
-	}
-#endif
-
     CObject *pObj = OBJECT(PLAYER(nPlayer).nObject);
     if (pObj) {
         pObj->SetType(OBJ_GHOST);
@@ -826,13 +815,6 @@ if ((nPlayer == N_LOCALPLAYER) || (nPlayer >= MAX_NUM_NET_PLAYERS) || (nPlayer <
 //-----------------------------------------------------------------------------
 
 void MultiTurnGhostToPlayer(int32_t nPlayer) {
-#if 0
-if ((nPlayer == N_LOCALPLAYER) || (nPlayer >= MAX_NUM_NET_PLAYERS)) {
-	Int3 (); // Non-terminal, see rob
-	return;
-	}
-#endif
-
     CObject *pObj = OBJECT(PLAYER(nPlayer).nObject);
     if (pObj) {
         pObj->SetType(OBJ_PLAYER);
@@ -1242,12 +1224,6 @@ void MultiLeaveGame(void) {
         MultiSendPlayerExplode(MULTI_PLAYER_DROP);
     }
     MultiSendQuit(MULTI_QUIT);
-#if 0
-if (N_LOCALPLAYER != 0) {
-	memcpy (&PLAYER (0), &LOCALPLAYER, sizeof (LOCALPLAYER));
-	N_LOCALPLAYER = 0;
-	}
-#endif
     ResetPlayerData(true, false, false, -1);
     if (IsNetworkGame)
         NetworkLeaveGame();
@@ -1324,14 +1300,6 @@ void MultiDoFire(uint8_t *buf) {
     int32_t flags = int32_t(buf[4]);
 
     gameData.multigame.weapon.nTrack = GET_INTEL_SHORT(buf + 6);
-
-#if 0
-if (gameStates.multi.nGameType == UDP_GAME) {
-	gameData.multigame.weapon.nFired [1] = buf [8];
-	for (int32_t i = 0; i < gameData.multigame.weapon.nFired [1]; i++)
-		gameData.multigame.weapon.nObjects [1][i] = GET_INTEL_SHORT (buf + 9 + i * sizeof (int16_t));
-	}
-#endif
 
     if (PLAYEROBJECT(nPlayer)->info.nType == OBJ_GHOST)
         MultiTurnGhostToPlayer(nPlayer);
@@ -1491,7 +1459,6 @@ void MultiDoPlayerExplode(uint8_t *buf) {
         pBuffer += 2;
         gameStates.app.nRandSeed = (uint32_t)GET_INTEL_INT(buf + pBuffer);
         pBuffer += 4;
-#if 1
         CObject *pObj = PLAYEROBJECT(nPlayer);
         pObj->Velocity().Set(
             GET_INTEL_INT(buf + pBuffer),
@@ -1505,11 +1472,7 @@ void MultiDoPlayerExplode(uint8_t *buf) {
         pBuffer += 12;
         pObj->SetSegment(GET_INTEL_SHORT(buf + pBuffer));
         pBuffer += 2;
-#endif
     }
-#if 0
-MultiAdjustRemoteCap (nPlayer);
-#endif
     pPlayer->m_tWeaponInfo = 0; // keep the PSALM from kicking in before updated player weapon info is available
     MultiDestroyPlayerShip(nPlayer, buf[0] == MULTI_PLAYER_EXPLODE, buf[pBuffer], (int16_t *)(buf + pBuffer + 1));
 }
@@ -2949,24 +2912,6 @@ void MultiSendPlaySound(int32_t nSound, fix volume) {
     gameData.multigame.msg.buf[2] = char(nSound);
     gameData.multigame.msg.buf[3] = char(volume >> 12);
     MultiSendData(gameData.multigame.msg.buf, 4, 0);
-}
-
-//-----------------------------------------------------------------------------
-
-void MultiSendAudioTaunt(int32_t taunt_num) {
-    return; // Taken out, awaiting sounds..
-
-#if 0
-	int32_t audio_taunts [4] = {
-		SOUND_CONTROL_CENTER_WARNING_SIREN,
-		SOUND_HOSTAGE_RESCUED,
-		SOUND_REFUEL_STATION_GIVING_FUEL,
-		SOUND_BAD_SELECTION
-		};
-
-	audio.PlaySound (audio_taunts [taunt_num]);
-	MultiSendPlaySound (audio_taunts [taunt_num], I2X (1));
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -4481,33 +4426,6 @@ void MultiDoPowerupUpdate(uint8_t *buf) {
 
 //-----------------------------------------------------------------------------
 
-#if 0 // never used...
-void MultiSendActiveDoor (int32_t i)
-{
-	int32_t count;
-
-gameData.multigame.msg.buf [0] = MULTI_ACTIVE_DOOR;
-gameData.multigame.msg.buf [1] = i;
-gameData.multigame.msg.buf [2] = gameData.wallData.nOpenDoors;
-count = 3;
-memcpy (gameData.multigame.msg.buf + 3, gameData.wallData.activeDoors + i, sizeof (CActiveDoor);
-count += sizeof (CActiveDoor);
-#if defined(WORDS_BIGENDIAN) || defined(__BIG_ENDIAN__)
-CActiveDoor *pDoor = reinterpret_cast<CActiveDoor*> (gameData.multigame.msg.buf + 3);
-pDoor->nPartCount = INTEL_INT (pDoor->nPartCount);
-pDoor->nFrontWall [0] = INTEL_SHORT (pDoor->nFrontWall [0]);
-pDoor->nFrontWall [1] = INTEL_SHORT (pDoor->nFrontWall [1]);
-pDoor->nBackWall [0] = INTEL_SHORT (pDoor->nBackWall [0]);
-pDoor->nBackWall [1] = INTEL_SHORT (pDoor->nBackWall [1]);
-pDoor->time = INTEL_INT (pDoor->time);
-#endif
-//MultiSendData (gameData.multigame.msg.buf, sizeof (CActiveDoor)+3, 1);
-MultiSendData (gameData.multigame.msg.buf, count, 1);
-}
-#endif // 0 (never used)
-
-//-----------------------------------------------------------------------------
-
 void MultiDoActiveDoor(uint8_t *buf) {
     CActiveDoor *pDoor = reinterpret_cast<CActiveDoor *>(gameData.multigame.msg.buf + 3);
 #if defined(WORDS_BIGENDIAN) || defined(__BIG_ENDIAN__)
@@ -4625,16 +4543,17 @@ void MultiDoCaptureBonus(uint8_t *buf) {
         audio.PlaySound(SOUND_HUD_BLUE_GOT_GOAL, SOUNDCLASS_GENERIC, I2X(2));
     PLAYER(nPlayer).flags &= ~(PLAYER_FLAGS_FLAG); // Clear capture flag
     if (penalty) {
-#if 0
-	PLAYER (nPlayer).netKillsTotal -= bonus;
-	PLAYER (nPlayer).nScoreGoalCount -= bonus;
-	if (gameData.multigame.score.nTeam [nTeam] >= ScoreGoal ()) {
-		sprintf (szTeam, "%s Team", nTeam ? TXT_RED : TXT_BLUE);
-		HUDInitMessage (TXT_REACH_SCOREGOAL, szTeam);
-		HUDInitMessage (TXT_CTRLCEN_DEAD);
-		NetDestroyReactor (ObjFindFirstOfType (OBJ_REACTOR));
-		}
-#endif
+        // FIXME: why is penalty handling commented out?
+        /*
+        PLAYER (nPlayer).netKillsTotal -= bonus;
+        PLAYER (nPlayer).nScoreGoalCount -= bonus;
+        if (gameData.multigame.score.nTeam [nTeam] >= ScoreGoal ()) {
+            sprintf (szTeam, "%s Team", nTeam ? TXT_RED : TXT_BLUE);
+            HUDInitMessage (TXT_REACH_SCOREGOAL, szTeam);
+            HUDInitMessage (TXT_CTRLCEN_DEAD);
+            NetDestroyReactor (ObjFindFirstOfType (OBJ_REACTOR));
+        }
+        */
     } else {
         PLAYER(nPlayer).netKillsTotal += bonus;
         PLAYER(nPlayer).nScoreGoalCount += bonus;

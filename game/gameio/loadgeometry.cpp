@@ -485,10 +485,6 @@ int32_t HasColoredLight(void) {
         return 0;
     // get the default colors
     for (i = 0; i < gameData.segData.nVertices; i++, pvc++) {
-#if 0
-	if (pvc->index <= 0)
-		continue;
-#endif
         if ((pvc->Red() == 0) && (pvc->Green() == 0) && (pvc->Blue() == 0)) {
             pvc->index = 0;
             continue;

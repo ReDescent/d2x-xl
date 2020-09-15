@@ -428,20 +428,12 @@ void IpxReadNetworkFile(const char *filename) {
         return;
     if (!(fp = fopen(filename, "rt")))
         return;
-#if 0
-//printf ("Using Networks:\n");
-for (i=0; i<nIpxNetworks; i++)		{
-	uint8_t * n1 = reinterpret_cast<uint8_t*> (&ipxNetworks[i]);
-	//printf ("* %02x%02x%02x%02x\n", n1[0], n1[1], n1[2], n1[3]);
-	}
-#endif
     while (fgets(szTemp, sizeof(szTemp), fp)) {
         ln++;
         if ((p1 = strchr(szTemp, '\n')))
             *p1 = '\0';
         if ((p1 = strchr(szTemp, ';')))
             *p1 = '\0';
-#if 1 // adb: replaced sscanf (..., "%2x...", (char *) (...) with better, but longer code
         if (strlen(szTemp) < 8)
             continue;
         for (n = 0; n < 4; n++) {
@@ -451,11 +443,6 @@ for (i=0; i<nIpxNetworks; i++)		{
         }
         if (n != 4)
             continue;
-#else
-        n = sscanf(szTemp, "%2x%2x%2x%2x", &tmp.network[0], &tmp.network[1], &tmp.network[2], &tmp.network[3]);
-        if (n != 4)
-            continue;
-#endif
         if (nIpxNetworks < MAX_NETWORKS) {
             int32_t j;
             for (j = 0; j < nIpxNetworks; j++)

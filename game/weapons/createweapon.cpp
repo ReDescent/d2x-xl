@@ -132,12 +132,10 @@ int32_t CreateWeaponSpeed(CObject *pWeapon, bool bFix) {
     // Don't do for weapons created by weapons.
     if (!bFix && pParent && (pParent->info.nType == OBJ_PLAYER) && (pWeaponInfo->renderType != WEAPON_RENDER_NONE) &&
         (nWeaponType != FLARE_ID) && !CObject::IsMissile(nWeaponType)) {
-#if 1
         pWeapon->mType.physInfo.velocity = vDir * (gameData.laserData.nOffset + xLaserLength / 2);
         if (pWeapon->Velocity().IsZero())
             PrintLog(0, "weapon object has no velocity\n");
         else
-#endif
         {
             fix xTime = gameData.physicsData.xTime;
             gameData.physicsData.xTime = -1; // make it move the entire velocity vector
@@ -313,7 +311,6 @@ int32_t CreateNewWeapon(
         gameStates.app.bD2XLevel && (pParent == gameData.objData.pConsole) &&
         (SEGMENT(gameData.objData.pConsole->info.nSegment)->HasNoDamageProp()))
         RETVAL(-1)
-#if 1
     if ((nParent == LOCALPLAYER.nObject) && (nWeaponType == PROXMINE_ID) &&
         (gameData.appData.GameMode(GM_HOARD | GM_ENTROPY))) {
         int32_t nObject = CreatePowerup(POW_HOARD_ORB, -1, nSegment, *vPosition, 0);
@@ -329,7 +326,6 @@ int32_t CreateNewWeapon(
         }
         RETVAL(-1)
     }
-#endif
     int32_t nObject = CreateWeaponObject(nWeaponType, nSegment, vPosition, -1);
     CObject *pObj = OBJECT(nObject);
     if (!pObj) {

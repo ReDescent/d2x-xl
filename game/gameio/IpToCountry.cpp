@@ -12,12 +12,8 @@ static inline bool ParseIP(char *buffer, uint32_t &ip) {
     char *token = strtok(buffer, ",") + 1;
     if (!token)
         return false;
-#if 1 // DBG
     for (ip = 0; isdigit(*token); token++)
         ip = 10 * ip + uint32_t(*token - '0');
-#else
-    ip = strtoul(token, NULL, 10);
-#endif
     return true;
 }
 
@@ -89,7 +85,7 @@ int32_t ReadIpToCountryRecord(void) {
     country[3] = '\0';
     if (!cf.GetS(lineBuf, sizeof(lineBuf)))
         return 0;
-#if 1
+
     if ((lineBuf[0] == '\0') || (lineBuf[0] == '#'))
         return 1;
     if (!(ParseIP(lineBuf, minIP) && ParseIP(NULL, maxIP)))
@@ -111,29 +107,8 @@ int32_t ReadIpToCountryRecord(void) {
     if (minIP > maxIP)
         Swap(minIP, maxIP);
     ipToCountry.Push(CIpToCountry(minIP, maxIP, country));
-#endif
     return 1;
 }
-
-//------------------------------------------------------------------------------
-
-#if 0
-
-static int32_t nProgressStep;
-
-static int32_t LoadIpToCountryPoll (CMenu& menu, int32_t& key, int32_t nCurItem, int32_t nState)
-{
-if (!ReadIpToCountryRecord ())
-	key = -2;
-else {
-	if (++(menu [0].Value ()) % nProgressStep == 0)
-		menu [0].Rebuild ();
-	key = 0;
-	}
-return nCurItem;
-}
-
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -167,12 +142,6 @@ int32_t LoadIpToCountry(void) {
     if (!cf.Open(pszFile, gameFolders.game.szData[1], "rb", 0))
         return -1;
 
-#if 0 // slows it down too much
-if (gameStates.app.bProgressBars && gameOpts->menus.nStyle) {
-	nProgressStep = (nRecords + 99) / 100;
-	ProgressBar (TXT_LOADING_IPTOCOUNTRY, 1, 0, nRecords, LoadIpToCountryPoll); 
-	}
-#endif
     else {
         while (ReadIpToCountryRecord())
             ;

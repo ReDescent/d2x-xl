@@ -106,7 +106,7 @@ int32_t do_slew_movement(CObject *pObj, int32_t check_keys, int32_t check_joy) {
 
     if (check_joy && bJoyPresent && (gameStates.app.nFunctionMode == FMODE_EDITOR)) {
         JoyGetPos(&joy_x, &joy_y);
-        btns = JoyGetBtns();
+        btns = 0; //JoyGetBtns();
 
         joyx_moved = (abs(joy_x - old_joy_x) > JOY_NULL);
         joyy_moved = (abs(joy_y - old_joy_y) > JOY_NULL);

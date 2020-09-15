@@ -514,9 +514,6 @@ int32_t ExecMultiMenuOption(CMenu &m, int32_t nChoice) {
         gameStates.multi.nGameType = IPX_GAME;
         IpxSetDriver(IPX_DRIVER_KALI);
     } else if ((nChoice == m.IndexOf("start mcast4 game")) || (nChoice == m.IndexOf("join mcast4 game"))) {
-#if 0 // DBG
-	NetworkGetIpAddr (bStart != 0, false);
-#endif
         gameStates.multi.nGameType = IPX_GAME;
         IpxSetDriver(IPX_DRIVER_MCAST4);
     }

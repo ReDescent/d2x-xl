@@ -128,11 +128,6 @@ void joy_set_cen(void);
 void JoyGetPos(int32_t *x, int32_t *y);
 
 //==========================================================================
-// This just reads the buttons and returns their status.  When bit 0
-// is 1, button 1 is pressed, when bit 1 is 1, button 2 is pressed.
-int32_t JoyGetBtns(void);
-
-//==========================================================================
 // This returns the number of times a button went either down or up since
 // the last call to this function.
 int32_t JoyGetButtonUpCnt(int32_t btn);

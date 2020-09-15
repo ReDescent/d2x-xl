@@ -137,10 +137,6 @@ void DrawVClipObject(CObject *pObj, fix timeToLive, int32_t bLit, int32_t nVClip
         else
             alpha = WEAPON_ALPHA;
     }
-#if 0
-if ((pObj->info.nType == OBJ_FIREBALL) || (pObj->info.nType == OBJ_EXPLOSION))
-	ogl.SetDepthWrite (true);	//don't set z-buffer for transparent objects
-#endif
     if (pAnimInfo->flags & VF_ROD)
         DrawObjectRodTexPoly(pObj, pAnimInfo->frames[iFrame], bLit, iFrame);
     else
@@ -151,10 +147,8 @@ if ((pObj->info.nType == OBJ_FIREBALL) || (pObj->info.nType == OBJ_EXPLOSION))
             iFrame,
             color,
             (float)alpha);
-#if 1
     if ((pObj->info.nType == OBJ_FIREBALL) || (pObj->info.nType == OBJ_EXPLOSION))
         ogl.SetDepthWrite(true);
-#endif
     RETURN
 }
 
@@ -172,13 +166,6 @@ void DrawExplBlast(CObject *pObj) {
     CFloatVector p = {0, 0, 0};
 #endif
     CFloatVector color;
-#if 0
-	static CFloatVector blastColors [] = {
-	 {0.5, 0.0f, 0.5f, 1},
-	 {1, 0.5f, 0, 1},
-	 {1, 0.75f, 0, 1},
-	 {1, 1, 1, 3}};
-#endif
     if (pObj->info.xLifeLeft <= 0)
         RETURN
     if (!explBlast.Load())
@@ -285,13 +272,9 @@ void DrawShockwave(CObject *pObj) {
     // vertices [3] -= f;
 
     pBm->SetColor(&color);
-#if 0
-ogl.RenderSprite (pBm, pObj->Position (), pObj->info.xSize * 5, pObj->info.xSize * 5, 1.0f, 2, 10.0f);
-#else
     for (int32_t i = 0; i < 4; i++)
         transformation.Transform(vertices[i], vertices[i], 0);
     transparencyRenderer.AddPoly(NULL, NULL, pBm, vertices, 4, texCoord, &color, NULL, 1, 0, GL_QUADS, GL_CLAMP, 2, -1);
-#endif
     RETURN
 }
 
@@ -339,18 +322,9 @@ int32_t ConvertVClipToPolymodel(CObject *pObj) {
     int16_t nModel = WeaponToModel(pObj->info.nId);
     if (!(nModel && HaveReplacementModel(nModel)))
         return 0;
-#if 0 // DBG
-pObj->Orientation () = gameData.objData.pConsole->Orientation ();
-pObj->mType.physInfo.rotVel.v.coord.x =
-pObj->mType.physInfo.rotVel.v.coord.y =
-pObj->mType.physInfo.rotVel.v.coord.z = 0;
-#else
+
     SetupSpin(pObj, true);
-#endif
-#if 0
-pObj->mType.physInfo.mass = I2X (1);
-pObj->mType.physInfo.drag = 512;
-#endif
+
     // pObj->info.controlType = CT_WEAPON;
     pObj->info.renderType = RT_POLYOBJ;
     pObj->info.movementType = MT_PHYSICS;

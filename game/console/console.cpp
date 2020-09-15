@@ -26,13 +26,6 @@
 
 #define get_msecs() approx_fsec_to_msec(TimerGetApproxSeconds())
 
-/* Private console stuff */
-#if 0
-#define CON_LINE_LEN 40
-static char con_display[40][40];
-static int32_t  con_line; /* Current display line */
-#endif
-
 CConsole console;
 
 /* This contains a pointer to the "topmost" console. The console that
@@ -178,92 +171,6 @@ int32_t CConsole::Events(int32_t event) {
     return 0;
 }
 
-#if 0
-/* CConsole::AlphaGL () -- sets the alpha channel of an SDL_Surface to the
- * specified value.  Preconditions: the surface in question is RGBA.
- * 0 <= a <= 255, where 0 is transparent and 255 is opaque. */
-void CConsole::AlphaGL (SDL_Surface *s, int32_t alpha) {
-	uint8_t val;
-	int32_t x, y, w, h;
-	uint32_t pixel;
-	uint8_t r, g, b, vec;
-	SDL_PixelFormat *format;
-	static char errorPrinted = 0;
-
-
-	/* debugging assertions -- these slow you down, but hey, crashing sucks */
-	if (!s) {
-		PRINT_ERROR ("NULL Surface passed to CConsole::AlphaGL\n");
-		return;
-	}
-
-	/* clamp alpha value to 0...255 */
-	if (alpha < SDL_ALPHA_TRANSPARENT)
-		val = SDL_ALPHA_TRANSPARENT;
-	else if (alpha > SDL_ALPHA_OPAQUE)
-		val = SDL_ALPHA_OPAQUE;
-	else
-		val = alpha;
-
-	/* loop over alpha channels of each pixel, setting them appropriately. */
-	w = s->w;
-	h = s->h;
-	format = s->format;
-	switch (format->BytesPerPixel) {
-	case 2:
-		/* 16-bit surfaces don't seem to support alpha channels. */
-		if (!errorPrinted) {
-			errorPrinted = 1;
-			PRINT_ERROR ("16-bit SDL surfaces do not support alpha-blending under OpenGL.\n");
-		}
-		break;
-	case 4: {
-			/* we can do this very quickly in 32-bit mode.  24-bit is more
-			 * difficult.  And since 24-bit mode is reall the same as 32-bit,
-			 * so it usually ends up taking this route too.  Win!  Unroll loop
-			 * and use pointer arithmetic for extra speed. */
-			int32_t numpixels = h * (w << 2);
-			uint8_t *pix = reinterpret_cast<uint8_t*> (s->pixels);
-			uint8_t *last = pix + numpixels;
-			uint8_t *pixel;
-			if ((numpixels & 0x7) == 0)
-				for (pixel = pix + 3; pixel < last; pixel += 32)
-					*pixel = * (pixel + 4) = * (pixel + 8) = * (pixel + 12) = * (pixel + 16) = * (pixel + 20) = * (pixel + 24) = * (pixel + 28) = val;
-			else
-				for (pixel = pix + 3; pixel < last; pixel += 4)
-					*pixel = val;
-			break;
-		}
-	default:
-		/* we have no choice but to do this slowly.  <sigh> */
-		for (y = 0; y < h; ++y)
-			for (x = 0; x < w; ++x) {
-				char print = 0;
-				/* Lock the surface for direct access to the pixels */
-				if (SDL_MUSTLOCK (s) && SDL_LockSurface (s) < 0) {
-#ifndef _WIN32
-					PRINT_ERROR ("Can't lock surface: ");
-					PrintLog (0, "%s\n", SDL_GetError ();
-#endif
-					return;
-				}
-				pixel = DT_GetPixel (s, x, y);
-				if (x == 0 && y == 0)
-					print = 1;
-				SDL_GetRGBA (pixel, format, &r, &g, &b, &vec);
-				pixel = SDL_MapRGBA (format, r, g, b, val);
-				SDL_GetRGBA (pixel, format, &r, &g, &b, &vec);
-				DT_PutPixel (s, x, y, pixel);
-
-				/* unlock surface again */
-				if (SDL_MUSTLOCK (s))
-					SDL_UnlockSurface (s);
-			}
-		break;
-	}
-}
-#endif
-
 //------------------------------------------------------------------------------
 
 /* Updates the console buffer */
@@ -403,9 +310,7 @@ void CConsole::Setup(CFont *font, CScreen *output, int32_t lines, int32_t x, int
     m_ConsoleScrollBack = 0;
     m_TotalCommands = 0;
     m_background = NULL;
-#if 0
-m_ConsoleAlpha = SDL_ALPHA_OPAQUE;
-#endif
+
     m_Offset = 0;
     m_InsMode = 1;
     m_CursorPos = 0;
@@ -567,19 +472,12 @@ void CConsole::NewLineCommand(void) {
 void CConsole::DrawCommandLine(void) {
     int32_t x;
     int32_t commandbuffer;
-#if 0
-	CFont* CurrentFont;
-#endif
     static int32_t LastBlinkTime = 0; /* Last time the consoles cursor blinked */
     static int32_t LastCursorPos = 0; // Last Cursor Position
     static int32_t bBlink = 0; /* Is the cursor currently blinking */
     CCanvasColor orig_color;
 
     commandbuffer = m_VChars - (int32_t)strlen(m_Prompt) - 1; // -1 to make cursor visible
-
-#if 0
-CurrentFont = m_canvas.Font ();
-#endif
 
     // Concatenate the left and right CSide to command
     strcpy(m_Command, m_LCommand);
@@ -596,15 +494,6 @@ CurrentFont = m_canvas.Font ();
     // then add the visible part of the command
     strncat(m_VCommand, &m_Command[m_Offset], strlen(&m_Command[m_Offset]));
     // now display the result
-
-#if 0
-//once again we're drawing text, so in OpenGL context we need to temporarily set up
-//software-mode transparency.
-if (m_output->flags & SDL_OPENGLBLIT) {
-	uint32_t *pix = reinterpret_cast<uint32_t*> (CurrentFont->FontSurface->pixels);
-	SDL_SetColorKey (CurrentFont->FontSurface, SDL_SRCCOLORKEY, *pix);
-}
-#endif
 
     // now add the text
     orig_color = CCanvas::Current()->FontColor(0);

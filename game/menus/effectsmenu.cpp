@@ -274,9 +274,6 @@ void EffectOptionsMenu(void) {
 
     CMenu m;
     int32_t i, j;
-#if 0
-	int32_t	optShockwaves;
-#endif
     char szSlider[50];
 
     InitStrings();

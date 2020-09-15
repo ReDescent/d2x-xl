@@ -103,7 +103,6 @@ void RotatePointList(CRenderPoint *dest, CFixVector *src, CRenderNormal *norms, 
         norms += o;
     while (n--) {
         dest->SetKey((int16_t)o);
-#if 1
         if (norms) {
             if (norms->nFaces > 1) {
                 norms->vNormal.v.coord.x /= norms->nFaces;
@@ -114,7 +113,6 @@ void RotatePointList(CRenderPoint *dest, CFixVector *src, CRenderNormal *norms, 
             }
             dest->Normal() = *norms++;
         } else
-#endif
             dest->Normal().Reset();
         if (ogl.m_states.bUseTransform) {
             pfv->Assign(*src);
@@ -124,17 +122,9 @@ void RotatePointList(CRenderPoint *dest, CFixVector *src, CRenderNormal *norms, 
             if (!gameData.modelData.vScale.IsZero()) {
                 CFixVector v = *src;
                 v *= gameData.modelData.vScale;
-#if 1
                 transformation.Transform(dest->ViewPos(), v, 0);
-#else
-                dest.TransformAndEncode(dir);
-#endif
             } else {
-#if 1
                 transformation.Transform(dest->ViewPos(), *src, 0);
-#else
-                dest.TransformAndEncode(*src);
-#endif
             }
             pfv->Assign(dest->ViewPos());
         }
@@ -337,11 +327,7 @@ void GetThrusterPos(int32_t nModel, CFixVector *vNormal, CFixVector *vOffset, CB
         if ((i != 24) && ((i < 1741) || (i > 1745)))
             RETURN
     }
-#if 1
     if (CFixVector::Dot(*vNormal, vForward) > -I2X(1) / 3)
-#else
-    if (vNormal->p.x || vNormal->p.y || (vNormal->p.z != -I2X(1)))
-#endif
         RETURN
     for (i = 1, v = pointList[0]->WorldPos(); i < nPoints; i++)
         v += pointList[i]->WorldPos();

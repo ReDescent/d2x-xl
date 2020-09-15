@@ -195,28 +195,6 @@ int32_t CLightManager::Toggle(int16_t nSegment, int16_t nSide, int16_t nObject, 
     return nLight;
 }
 
-//------------------------------------------------------------------------------
-
-void CLightManager::Register(CFaceColor *pColor, int16_t nSegment, int16_t nSide) {
-#if 0
-if (!pColor || pColor->index) {
-	tLightInfo	*pli = gameData.renderData.shadows.lightInfo + gameData.renderData.shadows.nLights++;
-#if DBG
-	CAngleVector	vec;
-#endif
-	pli->nIndex = (int32_t) nSegment * 6 + nSide;
-	pli->coord = SEGMENT (nSegment)->m_SideCenter (nSide);
-	OOF_VecVms2Gl (pli->glPos, &pli->coord);
-	pli->nSegNum = nSegment;
-	pli->nSideNum = (uint8_t) nSide;
-#if DBG
-	VmExtractAnglesVector (&vec, SEGMENT (nSegment)->m_sides [nSide].m_normals);
-	VmAngles2Matrix (&pli->position.mOrient, &vec);
-#endif
-	}
-#endif
-}
-
 //-----------------------------------------------------------------------------
 
 int32_t CLightManager::IsTriggered(int16_t nSegment, int16_t nSide, bool bOppSide) {
@@ -306,7 +284,8 @@ int32_t CLightManager::Add(
     int16_t nObject,
     int16_t nTexture,
     CFixVector *vPos,
-    uint8_t bAmbient) {
+    uint8_t bAmbient
+) {
     ENTER(0, 0);
 
     int16_t h, i;
@@ -315,10 +294,6 @@ int32_t CLightManager::Add(
     GLint nMaxLights;
 #endif
 
-#if 0
-if (xBrightness > I2X (1))
-	xBrightness = I2X (1);
-#endif
     if (fBrightness <= 0)
         RETVAL(-1);
 
@@ -332,14 +307,7 @@ if (xBrightness > I2X (1))
 #endif
 
     if (gameStates.render.nLightingMethod && (nSegment >= 0) && (nSide >= 0)) {
-#if 1
         fBrightness /= Intensity(pColor->Red(), pColor->Green(), pColor->Blue());
-#else
-        if (fBrightness < 1)
-            fBrightness = (float)sqrt(fBrightness);
-        else
-            fBrightness *= fBrightness;
-#endif
     }
     if (pColor)
         pColor->Alpha() = 1.0f;
@@ -389,10 +357,6 @@ if (xBrightness > I2X (1))
                 light.info.bPowerup = 1;
             else
                 light.info.bPowerup = 2;
-#if 0
-		if (light.info.bPowerup > gameData.renderData.nPowerupFilter)
-			RETVAL (-1);
-#endif
         }
         light.info.vPos = pObj->info.position.vPos;
         light.info.fRad = 0; // X2F (OBJECT (nObject)->size) / 2;
@@ -407,10 +371,6 @@ if (xBrightness > I2X (1))
         }
         m_data.owners[nObject] = m_data.nLights[0];
     } else if (nSegment >= 0) {
-#if 0
-	CFixVector	vOffs;
-	CSide			*pSide = SEGMENT (nSegment)->m_sides + nSide;
-#endif
         if (nSide < 0) {
             light.info.nType = 2;
             light.info.bVariable = 1;
@@ -436,12 +396,6 @@ if (xBrightness > I2X (1))
             CFixVector vOffs = pSide->m_normals[2];
             light.info.vDirf.Assign(vOffs);
             CFloatVector::Normalize(light.info.vDirf);
-#if 0
-		if (gameStates.render.bPerPixelLighting) {
-			vOffs *= I2X (1) / 64;
-			light.info.vPos += vOffs;
-			}
-#endif
         }
     } else {
         light.info.nType = 3;
@@ -682,15 +636,11 @@ int32_t CDynLight::SeesPoint(
         for (i = 0; i < nVertices; i++) {
             CFloatVector vLightToPointf = v1 - vLight[i];
             CFloatVector::Normalize(vLightToPointf);
-#if 0
-		if (CFloatVector::Dot (vLightToPointf, info.vDirf) < -0.001f) // light doesn't see point
-			continue;
-		if (pvNormal && (CFloatVector::Dot (vLightToPointf, vNormalf) > 0.001f)) // light doesn't "see" face
-			continue;
-#else
-            int32_t bLightSeesFace = (CFloatVector::Dot(vLightToPointf, info.vDirf) > -0.001f) &&
-                                     (!pvNormal || (CFloatVector::Dot(vLightToPointf, vNormalf) < 0.001f));
-#endif
+            int32_t bLightSeesFace = (
+                (CFloatVector::Dot(vLightToPointf, info.vDirf) > -0.001f) &&
+                (!pvNormal || (CFloatVector::Dot(vLightToPointf, vNormalf) < 0.001f))
+            );
+
             if (0 <= pLightSeg->ChildIndex(nDestSeg)) // don't check point to point visibility for connected segments
                 RETVAL(bLightSeesFace ? 1 : -1)
             if (PointSeesPoint(&vLight[i], &v1, info.nSegment, nDestSeg, nDestSide, 0, nThread))
@@ -763,37 +713,7 @@ int32_t CDynLight::Contribute(
     int32_t nThread) {
     ENTER(0, nThread);
 
-#if 1
     info.bDiffuse[nThread] = 1;
-#else
-    if ((info.nSegment >= 0) && (nDestSeg >= 0)) {
-#if DBG
-        if ((info.nSegment == nDbgSeg) && ((nDbgSide < 0) || (nDbgSide == info.nSide)))
-            BRP;
-#endif
-        if (info.nSide < 0)
-            info.bDiffuse[nThread] = gameData.segData.SegVis(info.nSegment, nDestSeg);
-        else {
-#if DBG
-            if (nDestSeg == nDbgSeg)
-                BRP;
-#endif
-            if (SEGMENT(info.nSegment)->HasOutdoorsProp()) {
-                if ((nDestSide >= 0) && ((info.nSide != nDestSide) || (info.nSegment != nDestSeg)))
-                    RETVAL(0)
-                info.bDiffuse[nThread] = 1;
-            } else if (0 > (info.bDiffuse[nThread] = gameData.segData.LightVis(Index(), nDestSeg)))
-                RETVAL(0)
-        }
-    }
-#if 0 // DBG
-#else
-    else if ((info.nSegment = LightSeg()) >= 0)
-        info.bDiffuse[nThread] = (nDestSeg < 0) || gameData.segData.SegVis(info.nSegment, nDestSeg);
-#endif
-    else
-        RETVAL(0)
-#endif
 
     fix xDistance, xRad;
     int32_t nLightSeg = LightSeg();
@@ -924,15 +844,7 @@ void CLightManager::AddGeometryLights(void) {
     CSegFace *pFace;
     CFaceColor *pColor;
 
-#if 0
-for (nTexture = 0; nTexture < 910; nTexture++)
-	nLight = IsLight (nTexture);
-#endif
     gameStates.render.bHaveDynLights = 1;
-#if 0
-if (gameStates.app.bD1Mission)
-	gameData.renderData.fAttScale [0] *= 2;
-#endif
     ogl.m_states.fLightRange = fLightRanges[IsMultiGame ? 1 : extraGameInfo[IsMultiGame].nLightRange];
     m_headlights.Init();
     if (gameStates.render.nLightingMethod)
@@ -970,10 +882,6 @@ if (gameStates.app.bD1Mission)
                 NULL,
                 pSeg->HasOutdoorsProp() || IsLight(pFace->m_info.nOvlTex));
         nTexture = pFace->m_info.nOvlTex;
-#if 0 // DBG
-	if (gameStates.app.bD1Mission && (nTexture == 289)) //empty, light
-		continue;
-#endif
         if ((nTexture > 0) && (nTexture < MAX_WALL_TEXTURES) &&
             (nLight = IsLight(nTexture)) /*gameData.pigData.tex.info.fBrightness [nTexture]*/) {
             pColor = gameData.renderData.color.textures + nTexture;

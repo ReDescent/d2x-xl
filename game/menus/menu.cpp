@@ -259,10 +259,6 @@ void CMenu::GetTitleSize(const char *pszTitle, CFont *font, int32_t &tw, int32_t
 int32_t CMenu::GetSize(int32_t &w, int32_t &h, int32_t &aw, int32_t &nMenus, int32_t &nOthers) {
     int32_t nStringWidth = 0, nStringHeight = 0, nAverageWidth = 0;
 
-#if 0
-if ((gameOpts->menus.nHotKeys > 0) && !gameStates.app.bEnglish)
-	gameOpts->menus.nHotKeys = -1;
-#endif
     for (uint32_t i = 0; i < ToS(); i++) {
         int32_t nLineCount =
             Item(i)
@@ -521,11 +517,7 @@ void CMenu::Render(const char *pszTitle, const char *pszSubTitle, CCanvas *gameC
 //------------------------------------------------------------------------------
 
 float CMenu::GetScale(void) {
-#if 0 // DBG
-return ogl.IsSideBySideDevice () ? 0.5f : 1.0f;
-#else
     return (ogl.IsOculusRift() && !gameData.renderData.rift.Resolution()) ? 0.5f : 1.0f;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -578,7 +570,6 @@ void CMenu::Render(void) {
             ((item.m_nType == NM_TYPE_INPUT) || ((item.m_nType == NM_TYPE_INPUT_MENU) && item.m_group)))
             item.UpdateCursor();
     }
-#if 1
     if (m_props.bIsScrollBox) {
         // fontManager.SetCurrent (NORMAL_FONT);
         if (m_bRedraw || (m_nLastScrollCheck != m_props.nScrollOffset)) {
@@ -605,16 +596,11 @@ void CMenu::Render(void) {
         DrawCloseBox(0, 0);
         m_bCloseBox = 1;
     }
-#endif
 
     m_background.Deactivate();
     fontManager.PopScale();
     m_bRedraw = 1;
     m_bStart = 0;
-#if 0
-if (!m_bDontRestore && paletteManager.EffectDisabled ())
-	paletteManager.EnableEffect ();
-#endif
     gameData.SetStereoOffsetType(nOffsetSave);
     gameStates.render.grAlpha = 1.0f;
 }

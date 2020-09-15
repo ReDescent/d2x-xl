@@ -70,12 +70,6 @@ void decodeFrame16(uint8_t *pFrame, uint8_t *pMap, int32_t mapRemain, uint8_t *p
 
         FramePtr += 7 * g_width;
     }
-
-#if 0
-    if ((length-(pData-pOrig)) != 0) {
-    	fprintf(stderr, "DEBUG: junk left over: %d,%d,%d\n", (pData-pOrig), length, (length-(pData-pOrig));
-    }
-#endif
 }
 
 static uint16_t GETPIXEL(uint8_t **buf, int32_t off) {

@@ -194,9 +194,6 @@ void NetworkSyncObjects(tNetworkSyncInfo *pSyncInfo) {
                 objBuf[2] = (uint8_t)pSyncInfo->objs.nFrame;
             Assert(bufI <= MAX_PAYLOAD_SIZE);
             if (gameStates.multi.nGameType >= IPX_GAME) {
-#if 0
-			IPXSendInternetPacketData (objBuf, bufI, pSyncInfo->player [1].player.network.Network (), pSyncInfo->player [1].player.network.Node ());
-#else
                 if (!pSyncInfo->bDeferredSync)
                     IPXSendInternetPacketData(
                         objBuf,
@@ -212,7 +209,6 @@ void NetworkSyncObjects(tNetworkSyncInfo *pSyncInfo) {
                     pSyncInfo->objs.nCurrent = -1;
                     return;
                 }
-#endif
             }
         }
     }

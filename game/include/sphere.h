@@ -82,20 +82,6 @@ class CSphereVertex {
         return v;
     }
 
-#if 0 // ndef _WIN32
-    inline const CSphereVertex operator+ (const CSphereVertex other) const {
-        CSphereVertex v = *this;
-        v += other;
-        return v;
-        }
-
-    inline const CSphereVertex operator- (const CSphereVertex other) const {
-        CSphereVertex v = *this;
-        v -= other;
-        return v;
-        }
-#endif
-
     inline CSphereVertex &operator*=(const float s) {
         m_v *= s;
         m_tc.v.u *= s;

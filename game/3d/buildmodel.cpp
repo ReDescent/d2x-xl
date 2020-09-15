@@ -972,11 +972,6 @@ fix CModel::Size(CObject *pObj, int32_t bHires) {
     if (m_nModel == nDbgModel)
         BRP;
 #endif
-#if 1
-// VmVecInc (&pSubModel [0].vOffset, gameData.modelData.offsets + m_nModel);
-#else
-    G3ShiftModel(pObj, m_nModel, bHires, &vOffset);
-#endif
     pHitbox[0].vSize = pHitbox[0].vMax - pHitbox[0].vMin;
     gameData.modelData.offsets[m_nModel] = CFixVector::Avg(pHitbox[0].vMax, pHitbox[0].vMin);
     // pHitbox [0].vOffset = gameData.modelData.offsets [m_nModel];

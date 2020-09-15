@@ -268,7 +268,6 @@ int32_t PickupLaser(CObject *pObj, int32_t nId, int32_t nPlayer) {
         if (gameData.demoData.nState == ND_STATE_RECORDING)
             NDRecordLaserLevel((int8_t)pPlayer->LaserLevel(0) - 1, (int8_t)pPlayer->LaserLevel(0));
         PickupEffect(10, 0, 10, LASER_SCORE, "%s %s %d", TXT_LASER, TXT_BOOSTED_TO, pPlayer->LaserLevel() + 1);
-        cockpit->UpdateLaserWeaponInfo();
         PickupPrimary(LASER_INDEX, nPlayer);
         RETVAL(1)
     }
@@ -291,7 +290,6 @@ int32_t PickupSuperLaser(CObject *pObj, int32_t nId, int32_t nPlayer) {
             if (gameData.demoData.nState == ND_STATE_RECORDING)
                 NDRecordLaserLevel(pPlayer->LaserLevel() - 1, pPlayer->LaserLevel());
             PickupEffect(10, 0, 10, LASER_SCORE, TXT_SUPERBOOST, pPlayer->LaserLevel() + 1, nPlayer);
-            cockpit->UpdateLaserWeaponInfo();
             if (gameData.weaponData.nPrimary != LASER_INDEX)
                 CheckToUsePrimary(SUPER_LASER_INDEX);
         }
@@ -313,7 +311,6 @@ int32_t PickupQuadLaser(CObject *pObj, int32_t nId, int32_t nPlayer) {
     if (!(pPlayer->flags & PLAYER_FLAGS_QUAD_LASERS)) {
         pPlayer->flags |= PLAYER_FLAGS_QUAD_LASERS;
         PickupEffect(15, 15, 7, QUAD_FIRE_SCORE, "%s!", TXT_QUAD_LASERS);
-        cockpit->UpdateLaserWeaponInfo();
         RETVAL(1)
     }
     if (nPlayer == N_LOCALPLAYER)

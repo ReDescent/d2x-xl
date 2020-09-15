@@ -2029,10 +2029,6 @@ const char *defaultGameTexts[][2] = {
     {"~Glanzlicht: %d%%", "~Specular light: %d%%"},
     {"~Direktes Licht: %d%%", "~Direct light: %d%%"},
     {"~Lightmaps neu berechnen", "~Rebuild lightmaps"},
-
-#if 0
- {"", ""},
-#endif
     {"", ""}};
 
 //------------------------------------------------------------------------------
@@ -2880,9 +2876,6 @@ const char *defaultHelpTexts[][2] =
          "Adjust the light contribution of direct light here."},
         {"Wenn angekreuzt, werden die Lightmaps fuer jede Mission,\ndie gestartet oder geladen wird, neu berechnet.\n\nDiese Einstellung wird nicht gespeichert, wenn das Programm beendet wird.",
          "If checked, lightmaps are recomputed\nfor every mission being started or loaded.\n\nThis setting is not stored when the program is terminated."},
-#if 0
- {"", ""},
-#endif
         {"", ""}};
 
 //------------------------------------------------------------------------------

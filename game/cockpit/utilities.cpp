@@ -48,10 +48,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "marker.h"
 
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
 
 char *CGenericCockpit::ftoa(char *pszVal, fix f) {
     int32_t decimal, fractional;
@@ -177,7 +173,8 @@ int32_t CGenericCockpit::CanSeeObject(int32_t nObject, int32_t bCheckObjs) {
         gameStates.render.cameras.bActive ? -1 : OBJ_IDX(gameData.objData.pViewer),
         0,
         0,
-        ++gameData.physicsData.bIgnoreObjFlag);
+        ++gameData.physicsData.bIgnoreObjFlag
+    );
 
     CHitResult hitResult;
 
@@ -215,18 +212,6 @@ void CGenericCockpit::DemoRecording(void) {
             m_history[0].flags = LOCALPLAYER.flags;
         }
     }
-}
-
-// ---------------------------------------------------------------------------------------------------------
-// Call when picked up a laser powerup.
-// If laser is active, set previous weapon [0] to -1 to force redraw.
-
-void CGenericCockpit::UpdateLaserWeaponInfo(void) {
-#if 0
-if (m_history [0].weapon [0] == 0)
-	if (!(LOCALPLAYER.laserLevel > MAX_LASER_LEVEL && m_history [0].laserLevel <= MAX_LASER_LEVEL))
-		m_history [0].weapon [0] = -1;
-#endif
 }
 
 //------------------------------------------------------------------------------

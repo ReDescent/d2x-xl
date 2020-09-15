@@ -349,17 +349,6 @@ int32_t ComputeNearestVertexLights(int32_t nVertex, int32_t nThread) {
                 h = CFixVector::Normalize(vLightToVert) - (int32_t)(pLight->info.fRad * 6553.6f);
                 if (h > MAX_LIGHT_RANGE * pLight->info.fRange)
                     continue;
-#if 0
-                if ((pLight->info.nSegment >= 0) && (pLight->info.nSide >= 0)) {
-                    CSide* pSide = SEGMENT (pLight->info.nSegment)->m_sides + pLight->info.nSide;
-                    if ((CFixVector::Dot (pSide->m_normals [0], vLightToVert) < 0) &&
-                        ((pSide->m_nType == SIDE_IS_QUAD) || (CFixVector::Dot (pSide->m_normals [1], vLightToVert) < 0))) {
-                        h = simpleRouter [nThread].PathLength (VERTICES [nVertex], -1, pLight->info.vPos, pLight->info.nSegment, X2I (xMaxLightRange / 5), WID_TRANSPARENT_FLAG | WID_PASSABLE_FLAG, 0);
-                        if (h > 4 * MAX_LIGHT_RANGE / 3 * pLight->info.fRange)
-                            continue;
-                    }
-                }
-#endif
             }
             pDists[n].nDist = h;
             pDists[n].nIndex = l;
@@ -867,12 +856,7 @@ int32_t LoadLightData(int32_t nLevel) {
     if (bOk)
         bOk = (ldh.nVersion == LIGHT_DATA_VERSION) && (ldh.nCheckSum == CalcSegmentCheckSum()) &&
               (ldh.nSegments == gameData.segData.nSegments) && (ldh.nVertices == gameData.segData.nVertices) &&
-              (ldh.nLights == lightManager.LightCount(0)) && (ldh.nMaxLightRange == MAX_LIGHT_RANGE)
-#if 0
-            && (ldh.nMethod = LightingMethod () &&
-            && ((ldh.bPerPixelLighting != 0) == (gameStates.render.bPerPixelLighting != 0)))
-#endif
-            ;
+              (ldh.nLights == lightManager.LightCount(0)) && (ldh.nMaxLightRange == MAX_LIGHT_RANGE);
     if (bOk)
         bOk = (gameData.segData.bSegVis.Read(cf, gameData.segData.SegVisSize(ldh.nSegments), 0, ldh.bCompressed) ==
                size_t(gameData.segData.SegVisSize(ldh.nSegments))) &&
@@ -1092,35 +1076,6 @@ int32_t _CDECL_ VertLightsThread(void *pThreadId) {
     RETVAL(0)
 }
 
-//------------------------------------------------------------------------------
-
-#if 0
-
-static void StartLightPrecalcThreads (pThreadFunc threadFunc)
-{
-    int32_t	i;
-
-    for (i = 0; i < gameStates.app.nThreads; i++) {
-        ti [i].bDone = 0;
-        ti [i].done = SDL_CreateSemaphore (0);
-        ti [i].nId = i;
-        ti [i].pThread = SDL_CreateThread (threadFunc, &ti [i].nId);
-    }
-#if 1
-    for (i = 0; i < gameStates.app.nThreads; i++)
-        SDL_SemWait (ti [i].done);
-#else
-    while (!(ti [0].bDone && ti [1].bDone))
-        G3_SLEEP (0);
-#endif
-    for (i = 0; i < gameStates.app.nThreads; i++) {
-        SDL_WaitThread (ti [i].pThread, NULL);
-        SDL_DestroySemaphore (ti [i].done);
-    }
-}
-
-#endif
-
 #endif // _OPENMP --------------------------------------------------------------
 #endif // MULTI_THREADED_PRECALC ------------------------------------------------
 
@@ -1308,16 +1263,6 @@ int32_t PrecomputeLightmapsPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int
             RETVAL(9);
 
         if (nState == -2) {
-#if 0
-            char szLabel [50];
-            int32_t h = menu.AddText ("", "settings:");
-            sprintf (szLabel, "%s / %s", LightmapQualityText (), LightmapPrecisionText ());
-            menu.AddText ("", szLabel);
-            menu.AddText ("", "");
-            menu.AddText ("", "total progress");
-            for (int32_t i = 0; i < 4; i++)
-                menu [h + i].m_bCentered = 1;
-#endif
             RETVAL(0)
         }
 
@@ -1361,10 +1306,6 @@ int32_t PrecomputeLightmapsPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int
             RETVAL(nCurItem);
         }
     }
-#if 0
-    menu [0].Value ()++;
-    menu [0].Rebuild ();
-#endif
     RETVAL(nCurItem);
 }
 

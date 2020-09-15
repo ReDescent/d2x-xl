@@ -83,8 +83,6 @@ void CMessageBox::Show(const char *pszMsg, const char *pszImage, bool bFade, boo
 //------------------------------------------------------------------------------
 
 void CMessageBox::Render(void) {
-#if 1
-
     static int32_t t0 = 0;
 
     if (!(BeginRenderMenu() && (FadeIn() || MenuRenderTimeout(t0, -1))))
@@ -107,44 +105,16 @@ void CMessageBox::Render(void) {
             1,
             0,
             0,
-            gameStates.render.grAlpha);
+            gameStates.render.grAlpha
+        );
     GrPrintF(
         NULL,
         m_bCentered ? 0x8000 : m_x - CCanvas::Current()->Left(),
         m_y - CCanvas::Current()->Top() + m_bm.Height() + (m_bm.Width() ? 28 : 0),
-        m_pszMsg);
-#if 0
-if (gameStates.app.bGameRunning)
-	ogl.ChooseDrawBuffer ();
-else
-	ogl.SetDrawBuffer (m_nDrawBuffer, 0);
-#endif
+        m_pszMsg
+    );
     gameStates.render.grAlpha = 1.0f;
     m_background.Deactivate();
-
-#else
-
-    static int32_t t0 = 0;
-
-    if (!(BeginRenderMenu() && MenuRenderTimeout(t0, -1)))
-        return;
-
-    CCanvas::SetCurrent(backgroundManager.Canvas(1));
-    FadeIn();
-    // backgroundManager.Redraw ();
-    backgroundManager.Activate(m_background);
-    fontManager.SetColorRGBi(DKGRAY_RGBA, 1, 0, 0);
-    fontManager.SetCurrent(MEDIUM1_FONT);
-    GrPrintF(NULL, 0x8000, BOX_BORDER / 2, m_pszMsg);
-    GrUpdate(0);
-    if (gameStates.app.bGameRunning)
-        ogl.ChooseDrawBuffer();
-    else
-        ogl.SetDrawBuffer(m_nDrawBuffer, 0);
-    gameStates.render.grAlpha = 1.0f;
-    m_background.Deactivate();
-
-#endif
 }
 
 //------------------------------------------------------------------------------

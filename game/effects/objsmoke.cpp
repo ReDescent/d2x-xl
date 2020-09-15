@@ -139,37 +139,6 @@ void CreateDamageExplosion(int32_t h, int32_t i) {
 }
 
 //------------------------------------------------------------------------------
-#if 0
-void CreateThrusterFlames (CObject *pObj)
-{
-	static int32_t nThrusters = -1;
-
-	CFixVector	coord, dir = pObj->info.position.mOrient.mat.dir.f;
-	int32_t			d, j;
-	tParticleEmitter		*pEmitter;
-
-VmVecNegate (&dir);
-if (nThrusters < 0) {
-	nThrusters =
-		particleManager.Create (&pObj->info.position.vPos, &dir, pObj->info.nSegment, 2, -2000, 20000,
-										gameOpts->render.particles.bSyncSizes ? -1 : gameOpts->render.particles.nSize [1],
-										2, -2000, PLR_PART_SPEED * 50, LIGHT_PARTICLES, pObj->Index (), NULL, 1, -1);
-	particleManager.SetObjectSystem (pObj->Index ()) = nThrusters;
-	}
-else
-	particleManager.SetDir (nThrusters, &dir);
-d = 8 * pObj->info.xSize / 40;
-for (j = 0; j < 2; j++)
-	if (pEmitter = GetParticleEmitter (nThrusters, j)) {
-		VmVecScaleAdd (&coord, &pObj->info.position.vPos, &pObj->info.position.mOrient.mat.dir.f, -pObj->info.xSize);
-		VmVecScaleInc (&coord, &pObj->info.position.mOrient.mat.dir.r, j ? d : -d);
-		VmVecScaleInc (&coord, &pObj->info.position.mOrient.mat.dir.u,  -pObj->info.xSize / 25);
-		SetParticleEmitterPos (pEmitter, &coord, NULL, pObj->info.nSegment);
-		}
-}
-#endif
-
-//------------------------------------------------------------------------------
 
 void KillPlayerBullets(CObject *pObj) {
     if (pObj) {
@@ -383,12 +352,6 @@ void DoPlayerSmoke(CObject *pObj, int32_t nPlayer) {
             }
         }
     }
-#if 0
-if (EGI_FLAG (bThrusterFlames, 1, 1, 0)) {
-	if ((vec <= I2X (1) / 4) && (vec || !gameStates.input.bControlsSkipFrame))	//no thruster flames if moving backward
-		DropAfterburnerBlobs (pObj, 2, I2X (1), -1, gameData.objData.pConsole, 1); //I2X (1) / 4);
-	}
-#endif
     if (IsNetworkGame && !PLAYER(nPlayer).connected)
         nParts = 0;
     else if (pObj->info.nFlags & (OF_SHOULD_BE_DEAD | OF_DESTROYED))
@@ -662,10 +625,6 @@ void DoMissileSmoke(CObject *pObj) {
                 // nParts /= 2;
                 nLife /= 2;
             }
-#if 0
-	if ((pObj->info.nId == EARTHSHAKER_MEGA_ID) || (pObj->info.nId == ROBOT_SHAKER_MEGA_ID))
-		nParts /= 2;
-#endif
             nSmoke = particleManager.Create(
                 &vPos,
                 NULL,
@@ -686,13 +645,7 @@ void DoMissileSmoke(CObject *pObj) {
                 return;
             particleManager.SetObjectSystem(nObject, nSmoke);
         }
-#if 1
         particleManager.SetPos(nSmoke, &vPos, NULL, pObj->info.nSegment);
-#else
-        tThrusterInfo ti;
-        thrusterFlames.CalcPos(pObj, &ti);
-        particleManager.SetPos(nSmoke, ti.vPos, NULL, pObj->info.nSegment);
-#endif
     } else
         KillObjectSmoke(nObject);
 #endif
@@ -1049,10 +1002,6 @@ void PlayerParticleFrame(void) {
 //------------------------------------------------------------------------------
 
 void ObjectParticleFrame(void) {
-#if 0
-if (!SHOW_SMOKE)
-	return;
-#endif
     CObject *pObj = OBJECTS.Buffer();
 
     for (int32_t i = 0; i <= gameData.objData.nLastObject[1]; i++, pObj++) {

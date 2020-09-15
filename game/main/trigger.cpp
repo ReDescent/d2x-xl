@@ -1640,34 +1640,6 @@ int32_t FindTriggerTarget(int16_t nSegment, int16_t nSide, int32_t i) {
 
 //------------------------------------------------------------------------------
 
-#if 0
-	static char d2TriggerMap [10] = {
-		TT_OPEN_DOOR,
-		TT_SHIELD_DAMAGE,
-		TT_ENERGY_DRAIN,
-		TT_EXIT,
-		-1,
-		-1,
-		TT_OBJECT_PRODUCER,
-		TT_ILLUSION_OFF,
-		TT_ILLUSION_ON,
-		TT_SECRET_EXIT
-		};
-
-	static char d2FlagMap [10] = {
-		0,
-		0,
-		0,
-		0,
-		0,
-		TF_ONE_SHOT,
-		0,
-		0,
-		0,
-		0
-		};
-#endif
-
 /*
  * reads a tTriggerV29 structure from a CFile
  */

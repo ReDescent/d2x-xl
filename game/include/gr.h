@@ -67,7 +67,6 @@ void _CDECL_ GrClose(void);
 //=========================================================================
 
 #include "bitmap.h"
-//#include "canvas.h"
 
 //=========================================================================
 // Color functions:
@@ -89,82 +88,6 @@ void GrCopyPalette(uint8_t *gr_palette, uint8_t *pal, int32_t size);
 // int32_t should really be fix
 void DrawPixelClipped(int32_t x, int32_t y);
 void DrawPixel(int32_t x, int32_t y);
-
-#if 0
-int32_t gr_poly(int32_t nverts, int32_t *verts);
-int32_t gr_upoly(int32_t nverts, int32_t *verts);
-
-
-// Draws a point into the current canvas in the current color and drawmode.
-// Gets a pixel;
-uint8_t gr_gpixel(CBitmap * bitmap, int32_t x, int32_t y);
-uint8_t gr_ugpixel(CBitmap * bitmap, int32_t x, int32_t y);
-
-// Draws a line into the current canvas in the current color and drawmode.
-int32_t GrLine(fix x0, fix y0, fix x1, fix y1);
-int32_t gr_uline(fix x0, fix y0, fix x1, fix y1);
-
-// Draws an anti-aliased line into the current canvas in the current color and drawmode.
-int32_t gr_aaline(fix x0, fix y0, fix x1, fix y1);
-int32_t gr_uaaline(fix x0, fix y0, fix x1, fix y1);
-
-void DrawScanLineClipped(int32_t x1, int32_t x2, int32_t y);
-void DrawScanLine(int32_t x1, int32_t x2, int32_t y);
-
-void RotateBitmap (CBitmap *bp, grsPoint *vertbuf, int32_t lightValue);
-void ScaleBitmap (CBitmap *bp, grsPoint *vertbuf, int32_t orientation);
-
-//===========================================================================
-// Global variables
-extern uint8_t Test_bitmap_data[64*64];
-
-extern uint32_t FixDivide(uint32_t x, uint32_t y);
-
-extern void gr_vesa_update(CBitmap * source1, CBitmap * dest, CBitmap * source2);
-
-// Special effects
-extern void gr_snow_out(int32_t num_dots);
-
-extern void TestRotateBitmap(void);
-extern void RotateBitmap(CBitmap *bp, grsPoint *vertbuf, int32_t lightValue);
-
-extern uint8_t grInverseTable [32*32*32];
-
-extern uint16_t grPaletteSelector;
-extern uint16_t grInverseTableSelector;
-extern uint16_t grFadeTableSelector;
-
-// Remaps a bitmap into the current palette. If transparent_color is
-// between 0 and 255 then all occurances of that color are mapped to
-// whatever color the 2d uses for transparency. This is normally used
-// right after a call to iff_read_bitmap like this:
-// 	iff_error = iff_read_bitmap(filename, new, BM_LINEAR, newpal);
-// 	if (iff_error != IFF_NO_ERROR) Error("Can't load IFF file <%s>, error=%d", filename, iff_error);
-// 	if (iff_has_transparency)
-// 		GrRemapBitmap(new, newpal, iff_transparent_color);
-// 	else
-// 		GrRemapBitmap(new, newpal, -1);
-// Allocates a selector that has a base address at 'address' and length 'size'.
-// Returns 0 if successful... BE SURE TO CHECK the return value since there
-// is a limited number of selectors available!!!
-int32_t GetSelector(void * address, int32_t size, uint32_t * selector);
-
-// Assigns a selector to a bitmap. Returns 0 if successful.  BE SURE TO CHECK
-// this return value since there is a limited number of selectors!!!!!!!
-int32_t GrBitmapAssignSelector(CBitmap * bmPp);
-
-//#define GR_GETCOLOR(r, g, b) (gr_inverse_table [((((r)&31)<<10) | (((g)&31)<<5) | ((b)&31))])
-//#define gr_getcolor(r, g, b) (gr_inverse_table [((((r)&31)<<10) | (((g)&31)<<5) | ((b)&31))])
-//#define BM_XRGB(r, g, b) (gr_inverse_table [((((r)&31)<<10) | (((g)&31)<<5) | ((b)&31))])
-
-#define BM_RGB(r, g, b) ((((r)&31) << 10) | (((g)&31) << 5) | ((b)&31))
-//#define BM_XRGB(r, g, b) GrFindClosestColor((r)*2, (g)*2, (b)*2)
-//#define GR_GETCOLOR(r, g, b) GrFindClosestColor((r)*2, (g)*2, (b)*2)
-//#define gr_getcolor(r, g, b) GrFindClosestColor((r)*2, (g)*2, (b)*2)
-
-// Given: r, g, b, each in range of 0-63, return the color index that
-// best matches the input.
-#endif
 
 void GrMergeTextures(uint8_t *lower, uint8_t *upper, uint8_t *dest, uint16_t width, uint16_t height, int32_t scale);
 void GrMergeTextures1(uint8_t *lower, uint8_t *upper, uint8_t *dest, uint16_t width, uint16_t height, int32_t scale);

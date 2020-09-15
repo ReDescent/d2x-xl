@@ -366,13 +366,6 @@ void CObject::UpdateShipSound(void) {
         RETURN;
 
     int32_t nSpeed = mType.physInfo.velocity.Mag();
-#if 0
-nSpeed -= I2X (2);
-if (nSpeed < 0)
-	nSpeed = 0;
-#endif
-    // if (gameData.multiplayer.bMoving == nSpeed)
-    // RETURN;
 
     if (gameData.multiplayer.bMoving < 0)
         audio.CreateObjectSound(

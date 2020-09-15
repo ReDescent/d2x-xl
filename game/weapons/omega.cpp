@@ -226,10 +226,8 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
     int32_t bSpectate = SPECTATOR(pParentObj);
     static int32_t nDelay = 0;
 
-#if 1
     if (gameStates.gameplay.bMineMineCheat && (gameData.omegaData.xCharge[IsMultiGame] < MAX_OMEGA_CHARGE))
         gameData.omegaData.xCharge[IsMultiGame] = MAX_OMEGA_CHARGE - 1;
-#endif
     if (nPlayer == N_LOCALPLAYER) {
         // If charge >= min, or (some charge and zero energy), allow to fire.
         if (((RandShort() > pParentObj->GunDamage()) || (gameData.omegaData.xCharge[IsMultiGame] < MIN_OMEGA_CHARGE)) &&
@@ -251,7 +249,6 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
     pWeaponObj->cType.laserInfo.parent.nSignature = pParentObj->info.nSignature;
 
     if (gameStates.limitFPS.bOmega && !gameStates.app.tick40fps.bTick)
-#if 1
         return;
     if (SlowMotionActive()) {
         if (nDelay > 0) {
@@ -261,10 +258,6 @@ void DoOmegaStuff(CObject *pParentObj, CFixVector *vMuzzle, CObject *pWeaponObj)
         }
         nDelay += gameOpts->gameplay.nSlowMotionSpeedup;
     }
-#else
-        nTargetObj = -1;
-    else
-#endif
     nTargetObj = pWeaponObj->FindVisibleHomingTarget(*vMuzzle, MAX_THREADS);
     nParentSeg = bSpectate ? gameStates.app.nPlayerSegment : pParentObj->info.nSegment;
 

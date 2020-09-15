@@ -231,17 +231,6 @@ int32_t NetworkJoinPoll(CMenu &menu, int32_t &key, int32_t nCurItem, int32_t nSt
         for (i = 3 + networkData.nActiveGames; i < MAX_ACTIVE_NETGAMES; i++, h++)
             InitNetGameMenuOption(menu, h);
     }
-#if 0
-else
-	for (i = 3; i < networkData.nActiveGames; i++, h++)
-		menu [h].m_value = SDL_GetTicks ();
-for (i = 3 + networkData.nActiveGames; i < MAX_ACTIVE_NETGAMES; i++, h++)
-	if (menu [h].m_value && (t - menu [h].m_value > 10000)) 
-	 {
-		InitNetGameMenuOption (menu, h);
-		bPlaySound = 1;
-		}
-#endif
     if (bPlaySound)
         audio.PlaySound(SOUND_HUD_MESSAGE);
     return nCurItem;

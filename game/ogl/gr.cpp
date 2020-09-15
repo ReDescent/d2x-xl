@@ -43,7 +43,6 @@
 #define DECLARE_VARS
 
 void GrPaletteStepClear(void); // Function prototype for GrInit;
-void ResetHoardData(void);
 
 extern int32_t screenShotIntervals[];
 
@@ -116,7 +115,6 @@ void ResetTextures(int32_t bReload, int32_t bGame) {
             fontManager.Remap();
         if (bGame) {
             hudIcons.Destroy();
-            // ResetHoardData ();
             particleImageManager.FreeAll();
             UnloadAddonImages();
             LoadAddonImages();
@@ -255,11 +253,7 @@ int32_t GrInit(void) {
             break;
         }
     if (!gameStates.gfx.bOverride)
-#if 0 // DBG
-        gameStates.gfx.nStartScrMode = FindDisplayMode (gameStates.gfx.nStartScrSize = SM (800, 600));
-#else
         gameStates.gfx.nStartScrSize = displayModeInfo[gameStates.gfx.nStartScrMode = MAX_DISPLAY_MODE].dim;
-#endif
         if ((i = GrSetMode(gameStates.gfx.nStartScrSize)))
             return i;
 
@@ -439,9 +433,6 @@ int32_t SetGameScreenMode(uint32_t sm) {
 // SMODE_GAME or SMODE_EDITOR. returns mode acutally set (could be other
 // mode if cannot init requested mode)
 int32_t SetScreenMode(uint32_t sm) {
-#if 0
-    GLint nError = glGetError ();
-#endif
     if ((gameStates.video.nScreenMode == sm) && (nCurrentVGAMode == gameData.renderData.screen.Scalar()) &&
         (gameData.renderData.screen.Mode() == gameData.renderData.screen.Scalar())) {
         ogl.SetScreenMode();

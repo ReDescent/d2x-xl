@@ -38,8 +38,6 @@
 
 //------------------------------------------------------------------------------
 
-#if 1
-
 tParticleImageInfo particleImageInfo[MAX_PARTICLE_QUALITY + 1][PARTICLE_TYPES] = {
     {{NULL, "", 1, 0, 0, 0, 0, 0},
      {NULL, "", 1, 0, 0, 0, 0, 0},
@@ -88,65 +86,6 @@ tParticleImageInfo particleImageInfo[MAX_PARTICLE_QUALITY + 1][PARTICLE_TYPES] =
      {NULL, "corona.tga", 1, 0, 0, 0, 0, 0},
      {NULL, "sparks.tga", 8, 0, 0, 0, 0, 0}},
 };
-
-#else
-
-tParticleImageInfo particleImageInfo[MAX_PARTICLE_QUALITY + 1][PARTICLE_TYPES] = {
-    {{NULL, "", 1, 0, 0, 0, 0, 0},
-     {NULL, "", 1, 0, 0, 0, 0, 0},
-     {NULL, "", 1, 0, 0, 0, 0, 0},
-     {NULL, "", 1, 0, 0, 0, 0, 0},
-     {NULL, "", 1, 0, 0, 0, 0, 0},
-     {NULL, "", 1, 0, 0, 0, 0, 0},
-     {NULL, "", 1, 0, 0, 0, 0, 0},
-     {NULL, "", 1, 0, 0, 0, 0, 0},
-     {NULL, "", 1, 0, 0, 0, 0, 0}},
-
-    {{NULL, "smoke.tga", 8, 0, 0, 1, 0, 0},
-     {NULL, "smoke.tga", 8, 0, 0, 1, 0, 0},
-     {NULL, "bubble.tga", 4, 0, 0, 1, 0, 0},
-     {NULL, "rain.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "simplesmoke.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "smokingfire.tga", 2, 0, 0, 1, 0, 0},
-     {NULL, "smoke.tga", 8, 0, 0, 0, 0, 0},
-     {NULL, "bullcase.tga", 1, 0, 0, 1, 0, 0},
-     {NULL, "corona.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "corona.tga", 1, 0, 0, 0, 0, 0}},
-
-    {{NULL, "smoke.tga", 8, 0, 0, 1, 0, 0},
-     {NULL, "smoke.tga", 8, 0, 0, 1, 0, 0},
-     {NULL, "bubble.tga", 4, 0, 0, 1, 0, 0},
-     {NULL, "rain.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "simplesmoke.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "smokingfire.tga", 2, 0, 0, 0, 0, 0},
-     {NULL, "smoke.tga", 8, 0, 0, 0, 0, 0},
-     {NULL, "bullcase.tga", 1, 0, 0, 1, 0, 0},
-     {NULL, "corona.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "corona.tga", 1, 0, 0, 0, 0, 0}},
-
-    {{NULL, "smoke.tga", 8, 0, 0, 1, 0, 0},
-     {NULL, "smoke.tga", 8, 0, 0, 1, 0, 0},
-     {NULL, "bubble.tga", 4, 0, 0, 1, 0, 0},
-     {NULL, "rain.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "simplesmoke.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "smokingfire.tga", 2, 0, 0, 0, 0, 0},
-     {NULL, "smoke.tga", 8, 0, 0, 0, 0, 0},
-     {NULL, "bullcase.tga", 1, 0, 0, 1, 0, 0},
-     {NULL, "corona.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "corona.tga", 1, 0, 0, 0, 0, 0}},
-
-    {{NULL, "smoke.tga", 8, 0, 0, 1, 0, 0},
-     {NULL, "smoke.tga", 8, 0, 0, 1, 0, 0},
-     {NULL, "bubble.tga", 4, 0, 0, 1, 0, 0},
-     {NULL, "rain.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "simplesmoke.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "smokingfire.tga", 2, 0, 0, 0, 0, 0},
-     {NULL, "smoke.tga", 8, 0, 0, 0, 0, 0},
-     {NULL, "bullcase.tga", 1, 0, 0, 1, 0, 0},
-     {NULL, "corona.tga", 1, 0, 0, 0, 0, 0},
-     {NULL, "corona.tga", 1, 0, 0, 0, 0, 0}}};
-
-#endif
 
 CParticleImageManager particleImageManager;
 
@@ -217,14 +156,6 @@ int32_t CParticleImageManager::Load(int32_t nType, int32_t bForce) {
     pii.bHave = 0;
     if (!LoadAddonBitmap(&pii.pBm, pii.szName, &pii.bHave, Bind(nType)))
         return 0;
-
-#if 0
-if (strstr (pii.szName, "smoke")) {
-	CTGA tga (pii.pBm);
-	tga.PreMultiplyAlpha (0.1f);
-	tga.ConvertToRGB ();
-	}
-#endif
 
 #if MAKE_SMOKE_IMAGE
     {

@@ -53,15 +53,6 @@ static void msg(const char *fmt, ...) {
 }
 
 //------------------------------------------------------------------------------
-#if 0
-static void chk(void *p)
-{
-if (p) return;
-msg("FATAL: Virtual memory exhausted!");
-exit(EXIT_FAILURE);
-}
-#endif
-//------------------------------------------------------------------------------
 
 static char szFailMsg[1024];
 

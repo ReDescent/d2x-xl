@@ -1108,14 +1108,7 @@ int32_t CTransparencyRenderer::AddFaceTris(CSegFace *pFace) {
     pTriangle = FACES.tris + pFace->m_info.nTriIndex;
     for (h = pFace->m_info.nTris; h; h--, pTriangle++) {
         for (i = 0, j = pTriangle->nIndex; i < 3; i++, j++) {
-#if 1
             transformation.Transform(vertices[i], *(reinterpret_cast<CFloatVector *>(FACES.vertices + j)), 0);
-#else
-            if (automap.Active())
-                transformation.Transform(vertices + i, gameData.segData.fVertices + pTriangle->index[i], 0);
-            else
-                vertices[i].Assign(RENDERPOINTS[pTriangle->index[i]].m_vertex[1]);
-#endif
         }
         if (!AddPoly(
                 pFace,
@@ -1155,14 +1148,7 @@ int32_t CTransparencyRenderer::AddFaceQuads(CSegFace *pFace) {
         BRP;
 #endif
     for (i = 0, j = pFace->m_info.nIndex; i < 4; i++, j++) {
-#if 1
         transformation.Transform(vertices[i], *(reinterpret_cast<CFloatVector *>(FACES.vertices + j)), 0);
-#else
-        if (automap.Active())
-            transformation.Transform(vertices[i], gameData.segData.fVertices[pFace->m_info.index[i]], 0);
-        else
-            vertices[i].Assign(RENDERPOINTS[pFace->m_info.index[i]].m_vertex[1]);
-#endif
     }
     RETVAL(
         AddPoly(
@@ -1179,7 +1165,9 @@ int32_t CTransparencyRenderer::AddFaceQuads(CSegFace *pFace) {
             GL_TRIANGLE_FAN,
             GL_REPEAT,
             bAdditive,
-            pFace->m_info.nSegment) > 0)
+            pFace->m_info.nSegment
+        ) > 0
+    )
 }
 
 //------------------------------------------------------------------------------
@@ -1223,8 +1211,8 @@ int32_t CTransparencyRenderer::AddSpark(
     int32_t nSize,
     char nFrame,
     char nRotFrame,
-    char nOrient) {
-#if 1
+    char nOrient
+) {
     ENTER(0, 0);
     if (gameStates.render.nShadowMap)
         RETVAL(0)
@@ -1241,9 +1229,6 @@ int32_t CTransparencyRenderer::AddSpark(
     if (gameOpts->SoftBlend(SOFT_BLEND_PARTICLES))
         m_data.bSoftBlend = 1;
     RETVAL(Add(&item, position))
-#else
-    RETVAL(0)
-#endif
 }
 
 //------------------------------------------------------------------------------

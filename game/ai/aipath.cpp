@@ -454,9 +454,9 @@ int32_t Last_buddy_polish_path_frame;
 // Changed, MK, 10/18/95.  I think this was causing robots to get hung up on walls.
 // 			Only drop up to the first three points.
 int32_t SmoothPath(CObject *pObj, tPointSeg *pPointSeg, int32_t numPoints) {
-#if 1
     return numPoints;
-#else
+    // NOTE: this was possibly causing robots to get 'hung up on walls'
+/*
     int32_t i, nFirstPoint = 0;
     CHitResult hitResult;
     int32_t hitType;
@@ -486,7 +486,7 @@ int32_t SmoothPath(CObject *pObj, tPointSeg *pPointSeg, int32_t numPoints) {
             pPointSeg[i - nFirstPoint] = pPointSeg[i];
     }
     return numPoints - nFirstPoint;
-#endif
+*/
 }
 
 // -------------------------------------------------------------------------------------------------------

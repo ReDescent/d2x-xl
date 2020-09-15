@@ -193,7 +193,6 @@ void MultiSendDropPowerup(
     const CFixVector *vPos,
     const CFixVector *vVel);
 void MultiSendPlaySound(int32_t nSound, fix volume);
-void MultiSendAudioTaunt(int32_t taunt_num);
 void MultiSendScore(void);
 void MultiSendTrigger(int32_t nTrigger, int32_t nObject);
 void MultiSendObjTrigger(int32_t CTrigger);

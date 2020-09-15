@@ -55,11 +55,7 @@
 #endif
 
 #define ATTENUATION_TYPE 0
-#if 0 // ATTENUATION_TYPE
-#define MAX_LIGHT_DIST 100.0f
-#else
 #define MAX_LIGHT_DIST float(MAX_LIGHT_RANGE)
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -153,48 +149,6 @@ CFloatVector GetCanvasColor(CCanvasColor *pColor) {
         return color;
     } else
         return GetPalColor(paletteManager.Game(), pColor->index);
-}
-
-//------------------------------------------------------------------------------
-
-// cap tMapColor scales the color values in tMapColor so that none of them exceeds
-// 1.0 if multiplied with any of the current face's corners' brightness values.
-// To do that, first the highest corner brightness is determined.
-// In the next step, color values are increased to match the max. brightness.
-// Then it is determined whether any color value multiplied with the max. brightness would
-// exceed 1.0. If so, all three color values are scaled so that their maximum multiplied
-// with the max. brightness does not exceed 1.0.
-
-inline void CapTMapColor(tUVL *uvlList, int32_t nVertices, CBitmap *bm) {
-#if 0
-	CFaceColor *color = tMapColor.index ? &tMapColor : lightColor.index ? &lightColor : NULL;
-
-if (! (bm->props.flags & BM_FLAG_NO_LIGHTING) && color) {
-		double	vec, mat = tMapColor.Red ();
-		double	h, l = 0;
-		int32_t		i;
-
-	for (i = 0; i < nVertices; i++, uvlList++) {
-		h = (bm->props.flags & BM_FLAG_NO_LIGHTING) ? 1.0 : X2F (uvlList->l);
-		if (l < h)
-			l = h;
-		}
-
-	// scale brightness with the average color to avoid darkening bright areas with the color
-	vec = (color->Red () + color->Green () + color->Blue ()) / 3;
-	if (mat < color->Green ())
-		mat = color->Green ();
-	if (mat < color->Blue ())
-		mat = color->Blue ();
-	l = l / vec;
-	// prevent any color component getting over 1.0
-	if (l * mat > 1.0)
-		l = 1.0 / mat;
-	color->Red () *= l;
-	color->Green () *= l;
-	color->Blue () *= l;
-	}
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -386,17 +340,10 @@ int32_t ComputeVertexColor(
         if ((nDbgSeg >= 0) && (pLight->info.nSegment == nDbgSeg) &&
             ((nDbgSide < 0) || (pLight->info.nSide == nDbgSide)))
             BRP;
-#if 0
-	else
-		continue;
-#endif
 #endif
         if (!pLight->render.bState)
             continue;
-#if 0
-	if (i == colorData.nMatLight)
-		continue;
-#endif
+
         nType = pLight->render.nType;
         if (bSkipHeadlight && (nType == 3))
             continue;
@@ -431,9 +378,6 @@ int32_t ComputeVertexColor(
             fLightDist = 0.0f;
             lightRayDir.SetZero();
         } else {
-#if 0
-		DistToFace (*colorData.pVertPos, pLight->info.nSegment, uint8_t (pLight->info.nSide), &lightPos); // returns 0 if a plane normal through the vertex position goes through the face
-#else
             if (nType < 2)
                 DistToFace(
                     *colorData.pVertPos,
@@ -442,7 +386,6 @@ int32_t ComputeVertexColor(
                     &lightPos); // returns 0 if a plane normal through the vertex position goes through the face
             else
                 lightPos = *pLight->render.vPosf[bTransform].XYZ();
-#endif
             lightRayDir = lightPos - *colorData.pVertPos;
             fLightDist = lightRayDir.Mag();
         }
@@ -451,15 +394,6 @@ int32_t ComputeVertexColor(
         if ((nDbgVertex >= 0) && (nVertex == nDbgVertex))
             BRP;
 #endif
-#if 0 // DBG
-	CFloatVector3 hDir = *pLight->render.vPosf [bTransform].XYZ () - *colorData.pVertPos;
-	CFloatVector3::Normalize (hDir);
-	float hDot = CFloatVector3::Dot (colorData.vertNorm, hDir);
-
-	if ((nDbgSeg >= 0) && (pLight->info.nSegment == nDbgSeg) && ((nDbgSide < 0) || (pLight->info.nSide == nDbgSide)))
-		BRP;
-#endif
-
         if (fLightDist == 0.0f) {
             fLightAngle = 1.0f;
             NdotL = 1.0f;
@@ -688,15 +622,6 @@ void InitVertColorData(CVertColorData &colorData) {
     colorData.bMatEmissive = 0;
     colorData.nMatLight = -1;
     if (lightManager.Material().bValid) {
-#if 0
-	if (lightManager.Material ().emissive.dir.color.r ||
-		 lightManager.Material ().emissive.dir.color.g ||
-		 lightManager.Material ().emissive.dir.color.b) {
-		colorData.bMatEmissive = 1;
-		colorData.nMatLight = lightManager.Material ().nLight;
-		colorSum = lightManager.Material ().emissive;
-		}
-#endif
         colorData.bMatSpecular = lightManager.Material().specular.Red() || lightManager.Material().specular.Green() ||
                                  lightManager.Material().specular.Blue();
         if (colorData.bMatSpecular) {
@@ -737,10 +662,6 @@ void GetVertexColor(
 #if DBG
     if (!gameStates.render.nState && (nVertex == nDbgVertex))
         BRP;
-#endif
-#if 0
-if (gameStates.render.nFlashScale)
-	fScale *= X2F (gameStates.render.nFlashScale);
 #endif
     if (!FAST_SHADOWS && (gameStates.render.nShadowPass == 3))
         ; // fScale = 1.0f;

@@ -603,7 +603,8 @@ void AddLightComponentControls(CMenu &m) {
             0,
             20,
             KEY_A,
-            HTX_DIFFUSE_LIGHT);
+            HTX_DIFFUSE_LIGHT
+        );
 #if USE_SPECULAR_LIGHT
         sprintf(szSlider + 1, TXT_SPECULAR_LIGHT, gameOpts->render.color.nSpecularLight);
         *szSlider = *(TXT_SPECULAR_LIGHT - 1);
@@ -614,7 +615,8 @@ void AddLightComponentControls(CMenu &m) {
             0,
             10,
             KEY_A,
-            HTX_SPECULAR_LIGHT);
+            HTX_SPECULAR_LIGHT
+        );
 #endif
     }
 }
@@ -638,7 +640,8 @@ void AddLightmapControls(CMenu &m) {
             0,
             2,
             KEY_P,
-            HTX_LMAP_PRECISION);
+            HTX_LMAP_PRECISION
+        );
         AddLightComponentControls(m);
     }
 }
@@ -711,7 +714,8 @@ void RenderOptionsMenu(void) {
                     0,
                     sizeofa(fpsTable) - 1,
                     KEY_F,
-                    HTX_RENDER_FRAMECAP);
+                    HTX_RENDER_FRAMECAP
+                );
             }
         }
 
@@ -726,7 +730,8 @@ void RenderOptionsMenu(void) {
                     0,
                     (gameOpts->render.bUseShaders && ogl.m_features.bShaders) ? 3 : 1,
                     KEY_L,
-                    HTX_LIGHTING);
+                    HTX_LIGHTING
+                );
                 if (nLighting >= 2) {
                     AddLightmapControls(m);
                     if (!gameStates.app.bPrecomputeLightmaps && (nLighting == 3)) {
@@ -739,7 +744,8 @@ void RenderOptionsMenu(void) {
                             0,
                             8 - MIN_LIGHTS_PER_PASS,
                             KEY_P,
-                            HTX_MAX_LIGHTS_PER_PASS);
+                            HTX_MAX_LIGHTS_PER_PASS
+                        );
                     }
                 }
                 if (!gameStates.app.bPrecomputeLightmaps) {
@@ -752,7 +758,8 @@ void RenderOptionsMenu(void) {
                         0,
                         2,
                         KEY_C,
-                        HTX_RENDER_LIGHTCOLOR);
+                        HTX_RENDER_LIGHTCOLOR
+                    );
                     m.AddText("", "");
                 }
             } else if (nLighting == 1) {
@@ -765,7 +772,8 @@ void RenderOptionsMenu(void) {
                     0,
                     2,
                     KEY_C,
-                    HTX_RENDER_LIGHTCOLOR);
+                    HTX_RENDER_LIGHTCOLOR
+                );
                 m.AddText("", "");
             }
         }
@@ -785,7 +793,8 @@ void RenderOptionsMenu(void) {
                 0,
                 4,
                 KEY_I,
-                HTX_ADVRND_RENDQUAL);
+                HTX_ADVRND_RENDQUAL
+            );
             sprintf(szSlider + 1, TXT_RENDER_QUALITY, pszRendQual[gameOpts->render.nQuality]);
             *szSlider = *(TXT_RENDER_QUALITY + 1);
             m.AddSlider("render quality", szSlider + 1, gameOpts->render.nQuality, 0, 3, KEY_R, HTX_ADVRND_TEXQUAL);
@@ -801,7 +810,8 @@ void RenderOptionsMenu(void) {
                         0,
                         3,
                         KEY_V,
-                        HTX_MESH_QUALITY);
+                        HTX_MESH_QUALITY
+                    );
                 }
             }
             sprintf(szSlider + 1, TXT_CAMERAS, pszNoneBasicFull[nCameras]);
@@ -811,8 +821,9 @@ void RenderOptionsMenu(void) {
             *szSlider = *(TXT_POWERUPS - 1);
             m.AddSlider("powerup quality", szSlider + 1, nPowerups, 0, 2, KEY_O, HTX_POWERUPS);
 
-            if (EXPERTMODE && stereoDeviceMap[nStereoDevice])
+            if (EXPERTMODE && stereoDeviceMap[nStereoDevice]) {
                 m.AddText("", "");
+            }
             sprintf(szSlider + 1, TXT_STEREO_VIEW, pszStereoDevice[nStereoDevice]);
             *szSlider = *(TXT_STEREO_VIEW - 1);
             m.AddSlider(
@@ -822,7 +833,8 @@ void RenderOptionsMenu(void) {
                 0,
                 nStereoDeviceCount - 1,
                 KEY_G,
-                HTX_STEREO_VIEW); // exclude shutter
+                HTX_STEREO_VIEW // exclude shutter
+            );
             if (stereoDeviceMap[nStereoDevice] == GLASSES_OCULUS_RIFT) {
                 sprintf(szSlider + 1, TXT_RIFT_IPD, nIPD + RIFT_MIN_IPD);
                 *szSlider = *(TXT_RIFT_IPD - 1);
@@ -843,14 +855,16 @@ void RenderOptionsMenu(void) {
                         0,
                         sizeofa(pszFOV) - 1,
                         KEY_F,
-                        HTX_STEREO_FOV);
+                        HTX_STEREO_FOV
+                    );
 #endif
                     m.AddCheck(
                         "chromAbCorr",
                         TXT_CHROM_AB_CORR,
                         gameOpts->render.stereo.bChromAbCorr,
                         KEY_C,
-                        HTX_CHROM_AB_CORR);
+                        HTX_CHROM_AB_CORR
+                    );
                 } else {
                     if (stereoDeviceMap[nStereoDevice] == 1) {
                         sprintf(szSlider + 1, TXT_ANAGLYPH_COLORS, pszAnaglyphColors[nAnaglyphColor]);
@@ -862,7 +876,8 @@ void RenderOptionsMenu(void) {
                             0,
                             sizeofa(pszAnaglyphColors) - 1,
                             KEY_C,
-                            HTX_ANAGLYPH_COLORS);
+                            HTX_ANAGLYPH_COLORS
+                        );
                     }
 
                     sprintf(szSlider + 1, TXT_STEREO_SEPARATION, pszStereoSeparation[xStereoSeparation]);
@@ -874,7 +889,8 @@ void RenderOptionsMenu(void) {
                         0,
                         sizeofa(pszStereoSeparation) - 1,
                         KEY_E,
-                        HTX_STEREO_SEPARATION);
+                        HTX_STEREO_SEPARATION
+                    );
 
                     sprintf(szSlider + 1, TXT_3D_METHOD, psz3DMethod[gameOpts->render.stereo.nMethod]);
                     *szSlider = *(TXT_3D_METHOD - 1);
@@ -885,7 +901,8 @@ void RenderOptionsMenu(void) {
                         0,
                         sizeofa(psz3DMethod) - 1,
                         KEY_J,
-                        HTX_3D_METHOD);
+                        HTX_3D_METHOD
+                    );
 
                     sprintf(szSlider + 1, TXT_3D_SCREEN_DIST, nScreenDists[gameOpts->render.stereo.nScreenDist]);
                     *szSlider = *(TXT_3D_SCREEN_DIST - 1);
@@ -896,7 +913,8 @@ void RenderOptionsMenu(void) {
                         0,
                         sizeofa(nScreenDists) - 1,
                         KEY_S,
-                        HTX_3D_SCREEN_DIST);
+                        HTX_3D_SCREEN_DIST
+                    );
 
                     if (nDevice > 0) {
                         sprintf(szSlider + 1, TXT_3D_DEGHOST, pszDeghost[gameOpts->render.stereo.bDeghost]);
@@ -908,7 +926,8 @@ void RenderOptionsMenu(void) {
                             0,
                             sizeofa(pszDeghost) - 2 + (gameOpts->render.stereo.bEnhance && (nDevice == 2)),
                             KEY_H,
-                            HTX_3D_DEGHOST);
+                            HTX_3D_DEGHOST
+                        );
                         if (gameOpts->render.stereo.bDeghost < 4) {
                             sprintf(szSlider + 1, TXT_COLORGAIN, pszEnhance3D[gameOpts->render.stereo.bColorGain]);
                             *szSlider = *(TXT_COLORGAIN - 1);
@@ -919,7 +938,8 @@ void RenderOptionsMenu(void) {
                                 0,
                                 sizeofa(pszEnhance3D) - 1,
                                 KEY_G,
-                                HTX_COLORGAIN);
+                                HTX_COLORGAIN
+                            );
                         }
                     }
                     m.AddText("", "");
@@ -928,17 +948,17 @@ void RenderOptionsMenu(void) {
                         TXT_BUMP_BRIGHTNESS,
                         gameOpts->render.stereo.bBrighten,
                         KEY_T,
-                        HTX_BUMP_BRIGHTNESS);
-                    if (nDevice > 0)
+                        HTX_BUMP_BRIGHTNESS
+                    );
+                    if (nDevice > 0) {
                         m.AddCheck(
                             "enhance 3D",
                             TXT_ENHANCE_3D,
                             gameOpts->render.stereo.bEnhance,
                             KEY_D,
-                            HTX_ENHANCE_3D);
-#if 0
-				m.AddCheck ("flip frames", TXT_FLIPFRAMES, gameOpts->render.stereo.bFlipFrames, KEY_F, HTX_FLIPFRAMES);
-#endif
+                            HTX_ENHANCE_3D
+                        );
+                    }
                 }
             }
             m.AddText("", "");
@@ -1005,10 +1025,7 @@ void RenderOptionsMenu(void) {
     if (gameOpts->render.stereo.nGlasses == 1)
         gameOpts->render.stereo.nGlasses += nAnaglyphColor;
     gameStates.render.SetCartoonStyle(gameOpts->render.bCartoonize);
-#if 0
-if (ogl.IsOculusRift ())
-	gameData.renderData.rift.m_magCalTO.Start (-1, true);
-#endif
+
     if (gameOpts->app.bExpertMode && gameOpts->render.color.bConfigurable) {
         gameData.SetAmbientLight(gameOpts->render.color.nAmbientLight);
         gameData.SetSpecularLight(gameOpts->render.color.nSpecularLight);

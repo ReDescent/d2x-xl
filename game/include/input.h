@@ -105,7 +105,6 @@ class CControlsManager {
     int32_t ReadOculusRift(void);
     void DoOculusRift(void);
     void DoSlideBank(int32_t bSlideOn, int32_t bBankOn, fix pitchTime, fix headingTime);
-    void CybermouseAdjust(void);
     int32_t DeltaAxis(int32_t v);
 };
 

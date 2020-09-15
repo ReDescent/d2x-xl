@@ -49,9 +49,6 @@ void DropStolenItems(CObject *pObj);
 
 CObject *CObject::CreateExplBlast(bool bForce) {
     ENTER(0, 0);
-#if 0 // DBG
-RETVAL (NULL)
-#endif
 
     int16_t nObject;
     CObject *pObj;
@@ -104,17 +101,10 @@ CObject *CObject::CreateShockwave(void) {
     pObj->cType.explInfo.nSpawnTime = -1;
     pObj->cType.explInfo.nDestroyedObj = -1;
     pObj->cType.explInfo.nDeleteTime = -1;
-#if 0
-pObj->Orientation () = Orientation ();
-#elif 0
-    CAngleVector a = CAngleVector::Create(SRandShort(), SRandShort(), SRandShort());
-    CFixMatrix mRotate = CFixMatrix::Create(a);
-    pObj->Orientation() = mRotate * Orientation();
-#else // always keep the same orientation towards the player, pitched down 45 degrees
+
     CAngleVector a = CAngleVector::Create(-I2X(1) / 8, /*I2X (1) / 8 - SRandShort () % (I2X (1) / 4)*/ 0, 0);
     CFixMatrix mOrient = CFixMatrix::Create(a);
     pObj->info.position.mOrient = gameData.objData.pViewer->Orientation() * mOrient;
-#endif
 
     if (IsMissile()) {
         if ((Id() == EARTHSHAKER_ID) || (Id() == ROBOT_EARTHSHAKER_ID))
@@ -473,14 +463,10 @@ void CObject::SetupRandomMovement(void) {
     // mType.physInfo.velocity *= (I2X (10));
     CFixVector::Normalize(mType.physInfo.velocity);
     mType.physInfo.velocity *= (I2X(10 + 30 * RandShort() / SHORT_RAND_MAX));
-// mType.physInfo.velocity += mType.physInfo.velocity;
-// -- used to be: Notice, not random!VmVecMake (&mType.physInfo.rotVel, 10*0x2000/3, 10*0x4000/3, 10*0x7000/3);
-#if 0 // DBG
-VmVecZero (&mType.physInfo.rotVel);
-#else
+    // mType.physInfo.velocity += mType.physInfo.velocity;
+    // -- used to be: Notice, not random!VmVecMake (&mType.physInfo.rotVel, 10*0x2000/3, 10*0x4000/3, 10*0x7000/3);
     mType.physInfo.rotVel =
         CFixVector::Create(RandShort() + 0x1000, 2 * RandShort() + 0x4000, 3 * RandShort() + 0x2000);
-#endif
     mType.physInfo.rotThrust.SetZero();
 }
 
@@ -498,23 +484,17 @@ void CObject::SetupDebris(int32_t nSubObj, int32_t nId, int32_t nTexOverride) {
     rType.polyObjInfo.nModel = nId;
     rType.polyObjInfo.nSubObjFlags = 1 << nSubObj;
     rType.polyObjInfo.nTexOverride = nTexOverride;
+
     // Set physics data for this CObject
     SetupRandomMovement();
-#if 0 // DBG
-SetLife (I2X (nDebrisLife [8]) + 3 * DEBRIS_LIFE / 4 + FixMul (RandShort (), DEBRIS_LIFE));	// Some randomness, so they don't all go away at the same time.
-#else
-    SetLife(
-        I2X(nDebrisLife[gameOpts->render.nDebrisLife]) + 3 * DEBRIS_LIFE / 4 +
-        FixMul(RandShort(), DEBRIS_LIFE)); // Some randomness, so they don't all go away at the same time.
+
+    // Some randomness, so they don't all go away at the same time.
+    SetLife(I2X(nDebrisLife[gameOpts->render.nDebrisLife]) + 3 * DEBRIS_LIFE / 4 + FixMul(RandShort(), DEBRIS_LIFE));
+
     if (nSubObj == 0)
         info.xLifeLeft *= 2;
-#endif
     mType.physInfo.mass =
-#if 0
-	(fix) ((double) mType.physInfo.mass * ObjectVolume (pDebris) / ObjectVolume (this));
-#else
         FixMulDiv(mType.physInfo.mass, info.xSize, info.xSize);
-#endif
         mType.physInfo.drag = gameOpts->render.nDebrisLife ? 256 : 0; // F2X (0.2);		//mType.physInfo.drag;
     if (gameOpts->render.nDebrisLife) {
         mType.physInfo.flags |= PF_FREE_SPINNING;
@@ -799,12 +779,6 @@ void CObject::DoExplosionSequence(void) {
         // make debris
         if (pDelObj->info.renderType == RT_POLYOBJ) {
             pDelObj->ExplodePolyModel(); // explode a polygon model
-#if 0
-		if (pExplObj) {
-			pExplObj->m_xMoveDist = (pDelObj->info.xSize < pExplObj->info.xSize) ? pExplObj->info.xSize : pDelObj->info.xSize;
-			pExplObj->m_xMoveTime = pExplObj->info.xLifeLeft;
-			}
-#endif
         }
 
         // set some parm in explosion
@@ -834,6 +808,3 @@ void CObject::DoExplosionSequence(void) {
     }
     RETURN
 }
-
-//------------------------------------------------------------------------------
-// eof

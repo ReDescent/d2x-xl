@@ -141,17 +141,10 @@ int32_t COmegaLightning::Update(CObject *pParentObj, CObject *pTargetObj, CFixVe
 // ---------------------------------------------------------------------------------
 
 #define OMEGA_PLASMA 0
-#if 0
-#define OMEGA_BOLTS 1
-#define OMEGA_NODES 150
-#define OMEGA_FRAMES 30
-#define OMEGA_LIFE -50000
-#else
 #define OMEGA_BOLTS 8
 #define OMEGA_NODES 150
 #define OMEGA_FRAMES 3
 #define OMEGA_LIFE -5000
-#endif
 
 static tLightningInfo omegaLightningInfo[2] = {
     {
@@ -239,16 +232,12 @@ int32_t COmegaLightning::Create(CFixVector *vTargetPos, CObject *pParentObj, COb
             pHandle->nLightning[1] = -1;
         else {
             m_nHandles++;
-#if 0
-		pHandle->nLightning [1] = -1;
-#else
             pHandle->nLightning[1] =
                 (gameOpts->render.nQuality < 3)
                     ? -1
                     : lightningManager.Create(omegaLightningInfo[1], &vMuzzle, vTarget, NULL, nObject);
             if (pHandle->nLightning[1] >= 0)
                 m_nHandles++;
-#endif
         }
     }
     return (pHandle->nLightning[0] >= 0);

@@ -258,24 +258,6 @@ void GameStartInitNetworkPlayers(void) {
             if (segNum < 0)
                 continue;
             segType = bCoop ? SEGMENT(segNum)->m_function : SEGMENT_FUNC_NONE;
-#if 0
-		switch (segType) {
-			case SEGMENT_FUNC_GOAL_RED:
-			case SEGMENT_FUNC_TEAM_RED:
-				if (i < nPlayers / 2) // (GetTeam (i) != TEAM_RED)
-					continue;
-				SEGMENT (segNum)->m_nType = SEGMENT_FUNC_NONE;
-				break;
-			case SEGMENT_FUNC_GOAL_BLUE:
-			case SEGMENT_FUNC_TEAM_BLUE:
-				if (i >= nPlayers / 2) //GetTeam (i) != TEAM_BLUE)
-					continue;
-				SEGMENT (segNum)->m_nType = SEGMENT_FUNC_NONE;
-				break;
-			default:
-				break;
-			}
-#endif
             pObj = OBJECT(playerObjs[j]);
             pObj->SetType(OBJ_PLAYER);
             gameData.multiplayer.playerInit[i].position = pObj->info.position;
@@ -748,13 +730,12 @@ int32_t LoadModData(char *pszLevelName, int32_t bLoadTextures, int32_t nStage) {
     if (nStage == 0) {
         SetD1Sound();
         SetDataVersion(-1);
-#if 0
-	LoadD2Sounds (true);
-#else
+
         if (gameStates.app.bD1Mission)
             LoadD1Sounds(false);
         else
             LoadD2Sounds(false);
+
         songManager.LoadDescentSongs(gameFolders.mods.szCurrent, gameStates.app.bD1Mission);
         LoadAddonSounds();
         gameStates.app.bCustomSounds = false;
@@ -767,7 +748,6 @@ int32_t LoadModData(char *pszLevelName, int32_t bLoadTextures, int32_t nStage) {
                 songManager.PlayLevelSong(missionManager.nCurrentLevel, 1);
             }
         }
-#endif
         if (!gameStates.app.bD1Mission /*missionManager.nEnhancedMission*/) {
             sprintf(szFile, "d2x.ham");
             /*---*/ PrintLog(1, "trying vertigo custom robots (d2x.ham)\n");
@@ -1763,21 +1743,13 @@ reloadLevel:
     missionManager.SetLevelState(missionManager.nCurrentLevel, 1);
     missionManager.SaveLevelStates();
     GameStartInitNetworkPlayers(); // Initialize the gameData.multiplayer.players array for
-#if 0 // DBG										  // this level
-InitHoardData ();
-SetMonsterballForces ();
-#endif
     // gameData.objData.pViewer = OBJECT (LOCALPLAYER.nObject);
     if (N_PLAYERS > gameData.multiplayer.nPlayerPositions) {
         TextBox(NULL, BG_STANDARD, 1, TXT_OK, "Too many players for this level.");
-#if 1
         while (N_PLAYERS > gameData.multiplayer.nPlayerPositions) {
             --N_PLAYERS;
             memset(gameData.multiplayer.players + N_PLAYERS, 0, sizeof(PLAYER(N_PLAYERS)));
         }
-#else
-        return 0;
-#endif
     }
     Assert(N_PLAYERS <= gameData.multiplayer.nPlayerPositions);
     // If this assert fails, there's not enough start positions
@@ -1851,10 +1823,7 @@ SetMonsterballForces ();
         SetSoundSources();
         PrintLog(-1);
     }
-#if 0
-LOCALPLAYER.nInvuls =
-LOCALPLAYER.nCloaks = 0;
-#endif
+
     // Say player can use FLASH cheat to mark path to exit.
     nLastLevelPathCreated = -1;
     return 1;

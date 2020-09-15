@@ -227,26 +227,22 @@ int32_t _CDECL_ EffectsThread(void *pThreadId) {
 //------------------------------------------------------------------------------
 
 bool StartEffectsThread(int32_t nWindow) {
-#if 1 //! USE_OPENMP
     if (!WaitForEffectsThread())
         return false;
     tiEffects.nWindow = nWindow;
     tiEffects.bExec = 1;
     return true;
-#endif
 }
 
 //------------------------------------------------------------------------------
 // waits for effects thread to finish current processing and return true if effects thread exists, otherwise false
 
 bool WaitForEffectsThread(void) {
-#if 1 //! USE_OPENMP
     if ((gameStates.app.nThreads < 2) || !tiEffects.pThread)
         return false;
     while (tiEffects.bExec)
         G3_SLEEP(0);
     return true;
-#endif
 }
 
 //------------------------------------------------------------------------------

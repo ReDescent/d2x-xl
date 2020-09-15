@@ -209,11 +209,7 @@ extern const char *pszKeyText[256];
 #define KEY_LCMD 0xFD
 #define KEY_RCMD 0xFE
 
-#if 0 // def _WIN32
-#define KEY_PRINT_SCREEN (KEY_ALTED + KEY_F9)
-#else
 #define KEY_PRINT_SCREEN 0xB7
-#endif
 #define KEY_PAUSE 0x61
 
 #endif

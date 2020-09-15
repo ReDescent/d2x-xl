@@ -32,10 +32,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 #endif
 
-#if 0 // DBG
-#include "vld.h"
-#endif
-
 #ifdef _WIN32
 #define USE_SDL_IMAGE 1
 #endif
@@ -812,7 +808,6 @@ class CInputStates {
     int32_t nJoysticks;
     int32_t bGrabMouse;
     int32_t bHaveTrackIR;
-    uint8_t bCybermouseActive;
     int32_t bSkipControls;
     int32_t bControlsSkipFrame;
     int32_t bKeepSlackTime;
@@ -1418,23 +1413,6 @@ class CBase {
 
 #include "cameras.h"
 
-#if 0
-class CShadowLightData {
-	public:
-		CFloatVector	vPosf;
-		int16_t				nMap;
-		uint8_t				nFrame;	//set per frame when scene as seen from a light source has been rendered
-#if DBG
-		CFixMatrix	orient;
-#endif
-	public:
-		CShadowLightData () { Init (); }
-		void Init (void) { memset (this, 0, sizeof (*this)); }
-};
-
-#define MAX_SHADOW_MAPS 20
-#endif
-
 #define MAX_SHADOW_LIGHTS 8
 
 typedef struct tLightRef {
@@ -1866,11 +1844,6 @@ class CRiftData {
     OVR::SensorFusion *m_pSensorFusion;
     OVR::Util::Render::StereoConfig m_stereoConfig;
     OVR::Util::Render::StereoEyeParams m_eyes[2];
-#if 0 // manual calibration removed from Rift SDK since v0.25
-		OVR::Util::MagCalibration				m_magCal;
-		CTimeout			m_magCalTO;
-		bool				m_bCalibrating;
-#endif
 #endif
 
     float m_renderScale;
@@ -2409,12 +2382,9 @@ class CSegmentData {
     inline int32_t SegDistIdx(int32_t i, int32_t j) { return QUADMATIDX(i, j, nSegments); }
 
     int32_t SegDist(uint16_t i, uint16_t j, const CFixVector &vStart, const CFixVector &vDest);
-#if 0
-		inline void SetSegDist (uint16_t i, uint16_t j, fix xDistance) {
-			segDistTable [i].Set (j, xDistance, -1, -1);
-			}
-#endif
-    inline int32_t LightVisIdx(int32_t i, int32_t j) { return QUADMATIDX(i, j, nSegments); }
+    inline int32_t LightVisIdx(int32_t i, int32_t j) {
+        return QUADMATIDX(i, j, nSegments);
+    }
 
     inline int8_t LightVis(int32_t nLight, int32_t nSegment) {
         int32_t i = LightVisIdx(nLight, nSegment);
@@ -2529,10 +2499,6 @@ typedef struct tQuad {
 typedef struct tBox {
     CFixVector vertices[8];
     tQuad faces[6];
-#if 0
-	tQuad					rotFaces [6];	//transformed faces
-	int16_t				nTransformed;
-#endif
 } tBox;
 
 typedef struct tHitbox {
@@ -3207,36 +3173,6 @@ typedef struct tCountdownData {
     int32_t nSecsLeft;
     int32_t nTotalTime;
 } tCountdownData;
-
-//------------------------------------------------------------------------------
-
-#if 0
-
-#define NUM_MARKERS (MAX_PLAYERS * 3)
-#define MARKER_MESSAGE_LEN 40
-
-class CMarkerData {
-	public:
-		CStaticArray< CFixVector, NUM_MARKERS >	position; // [NUM_MARKERS];	//three markers (two regular + one spawn) per player in multi
-		char					szMessage [NUM_MARKERS][MARKER_MESSAGE_LEN];
-		char					nOwner [NUM_MARKERS][CALLSIGN_LEN+1];
-		CStaticArray< int16_t, NUM_MARKERS >			objects; // [NUM_MARKERS];
-		int16_t					viewers [2];
-		int32_t					nHighlight;
-		float					fScale;
-		uint8_t					nDefiningMsg;
-		char					szInput [40];
-		int32_t					nIndex;
-		int32_t					nCurrent;
-		int32_t					nLast;
-		bool					bRotate;
-
-	public:
-		CMarkerData ();
-		void Init (void);
-};
-
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -3933,17 +3869,6 @@ class CCockpitData {
     public:
     CCockpitData();
 };
-
-#if 0
-#define GAMEDATA_CHECK_NONE 0
-#define GAMEDATA_CHECK_BUFFER 1
-#define GAMEDATA_CHECK_UNDERFLOW 2
-#define GAMEDATA_CHECK_OVERFLOW 4
-#define GAMEDATA_CHECK_TYPE 8
-#define GAMEDATA_CHECK_INDEX (GAMEDATA_CHECK_UNDERFLOW | GAMEDATA_CHECK_OVERFLOW)
-#define GAMEDATA_CHECK_ALL (GAMEDATA_CHECK_BUFFER | GAMEDATA_CHECK_INDEX)
-#define GAMEDATA_CHECK_DEFAULT (GAMEDATA_CHECK_BUFFER | GAMEDATA_CHECK_OVERFLOW)
-#endif
 
 #define GAMEDATA_ERRLOG_NONE 0
 #define GAMEDATA_ERRLOG_BUFFER 1

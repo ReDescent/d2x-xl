@@ -737,7 +737,6 @@ void DoWowieCheat(int32_t bVerbose, int32_t bInitialize) {
     LOCALPLAYER.flags |= PLAYER_FLAGS_QUAD_LASERS;
     gameData.physicsData.xAfterburnerCharge = I2X(1);
     SetMaxOmegaCharge();
-    cockpit->UpdateLaserWeaponInfo();
     if (bInitialize)
         SetLastSuperWeaponStates();
     OBJECT(N_LOCALPLAYER)->ResetDamage();

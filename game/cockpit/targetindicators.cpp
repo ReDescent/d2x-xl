@@ -53,40 +53,12 @@ static inline CFloatVector3 *ObjectFrameColor(CObject *pObj, CFloatVector3 *pc) 
 }
 
 // -----------------------------------------------------------------------------
-// Normalized Device Coordinates
-
-#if 0
-
-static float NDC (float d)
-{
-#define _A (ZNEAR + ZFAR)
-#define _B (ZNEAR - ZFAR)
-#define _C (2.0f * ZNEAR * ZFAR)
-//#define NDC(z) (2.0f * z - 1.0f)
-//#define D(z) (NDC (z) * B)
-//#define ZEYE(z) (C / (A + D (z)))
-//d = C / (A + D(z))
-//C / d = A + D(z)
-//C / d - A = D(z)
-//C / d - A = NDC(z) * B
-//(C / d - A) / B = NDC(z)
-//(C / d - A) / B = 2.0 * z - 1.0
-//(C / d - A) / B + 1.0 = 2.0 * z
-//z = ((C / d - A) / B + 1.0) * 0.5f
-return ((_C / d - _A) / _B + 1.0f) * 0.5f;
-}
-
-#endif
-
-// -----------------------------------------------------------------------------
 // Scale the distance between target and viewer with the view range and stretch
 // the scale to increase the alpha scaling effect.
 
 static float AlphaScale(CObject *pObj) {
     float scale = X2F(CFixVector::Dist(pObj->Position(), gameData.objData.pViewer->Position()));
-    scale = /*ZFAR **/ 1.0f - sqrt(scale / ZFAR);
-    // scale = NDC (scale);
-    // scale /= ZFAR;
+    scale = 1.0f - sqrt(scale / ZFAR);
     return scale * scale;
 }
 
@@ -151,9 +123,9 @@ static int32_t nMslLockColor[2] = {0, 0};
 static int32_t nMslLockColorIncr[2] = {-1, -1};
 static float fMslLockGreen[2] = {0.65f, 0.0f};
 
-void RenderMslLockIndicator(CObject *pObj) {
 #define INDICATOR_POSITIONS 60
 
+void RenderMslLockIndicator(CObject *pObj) {
     static tSinCosf sinCosInd[INDICATOR_POSITIONS];
     static int32_t bInitSinCos = 1;
     static int32_t nMslLockIndPos[2] = {0, 0};

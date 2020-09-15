@@ -90,12 +90,6 @@ int32_t joybutton_text[28] = {TNUM_BTN_1,  TNUM_BTN_2, TNUM_BTN_3,  TNUM_BTN_4, 
                               TNUM_LEFT,   TNUM_RIGHT, -1,          TNUM_UP,     TNUM_DOWN,   TNUM_LEFT,  TNUM_RIGHT};
 
 int32_t joyaxis_text[7] = {TNUM_X1, TNUM_Y1, TNUM_Z1, TNUM_R1, TNUM_P1, TNUM_R1, TNUM_YA1};
-// int32_t JOYAXIS_TEXT [4] = { TNUM_X1, TNUM_Y1, TNUM_X2, TNUM_Y2 };
-#endif
-
-#if 0
-#define JOYAXIS_TEXT(v) joyaxis_text[(v) % MAX_AXES_PER_JOYSTICK]
-#define JOYBUTTON_TEXT(v) joybutton_text[(v) % MAX_BUTTONS_PER_JOYSTICK]
 #endif
 
 int32_t mouseAxisTextIndex[3] = {TNUM_L_R, TNUM_F_B, TNUM_Z1};
@@ -498,16 +492,9 @@ int32_t CControlConfig::FindNextItemUp(int32_t nItems, int32_t nCurItem, tItemPo
     r = pos[i].r;
     x = (l + r) / 2;
     y = yStart = pos[i].y;
-#if 0
-do {
-	if (--i < 0)
-		i = m_nItems - 1;
-	if ((r >= coord [i].l) && (l <= coord [i].r))
-		return coord [i].i;
-	} while (i != j);
-#endif
     dMin = 0x7fffffff;
     dy = 0;
+
     for (;;) {
         if (--i < 0)
             i = nItems - 1;
@@ -540,13 +527,7 @@ int32_t CControlConfig::FindNextItemDown(int32_t nItems, int32_t nCurItem, tItem
     r = pos[i].r;
     x = (l + r) / 2;
     y = yStart = pos[i].y;
-#if 0
-do {
-	i = (i + 1) % m_nItems;
-	if ((r >= coord [i].l) && (l <= coord [i].r))
-		return coord [i].i;
-	} while (i != j);
-#endif
+
     dMin = 0x7fffffff;
     dy = 0;
     for (;;) {

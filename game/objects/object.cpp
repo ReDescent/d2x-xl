@@ -190,16 +190,16 @@ float CObject::Damage(void) {
         if (0 >= (xMaxShield = RobotDefaultShield(this)))
             return 1.0f;
         fDmg = X2F(info.xShield) / X2F(xMaxShield);
-#if 0
-	if (gameData.botData.info [0][info.nId].companion)
-		fDmg /= 2;
-#endif
-    } else if (info.nType == OBJ_REACTOR)
+    }
+    else if (info.nType == OBJ_REACTOR) {
         fDmg = X2F(info.xShield) / X2F(ReactorStrength());
-    else if ((info.nType == 255) || (info.nFlags & (OF_EXPLODING | OF_SHOULD_BE_DEAD | OF_DESTROYED | OF_ARMAGEDDON)))
+    }
+    else if ((info.nType == 255) || (info.nFlags & (OF_EXPLODING | OF_SHOULD_BE_DEAD | OF_DESTROYED | OF_ARMAGEDDON))) {
         fDmg = 0.0f;
-    else
+    }
+    else {
         fDmg = 1.0f;
+    }
     return (fDmg > 1.0f) ? 1.0f : (fDmg < 0.0f) ? 0.0f : fDmg;
 }
 
@@ -601,81 +601,6 @@ void CObject::ToBaseObject(tBaseObject *pObj) {
 }
 
 //------------------------------------------------------------------------------
-
-#if 0
-
-void CRobotObject::ToBaseObject (tBaseObject *pObj)
-{
-pObj->info = *CObject::GetInfo ();
-pObj->mType.physInfo = *CPhysicsInfo::GetInfo ();
-pObj->cType.aiInfo = *CAIStaticInfo::GetInfo ();
-pObj->rType.polyObjInfo = *CPolyObjInfo::GetInfo ();
-}
-
-//------------------------------------------------------------------------------
-
-void CPowerupObject::ToBaseObject (tBaseObject *pObj)
-{
-pObj->info = *CObject::GetInfo ();
-pObj->mType.physInfo = *CPhysicsInfo::GetInfo ();
-pObj->rType.polyObjInfo = *CPolyObjInfo::GetInfo ();
-}
-
-//------------------------------------------------------------------------------
-
-void CWeaponObject::ToBaseObject (tBaseObject *pObj)
-{
-pObj->info = *CObject::GetInfo ();
-pObj->mType.physInfo = *CPhysicsInfo::GetInfo ();
-pObj->rType.polyObjInfo = *CPolyObjInfo::GetInfo ();
-}
-
-//------------------------------------------------------------------------------
-
-void CLightObject::ToBaseObject (tBaseObject *pObj)
-{
-pObj->info = *CObject::GetInfo ();
-pObj->cType.lightInfo = *CObjLightInfo::GetInfo ();
-}
-
-//------------------------------------------------------------------------------
-
-void CLightningObject::ToBaseObject (tBaseObject *pObj)
-{
-pObj->info = *CObject::GetInfo ();
-pObj->rType.lightningInfo = *CLightningInfo::GetInfo ();
-}
-
-//------------------------------------------------------------------------------
-
-void CParticleObject::ToBaseObject (tBaseObject *pObj)
-{
-pObj->info = *CObject::GetInfo ();
-pObj->rType.particleInfo = *CSmokeInfo::GetInfo ();
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
-void CheckFreeList(void) {
-#if 0
-	static uint8_t checkObjs [MAX_OBJECTS_D2X];
-
-memset (checkObjs, 0, LEVEL_OBJECTS);
-for (int32_t i = 0; i < LEVEL_OBJECTS; i++) {
-	int16_t h = gameData.objData.freeList [i];
-	if ((i < gameData.objData.nObjects - 1) && (OBJECT (h)->Type () >= MAX_OBJECT_TYPES))
-		BRP;
-	if (checkObjs [h])
-		BRP;
-	else
-		checkObjs [h] = 1;
-	}
-#endif
-}
-
-//------------------------------------------------------------------------------
 // Try to allocate the object with the index nObject in the object list
 // This is only possible if that object is in the list of unallocated objects
 // Because otherwise that object is already allocated (live)
@@ -686,9 +611,7 @@ int32_t ClaimObjectSlot(int32_t nObject) {
             if (i != gameData.objData.nObjects)
                 Swap(gameData.objData.freeList[i], gameData.objData.freeList[gameData.objData.nObjects]);
             gameData.objData.freeListIndex[nObject] = gameData.objData.nObjects++;
-#if DBG
-            CheckFreeList();
-#endif
+
             if (nObject > gameData.objData.nLastObject[0]) {
                 gameData.objData.nLastObject[0] = nObject;
                 if (gameData.objData.nLastObject[1] < gameData.objData.nLastObject[0])
@@ -727,10 +650,6 @@ int32_t AllocObject(int32_t nRequestedObject, bool bReset) {
         nObject = gameData.objData.freeList[gameData.objData.nObjects];
         gameData.objData.freeListIndex[nObject] = gameData.objData.nObjects++;
     }
-
-#if DBG
-    CheckFreeList();
-#endif
 
     if (nObject > gameData.objData.nLastObject[0]) {
         gameData.objData.nLastObject[0] = nObject;
@@ -1088,9 +1007,6 @@ int32_t UpdateFreeList(int32_t nObject) {
         if (OBJECT(nObject)->Type() >= MAX_OBJECT_TYPES)
             BRP;
     }
-#if DBG
-    CheckFreeList();
-#endif
     return 1;
 }
 

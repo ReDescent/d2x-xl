@@ -29,14 +29,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //------------------------------------------------------------------------------
 
 void DrawPixel(int32_t x, int32_t y) {
-#if 1
     OglDrawPixel(x, y);
-#else
-    if (MODE == BM_OGL)
-        OglDrawPixel(x, y);
-    else if (MODE == BM_LINEAR)
-        DATA[ROWSIZE * y + x] = (uint8_t)COLOR.index;
-#endif
 }
 
 //------------------------------------------------------------------------------

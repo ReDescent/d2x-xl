@@ -222,11 +222,7 @@ void CTransformation::SetupProjection(float aspectRatio) {
     glPopMatrix();
     CCanvas::Current()->Reactivate();
     glGetIntegerv(GL_VIEWPORT, m_info.oglViewport);
-#if 1
     glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat *)m_info.projection.m.vec);
-#else
-    memcpy(m_info.projection.m.vec, &m_info.oglProjection[0][0], sizeof(m_info.projection.m.vec));
-#endif
     m_info.projection.Flip();
     m_info.aspectRatio = aspectRatio;
 }
@@ -235,7 +231,6 @@ void CTransformation::SetupProjection(float aspectRatio) {
 
 uint8_t CTransformation::Codes(CFixVector &v) {
     uint8_t codes = (v.v.coord.z < 0) ? CC_BEHIND : 0;
-#if 1
     tScreenPos s;
     ProjectPoint(v, s);
     if (s.x < 0)
@@ -246,20 +241,6 @@ uint8_t CTransformation::Codes(CFixVector &v) {
         codes |= CC_OFF_BOT;
     else if (s.y > gameData.renderData.screen.Height())
         codes |= CC_OFF_TOP;
-#else
-    fix z = v.v.coord.z;
-    fix r = fix(m_info.zoom * m_info.aspectRatio);
-    fix x = FixMulDiv(v.v.coord.x, m_info.scale.v.coord.x, r);
-
-    if (x > z)
-        codes |= CC_OFF_RIGHT;
-    else if (x < -z)
-        codes |= CC_OFF_LEFT;
-    if (v.v.coord.y > z)
-        codes |= CC_OFF_TOP;
-    else if (v.v.coord.y < -z)
-        codes |= CC_OFF_BOT;
-#endif
     return codes;
 }
 
@@ -358,17 +339,10 @@ void CFrustum::Compute(void) {
 #define bf (bn * r)
 
     CFloatVector corners[8] = {
-#if 1
         {{{0.0f, 0.0f, 0.0f}}},
         {{{0.0f, 0.0f, 0.0f}}},
         {{{0.0f, 0.0f, 0.0f}}},
         {{{0.0f, 0.0f, 0.0f}}},
-#else
-        {{{ln, bn, n}}},
-        {{{ln, tn, n}}},
-        {{{rn, tn, n}}},
-        {{{rn, bn, n}}},
-#endif
         {{{lf, bf, f}}},
         {{{lf, tf, f}}},
         {{{rf, tf, f}}},
@@ -376,11 +350,7 @@ void CFrustum::Compute(void) {
     };
 
     static CFloatVector centers[6] = {
-#if 1
         {{{0.0f, 0.0f, 0.0f}}},
-#else
-        {{{0.0f, 0.0f, n}}},
-#endif
         {{{lf * 0.5f, 0.0f, m}}},
         {{{0.0f, tf * 0.5f, m}}},
         {{{rf * 0.5f, 0.0f, m}}},
@@ -407,12 +377,10 @@ void CFrustum::Compute(void) {
             m_centers[i] += m_corners[planeVerts[i][j]];
         m_centers[i] /= I2X(4);
 #endif
-#if 1
         CFixVector v = m_corners[normRefs[i][1]] - m_corners[normRefs[i][0]];
         CFixVector::Normalize(v);
         if (CFixVector::Dot(v, m_normals[i]) < 0)
             m_normals[i].Neg();
-#endif
     }
 }
 

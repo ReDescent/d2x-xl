@@ -328,14 +328,12 @@ targetLed:
         AIMultiSendRobotPos(nObject, -1);
         MultiSendRobotFire(nObject, pObj->cType.aiInfo.CURRENT_GUN, &vFire);
     }
-#if 1
     if (++(pObj->cType.aiInfo.CURRENT_GUN) >= pRobotInfo->nGuns) {
         if ((pRobotInfo->nGuns == 1) || (pRobotInfo->nSecWeaponType == -1))
             pObj->cType.aiInfo.CURRENT_GUN = 0;
         else
             pObj->cType.aiInfo.CURRENT_GUN = 1;
     }
-#endif
     CreateAwarenessEvent(pObj, PA_NEARBY_ROBOT_FIRED);
     SetNextFireTime(pObj, pLocalInfo, pRobotInfo, nGun);
     RETURN
@@ -459,12 +457,7 @@ void AIDoActualFiringStuff(
                             RETURN
                         DoAIRobotHitAttack(pObj, TARGETOBJ, &pObj->info.position.vPos);
                     } else {
-#if 1
                         if (AICanFireAtTarget(pObj, &gameData.aiData.vGunPoint, &vFirePos)) {
-#else
-                        if (gameData.aiData.vGunPoint.p.x || gameData.aiData.vGunPoint.p.y ||
-                            gameData.aiData.vGunPoint.p.z) {
-#endif
                             if (!AILocalPlayerControlsRobot(pObj, ROBOT_FIRE_AGITATION))
                                 RETURN
                             // New, multi-weapon-nType system, 06/05/95 (life is slipping awayd:\temp\dm_test.)

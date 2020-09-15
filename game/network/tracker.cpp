@@ -30,9 +30,6 @@ static int32_t bTestTracker = 0;
 #else
 #define bTestTracker 0
 #endif
-#if 0
-static tUdpAddress testServer;
-#endif
 
 static tUdpAddress d2xTracker = {82, 165, 136, 196, 0, 0};
 

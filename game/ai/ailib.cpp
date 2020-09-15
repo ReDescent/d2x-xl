@@ -145,11 +145,9 @@ int32_t AICanFireAtTarget(CObject *pObj, CFixVector *vGun, CFixVector *vTarget) 
 // --------------------------------------------------------------------------------------------------------------------
 
 inline void LimitTargetVisibility(fix xMaxVisibleDist, tAILocalInfo *pLocalInfo) {
-#if 1
     if ((xMaxVisibleDist > 0) && (gameData.aiData.target.xDist > xMaxVisibleDist) &&
         (pLocalInfo->targetAwarenessType < PA_RETURN_FIRE))
         gameData.aiData.nTargetVisibility = 0;
-#endif
 }
 
 // --------------------------------------------------------------------------------------------------------------------

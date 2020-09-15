@@ -123,10 +123,6 @@ static bool GetSelectedPlayers(CMenu &m, int32_t nSavePlayers) {
 #if !DBG
     if (N_PLAYERS < 2) {
         InfoBox(TXT_WARNING, NULL, BG_STANDARD, 1, TXT_OK, TXT_TEAM_ATLEAST_TWO);
-#if 0
-	N_PLAYERS = nSavePlayers;
-	return true;
-#endif
     }
 #endif
 
@@ -137,9 +133,6 @@ static bool GetSelectedPlayers(CMenu &m, int32_t nSavePlayers) {
         (N_PLAYERS < 2)) {
         InfoBox(TXT_ERROR, NULL, BG_STANDARD, 1, TXT_OK, TXT_NEED_2PLAYERS);
         N_PLAYERS = nSavePlayers;
-#if 0	
-	return true;
-#endif
     }
 #endif
     return false;

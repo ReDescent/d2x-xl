@@ -99,10 +99,6 @@ void UpdateVCRState(void) {
         !(gameStates.input.keys.pressed[KEY_LCTRL] || gameStates.input.keys.pressed[KEY_RCTRL]) &&
         gameStates.input.keys.pressed[KEY_LEFT] && ((TimerGetFixedSeconds() - newdemo_single_frameTime) >= I2X(1)))
         gameData.demoData.nVcrState = ND_STATE_ONEFRAMEBACKWARD;
-#if 0
-else if ((gameData.demoData.nVcrState == ND_STATE_FASTFORWARD) || (gameData.demoData.nVcrState == ND_STATE_REWINDING))
-	gameData.demoData.nVcrState = ND_STATE_PLAYBACK;
-#endif
 }
 
 //------------------------------------------------------------------------------

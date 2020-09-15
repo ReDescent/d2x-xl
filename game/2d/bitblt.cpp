@@ -641,7 +641,6 @@ void CBitmap::BlitClipped(
 void CBitmap::RenderFullScreen(void) {
     CCanvas *const dest = CCanvas::Current();
 
-#if 1
     Render(
         NULL,
         0,
@@ -653,29 +652,8 @@ void CBitmap::RenderFullScreen(void) {
         Width(),
         Height(),
         (m_info.props.flags & BM_FLAG_TRANSPARENT) != 0,
-        0);
-#else
-    if ((Mode() == BM_LINEAR) && (dest->Mode() == BM_OGL)) {
-        Render(
-            dest,
-            0,
-            0,
-            dest->Width(),
-            dest->Height(),
-            0,
-            0,
-            Width(),
-            Height(),
-            (m_info.props.flags & BM_FLAG_TRANSPARENT) != 0,
-            0);
-    } else if (dest->Mode() != BM_LINEAR) {
-        CBitmap *tmp = CBitmap::Create(0, dest->Width(), dest->Height(), 1);
-        BlitScaled(tmp);
-        tmp->BlitClipped(0, 0);
-        delete tmp;
-    } else
-        BlitScaled(dest);
-#endif
+        0
+    );
 }
 
 //------------------------------------------------------------------------------

@@ -153,40 +153,14 @@ int32_t CSegment::ConquerCheck(void) {
     gameStates.entropy.bConquering = 0;
     if (!IsEntropyGame)
         return 0;
-#if 0
-if (gameStates.entropy.nTimeLastMoved < 0) {
-	HUDMessage (0, "you are moving");
-	StopConquerWarning ();
-	return 0;
-	}
-if (pPlayer->Shield () < 0) {
-	HUDMessage (0, "you are dead");
-	StopConquerWarning ();
-	return 0;
-	}
-if (pPlayer->secondaryAmmo [PROXMINE_INDEX] < extraGameInfo [1].nCaptureVirusThreshold) {
-	HUDMessage (0, "too few viruses");
-	StopConquerWarning ();
-	return 0;
-	}
-if (m_owner < 0) {
-	HUDMessage (0, "neutral room");
-	StopConquerWarning ();
-	return 0;
-	}
-if (m_owner == team) {
-	HUDMessage (0, "own room");
-	StopConquerWarning ();
-	return 0;
-	}
-#else
+
     if ((gameStates.entropy.nTimeLastMoved < 0) || (pPlayer->Shield() < 0) ||
         (pPlayer->secondaryAmmo[PROXMINE_INDEX] < extraGameInfo[1].entropy.nCaptureVirusThreshold) || (m_owner < 0) ||
         (m_owner == team)) {
         StopConquerWarning();
         return 0;
     }
-#endif
+
     t = SDL_GetTicks();
     if (!gameStates.entropy.nTimeLastMoved)
         gameStates.entropy.nTimeLastMoved = (int32_t)t;

@@ -294,12 +294,7 @@ void CFont::Create(const char *fontname) {
             else
                 fp = m_info.data + i * w * h;
             for (y = 0; y < h; y++)
-#if 1
                 memcpy(m_info.parentBitmap + curx + (cury + y) * tw, fp + y * w, w);
-#else
-                for (x = 0; x < w; x++)
-                    m_info.parentBitmap[curx + x + (cury + y) * tw] = fp[x + y * w];
-#endif
         } else {
             int32_t mask, bits = 0;
             // 		if (w*h>sizeof (data))

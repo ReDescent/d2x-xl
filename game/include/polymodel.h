@@ -64,7 +64,6 @@ class CSubModelData {
     CSubModelData() { Create(); }
     void Create(void);
     void Setup(uint8_t *pData);
-    void Destroy(void);
 };
 #pragma pack(pop)
 
@@ -127,12 +126,6 @@ class CPolyModel : public CByteArray {
         CByteArray::Destroy();
         ResetBuffer();
     }
-#if 0
-		inline CPolyModel& operator= (CPolyModel& other) { 
-			m_info.data = other.m_info.data; 
-			return *this;
-			}
-#endif
 
     private:
     int32_t m_fileEnd;

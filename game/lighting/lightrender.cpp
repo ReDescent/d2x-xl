@@ -168,17 +168,6 @@ int32_t CLightManager::SetActive(
 
 CDynLight *CLightManager::GetActive(CActiveDynLight *pActiveLights, int32_t nThread) {
     CDynLight *pLight = pActiveLights->pLight;
-#if 0
-if (pLight) {
-	if (pLight->render.bUsed [nThread] > 1)
-		pLight->render.bUsed [nThread] = 0;
-	if (pActiveLights->nType > 1) {
-		pActiveLights->nType = 0;
-		pActiveLights->pLight = NULL;
-		m_data.index [0][nThread].nActive--;
-		}
-	}
-#endif
     if (pLight == reinterpret_cast<CDynLight *>(0xffffffff))
         return NULL;
     return pLight;
@@ -293,14 +282,7 @@ int32_t CLightManager::SetNearestToFace(CSegFace *pFace, int32_t bTextured) {
     ENTER(0, 0);
 
     PROF_START
-#if 0
-	static		int32_t nFrameCount = -1;
-if ((pFace == prevFaceP) && (nFrameCount == gameData.appData.nFrameCount))
-	RETVAL (m_data.index [0][0].nActive);
 
-prevFaceP = pFace;
-nFrameCount = gameData.appData.nFrameCount;
-#endif
     int32_t i;
     CFixVector vNormal;
     CSide *pSide = SEGMENT(pFace->m_info.nSegment)->m_sides + pFace->m_info.nSide;
@@ -311,7 +293,6 @@ nFrameCount = gameData.appData.nFrameCount;
     if (pFace - FACES.faces == nDbgFace)
         BRP;
 #endif
-#if 1 //! DBG
     if (m_data.index[0][0].nActive < 0)
         lightManager.SetNearestToSegment(
             pFace->m_info.nSegment,
@@ -323,20 +304,10 @@ nFrameCount = gameData.appData.nFrameCount;
     else {
         m_data.index[0][0] = m_data.index[1][0];
     }
-#else
-    lightManager.SetNearestToSegment(
-        pFace->m_info.nSegment,
-        pFace - FACES,
-        0,
-        0,
-        0); // only get light emitting objects here (variable geometry lights are caught in
-            // lightManager.SetNearestToVertex ())
-#endif
+
     vNormal = pSide->m_normals[2];
-#if 1
     for (i = 0; i < 4; i++)
         lightManager.SetNearestToVertex(-1, -1, pFace->m_info.index[i], &vNormal, 0, 0, 1, 0);
-#endif
     PROF_END(ptPerPixelLighting)
     RETVAL(m_data.index[0][0].nActive);
 }

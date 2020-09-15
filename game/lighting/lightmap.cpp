@@ -719,16 +719,6 @@ bool CLightmapManager::FaceIsInvisible(CSegFace *pFace) {
 static float weight[5] = {0.2270270270f, 0.1945945946f, 0.1216216216f, 0.0540540541f, 0.0162162162f};
 
 static inline void Add(CLightmapFaceData &source, int32_t x, int32_t y, int32_t offset, CFloatVector3 &color) {
-#if 0
-if (x < 0)
-	return;
-if (x >= LM_W)
-	return;
-if (y < 0)
-	return;
-if (y >= LM_H)
-	return;
-#else
     if (x < 0)
         x = 0;
     else if (x >= LM_W)
@@ -737,7 +727,6 @@ if (y >= LM_H)
         y = 0;
     else if (y >= LM_H)
         y = LM_H - 1;
-#endif
     CRGBColor &sourceColor = source.m_texColor[y * LM_W + x];
     float w = weight[offset];
     color.Red() += sourceColor.r * w;
@@ -804,40 +793,6 @@ int32_t CLightmapManager::CompareFaces(const tSegFacePtr *pf, const tSegFacePtr 
 
     return (k < m) ? -1 : (k > m) ? 1 : 0;
 }
-
-//------------------------------------------------------------------------------
-
-#if 0 // DBG
-
-void CheckProgressMenu (int32_t nThread)
-{
-if (nThread)
-	return;
-
-static int32_t nCalls = 0;
-#pragma omp critical(CheckProgressMenuEntry)
-{
-if (nCalls)
-	PrintLog (0);
-++nCalls;
-}
-
-CMenuItem *pTime = lightmapManager.Progress ().Time ();
-if (pTime && pTime->m_bmText [0] && strcmp (pTime->m_bmText [0]->Name (), "String Bitmap"))
-	PrintLog (0, "Warning: Progress menu corrupted!\n");
-#pragma omp critical(CheckProgressMenuExit)
-{
-if (nCalls)
-	PrintLog (0);
---nCalls;
-}
-}
-
-#else
-
-#define CheckProgressMenu(_nThread)
-
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -1211,10 +1166,6 @@ int32_t CLightmapManager::BuildAll(int32_t nFace) {
     if (gameStates.app.nThreads > 1) {
         m_nFaces = FACES.nFaces;
         memset(m_bActiveThreads, 0, sizeof(m_bActiveThreads));
-#if 0
-	for (int32_t i = 0; i < gameStates.app.nThreads; i++)
-		uniDacsRouter [i].Create (gameData.segData.nSegments);
-#endif
 #pragma omp parallel for
         for (int32_t nThread = 0; nThread < gameStates.app.nThreads; nThread++) {
             BuildThread(nThread);
@@ -1515,14 +1466,8 @@ int32_t CLightmapManager::Create(int32_t nLevel) {
         }
         BindAll();
         Save(nLevel);
-#if 1
         if (gameOpts->render.color.nLevel < 2)
             ToGrayScale();
-#if 0
-	if (gameStates.render.CartoonStyle ())
-		Posterize ();
-#endif
-#endif
     }
     return m_bSuccess;
 }

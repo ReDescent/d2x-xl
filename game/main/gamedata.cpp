@@ -184,10 +184,6 @@ void CDynLight::Init() {
 // ----------------------------------------------------------------------------
 
 void COglMaterial::Init(void) {
-#if 0 // using global default values instead
-    diffuse.SetZero ();
-    ambient.SetZero ();
-#endif
     specular.SetZero();
     emissive.SetZero();
     shininess = 0;
@@ -633,11 +629,12 @@ bool CRiftData::Create(void) {
             m_pSensorFusion = NEW OVR::SensorFusion;
             m_pSensorFusion->AttachToSensor(m_pSensorP);
             m_pSensorFusion->SetYawCorrectionEnabled(true);
-#if 0
+            // TODO: missing autocalibration for VR
+            /*
             m_magCalTO.Setup (60000); // 1 minute
             m_magCalTO.Start (-1, true);
             m_bCalibrating = false;
-#endif
+            */
             m_bAvailable = 2;
         }
         if (detectionMessage)
@@ -703,7 +700,8 @@ int32_t CRiftData::GetHeadAngles(CAngleVector *angles) {
 // ----------------------------------------------------------------------------
 
 void CRiftData::AutoCalibrate(void) {
-#if 0
+    // TODO: missing autocalibration for VR
+    /*
     if (Available () > 1) {
         if (m_bCalibrating) {
             if (!m_magCal.IsAutoCalibrating ()) {
@@ -721,7 +719,7 @@ void CRiftData::AutoCalibrate(void) {
         else if (m_magCalTO.Expired (false))
             m_magCal.BeginAutoCalibration (*m_pSensorFusion);
     }
-#endif
+    */
 }
 
 // ----------------------------------------------------------------------------
@@ -962,14 +960,6 @@ bool CSegmentData::Create(int32_t nSegments, int32_t nVertices) {
     for (i = 0; i < LEVEL_SEGMENTS; i++)
         segments[i].m_objects = -1;
     Init();
-#if 0
-#if BIDIRECTIONAL_DACS
-    dialHeaps [0].Create (gameData.segData.nSegments);
-    dialHeaps [1].Create (gameData.segData.nSegments);
-#else
-    dialHeap.Create (gameData.segData.nSegments);
-#endif
-#endif
     return true; // faces.Create ();
 }
 
@@ -1014,14 +1004,6 @@ void CSegmentData::Destroy(void) {
     nFaces = 0;
     nEdges = 0;
     faceData.Destroy();
-#if 0
-#if BIDIRECTIONAL_DACS
-    dialHeaps [0].Destroy ();
-    dialHeaps [1].Destroy ();
-#else
-    dialHeap.Destroy ();
-#endif
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1246,17 +1228,9 @@ CTriggerData::CTriggerData() {}
 bool CTriggerData::Create(int32_t nTriggers, bool bObjTriggers) {
     if (bObjTriggers) {
         triggers[1].Create(nTriggers, "CTriggerData::triggers [1]");
-#if 0
-        objTriggerRefs.Create (MAX_OBJ_TRIGGERS, "CTriggerData::objTriggerRefs");
-        objTriggerRefs.Clear (0xff);
-#endif
         m_nTriggers[1] = nTriggers;
     } else {
-#if 0
-        CREATE (firstObjTrigger, LEVEL_OBJECTS, 0xff);
-#else
         CREATE(objTriggerRefs, LEVEL_OBJECTS, 0);
-#endif
         triggers[0].Create(nTriggers, "CTriggerData::triggers [0]");
         delay.Create(nTriggers, "CTriggerData::delay");
         delay.Clear(0xff);
@@ -1268,9 +1242,6 @@ bool CTriggerData::Create(int32_t nTriggers, bool bObjTriggers) {
 // ----------------------------------------------------------------------------
 
 void CTriggerData::Destroy(void) {
-#if 0
-    firstObjTrigger.Destroy ();
-#endif
     triggers[0].Destroy();
     triggers[1].Destroy();
     objTriggerRefs.Destroy();
@@ -2190,10 +2161,6 @@ void DefaultMovieSettings(void) {
 void DefaultShadowSettings(void) {
     // shadow render option defaults
     gameOptions[0].render.shadows.nLights = (gameOptions[0].render.nQuality > 1) ? 4 : 2;
-#if 0
-    gameOptions [0].render.shadows.nReach = (gameOptions [0].render.nQuality > 1) ? 2 : 1;
-    gameOptions [0].render.shadows.nClip = (gameOptions [0].render.nQuality > 1) ? 2 : 1;
-#endif
     gameOptions[0].render.shadows.bPlayers = 1;
     gameOptions[0].render.shadows.bRobots = 1;
     gameOptions[0].render.shadows.bMissiles = (gameOptions[0].render.nQuality > 1);
@@ -2259,11 +2226,6 @@ void DefaultSmokeSettings(bool bSetup) {
         gameOptions[0].render.particles.nDens[4] = 1 + (gameOpts->render.particles.nQuality > 1);
         gameOptions[0].render.particles.nLife[4] = 1 + (gameOpts->render.particles.nQuality > 1);
         gameOptions[0].render.particles.nAlpha[4] = 2;
-        // static smoke
-#if 0
-        gameOptions [0].render.particles.bStatic =
-        gameOptions [0].render.particles.bBubbles = (gameOptions [0].render.particles.nQuality > 2);
-#endif
     }
 }
 
@@ -2339,10 +2301,6 @@ void DefaultEffectSettings(bool bSetup) {
     gameOptions[0].render.effects.bTransparent = 1;
     // gameOptions [0].render.effects.nShockwaves = 1;
     gameOptions[0].render.effects.bMovingSparks = 1;
-#if 0
-    if (gameOptions [0].render.nQuality < 2)
-        gameOptions [0].render.effects.bGlow = 0;
-#endif
     extraGameInfo[0].nShieldEffect = gameOpts->render.effects.bShields;
     gameOptions[0].render.effects.bOnlyShieldHits = 1;
     extraGameInfo[0].bTracers = 1;
@@ -2353,9 +2311,8 @@ void DefaultEffectSettings(bool bSetup) {
         gameOptions[0].render.effects.bSoftParticles = (gameOptions[0].render.nQuality == 3) ? 7 : 0;
     } else if (gameOptions[0].render.nQuality < 3)
         gameOptions[0].render.effects.bSoftParticles = 0;
-#if 1
     gameOptions[0].render.particles.bBubbles = gameOptions[0].render.particles.bStatic;
-#endif
+
     DefaultSmokeSettings();
     DefaultShadowSettings();
     DefaultCoronaSettings();

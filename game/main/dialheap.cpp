@@ -48,12 +48,6 @@ void CDialHeap::Destroy(void) {
 void CDialHeap::Reset(void) {
     ENTER(0, 0);
 #if SPARSE_RESET
-#if 0 // DBG
-for (uint32_t i = 0, j = m_dirtyIndex.ToS (); i < j; i++)
-	m_index [m_dirtyIndex [i]] = -1;
-for (uint32_t i = 0, j = m_dirtyCost.ToS (); i < j; i++)
-	m_cost [m_dirtyCost [i]] = 0xFFFFFFFF;
-#else
     int16_t *pIndex = m_index.Buffer();
     uint16_t *dirtyIndexP = m_dirtyIndex.Buffer();
     uint32_t i;
@@ -64,7 +58,6 @@ for (uint32_t i = 0, j = m_dirtyCost.ToS (); i < j; i++)
     uint32_t *dirtyCostP = m_dirtyCost.Buffer();
     for (i = m_dirtyCost.ToS(); i; i--, dirtyCostP++)
         costP[*dirtyCostP] = 0xFFFFFFFF;
-#endif
     m_dirtyIndex.Reset();
     m_dirtyCost.Reset();
 #else

@@ -295,32 +295,6 @@ void CBriefingInfo::Setup(char *_message, int32_t _nLevel, int32_t _nScreen) {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void CBriefing::Init(void) {
-#if 0
-briefingHandlers1 [0].handlerP = &CBriefing::HandleA;
-briefingHandlers1 [1].handlerP = &CBriefing::HandleB;
-briefingHandlers1 [2].handlerP = &CBriefing::HandleC;
-briefingHandlers1 [3].handlerP = &CBriefing::HandleD;
-briefingHandlers1 [4].handlerP = &CBriefing::HandleF;
-briefingHandlers1 [5].handlerP = &CBriefing::HandleN;
-briefingHandlers1 [6].handlerP = &CBriefing::HandleO;
-briefingHandlers1 [7].handlerP = &CBriefing::HandleP;
-briefingHandlers1 [8].handlerP = &CBriefing::HandleR;
-briefingHandlers1 [9].handlerP = &CBriefing::HandleS;
-briefingHandlers1 [10].handlerP = &CBriefing::HandleT;
-briefingHandlers1 [11].handlerP = &CBriefing::HandleU;
-briefingHandlers1 [12].handlerP = &CBriefing::HandleZ;
-
-briefingHandlers2 [0].handlerP = &CBriefing::HandleTAB;
-briefingHandlers2 [0].handlerP = &CBriefing::HandleBS;
-briefingHandlers2 [0].handlerP = &CBriefing::HandleNEWL;
-briefingHandlers2 [0].handlerP = &CBriefing::HandleSEMI;
-briefingHandlers2 [0].handlerP = &CBriefing::HandleANY;
-#endif
-}
-
-//-----------------------------------------------------------------------------
-
 int32_t CBriefing::StartSound(int32_t nChannel, int16_t nSound, fix nVolume, const char *pszWAV) {
     if (nChannel < 0) {
         int32_t bSound = gameStates.sound.bD1Sound;
@@ -621,11 +595,7 @@ void CBriefing::SetupAnimationCanvas(CCanvas *baseCanv) {
 //------------------------------------------------------------------------------
 
 float CBriefing::GetScale(void) {
-#if 0 // DBG
-return ogl.IsSideBySideDevice () ? 0.5f : 1.0f;
-#else
     return (ogl.IsOculusRift() /*&& gameStates.app.bGameRunning*/) ? 0.5f : 1.0f;
-#endif
 }
 
 //---------------------------------------------------------------------------
@@ -741,14 +711,10 @@ int32_t CBriefing::PrintCharDelayed(int32_t delay) {
     if (!tText)
         tText = SDL_GetTicks();
 
-#if 0
-Assert ((m_info.nCurrentColor >= 0) && (m_info.nCurrentColor < MAX_BRIEFING_COLORS));
-#else
     if (m_info.nCurrentColor < 0)
         m_info.nCurrentColor = 0;
     else if (m_info.nCurrentColor >= MAX_BRIEFING_COLORS)
         m_info.nCurrentColor = MAX_BRIEFING_COLORS - 1;
-#endif
 
     // Draw cursor if there is some delay and caller says to draw cursor
     if (m_info.bFlashingCursor && !m_info.bRedraw)
@@ -990,14 +956,10 @@ int32_t CBriefing::HandleC(void) {
         m_info.nCurrentColor = 0;
     } else {
         m_info.nCurrentColor = ParseMessageInt(m_info.message);
-#if 0
-	Assert ((m_info.nCurrentColor >= 0) && (m_info.nCurrentColor < MAX_BRIEFING_COLORS));
-#else
         if (m_info.nCurrentColor < 0)
             m_info.nCurrentColor = 0;
         else if (m_info.nCurrentColor >= MAX_BRIEFING_COLORS)
             m_info.nCurrentColor = MAX_BRIEFING_COLORS - 1;
-#endif
     }
     m_info.prevCh = 10;
     return 1;

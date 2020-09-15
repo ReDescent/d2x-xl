@@ -85,10 +85,6 @@ void NetworkReadEndLevelShortPacket(uint8_t *data) {
     int32_t nPlayer;
     tEndLevelInfoShort *eli;
 
-#if 0 // DBG
-if (N_LOCALPLAYER)
-	audio.PlaySound (SOUND_HUD_MESSAGE);
-#endif
     eli = reinterpret_cast<tEndLevelInfoShort *>(data);
     nPlayer = eli->nPlayer;
     Assert(nPlayer != N_LOCALPLAYER);
@@ -425,16 +421,6 @@ void NetworkReadShortPlayerDataPacket(tFrameInfoShort *pd) {
     int32_t nObject;
     CObject *pObj = NULL;
 
-// int16_t frame info is not aligned because of tShortPos.  The mac
-// will call totally hacked and gross function to fix this up.
-#if 0
-tFrameInfoShort new_pd;
-if (gameStates.multi.nGameType >= IPX_GAME)
-	GetShortFrameInfo (reinterpret_cast<uint8_t*> (pd), &new_pd);
-else
-	memcpy (&new_pd, reinterpret_cast<uint8_t*> (pd), sizeof (tFrameInfoShort));
-#endif
-
     nPlayer = pd->data.nPlayer;
     if (nPlayer < 0) {
         Int3(); // This packet is bogus!!
@@ -512,9 +498,7 @@ int32_t NetworkVerifyPlayers(void) {
 
     for (j = 0, pPlayer = gameData.multiplayer.players; j < MAX_PLAYERS; j++, pPlayer++)
         nPlayerObjs[j] = pPlayer->connected ? pPlayer->nObject : -1;
-#if 0
-if (gameData.appData.GameMode (GM_MULTI_ROBOTS))
-#endif
+
     nPlayers = 0;
     FORALL_OBJS(pObj) {
         i = pObj->Index();
@@ -533,10 +517,6 @@ if (gameData.appData.GameMode (GM_MULTI_ROBOTS))
             if (bCoop)
                 nPlayers++;
         }
-#if 0
-	else if (bCoop) {
-		}
-#endif
         if (nPlayers > gameData.multiplayer.nMaxPlayers)
             return 1;
     }
@@ -631,10 +611,7 @@ int32_t CObjectSynchronizer::ValidateFrame(void) {
 int32_t CObjectSynchronizer::Start(void) {
     if ((m_nLocalObj != -1) && (m_nLocalObj != -3))
         return 0;
-#if 0 // disallow sync restart
-if (networkData.nJoinState)
-	return -1;
-#endif
+
     // Clear object list
     m_nPlayer = m_nObjOwner;
     m_nLocalObj = m_nRemoteObj = -1;
@@ -809,15 +786,6 @@ int32_t CObjectSynchronizer::Run(uint8_t *data)
 //------------------------------------------------------------------------------
 
 void NetworkReadObjectPacket(uint8_t *data) {
-#if 0 // DBG
-static bool bWait = true;
-
-if (bWait) {
-	while (networkThread.RxPacketQueue ().Length () < (gameData.objData.nObjects + 4) / 5)
-		G3_SLEEP (0);
-	bWait = false;
-	}
-#endif
     objectSynchronizer.Run(data);
 }
 

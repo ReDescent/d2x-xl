@@ -867,7 +867,6 @@ int32_t LineHitsFace(CFixVector *pHit, CFixVector *p0, CFixVector *p1, int16_t n
 float NearestShadowedWallDist(int16_t nObject, int16_t nSegment, CFixVector *vPos, float fScale) {
     static float fClip[4] = {1.1f, 1.5f, 2.0f, 3.0f};
 
-#if 1
     CFixVector vHit, v, vh;
     CSegment *pSeg;
     int32_t nSide, nHitSide, nChild, nWID, bHit = 0;
@@ -960,33 +959,6 @@ float NearestShadowedWallDist(int16_t nObject, int16_t nSegment, CFixVector *vPo
     if (bHit)
         return fDist * (/*fScale ? fScale :*/ fClip[gameOpts->render.shadows.nReach]);
     return G3_INFINITY;
-
-#else // slower method
-
-    CHitQuery hitQuery;
-    CHitResult hitResult;
-    CFixVector dir;
-
-    if (!gameOpts->render.shadows.nClip)
-        return G3_INFINITY;
-    if (0 > (nSegment = FindSegByPos(vPos, nSegment, 1, 0)))
-        return G3_INFINITY;
-    hitQuery.p0 = vPos;
-    VmVecSub(&dir, hitQuery.p0, &vLightPos);
-    CFixVector::Normalize(dir);
-    VmVecScale(&dir, I2X(G3_INFINITY));
-    hitQuery.nSegment = nSegment;
-    hitQuery.p1 = &dir;
-    hitQuery.rad = 0;
-    hitQuery.nObject = nObject;
-    hitQuery.ignoreObjList = NULL;
-    hitQuery.flags = FQ_TRANSWALL;
-    hitQuery.bCheckVisibility = false;
-    if (FindHitpoint(hitQuery, hitResult, 0) != HIT_WALL)
-        return G3_INFINITY;
-    return // fScale ? X2F (VmVecDist (hitQuery.p0, &hitResult.hit.vPoint)) * fScale :
-        X2F(VmVecDist(hitQuery.p0, &hitResult.hit.vPoint)) * fClip[gameOpts->render.shadows.nReach];
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1202,13 +1174,8 @@ int32_t CSubModel::RenderShadowCaps(CObject *pObj, CModel *po, int32_t bCullFron
         if (!ogl.SizeVertexBuffer(j))
             return 0;
         nVerts = 0;
-#if 1
         for (pfv = pf->m_vertices + j; j; j--) {
             v0 = pvf[*--pfv] + vShadowOffset;
-#else
-        for (pfv = pf->m_vertices; j; j--) {
-            v0 = pvf[*pfv++] + vShadowOffset;
-#endif
             v1 = v0 - vLightPosf; // project the current shadow cap vertex to a distance of fClipDist from it's current
                                   // position as seen from the light
             v1 *= fClipDist / v1.Mag();

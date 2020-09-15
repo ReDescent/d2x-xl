@@ -275,11 +275,6 @@ tEffectInfo *FindEffect(tEffectInfo *pEffectInfo, int32_t nTexture) {
         for (j = pEffectInfo->animationInfo.nFrameCount, pFrame = pEffectInfo->animationInfo.frames; j > 0;
              j--, pFrame++)
             if (pFrame->index == nTexture) {
-#if 0
-			int32_t t = FindTextureByIndex (nTexture);
-			if (t >= 0)
-				pEffectInfo->changing.nWallTexture = t;
-#endif
                 return pEffectInfo;
             }
     }
@@ -407,20 +402,9 @@ static int32_t BestShrinkFactor(CBitmap *pBm, int32_t nShrinkFactor) {
     if ((pBm->Width() != Pow2ize(pBm->Width(), 65536)) ||
         ((pBm->Height() != Pow2ize(pBm->Height(), 65536)) && (pBm->Height() % pBm->Width() != 0)))
         return 1;
-#if 0
-if (pBm->Width () >= 2 * pBm->Width ()) {
-#endif
     nBaseSize = pBm->Width();
     nTargetSize = 512 / nShrinkFactor;
     nBaseFactor = (3 * nBaseSize / 2) / nTargetSize;
-#if 0
-	}
-else {
-	nBaseSize = pBm->Width () * pBm->Width ();
-	nTargetSize = (512 * 512) / (nShrinkFactor * nShrinkFactor);
-	nBaseFactor = (int32_t) sqrt ((double) (3 * nBaseSize / 2) / nTargetSize);
-	}
-#endif
     if (!nBaseFactor)
         return 1;
     if (nBaseFactor > nShrinkFactor)
@@ -774,11 +758,6 @@ int32_t ReadHiresBitmap(CBitmap *pBm, const char *bmName, int32_t nIndex, int32_
 #if DBG
     if (!strcmp(bmName, "hostage#0"))
         BRP;
-#if 0
-const char* s = strchr (bmName, '#');
-if (s && (s [1] != '0'))
-	return 0;
-#endif
 #endif
 
     if (nFile < 2) // was level specific mod folder
@@ -1006,15 +985,12 @@ void LoadReplacementBitmaps(const char *pszLevelName) {
         nBitmapNum = cf.ReadInt();
         indices = new uint16_t[nBitmapNum];
         bmh = new tPIGBitmapHeader[nBitmapNum];
-#if 0
-	cf.Read (indices, nBitmapNum * sizeof (uint16_t), 1);
-	cf.Read (bmh, nBitmapNum * sizeof (tPIGBitmapHeader), 1);
-#else
+
         for (i = 0; i < nBitmapNum; i++)
             indices[i] = cf.ReadShort();
         for (i = 0; i < nBitmapNum; i++)
             PIGBitmapHeaderRead(bmh + i, cf);
-#endif
+
         bmDataOffset = (int32_t)cf.Tell();
 
         for (i = 0; i < nBitmapNum; i++) {

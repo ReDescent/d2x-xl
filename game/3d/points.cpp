@@ -80,13 +80,8 @@ uint8_t OglProjectPoint(CFloatVector3 &p, tScreenPos &s, uint8_t flags, uint8_t 
         &x,
         &y,
         &z);
-#if 1
     s.x = fix(x);
     s.y = fix(y);
-#else
-    s.x = fix(CCanvas::xCanvW2f - x * CCanvas::xCanvW2f / z);
-    s.y = fix(CCanvas::fCanvH2 - y * CCanvas::fCanvH2 / z);
-#endif
 #if DBG
     tScreenPos h;
     OglProjectPoint(p, h);

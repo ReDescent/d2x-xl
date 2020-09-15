@@ -113,7 +113,8 @@ int32_t CObject::Create(
     fix xSize,
     uint8_t cType,
     uint8_t mType,
-    uint8_t rType) {
+    uint8_t rType
+) {
     ENTER(0, 0);
 #if DBG
     if (nType == OBJ_WEAPON) {
@@ -125,10 +126,7 @@ int32_t CObject::Create(
         if (IsMissile((int32_t)nId))
             nType = nType;
     } else if (nType == OBJ_ROBOT) {
-#if 0
-	if (ROBOTINFO ((int32_t) nId) && ROBOTINFO ((int32_t) nId)->bossFlag && (BOSS_COUNT >= MAX_BOSS_COUNT))
-		RETVAL (-1)
-#endif
+        nType = nType;
     } else if (nType == OBJ_HOSTAGE)
         nType = nType;
     else if (nType == OBJ_FIREBALL)
@@ -176,31 +174,6 @@ int32_t CObject::Create(
             : IMMORTAL_TIME);
     SetAttachedObj(-1);
     m_xCreationTime = gameData.timeData.xGame;
-#if 0
-if (GetControlType () == CT_POWERUP)
-	CPowerupInfo::SetCount (1);
-// Init physics info for this CObject
-if (GetMovementType () == MT_PHYSICS)
-	m_vStartVel.SetZero ();
-if (GetRenderType () == RT_POLYOBJ)
-	CPolyObjInfo::SetTexOverride (-1);
-
-if (GetType () == OBJ_WEAPON) {
-	CPhysicsInfo::SetFlags (CPhysInfo.GetFlags () | WI_Persistent (m_info.nId) * PF_PERSISTENT);
-	CLaserInfo::SetCreationTime (gameData.timeData.xGame);
-	CLaserInfo::SetLastHitObj (0);
-	CLaserInfo::SetScale (I2X (1));
-	}
-else if (GetType () == OBJ_DEBRIS)
-	gameData.objData.nDebris++;
-if (GetControlType () == CT_POWERUP)
-	CPowerupInfo::SetCreationTime (gameData.timeData.xGame);
-else if (GetControlType () == CT_EXPLOSION) {
-	CAttachedInfo::SetPrev (-1);
-	CAttachedInfo::SetNext (-1);
-	CAttachedInfo::SetParent (-1);
-	}
-#endif
     Link();
     LinkToSeg(nSegment);
     RETVAL(Key())
@@ -247,10 +220,6 @@ int32_t CreateObject(
             BRP;
     } else if (nType == OBJ_ROBOT) {
         BRP;
-#if 0
-	if (ROBOTINFO ((int32_t) nId) && ROBOTINFO ((int32_t) nId)->bossFlag && (BOSS_COUNT >= MAX_BOSS_COUNT))
-		RETVAL (-1)
-#endif
     } else if (nType == OBJ_HOSTAGE)
         BRP;
     else if (nType == OBJ_FIREBALL)

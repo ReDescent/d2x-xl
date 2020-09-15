@@ -217,25 +217,6 @@ class CShortPos {
 #define MATRIX_PRECISION 9
 #define MATRIX_MAX 0x7f // This is based on MATRIX_PRECISION, 9 => 0x7f
 
-#if 0
-class MovementInfo { };
-class PhysicsMovementInfo : public MovementInfo { };
-class SpinMovementInfo    : public MovementInfo { };
-
-class ControlInfo { };
-class ControlLaserInfo : public ControlInfo { };
-class ControlExplosionInfo : public ControlInfo { };
-class ControlAIStaticInfo : public ControlInfo { };
-class ControlLightInfo : public ControlInfo { };     // why put this here?  Didn't know what else to do with it.
-class ControlPowerupInfo : public ControlInfo { };
-
-class RenderInfo { };
-class RenderPolyObjInfo : public RenderInfo { };      // polygon model
-class RenderVClipInfo : public RenderInfo { };     // tAnimationInfo
-class RenderSmokeInfo : public RenderInfo { };
-class RenderLightningInfo : public RenderInfo { };
-#endif
-
 // -----------------------------------------------------------------------------
 // information for physics sim for an CObject
 #pragma pack(push, 1)
@@ -733,14 +714,6 @@ typedef struct tBaseObject {
 class CObjectInfo : public CObjTransformation, public CObjContainerInfo, public tBaseObject {
     public:
     CObjectInfo() { memset(&info, 0, sizeof(info)); }
-#if 0
-	private:
-		tBaseObject	m_object;
-
-	public:
-		inline tBaseObject* GetInfo (void) { return &info; };
-		inline void GetInfo (tBaseObject* pInfo) { info = *pInfo; };
-#endif
 
     public:
     inline int32_t Signature() { return info.nSignature; }
@@ -1351,68 +1324,6 @@ class CObject : public CObjectInfo {
 };
 
 inline int32_t operator-(CObject *o, CArray<CObject> &a) { return a.Index(o); }
-
-#if 0
-
-// -----------------------------------------------------------------------------
-
-class CRobotObject : public CObject, public CPhysicsInfo, public CAIStaticInfo, public CPolyObjInfo {
-	public:
-		CRobotObject () {}
-		~CRobotObject () {}
-		void Initialize (void) {};
-		void ToBaseObject (tBaseObject *pObj);
-};
-
-// -----------------------------------------------------------------------------
-
-class CPowerupObject : public CObject, public CPhysicsInfo, public CPolyObjInfo {
-	public:
-		CPowerupObject () {}
-		~CPowerupObject () {}
-		void Initialize (void) {};
-		void ToBaseObject (tBaseObject *pObj);
-};
-
-// -----------------------------------------------------------------------------
-
-class CWeaponObject : public CObject, public CPhysicsInfo, public CPolyObjInfo {
-	public:
-		CWeaponObject () {}
-		~CWeaponObject () {}
-		void Initialize (void) {};
-		void ToBaseObject (tBaseObject *pObj);
-};
-
-// -----------------------------------------------------------------------------
-
-class CLightObject : public CObject, public CObjLightInfo {
-	public:
-		CLightObject () {};
-		~CLightObject () {};
-		void Initialize (void) {};
-		void ToBaseObject (tBaseObject *pObj);
-};
-
-// -----------------------------------------------------------------------------
-
-class CLightningObject : public CObject, public CLightningInfo {
-	public:
-		CLightningObject () {};
-		~CLightningObject () {};
-		void Initialize (void) {};
-		void ToBaseObject (tBaseObject *pObj);
-};
-
-class CParticleObject : public CObject, public CSmokeInfo {
-	public:
-		CParticleObject () {};
-		~CParticleObject () {};
-		void Initialize (void) {};
-		void ToBaseObject (tBaseObject *pObj);
-};
-
-#endif
 
 // -----------------------------------------------------------------------------
 

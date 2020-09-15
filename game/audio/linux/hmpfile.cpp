@@ -345,7 +345,7 @@ static void setup_tempo(hmp_file *hmp, ulong tempo) {
 int32_t hmp_play(hmp_file *hmp, int32_t bLoop) {
     int32_t rc;
     MIDIPROPTIMEDIV mptd;
-#if 1
+
     uint32_t numdevs;
     int32_t i = 0;
 
@@ -361,7 +361,6 @@ int32_t hmp_play(hmp_file *hmp, int32_t bLoop) {
         i++;
     } while ((i < (int32_t)numdevs) && (hmp->devid == -1));
     if (hmp->devid == -1)
-#endif
         hmp->bLoop = bLoop;
     hmp->devid = MIDI_MAPPER;
 

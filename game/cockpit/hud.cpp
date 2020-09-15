@@ -141,56 +141,52 @@ void CHUD::DrawHomingWarning(void) {
 
     static int32_t nIdLock = 0;
 
-#if 0 // DBG
-if (gameData.timeData.xGame & 0x4000) {
-#else
     if ((LOCALPLAYER.homingObjectDist >= 0) && (gameData.timeData.xGame & 0x4000)) {
-#endif
-    int32_t x, y, nOffsetSave = -1;
-    int32_t nLayout =
-        ogl.IsOculusRift() ? -1 : gameStates.menus.nInMenu ? 0 : gameOpts->render.cockpit.nShipStateLayout + 1;
-    int32_t w, h, aw;
+        int32_t x, y, nOffsetSave = -1;
+        int32_t nLayout =
+            ogl.IsOculusRift() ? -1 : gameStates.menus.nInMenu ? 0 : gameOpts->render.cockpit.nShipStateLayout + 1;
+        int32_t w, h, aw;
 
-    if (nLayout) {
-        ScaleUp();
-        fontManager.Current()->StringSize(TXT_LOCK, w, h, aw);
-        x = gameData.renderData.scene.Width() / 2 - w / 2;
-        y = gameData.renderData.scene.Height() / 2 + ScaleY(Y_GAUGE_OFFSET(0)) + (nLayout ? LineSpacing() : 0);
-        if (nLayout == 1) {
+        if (nLayout) {
+            ScaleUp();
+            fontManager.Current()->StringSize(TXT_LOCK, w, h, aw);
+            x = gameData.renderData.scene.Width() / 2 - w / 2;
+            y = gameData.renderData.scene.Height() / 2 + ScaleY(Y_GAUGE_OFFSET(0)) + (nLayout ? LineSpacing() : 0);
+            if (nLayout == 1) {
+                SetFontColor(RED_RGBA);
+                if ((EGI_FLAG(nDamageModel, 0, 0, 0) != 0) && !ShowTextGauges())
+                    y -= 2 * LineSpacing();
+            } else {
+                CCanvas::Current()->SetColorRGB(255, 0, 0, 255);
+                OglDrawFilledRect(x - 5, y - 4, x + w + 3, y + h + 3);
+                SetFontColor(BLACK_RGBA);
+            }
+            nIdLock = DrawHUDText(&nIdLock, x, y, TXT_LOCK);
+            ScaleDown();
+        } else {
+            fontManager.Current()->StringSize(TXT_LOCK, w, h, aw);
+            if (nLayout < 0) {
+                x = CCanvas::Current()->Width() / 2 - w / 2;
+                y = AdjustCockpitY(-4 * LineSpacing());
+                // y = CCanvas::Current ()->Height () / 2 + 4 * h;
+                nOffsetSave = gameData.SetStereoOffsetType(STEREO_OFFSET_NONE);
+            } else {
+                x = 0x8000;
+                y = CCanvas::Current()->Height() - LineSpacing();
+                if ((hudIcons.Visible() && (extraGameInfo[0].nWeaponIcons == 2)) ||
+                    (hudIcons.Inventory() && (extraGameInfo[0].nWeaponIcons & 1)))
+                    y -= LHY(30);
+                m_info.bAdjustCoords = true;
+            }
+            if ((m_info.weaponBoxUser[0] != WBU_WEAPON) || (m_info.weaponBoxUser[1] != WBU_WEAPON)) {
+                int32_t wy = (m_info.weaponBoxUser[0] != WBU_WEAPON) ? SW_y[0] : SW_y[1];
+                y = Min(y, (wy - LineSpacing() - gameData.renderData.frame.Top()));
+            }
             SetFontColor(RED_RGBA);
-            if ((EGI_FLAG(nDamageModel, 0, 0, 0) != 0) && !ShowTextGauges())
-                y -= 2 * LineSpacing();
-        } else {
-            CCanvas::Current()->SetColorRGB(255, 0, 0, 255);
-            OglDrawFilledRect(x - 5, y - 4, x + w + 3, y + h + 3);
-            SetFontColor(BLACK_RGBA);
+            nIdLock = DrawHUDText(&nIdLock, x, y, TXT_LOCK);
         }
-        nIdLock = DrawHUDText(&nIdLock, x, y, TXT_LOCK);
-        ScaleDown();
-    } else {
-        fontManager.Current()->StringSize(TXT_LOCK, w, h, aw);
-        if (nLayout < 0) {
-            x = CCanvas::Current()->Width() / 2 - w / 2;
-            y = AdjustCockpitY(-4 * LineSpacing());
-            // y = CCanvas::Current ()->Height () / 2 + 4 * h;
-            nOffsetSave = gameData.SetStereoOffsetType(STEREO_OFFSET_NONE);
-        } else {
-            x = 0x8000;
-            y = CCanvas::Current()->Height() - LineSpacing();
-            if ((hudIcons.Visible() && (extraGameInfo[0].nWeaponIcons == 2)) ||
-                (hudIcons.Inventory() && (extraGameInfo[0].nWeaponIcons & 1)))
-                y -= LHY(30);
-            m_info.bAdjustCoords = true;
-        }
-        if ((m_info.weaponBoxUser[0] != WBU_WEAPON) || (m_info.weaponBoxUser[1] != WBU_WEAPON)) {
-            int32_t wy = (m_info.weaponBoxUser[0] != WBU_WEAPON) ? SW_y[0] : SW_y[1];
-            y = Min(y, (wy - LineSpacing() - gameData.renderData.frame.Top()));
-        }
-        SetFontColor(RED_RGBA);
-        nIdLock = DrawHUDText(&nIdLock, x, y, TXT_LOCK);
+        gameData.SetStereoOffsetType(nOffsetSave);
     }
-    gameData.SetStereoOffsetType(nOffsetSave);
-}
 }
 
 // -----------------------------------------------------------------------------
@@ -203,13 +199,6 @@ void CHUD::DrawKeys(void) {
 
     int32_t x, y, dx = GAME_FONT->Width() + GAME_FONT->Width() / 2;
 
-#if 0
-if (ogl.IsOculusRift ()) {
-	x = 3 * CCanvas::Current ()->Width () / 4 - 4 * dx;
-	y = CCanvas::Current ()->Height () + AdjustCockpitY (-2 * LineSpacing ());
-	}
-else
-#endif
     {
         x = 2;
         y = 3 * LineSpacing();
@@ -692,11 +681,6 @@ char *CHUD::StrPrimaryWeaponList(char *pszList, char *pszAmmo) {
     for (int32_t j = 0; j < n; j++) {
         int32_t bActive, bHave, bAvailable;
 
-#if 0
-	if (!gameStates.app.bD1Mission && extraGameInfo [0].bSmartWeaponSwitch && ((j == 1) || (j == 2)) && LOCALPLAYER.primaryWeaponFlags & (1 << (j + 5)))
-		continue; // skip Vulcan / Spreadfire if player has Gauss / Helix and smart weapon switch is enabled
-#endif
-
         int32_t k = hudIcons.GetWeaponIndex(0, j, nMaxAutoSelect);
 
         if (k == 0)
@@ -716,10 +700,6 @@ char *CHUD::StrPrimaryWeaponList(char *pszList, char *pszAmmo) {
             if (nState[1] != nState[0])
                 l = StrWeaponStateColor(szList, l, bHave && bAvailable, bActive);
             szList[l++] = 'L';
-#if 0
-		szList [l++] = (LOCALPLAYER.flags & PLAYER_FLAGS_QUAD_LASERS) ? 'Q' : 'L';
-		szList [l++] = 48 + LOCALPLAYER.LaserLevel () + 1;
-#endif
         } else if (k == 0) { // 5 == super laser, handled above
             continue;
         } else {
@@ -741,11 +721,6 @@ char *CHUD::StrPrimaryWeaponList(char *pszList, char *pszAmmo) {
                     szPrefix[0] = 'Q';
             } else if ((k == 1) || (k == 6)) {
                 nAmmo = X2I((uint32_t)LOCALPLAYER.primaryAmmo[VULCAN_INDEX] * (uint32_t)VULCAN_AMMO_SCALE);
-#if 0
-			if (nAmmo >= 1000)
-				nAmmo /= 1000;
-				szSuffix [0] = 'K';
-#endif
             } else if (k == 9)
                 nAmmo = gameData.omegaData.xCharge[IsMultiGame] * 100 / MAX_OMEGA_CHARGE;
             else
@@ -757,13 +732,6 @@ char *CHUD::StrPrimaryWeaponList(char *pszList, char *pszAmmo) {
 
     szList[l] = '\0';
     pszList[0] = '\0';
-#if 0
-if (nLayout == 2) {
-	strcpy (pszList + 1, szAmmo);
-	strcat (pszList + 1, " ");
-	}
-else
-#endif
     pszList[1] = '\0';
     strcat(pszList + 1, szList);
     return pszList;
@@ -1461,11 +1429,6 @@ void CWideHUD::Toggle(void) { CGenericCockpit::Activate(CM_FULL_COCKPIT, true); 
 
 void CWideHUD::SetupWindow(int32_t nWindow) {
     CHUD::SetupWindow(nWindow);
-#if 0
-if (SW_y [nWindow] + SW_h [nWindow] > gameData.renderData.frame.Bottom ())
-	SW_y [nWindow] -= (gameData.renderData.screen.Height () - gameData.renderData.frame.Height ());
-gameData.renderData.frame.SetupPane (pCanvas, SW_x [nWindow], SW_y [nWindow], SW_w [nWindow], SW_h [nWindow]);
-#endif
 }
 
 // -----------------------------------------------------------------------------

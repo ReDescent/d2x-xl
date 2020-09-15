@@ -77,23 +77,6 @@ class CPacketAddress : public CNetworkAddress {
         srcSocket = m_srcSocket;
         destSocket = m_destSocket;
     }
-#if 0 // inherited from CNetworkAddress
-		inline uint32_t Server (void) { return src_addr.address.portAddress.ip.a; }
-		inline uint16_t Port (void) { return src_addr.address.portAddress.port.s; }
-		inline uint8_t* Network (void) { return src_addr.network.b; }
-		inline uint8_t* Node (void) { return src_addr.address.node; }
-		inline int32_t Type (void) { return packetType; }
-
-		inline void SetServer (void* server) { memcpy (src_addr.address.portAddress.ip.octets, (uint8_t*) server, sizeof (src_addr.address.portAddress.ip.octets)); }
-		inline void SetNetwork (void* network) { memcpy (src_addr.network.b, (uint8_t*) network, sizeof (src_addr.network)); }
-		inline void SetNode (void* node) { memcpy (src_addr.address.node, (uint8_t*) node, sizeof (src_addr.address.node)); }
-		inline void SetPort (void* port) { memcpy (src_addr.address.portAddress.port.b, (uint8_t*) port, sizeof (src_addr.address.portAddress.port)); }
-
-		inline void ResetServer (uint8_t filler = 0) { memset (src_addr.address.portAddress.ip.octets, filler, sizeof (src_addr.address.portAddress.ip.octets)); }
-		inline void ResetNetwork (uint8_t filler = 0) { memset (src_addr.network.b, filler, sizeof (src_addr.network)); }
-		inline void ResetNode (uint8_t filler = 0) { memset (src_addr.address.node, filler, sizeof (src_addr.address.node)); }
-		inline void ResetPort (uint8_t filler = 0) { memset (src_addr.address.portAddress.port.b, filler, sizeof (src_addr.address.portAddress.port)); }
-#endif
     inline tNetworkAddress &Address(void) { return m_address; }
 
     inline bool operator==(CPacketAddress &other) {

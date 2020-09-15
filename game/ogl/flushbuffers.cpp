@@ -143,14 +143,9 @@ static float PrintTime(tProfilerTags tag, int32_t nLine, int32_t bStyle = 0) {
     int32_t h = fontManager.Current()->Height() + 3;
     float t = 0.0f;
 
-#if 0
-
-    GrPrintF (NULL, 5, h * nLine, fontManager.Current ()->PadString (szValue, pszLabel, " .", 190));
-#else
     PrepareTagLabels();
     GrString(5, h * nLine, szTags[tag].szLabel);
     GrString(szTags[tag].nPadOffset, h * nLine, szTags[tag].pszPad);
-#endif
 
     if (bStyle == 0)
         sprintf(
@@ -285,10 +280,6 @@ void COGL::SwapBuffers(int32_t bForce, int32_t bClear) {
         SaveScreenShot(NULL, 0);
     SetupCanvasses(-1.0f);
     SetDrawBuffer(GL_BACK, gameStates.render.bRenderIndirect > 0);
-#if 0
-    if (gameStates.menus.nInMenu || bClear)
-        glClear (GL_COLOR_BUFFER_BIT);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -421,14 +412,6 @@ void COGL::FlushDrawBuffer(bool bAdditive) {
         int32_t nDevice = abs(StereoDevice());
 
         gameData.renderData.screen.Activate("FlushDrawBuffer");
-
-#if 0 // need to get the depth texture before switching the render target!
-        if (postProcessManager.HaveEffects ()) {
-            ChooseDrawBuffer ();
-            if (!ogl.CopyDepthTexture (1)) // doesn't work when called here
-                postProcessManager.Destroy ();
-            }
-#endif
 
         switch (nDevice) {
         case GLASSES_AMBER_BLUE:

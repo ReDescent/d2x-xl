@@ -56,19 +56,6 @@ static void _CDECL_ msg(const char *fmt, ...) {
 
 //------------------------------------------------------------------------------
 
-#if 0
-
-static void chk (void *p)
-{
-	if (p) return;
-	msg ("FATAL: Virtual memory exhausted!");
-	exit (EXIT_FAILURE);
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 static char szFailMsg[1024];
 
 int32_t _CDECL_ Fail(const char *fmt, ...) {
@@ -122,11 +109,6 @@ static int32_t ipx_mcast4_OpenSocket(ipx_socket_t *sk, int32_t port) {
     struct sockaddr_in sin;
     int32_t ttl = 128;
 
-#if 0 // DBG
-	uint16_t	nServerPort = mpParams.udpPorts [0] + networkData.nPortOffset,
-				nLocalPort = gameStates.multi.bServer [0] ? nServerPort : mpParams.udpPorts [1];
-#endif
-
     if (int32_t(sk->fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0) {
         sk->fd = (UINT_PTR)(-1);
 #ifdef _GNUC
@@ -139,11 +121,7 @@ static int32_t ipx_mcast4_OpenSocket(ipx_socket_t *sk, int32_t port) {
     // Bind to the port
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = htonl(INADDR_ANY);
-#if 0 // DBG
-sin.sin_port = htons (nLocalPort);
-#else
     sin.sin_port = htons(baseport);
-#endif
     if (bind(sk->fd, reinterpret_cast<struct sockaddr *>(&sin), sizeof(sin))) {
         closesocket(sk->fd);
         sk->fd = (UINT_PTR)(-1);
@@ -187,20 +165,12 @@ static void ipx_mcast4_CloseSocket(ipx_socket_t *sk) {
 
 static int32_t ipx_mcast4_SendPacket(ipx_socket_t *sk, IPXPacket_t *IPXHeader, uint8_t *data, int32_t dataLen) {
     struct sockaddr_in toaddr;
-#if 0 // DBG
-	uint16_t	nServerPort = mpParams.udpPorts [0] + networkData.nPortOffset,
-				nLocalPort = gameStates.multi.bServer [0] ? nServerPort : mpParams.udpPorts [1];
-#endif
 
     if ((dataLen < 0) || (dataLen > MAX_PACKETSIZE_MCAST4))
         return -1;
     toaddr.sin_family = AF_INET;
     memcpy(&toaddr.sin_addr, IPXHeader->Destination.Node + 0, 4);
-#if 0 // DBG
-toaddr.sin_port = htons (nLocalPort);
-#else
     toaddr.sin_port = htons(UDP_BASEPORT);
-#endif
     if (toaddr.sin_addr.s_addr == INADDR_BROADCAST)
         toaddr.sin_addr.s_addr = DESCENT2_ANNOUNCE_ADDR;
 #ifdef IPX_MCAST4DBG
@@ -349,27 +319,20 @@ static void ipx_mcast4_HandleLeaveGame(ipx_socket_t *sk) {
 // Send a packet to every member of the game.  We can just multicast it here.
 static int32_t ipx_mcast4_SendGamePacket(ipx_socket_t *sk, uint8_t *data, int32_t dataLen) {
     struct sockaddr_in toaddr;
-#if 0 // DBG
-	uint16_t	nServerPort = mpParams.udpPorts [0] + networkData.nPortOffset,
-				nLocalPort = gameStates.multi.bServer [0] ? nServerPort : mpParams.udpPorts [1];
-#endif
 
     memset(&toaddr, 0, sizeof(toaddr));
     toaddr.sin_family = AF_INET;
     toaddr.sin_addr = game_addr;
     toaddr.sin_port = htons(UDP_BASEPORT);
-#if 0 // DBG
-toaddr.sin_port = htons (nLocalPort);
-#else
     toaddr.sin_port = htons(baseport);
-#endif
     return sendto(
         sk->fd,
         reinterpret_cast<const char *>(data),
         dataLen,
         0,
         reinterpret_cast<struct sockaddr *>(&toaddr),
-        sizeof(toaddr));
+        sizeof(toaddr)
+    );
 }
 
 //------------------------------------------------------------------------------

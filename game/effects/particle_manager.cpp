@@ -37,29 +37,6 @@
 
 CParticleManager particleManager;
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-void CParticleManager::RebuildSystemList(void) {
-#if 0
-m_nUsed =
-m_nFree = -1;
-CParticleSystem *pSystem = m_systems;
-for (int32_t i = 0; i < MAX_PARTICLE_SYSTEMS; i++, pSystem++) {
-	if (pSystem->HasEmitters ()) {
-		pSystem->SetNext (m_nUsed);
-		m_nUsed = i;
-		}
-	else {
-		pSystem->Destroy ();
-		pSystem->SetNext (m_nFree);
-		m_nFree = i;
-		}
-	}
-#endif
-}
-
 // -----------------------------------------------------------------------------
 
 void CParticleManager::Init(void) {
@@ -131,12 +108,7 @@ void CParticleManager::Init(void) {
 //------------------------------------------------------------------------------
 
 int32_t CParticleManager::Destroy(int32_t i) {
-#if 1
     m_systems[i].m_bDestroy = true;
-#else
-    m_systems[i].Destroy();
-    m_systems.Push(i);
-#endif
     return i;
 }
 
@@ -187,14 +159,10 @@ int32_t CParticleManager::Create(
     int32_t nObject,
     CFloatVector *pColor,
     int32_t bBlowUpParts,
-    char nSide) {
+    char nSide
+) {
     if (!gameOpts->render.particles.nQuality)
         return -1;
-#if 0
-if (!(EGI_FLAG (bUseParticleSystem, 0, 1, 0)))
-	return 0;
-else
-#endif
     CParticleSystem *pSystem;
 #if USE_OPENMP > 1
 #pragma omp critical(CParticleManagerCreate)
@@ -353,10 +321,6 @@ int16_t CParticleManager::Add(CParticle *pParticle, float brightness, int32_t nB
             continue;
         if (!particleBuffer[i].Overlap(pos, rad))
             continue;
-#if 0
-	if ((particleBuffer [nBuffer].m_dMax > particleBuffer [i].m_dMax) && particleBuffer [nBuffer].Flush (brightness, true))
-		bFlushed = true;
-#endif
         if (particleBuffer[i].Flush(brightness, true))
             bFlushed = true;
     }

@@ -699,9 +699,6 @@ void NetworkD2XOptions(void) {
             m.AddCheck("multiplayer cheats", TXT_MULTICHEATS, mpParams.bEnableCheats, KEY_T, HTX_MULTICHEATS);
         m.AddCheck("cycle levels", TXT_MSN_CYCLE, extraGameInfo[1].bRotateLevels, KEY_Y, HTX_MULTI2_MSNCYCLE);
 
-#if 0
-	mat.AddCheck (TXT_NO_REACTOR, extraGameInfo [1].bDisableReactor, KEY_R, HTX_MULTI2_NOREACTOR, "disable reactor");
-#endif
 #if UDP_SAFEMODE
         m.AddCheck(, TXT_UDP_QUAL, extraGameInfo[0].bSafeUDP, KEY_Q, HTX_MULTI2_UDPQUAL, "safe udp");
 #endif
@@ -1151,19 +1148,9 @@ void BuildGameParamsMenu(
         m.AddRadio("robot anarchy", TXT_ROBOT_ANARCHY, 0, KEY_R, HTX_MULTI_BOTANA);
         m.AddRadio("coop", TXT_COOP, 0, KEY_P, HTX_MULTI_COOP);
         m.AddRadio("CTF", TXT_CTF, 0, KEY_F, HTX_MULTI_CTF);
-#if 0
-	if (!gameStates.app.bNostalgia)
-		m.AddRadio ("CTF+", TXT_CTF_PLUS, 0, KEY_T, HTX_MULTI_CTFPLUS);
-#endif
         if (bHoard) {
             m.AddRadio("hoard", TXT_HOARD, 0, KEY_H, HTX_MULTI_HOARD);
             m.AddRadio("team hoard", TXT_TEAM_HOARD, 0, KEY_O, HTX_MULTI_TEAMHOARD);
-#if 0
-		if (!gameStates.app.bNostalgia) {
-			m.AddRadio ("entropy", TXT_ENTROPY, 0, KEY_Y, HTX_MULTI_ENTROPY);
-			m.AddRadio ("monsterball", TXT_MONSTERBALL, 0, KEY_B, HTX_MULTI_MONSTERBALL);
-			}
-#endif
         }
         nGameTypes = m.ToS() - nGameTypes;
         m[m.IndexOf("anarchy") + NMCLAMP(mpParams.nGameType, 0, nGameTypes)].Value() = 1;

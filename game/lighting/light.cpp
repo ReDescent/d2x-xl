@@ -469,13 +469,6 @@ fix ComputeLightIntensity(int32_t nObject, CFloatVector *pColor, char *pbGotColo
             fix xLight = pAnimInfo->lightValue;
             int32_t i, j;
             CBitmap *pBmo, *pBm; // = gameData.pigData.tex.pBitmap [pAnimInfo->frames [0].index].Override (-1);
-#if 0
-			if (pBm) {
-				pBm->GetAvgColor (pColor);
-				*pbGotColor = 1;
-				}
-			else
-#endif
             {
                 pColor->Red() = pColor->Green() = pColor->Blue() = 0.0f;
                 for (i = j = 0; i < pAnimInfo->nFrameCount; i++) {
@@ -501,10 +494,7 @@ fix ComputeLightIntensity(int32_t nObject, CFloatVector *pColor, char *pbGotColo
                     *pbGotColor = 1;
                 }
             }
-#if 0
-			if (pObj->info.renderType != RT_THRUSTER)
-				xLight /= 8;
-#endif
+
             float maxColor = pColor->Red();
             if (maxColor < pColor->Green())
                 maxColor = pColor->Green();

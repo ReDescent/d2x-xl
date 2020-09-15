@@ -249,7 +249,6 @@ void RenderRobotShield(CObject *pObj) {
     RenderHitbox(pObj, 0.5f, 0.0f, 0.6f, 0.4f);
 #else
 #endif
-#if 1
     float scale = 1;
     tCloakInfo ci;
     fix dt;
@@ -281,7 +280,6 @@ void RenderRobotShield(CObject *pObj) {
         else
             DrawShieldSphere(pObj, 0.75f * scale, 0.0f, 0.75f * scale, pObj->Damage() / 2 * scale, 1);
     }
-#endif
 }
 
 //------------------------------------------------------------------------------

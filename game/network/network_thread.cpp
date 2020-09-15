@@ -312,16 +312,6 @@ CNetworkPacket *CNetworkPacketQueue::Append(CNetworkPacket *packet, bool bAllowD
     }
 
     if (Tail()) { // list tail
-#if 0
-        if (!bAllowDuplicates && (*Tail () == *packet)) {
-            ++m_nDuplicate;
-            Tail ()->SetTime (SDL_GetTicks ());
-            UpdateClientList ();
-            Unlock (bLock, __FUNCTION__);
-            Free (packet, bLock);
-            return Tail ();
-            }
-#endif
         Tail()->m_pNextacket = packet;
     } else
         SetHead(packet); // list head
@@ -793,43 +783,13 @@ void CNetworkThread::AbortSync(void) {
 
 int32_t CNetworkThread::TransmitPackets(bool bImmediately) {
 #if SEND_TIMEOUT
-#if 1
     static CTimeout toSend(SEND_TIMEOUT);
 
     if (bImmediately)
         toSend.Start(); // reset timeout as we are sending now
     else if (!toSend.Expired())
         return 1;
-#else
-    if (m_toSend.Duration() != 1000 / PPS) {
-        m_toSend.Setup(1000 / PPS);
-        m_toSend.Start();
-    }
-
-    if (m_txPacketQueue.Empty())
-        return 0;
-
-    if (bImmediately)
-        toSend.Start();
-    else if (!toSend.Expired())
-        return 1;
 #endif
-#endif
-
-#if 0
-
-    int32_t nSize = 0;
-    CNetworkPacket* packet;
-
-    m_txPacketQueue.Lock (true, __FUNCTION__);
-    while ((packet = m_txPacketQueue.Head ())) {
-        nSize += packet->Size ();
-        packet->Transmit ();
-        m_txPacketQueue.Pop (true, false);
-        }
-    m_txPacketQueue.Unlock (true, __FUNCTION__);
-
-#else
 
     m_txPacketQueue.Lock(true, __FUNCTION__);
     CNetworkPacket *head = m_txPacketQueue.Head();
@@ -853,10 +813,6 @@ int32_t CNetworkThread::TransmitPackets(bool bImmediately) {
         m_txPacketQueue.Free(packet, false);
     }
     m_txPacketQueue.Unlock(true, __FUNCTION__);
-    return 1;
-
-#endif
-
     return 1;
 }
 

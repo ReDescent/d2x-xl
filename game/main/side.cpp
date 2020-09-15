@@ -269,12 +269,6 @@ void CSide::SetupAsTriangles(bool bSolid, uint16_t *verts, uint16_t *index) {
         m_nType = (dot >= 0) ? SIDE_IS_TRI_02 : SIDE_IS_TRI_13;
         // Now, based on triangulation nType, set the normals.
         if (m_nType == SIDE_IS_TRI_02) {
-#if 0
-		VmVecNormalChecked (&vNormal, 
-								  VERTICES + m_corners [0], 
-								  VERTICES + m_corners [1], 
-								  VERTICES + m_corners [2]);
-#endif
             m_normals[0] = vNormal;
             m_normals[1] = CFixVector::Normal(VERTICES[m_corners[0]], VERTICES[m_corners[2]], VERTICES[m_corners[3]]);
             m_fNormals[0] =
@@ -770,65 +764,6 @@ uint32_t CSide::PointToFaceRelationf(CFloatVector &vRef, int16_t nFace, CFloatVe
 // -----------------------------------------------------------------------------
 // see if a pRef is inside a face by projecting into 2d
 uint32_t CSide::PointToFaceRelation(CFixVector &vRef, int16_t nFace, CFixVector vNormal) {
-#if 0
-
-	CFixVector		t;
-	int32_t			biggest;
-	int32_t 			h, i, j, nEdge, nVerts;
-	uint32_t 		nEdgeMask;
-	fix 				check_i, check_j;
-	CFixVector		*v0, *v1;
-	CFixVector2		vEdge, vCheck;
-	int64_t			d;
-
-//now do 2d check to see if pRef is in CSide
-//project polygon onto plane by finding largest component of Normal
-t.v.coord.x = labs (vNormal.v.coord.x);
-t.v.coord.y = labs (vNormal.v.coord.y);
-t.v.coord.z = labs (vNormal.v.coord.z);
-if (t.v.coord.x > t.v.coord.y)
-	if (t.v.coord.x > t.v.coord.z)
-		biggest = 0;
-	else
-		biggest = 2;
-else if (t.v.coord.y > t.v.coord.z)
-	biggest = 1;
-else
-	biggest = 2;
-if (vNormal.v.vec [biggest] > 0) {
-	i = ijTable [biggest][0];
-	j = ijTable [biggest][1];
-	}
-else {
-	i = ijTable [biggest][1];
-	j = ijTable [biggest][0];
-	}
-//now do the 2d problem in the i, j plane
-check_i = vRef.v.vec [i];
-check_j = vRef.v.vec [j];
-nVerts = 5 - m_nFaces;
-h = nFace * 3;
-for (nEdge = nEdgeMask = 0; nEdge < nVerts; nEdge++) {
-	if (gameStates.render.bRendering) {
-		v0 = &RENDERPOINTS [m_vertices [h + nEdge]].ViewPos ();
-		v1 = &RENDERPOINTS [m_vertices [h + ((nEdge + 1) % nVerts)]].ViewPos ();
-		}
-	else {
-		v0 = VERTICES + m_vertices [h + nEdge];
-		v1 = VERTICES + m_vertices [h + ((nEdge + 1) % nVerts)];
-		}
-	vEdge.i = v1->v.vec [i] - v0->v.vec [i];
-	vEdge.j = v1->v.vec [j] - v0->v.vec [j];
-	vCheck.i = check_i - v0->v.vec [i];
-	vCheck.j = check_j - v0->v.vec [j];
-	d = FixMul64 (vCheck.i, vEdge.j) - FixMul64 (vCheck.j, vEdge.i);
-	if (d < 0)              		//we are outside of triangle
-		nEdgeMask |= (1 << nEdge);
-	}
-return nEdgeMask;
-
-#else
-
     CFixVector t;
     int32_t h, i, j, nEdge, nProjPlane;
     uint32_t nEdgeMask;
@@ -866,8 +801,6 @@ return nEdgeMask;
             nEdgeMask |= (1 << (nEdge - 1));
     }
     return nEdgeMask;
-
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -915,13 +848,9 @@ int32_t CSide::SphereToFaceRelationf(CFloatVector &vRef, float rad, int16_t iFac
         vNearest = v1;
     else {
         iType = IT_EDGE;
-#if 0
-	vNearest = *v0 + (vEdge * d);
-#else
         vNearest = vEdge;
         vNearest *= d;
         vNearest += v0;
-#endif
     }
     dist = CFloatVector::Dist(vRef, vNearest);
     if (dist <= rad)
@@ -973,13 +902,9 @@ int32_t CSide::SphereToFaceRelation(CFixVector &vRef, fix rad, int16_t iFace, CF
         vNearest = *v1;
     else {
         iType = IT_EDGE;
-#if 0
-	vNearest = *v0 + (vEdge * d);
-#else
         vNearest = vEdge;
         vNearest *= d;
         vNearest += *v0;
-#endif
     }
     dist = CFixVector::Dist(vRef, vNearest);
     if (dist <= rad)
@@ -1058,21 +983,8 @@ int32_t CSide::CheckLineToFaceRegular(
     CFixVector *p1,
     fix rad,
     int16_t iFace,
-    CFixVector vNormal) {
-#if 0 // FLOAT_COLLISION_MATH
-
-	CFloatVector vi, v0, v1, vn;
-
-v0.Assign (*p0);
-v1.Assign (*p1);
-vn.Assign (vNormal);
-int32_t i = CheckLineToFaceRegularf (vi, &v0, &v1, X2F (rad), iFace, vn);
-if (i != IT_NONE)
-	vIntersection.Assign (vi);
-return i;
-
-#else
-
+    CFixVector vNormal
+) {
     CFixVector v1;
     int32_t bCheckRad = 0;
 
@@ -1125,7 +1037,6 @@ return i;
     }
     return IT_NONE;
 
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -1187,19 +1098,6 @@ int32_t CSide::CheckLineToFaceEdges(
     fix rad,
     int16_t iFace,
     CFixVector vNormal) {
-#if 0 // FLOAT_COLLISION_MATH
-
-	CFloatVector vi, v0, v1, vn;
-
-v0.Assign (*p0);
-v1.Assign (*p1);
-vn.Assign (vNormal);
-int32_t i = CheckLineToFaceEdgesf (vi, v0, v1, X2F (rad), iFace, vn);
-if (i != IT_NONE)
-	vIntersection.Assign (vi);
-return i;
-
-#else
 
     CFixVector vMove = *p1 - *p0;
     // figure out which edge(side) to check against
@@ -1238,8 +1136,6 @@ return i;
         return IT_EDGE;
     }
     return IT_NONE; // no hit
-
-#endif
 }
 
 // -----------------------------------------------------------------------------

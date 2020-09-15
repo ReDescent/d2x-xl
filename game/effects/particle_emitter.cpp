@@ -178,21 +178,6 @@ int32_t CParticleEmitter::Destroy(void) {
 
 //------------------------------------------------------------------------------
 
-#if 0
-
-void CParticleEmitter::Check (void)
-{
-	int32_t	i, j;
-
-for (i = m_nParts, j = m_nFirstPart; i; i--, j = (j + 1) % m_nPartLimit)
-	if (m_particles [j].nType < 0)
-		j = j;
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 int32_t CParticleEmitter::Update(int32_t nCurTime, int32_t nThread) {
     if (!m_particles)
         return 0;
@@ -411,10 +396,6 @@ int32_t CParticleEmitter::SetDensity(int32_t nMaxParts /*, int32_t nDensity*/) {
     }
     // m_nDensity = nDensity;
     m_nMaxParts = nMaxParts;
-#if 0
-if (m_nParts > nMaxParts)
-	m_nParts = nMaxParts;
-#endif
     m_fPartsPerTick = float(m_nMaxParts) / float(abs(m_nLife) * 1.25f);
     return 1;
 }

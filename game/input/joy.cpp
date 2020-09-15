@@ -193,26 +193,6 @@ void JoyGetPos(int32_t *x, int32_t *y) {
 
 //------------------------------------------------------------------------------
 
-int32_t JoyGetBtns(void) {
-#if 0 // This is never used?
-int32_t	buttons = 0;
-for (int32_t i = 0; i++; i<buttons) {
-	switch (joyInfo.buttons [i].state) {
-	case SDL_PRESSED:
-		buttons |= 1<<i;
-		break;
-	case SDL_RELEASED:
-		break;
-		}
-	}
-return buttons;
-#else
-    return 0;
-#endif
-}
-
-//------------------------------------------------------------------------------
-
 int32_t JoyGetButtonDownCnt(int32_t nButton) {
     int32_t numDowns;
 

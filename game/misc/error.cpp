@@ -158,41 +158,6 @@ void _CDECL_ print_exit_message(void) {
 
 static XtAppContext appShell;
 
-//------------------------------------------------------------------------------
-// intercept the window manager's close signal
-
-#if 0
-
-Boolean SetCloseCallBack (Widget shell, void (*callback) (Widget, XtPointer, XtPointer))
-{
-extern Atom XmInternAtom (Display *, char *, Boolean);
-
-if (!shell)
-	return False;
-Display* disp = XtDisplay (shell);
-if (!disp)
-	return False;
-// Retrieve Window Manager Protocol Property
-Atom prop = XmInternAtom (disp, const_cast<char*>("WM_PROTOCOLS"), False);
-if (!prop)
-	return False;
-// Retrieve Window Manager Delete Window Property
-Atom prot = XmInternAtom (disp, const_cast<char*>("WM_DELETE_WINDOW"), True);
-if (!prot)
-	return False;
-// Ensure that Shell has the Delete Window Property
-// NB: Necessary since some Window managers are not
-// Fully XWM Compilant (olwm for instance is not)
-XmAddProtocols (shell, prop, &prot, 1);
-// Now add our callback into the Protocol Callback List
-XmAddProtocolCallback (shell, prop, prot, callback, NULL);
-return True;
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 static int32_t MsgSize(char *pszMsg, int32_t &nCols) {
     if (!(pszMsg && *pszMsg))
         return 0;
@@ -253,30 +218,6 @@ Widget XmMessageDialog(const char *pszMsg, int32_t nRows, int32_t nCols, bool bE
     pane = XmCreatePanedWindow(msgBox, const_cast<char *>("pane"), args, 2);
     // Create a RowColumn in the form for Label and Text widgets. This is the control area.
     form = XmCreateForm(pane, const_cast<char *>("form1"), NULL, 0);
-
-#if 0
-Pixel fg, bg;
-XtVaGetValues (form, /* once created, we can get its colors */
-					XmNforeground, &fg,
-					XmNbackground, &bg,
-					NULL);
-// create the pixmap of the appropriate depth using the colors that will be used by the parent (form).
-pixmap = XCreatePixmapFromBitmapData (
-	 XtDisplay (form),
-	 RootWindowOfScreen (XtScreen (form)),
-		(char *) info_bits, info_width, info_height,
-		fg, bg,
-		DefaultDepthOfScreen (XtScreen (form)));
-// Create a label gadget using this pixmap
-n = 0;
-XtSetArg (args [n], XmNlabelType, XmPIXMAP); n++;
-XtSetArg (args [n], XmNlabelPixmap, pixmap); n++;
-XtSetArg (args [n], XmNleftAttachment, XmATTACH_FORM); n++;
-XtSetArg (args [n], XmNtopAttachment, XmATTACH_FORM); n++;
-XtSetArg (args [n], XmNbottomAttachment, XmATTACH_FORM); n++;
-label = XmCreateLabelGadget (form, "label", args, n);
-XtManageChild (label);
-#endif
 
     // prepare the text for display in the ScrolledText object we are about to create.
     n = 0;

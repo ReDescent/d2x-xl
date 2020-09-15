@@ -1784,7 +1784,6 @@ int32_t NDReadDemoStart(int32_t bRandom) {
     laserLevel = NDReadByte();
     if (laserLevel != LOCALPLAYER.LaserLevel()) {
         LOCALPLAYER.ComputeLaserLevels(laserLevel);
-        cockpit->UpdateLaserWeaponInfo();
     }
     // Support for missions
     NDReadString(szCurrentMission);
@@ -2263,7 +2262,6 @@ int32_t NDReadFrameInfo(void) {
                 if ((oflags & PLAYER_FLAGS_INVULNERABLE) && !(LOCALPLAYER.flags & PLAYER_FLAGS_INVULNERABLE))
                     LOCALPLAYER.invulnerableTime = 0;
             }
-            cockpit->UpdateLaserWeaponInfo(); // in case of quad laser change
         } break;
 
         case ND_EVENT_PLAYER_WEAPON: {
@@ -2650,13 +2648,11 @@ int32_t NDReadFrameInfo(void) {
             if ((gameData.demoData.nVcrState == ND_STATE_REWINDING) ||
                 (gameData.demoData.nVcrState == ND_STATE_ONEFRAMEBACKWARD)) {
                 LOCALPLAYER.ComputeLaserLevels(oldLevel);
-                cockpit->UpdateLaserWeaponInfo();
             } else if (
                 (gameData.demoData.nVcrState == ND_STATE_PLAYBACK) ||
                 (gameData.demoData.nVcrState == ND_STATE_FASTFORWARD) ||
                 (gameData.demoData.nVcrState == ND_STATE_ONEFRAMEFORWARD)) {
                 LOCALPLAYER.ComputeLaserLevels(newLevel);
-                cockpit->UpdateLaserWeaponInfo();
             }
         } break;
 
@@ -2832,7 +2828,6 @@ void NDGotoEnd() {
     laserLevel = NDReadByte();
     if (laserLevel != LOCALPLAYER.LaserLevel()) {
         LOCALPLAYER.ComputeLaserLevels(laserLevel);
-        cockpit->UpdateLaserWeaponInfo();
     }
     if (gameData.demoData.nGameMode & GM_MULTI) {
         c = NDReadByte();

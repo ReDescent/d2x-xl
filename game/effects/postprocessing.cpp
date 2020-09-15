@@ -577,17 +577,12 @@ static vec4 fogColors[FOG_TYPE_COUNT + 1] = {
 static vec4 *FogColor(int32_t nFogType) {
     if (!gameStates.render.bHaveFog[nFogType + 1])
         return fogColors + 4;
-#if 0
-if (nFogType < 2)
-	return fogColors + nFogType;
-#endif
     return (vec4 *)&gameData.segData.FogColor(nFogType);
 }
 
 inline double DegToRad(double d) { return d * (PI / 180.0); }
 
 void RenderFog(void) {
-#if 1
     if (!gameStates.render.bHaveFog[0])
         return;
     ogl.CopyDepthTexture(1, GL_TEXTURE1, 1);
@@ -608,18 +603,12 @@ void RenderFog(void) {
 #endif
     glColor4f(1, 1, 1, 1);
     ogl.SetBlendMode(OGL_BLEND_ALPHA);
-#else
-    ogl.SetBlendMode(OGL_BLEND_REPLACE);
-    ogl.SetDepthMode(GL_ALWAYS);
-#endif
     for (int32_t nFogType = 0; nFogType < FOG_TYPE_COUNT; nFogType += 2) {
         if (gameStates.render.bHaveFog[nFogType + 1] + gameStates.render.bHaveFog[nFogType + 2]) {
             ogl.EnableClientStates(1, 0, 0, GL_TEXTURE0);
             ogl.BindTexture(ogl.m_data.GetDrawBuffer(5 + nFogType / 2)->ColorBuffer(0));
-#if 1
             shaderManager.Set("fogColor1", *FogColor(nFogType));
             shaderManager.Set("fogColor2", *FogColor(nFogType + 1));
-#endif
             OglTexCoordPointer(2, GL_FLOAT, 0, quadTexCoord[0]);
             OglVertexPointer(2, GL_FLOAT, 0, quadVerts[0]);
             OglDrawArrays(GL_QUADS, 0, 4);

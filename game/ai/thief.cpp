@@ -450,7 +450,6 @@ int32_t AttemptToStealItem(CObject *pObj, int32_t nPlayer) {
     gameData.aiData.localInfo[pObj->Index()].mode = AIM_THIEF_RETREAT;
     if (rval) {
         paletteManager.BumpEffect(30, 15, -20);
-        cockpit->UpdateLaserWeaponInfo();
         if (IsNetworkGame)
             MultiSendStolenItems();
     }

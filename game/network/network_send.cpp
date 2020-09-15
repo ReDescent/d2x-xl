@@ -126,46 +126,9 @@ void NetworkSendRejoinSync(int32_t nPlayer, tNetworkSyncInfo *pSyncInfo) {
 
 //------------------------------------------------------------------------------
 
-#if 0
-
-void ResendSyncDueToPacketLoss (void)
-{
-   int32_t i, j;
-
-NetworkUpdateNetGame ();
-// Fill in the kill list
-for (j = 0; j < MAX_PLAYERS; j++) {
-	for (i = 0; i < MAX_PLAYERS; i++)
-		*netGameInfo.Kills () [j][i] = gameData.multigame.score.matrix [j][i];
-	*netGameInfo.Killed () [j] = PLAYER (j).netKilledTotal;
-	*netGameInfo.PlayerKills () [j] = PLAYER (j).netKillsTotal;
-	*netGameInfo.PlayerScore () [j] = PLAYER (j).score;
-	}       
-netGameInfo.LevelTime () = LOCALPLAYER.timeLevel;
-netGameInfo.MonitorVector () = NetworkCreateMonitorVector ();
-if (gameStates.multi.nGameType >= IPX_GAME) {
-	SendInternetFullNetGamePacket (
-		networkData.syncInfo [0].player [1].player.network.Network (), 
-		networkData.syncInfo [0].player [1].player.network.Node ());
-	SendNetPlayersPacket (
-		networkData.syncInfo [0].player [1].player.network.Network (), 
-		networkData.syncInfo [0].player [1].player.network.Node ());
-	}
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 #if DBG
 
 void TestXMLInfoRequest(uint8_t *serverAddress) {
-#if 0 // DBG
-gameStates.multi.bTrackerCall = 2;
-networkThread.Send ((uint8_t *) "FDescent Game Info Request", (int32_t) strlen ("FDescent Game Info Request") + 1, serverAddress, serverAddress + 4);
-gameStates.multi.bTrackerCall = 0;
-#endif
-#if 1 // DBG
     gameStates.multi.bTrackerCall = 2;
     networkThread.Send(
         (uint8_t *)"GDescent Game Status Request",
@@ -173,7 +136,6 @@ gameStates.multi.bTrackerCall = 0;
         serverAddress,
         serverAddress + 4);
     gameStates.multi.bTrackerCall = 0;
-#endif
 }
 
 #endif
@@ -236,11 +198,7 @@ void NetworkSendEndLevelSub(int32_t nPlayer) {
     CEndLevelInfo end;
     int32_t i;
 
-// Send an endlevel packet for a player
-#if 0 // DBG
-if (!N_LOCALPLAYER)
-	audio.PlaySound (SOUND_HOMING_WARNING);
-#endif
+    // Send an endlevel packet for a player
     *end.Type() = PID_ENDLEVEL;
     *end.Player() = nPlayer;
     end.SetConnected((int8_t)PLAYER(nPlayer).GetConnected());
@@ -255,10 +213,6 @@ if (!N_LOCALPLAYER)
     if (PLAYER(nPlayer).Connected(CONNECT_PLAYING)) { // Still playing
 #if DBG
         BRP;
-#endif
-#if 0
-	Assert (gameData.reactorData.bDestroyed);
-	*end.SecondsLeft () = gameData.reactorData.countdown.nSecsLeft;
 #endif
     }
     for (i = 0; i < N_PLAYERS; i++) {

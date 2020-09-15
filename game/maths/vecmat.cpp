@@ -117,26 +117,6 @@ void CFixVector::Check(void) {
 // ------------------------------------------------------------------------
 
 CFixVector &CFixVector::Cross(CFixVector &dest, const CFixVector &v0, const CFixVector &v1) {
-#if 0
-	double x = (double (v0.dir.coord.y) * double (v1.dir.coord.z) - double (v0.dir.coord.z) * double (v1.dir.coord.y)) / 65536.0;
-	double y = (double (v0.dir.coord.z) * double (v1.dir.coord.x) - double (v0.dir.coord.x) * double (v1.dir.coord.z)) / 65536.0;
-	double z = (double (v0.dir.coord.x) * double (v1.dir.coord.y) - double (v0.dir.coord.y) * double (v1.dir.coord.x)) / 65536.0;
-
-if (x > double (0x7fffffff))
-	x = double (0x7fffffff);
-else if (x < double (-0x7fffffff))
-	x = double (-0x7fffffff);
-if (y > double (0x7fffffff))
-	y = double (0x7fffffff);
-else if (y < double (-0x7fffffff))
-	y = double (-0x7fffffff);
-if (z > double (0x7fffffff))
-	z = double (0x7fffffff);
-else if (z < double (-0x7fffffff))
-	z = double (-0x7fffffff);
-
-dest.Set (fix (x), fix (y), fix (z));
-#else
     int64_t x, y, z;
 
     x = mul64(v0.v.coord.y, v1.v.coord.z);
@@ -146,7 +126,6 @@ dest.Set (fix (x), fix (y), fix (z));
     z = mul64(v0.v.coord.x, v1.v.coord.y);
     z += mul64(-v0.v.coord.y, v1.v.coord.x);
     dest.Set(fix(x / 65536), fix(y / 65536), fix(z / 65536));
-#endif
     return dest;
 }
 
@@ -155,26 +134,6 @@ dest.Set (fix (x), fix (y), fix (z));
 fix FixQuadAdjust(int64_t q) { return fix((q >> 32) << 16) + fix((q & 0xffffffff) >> 16); }
 
 const CFixVector CFixVector::Cross(const CFixVector &v0, const CFixVector &v1) {
-#if 0
-	double x = (double (v0.dir.coord.y) * double (v1.dir.coord.z) - double (v0.dir.coord.z) * double (v1.dir.coord.y)) / 65536.0;
-	double y = (double (v0.dir.coord.z) * double (v1.dir.coord.x) - double (v0.dir.coord.x) * double (v1.dir.coord.z)) / 65536.0;
-	double z = (double (v0.dir.coord.x) * double (v1.dir.coord.y) - double (v0.dir.coord.y) * double (v1.dir.coord.x)) / 65536.0;
-
-if (x > double (0x7fffffff))
-	x = double (0x7fffffff);
-else if (x < double (-0x7fffffff))
-	x = double (-0x7fffffff);
-if (y > double (0x7fffffff))
-	y = double (0x7fffffff);
-else if (y < double (-0x7fffffff))
-	y = double (-0x7fffffff);
-if (z > double (0x7fffffff))
-	z = double (0x7fffffff);
-else if (z < double (-0x7fffffff))
-	z = double (-0x7fffffff);
-
-return Create (fix (x), fix (y), fix (z));
-#else
     int64_t x, y, z;
 
     x = mul64(v0.v.coord.y, v1.v.coord.z);
@@ -184,7 +143,6 @@ return Create (fix (x), fix (y), fix (z));
     z = mul64(v0.v.coord.x, v1.v.coord.y);
     z += mul64(-v0.v.coord.y, v1.v.coord.x);
     return Create(FixQuadAdjust(x), FixQuadAdjust(y), FixQuadAdjust(z));
-#endif
 }
 
 // ------------------------------------------------------------------------
@@ -286,11 +244,6 @@ const CFloatMatrix CFloatMatrix::Mul(CFloatMatrix &other) {
     t.m.dir.r.v.coord.z = CFloatVector::Dot(v, other.m.dir.r);
     t.m.dir.u.v.coord.z = CFloatVector::Dot(v, other.m.dir.u);
     t.m.dir.f.v.coord.z = CFloatVector::Dot(v, other.m.dir.f);
-#if 0
-CFloatVector::Normalize (m.m.dir.r);
-CFloatVector::Normalize (m.m.dir.u);
-CFloatVector::Normalize (m.m.dir.f);
-#endif
     return t;
 }
 
@@ -335,11 +288,6 @@ CFixMatrix CFixMatrix::Mul(const CFixMatrix &other) {
     t.m.dir.r.v.coord.z = CFixVector::Dot(v, other.m.dir.r);
     t.m.dir.u.v.coord.z = CFixVector::Dot(v, other.m.dir.u);
     t.m.dir.f.v.coord.z = CFixVector::Dot(v, other.m.dir.f);
-#if 0
-CFixVector::Normalize (m.m.dir.r);
-CFixVector::Normalize (m.m.dir.u);
-CFixVector::Normalize (m.m.dir.f);
-#endif
     return t;
 }
 

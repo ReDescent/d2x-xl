@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <io.h>
 #endif
+
 #include <string.h>
 #include <math.h>
 #include <fcntl.h>
@@ -84,34 +85,23 @@ int32_t CFBO::CreateColorBuffers(int32_t nBuffers) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
         glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-        if (m_info.nType == -3) // GPGPU
+        if (m_info.nType == -3) {
+            // GPGPU
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, m_info.nWidth, m_info.nHeight, 0, GL_RGBA, GL_FLOAT, NULL);
+        }
         else {
-#if 0
-		if (i > 0)
-			glTexImage2D (GL_TEXTURE_2D, 0, GL_RGB, m_info.nWidth, m_info.nHeight, 0, GL_RGB, GL_FLOAT, NULL);
-		else
-#endif
-#if 0
-		if (m_info.nType == -2) {
-			glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, m_info.nWidth, m_info.nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-			glGenerateMipmapEXT (GL_TEXTURE_2D);
-			}
-		else
-#endif
-            {
-                glTexImage2D(
-                    GL_TEXTURE_2D,
-                    0,
-                    GL_RGB,
-                    m_info.nWidth,
-                    m_info.nHeight,
-                    0,
-                    GL_RGB,
-                    GL_UNSIGNED_BYTE,
-                    NULL);
-                glGenerateMipmapEXT(GL_TEXTURE_2D);
-            }
+            glTexImage2D(
+                GL_TEXTURE_2D,
+                0,
+                GL_RGB,
+                m_info.nWidth,
+                m_info.nHeight,
+                0,
+                GL_RGB,
+                GL_UNSIGNED_BYTE,
+                NULL
+            );
+            glGenerateMipmapEXT(GL_TEXTURE_2D);
         }
         m_info.bufferIds[i] = GL_COLOR_ATTACHMENT0_EXT + i;
         // glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, m_info.bufferIds [i], GL_TEXTURE_2D, m_info.hColorBuffer [i],
@@ -132,11 +122,9 @@ int32_t CFBO::CreateDepthBuffer(void) {
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, m_info.hDepthBuffer, 0);
     } else if (m_info.nType != 2) { // 2 -> GPGPU
         // depth buffer
-#if 1
         if (abs(m_info.nType) != 1) // -> no stencil buffer
             glGenRenderbuffersEXT(1, &m_info.hDepthBuffer);
         else
-#endif
         { // depth + stencil buffer
             m_info.hDepthBuffer = ((m_info.nType == 1) || (m_info.nType == -2) || (m_info.nType == -3))
                                       ? ogl.CreateDepthTexture(GL_TEXTURE0, 1, 1, m_info.nWidth, m_info.nHeight)
@@ -166,18 +154,16 @@ void CFBO::AttachBuffers(void) {
     if (m_info.nType == 3) { // depth buffer for shadow map
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, m_info.hDepthBuffer, 0);
     } else if (m_info.nType != 2) { // 2 -> GPGPU
-        for (int32_t i = 0; i < m_info.nColorBuffers; i++)
+        for (int32_t i = 0; i < m_info.nColorBuffers; i++) {
             glFramebufferTexture2DEXT(
                 GL_FRAMEBUFFER_EXT,
                 m_info.bufferIds[i],
                 GL_TEXTURE_2D,
                 m_info.hColorBuffer[i],
-                0);
-            // depth + stencil buffer
-#if 0
-	glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, m_info.hDepthBuffer, 0);
-	glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_TEXTURE_2D, m_info.hStencilBuffer = m_info.hDepthBuffer, 0);
-#else
+                0
+            );
+        }
+        // depth + stencil buffer
         if (abs(m_info.nType) == 1) {
             glFramebufferTexture2DEXT(
                 GL_FRAMEBUFFER_EXT,
@@ -302,8 +288,6 @@ int32_t CFBO::Disable(void) {
     ogl.SetDrawBuffer(GL_BACK, 0);
     return 1;
 }
-
-#endif
 
 //------------------------------------------------------------------------------
 

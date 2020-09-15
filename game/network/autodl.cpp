@@ -31,21 +31,6 @@ CDownloadManager downloadManager;
 
 //------------------------------------------------------------------------------
 
-#if 0
-static char *sznStates [] = {
-	"start",
-	"open file",
-	"data",
-	"close file",
-	"end",
-	"error"
-	};
-#endif
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
 int32_t _CDECL_ UploadThread(void *pThreadId) { return downloadManager.Upload(*((int32_t *)pThreadId)); }
 
 //------------------------------------------------------------------------------
@@ -595,13 +580,6 @@ int32_t CDownloadManager::Poll(CMenu &menu, int32_t &key, int32_t nCurItem) {
 
     key = 0;
     return nCurItem;
-
-#if 0
-    menu [m_nOptPercentage].SetText ("download failed");
-    menu [m_nOptPercentage].m_bRedraw = 1;
-    key = -2;
-    return nCurItem;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -635,10 +613,7 @@ int32_t CDownloadManager::DownloadMission(char *pszMission) {
     PrintLog(1, "trying to download mission '%s'\n", pszMission);
     m_bDownloading[MAX_PLAYERS - 1] = true;
     gameStates.multi.bTryAutoDL = 0;
-#if 0
-    if (!(/*gameStates.app.bHaveExtraGameInfo [1] &&*/ extraGameInfo [0].bAutoDownload))
-        return 0;
-#endif
+
     m.AddText("", "");
     sprintf(szProgress, "0%c done", '%');
     m_nOptPercentage = m.AddText(szProgress, 0);

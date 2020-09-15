@@ -78,35 +78,7 @@ void RockTheMineFrame(void) {
                 eshakerDetonateTimes[i] = 0;
                 eshakerDetonateScales[i] = 0.0f;
             } else {
-#if 1
                 RockPlayerShip((ESHAKER_SHAKE_TIME - deltaTime) / (ESHAKER_SHAKE_TIME / 16), eshakerDetonateScales[i]);
-#else
-                // Control center destroyed, rock the player's ship.
-                int32_t fc, rx, rz;
-                // -- fc = abs(deltaTime - ESHAKER_SHAKE_TIME/2);
-                // Changed 10/23/95 to make decreasing for super mega missile.
-                fc = (ESHAKER_SHAKE_TIME - deltaTime) / (ESHAKER_SHAKE_TIME / 16);
-                if (fc > 16)
-                    fc = 16;
-                else if (fc == 0)
-                    fc = 1;
-                gameStates.gameplay.seismic.nVolume += fc;
-                float fScale = X2F(I2X(3) / 16 + (I2X(16 - fc)) / 32);
-                if (eshakerDetonateScales[i] > 0.0f)
-                    fScale *= eshakerDetonateScales[i];
-                // HUDMessage (0, "shaker rock scale %d: %1.2f", i, fScale);
-                rx = (fix)FRound(SRandShort() * fScale);
-                rz = (fix)FRound(SRandShort() * fScale);
-                gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.x += rx;
-                gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.z += rz;
-                // Shake the buddy!
-                if (gameData.escortData.nObjNum != -1) {
-                    OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.x += rx * 4;
-                    OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.z += rz * 4;
-                }
-                // Shake a guided missile!
-                gameStates.gameplay.seismic.nMagnitude += rx;
-#endif
             }
         }
     }
@@ -153,34 +125,10 @@ void SeismicDisturbanceFrame(void) {
              (gameStates.gameplay.seismic.nEndTime > gameData.timeData.xGame)) ||
             StartSeismicDisturbance()) {
             fix deltaTime = gameData.timeData.xGame - gameStates.gameplay.seismic.nStartTime;
-#if 1
             RockPlayerShip(
                 abs(deltaTime - (gameStates.gameplay.seismic.nEndTime - gameStates.gameplay.seismic.nStartTime) / 2),
-                X2F(gameStates.gameplay.seismic.nShakeFrequency));
-#else
-            int32_t fc, rx, rz;
-            fix h;
-
-            fc = abs(deltaTime - (gameStates.gameplay.seismic.nEndTime - gameStates.gameplay.seismic.nStartTime) / 2);
-            fc /= I2X(1) / 16;
-            if (fc > 16)
-                fc = 16;
-            else if (fc == 0)
-                fc = 1;
-            gameStates.gameplay.seismic.nVolume += fc;
-            h = I2X(3) / 16 + (I2X(16 - fc)) / 32;
-            rx = FixMul(SRandShort(), h);
-            rz = FixMul(SRandShort(), h);
-            gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.x += rx;
-            gameData.objData.pConsole->mType.physInfo.rotVel.v.coord.z += rz;
-            // Shake the buddy!
-            if (gameData.escortData.nObjNum != -1) {
-                OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.x += rx * 4;
-                OBJECT(gameData.escortData.nObjNum)->mType.physInfo.rotVel.v.coord.z += rz * 4;
-            }
-            // Shake a guided missile!
-            gameStates.gameplay.seismic.nMagnitude += rx;
-#endif
+                X2F(gameStates.gameplay.seismic.nShakeFrequency)
+            );
         }
     }
 }
@@ -188,7 +136,6 @@ void SeismicDisturbanceFrame(void) {
 // -----------------------------------------------------------------------------
 // Call this when a smega detonates to start the process of rocking the mine.
 void ShakerRockStuff(CFixVector *vPos) {
-#if 1 //! DBG
     int32_t i;
 
     for (i = 0; i < MAX_ESHAKER_DETONATES; i++)
@@ -210,7 +157,6 @@ void ShakerRockStuff(CFixVector *vPos) {
             // HUDMessage (0, "shaker rock scale %d: %1.2f (dist %1.2f)", i, fScale, fDist);
             break;
         }
-#endif
 }
 
 // ---------------------------------------------------------------------------------------

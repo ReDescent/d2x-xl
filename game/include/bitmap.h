@@ -361,10 +361,7 @@ class CBitmap : public CArray<uint8_t> {
     inline uint8_t Compressed(void) { return 0; }
     inline int32_t Format(void) { return 0; }
 #endif
-#if 0
-		void UnlinkTexture (void);
-		void Unlink (int32_t bAddon);
-#endif
+
     void RenderFullScreen(void);
     int32_t Render(
         CRectangle *dest,

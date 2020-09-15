@@ -57,19 +57,11 @@ inline float sqr(float n) { return n * n; }
 // Greater values have stronger influence
 
 static inline float Luminance(CFloatVector &color) {
-#if 1
     return sqrt(
                (sqr(Min(color.v.color.r, 1.0f) * 255.0f) + sqr(Min(color.v.color.g, 1.0f) * 255.0f) +
                 sqr(Min(color.v.color.b, 1.0f) * 255.0f)) /
                3.0f) /
            255.0f;
-#else
-    return pow((sqr(Min(color.v.color.r, 1.0f) * 255.0f, 3.0f) + sqr(Min(color.v.color.g, 1.0f) * 255.0f, 3.0f) +
-                sqr(Min(color.v.color.b, 1.0f) * 255.0f, 3.0f)) /
-                   3.0f,
-               1.0f / 3.0f) /
-           255.0f;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -83,11 +75,7 @@ static inline float SmokeStartAlpha(char bBlowUp, char nClass) {
 //------------------------------------------------------------------------------
 
 inline float ParticleBrightness(CFloatVector *pColor) {
-#if 0
-return (pColor->Red () + pColor->Green () + pColor->Blue ()) / 3.0f;
-#else
     return pColor ? (pColor->Red() * 3 + pColor->Green() * 5 + pColor->Blue() * 2) / 10.0f : 1.0f;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -197,12 +185,7 @@ void CParticle::InitColor(CFloatVector *pColor, float fBrightness, char nParticl
                     m_color[0].Red() = 0.5f + RandFloat(2.0f);
                     m_color[0].Green() = m_color[0].Red() * (0.5f + RandFloat(2.0f));
                 } else {
-#if 1
                     m_color[0].Red() = m_color[0].Green() = 1.0;
-#else
-                    m_color[0].Red() = 0.9f + RandFloat(10.0f);
-                    m_color[0].Green() = m_color[0].Red() * (0.9f + RandFloat(10.0f));
-#endif
                 }
                 m_color[0].Blue() = 0.0f;
                 m_nFadeTime = 50 + Rand(150);
@@ -226,11 +209,7 @@ void CParticle::InitColor(CFloatVector *pColor, float fBrightness, char nParticl
             3.5f - float(1 + int32_t(gameOpts->render.particles.nQuality > 1)) /
                        2.0f; // pColor ? 2.0f + (color.Red () + color.Green () + color.Blue ()) / 3.0f : 2.0f;
     else if (nParticleSystemType == SMOKE_PARTICLES)
-#if 1
         m_color[1].Alpha() /= pColor ? 3.0f - Luminance(color) : 2.5f;
-#else
-        m_color[1].Alpha() /= pColor ? 3.0f - (color.Red() + color.Green() + color.Blue()) / 3.0f : 2.5f;
-#endif
     else if (
         (nParticleSystemType == BUBBLE_PARTICLES) || (nParticleSystemType == RAIN_PARTICLES) ||
         (nParticleSystemType == SNOW_PARTICLES))
@@ -246,11 +225,6 @@ void CParticle::InitColor(CFloatVector *pColor, float fBrightness, char nParticl
 //------------------------------------------------------------------------------
 
 int32_t CParticle::InitDrift(CFixVector *vDir, int32_t nSpeed) {
-#if 0
-if (nType == FIRE_PARTICLES)
-nSpeed = int32_t (sqrt (double (nSpeed)) * float (I2X (1)));
-else
-#endif
     nSpeed *= I2X(1);
     if (!vDir) {
         m_vDrift.v.coord.x = nSpeed - RandN(2 * nSpeed);
@@ -264,22 +238,11 @@ else
         if (m_nType == RAIN_PARTICLES)
             m_vDrift = m_vDir;
         else {
-#if 1
             m_vDrift.v.coord.x = RandN(I2X(1) / 4) - I2X(1) / 8;
             m_vDrift.v.coord.y = RandN(I2X(1) / 4) - I2X(1) / 8;
             m_vDrift.v.coord.z = RandN(I2X(1) / 4) - I2X(1) / 8;
             m_vDrift += m_vDir;
-#else
-            CAngleVector a;
-            CFixMatrix m;
-            a.v.coord.p = RandN(I2X(1) / 4) - I2X(1) / 8;
-            a.v.coord.b = RandN(I2X(1) / 4) - I2X(1) / 8;
-            a.v.coord.h = RandN(I2X(1) / 4) - I2X(1) / 8;
-            m = CFixMatrix::Create(a);
-            if (m_nType == WATERFALL_PARTICLES)
-                CFixVector::Normalize(m_vDir);
-            m_vDrift = m * m_vDir;
-#endif
+
             CFixVector::Normalize(m_vDrift);
             if (m_nType == WATERFALL_PARTICLES) {
                 fix dot = CFixVector::Dot(m_vDir, m_vDrift);
@@ -435,7 +398,8 @@ int32_t CParticle::Create(
     int32_t bBlowUp,
     char nFadeType,
     float fBrightness,
-    CFixVector *vEmittingFace) {
+    CFixVector *vEmittingFace
+) {
     int32_t nType = particleImageManager.GetType(nParticleSystemType);
 
     m_bChecked = 0;
@@ -462,28 +426,20 @@ int32_t CParticle::Create(
     if (bPointSource)
         nSpeed = -nSpeed;
 
-#if 0
-
-InitColor (pColor, fBrightness, nParticleSystemType);
-if (!InitDrift (vDir, nSpeed))
-	return 0;
-if (!InitPosition (vPos, vEmittingFace, mOrient, bPointSource)) // needs InitDrift() to be executed first!
-	return 0;
-InitSize (nScale, mOrient);
-InitAnimation ();
-
-#else
-
     // init color
-
     CFloatVector color;
+    switch (nParticleSystemType) {
+        case LIGHT_PARTICLES:
+            m_bEmissive = 1;
+            break;
+        case FIRE_PARTICLES:
+            m_bEmissive = 2;
+            break;
+        default:
+            m_bEmissive = 0;
+            break;
+    }
 
-    m_bEmissive = (nParticleSystemType == LIGHT_PARTICLES)
-                      ? 1
-                      : (nParticleSystemType == FIRE_PARTICLES) ? 2
-                                                                //: ((nParticleSystemType <= SMOKE_PARTICLES) ||
-                                                                //(nParticleSystemType <= WATERFALL_PARTICLES)) 	? 3
-                                                                : 0;
     m_color[0] = m_color[1] = color =
         CFloatVector::Min((pColor && (m_bEmissive != 2)) ? *pColor : defaultParticleColor, 1.0f);
 
@@ -522,12 +478,7 @@ InitAnimation ();
                     m_color[0].Red() = 0.5f + RandFloat(2.0f);
                     m_color[0].Green() = m_color[0].Red() * (0.5f + RandFloat(2.0f));
                 } else {
-#if 1
                     m_color[0].Red() = m_color[0].Green() = 1.0;
-#else
-                    m_color[0].Red() = 0.9f + RandFloat(10.0f);
-                    m_color[0].Green() = m_color[0].Red() * (0.9f + RandFloat(10.0f));
-#endif
                 }
                 m_color[0].Blue() = 0.0f;
                 m_nFadeTime = (nParticleSystemType == SIMPLE_SMOKE_PARTICLES) ? 25 + Rand(75) : 50 + Rand(150);
@@ -551,11 +502,7 @@ InitAnimation ();
             3.5f - float(1 + int32_t(gameOpts->render.particles.nQuality > 1)) /
                        2.0f; // pColor ? 2.0f + (color.Red () + color.Green () + color.Blue ()) / 3.0f : 2.0f;
     else if (nParticleSystemType == SMOKE_PARTICLES)
-#if 1
         m_color[1].Alpha() /= pColor ? 3.0f - Luminance(color) : 2.5f;
-#else
-        m_color[1].Alpha() /= pColor ? 3.0f - (color.Red() + color.Green() + color.Blue()) / 3.0f : 2.5f;
-#endif
     else if (
         (nParticleSystemType == BUBBLE_PARTICLES) || (nParticleSystemType == RAIN_PARTICLES) ||
         (nParticleSystemType == SNOW_PARTICLES))
@@ -567,13 +514,7 @@ InitAnimation ();
     else
         m_color[0].Alpha() = m_color[1].Alpha();
 
-        // init drift
-
-#if 0
-if (nType == FIRE_PARTICLES)
-nSpeed = int32_t (sqrt (double (nSpeed)) * float (I2X (1)));
-else
-#endif
+    // init drift
     nSpeed *= I2X(1);
     if (!vDir) {
         m_vDrift.v.coord.x = nSpeed - RandN(2 * nSpeed);
@@ -587,22 +528,11 @@ else
         if (m_nType == RAIN_PARTICLES)
             m_vDrift = m_vDir;
         else {
-#if 1
             m_vDrift.v.coord.x = RandN(I2X(1) / 4) - I2X(1) / 8;
             m_vDrift.v.coord.y = RandN(I2X(1) / 4) - I2X(1) / 8;
             m_vDrift.v.coord.z = RandN(I2X(1) / 4) - I2X(1) / 8;
             m_vDrift += m_vDir;
-#else
-            CAngleVector a;
-            CFixMatrix m;
-            a.v.coord.p = RandN(I2X(1) / 4) - I2X(1) / 8;
-            a.v.coord.b = RandN(I2X(1) / 4) - I2X(1) / 8;
-            a.v.coord.h = RandN(I2X(1) / 4) - I2X(1) / 8;
-            m = CFixMatrix::Create(a);
-            if (m_nType == WATERFALL_PARTICLES)
-                CFixVector::Normalize(m_vDir);
-            m_vDrift = m * m_vDir;
-#endif
+
             CFixVector::Normalize(m_vDrift);
             if (m_nType == WATERFALL_PARTICLES) {
                 fix dot = CFixVector::Dot(m_vDir, m_vDrift);
@@ -728,8 +658,6 @@ else
                     ? 1
                     : (m_nRenderType == FIRE_PARTICLES + PARTICLE_TYPES) ? -1 : 0;
 
-#endif
-
     m_nTTL = m_nLife; // may have been changed during initialization
 
     UpdateDecay();
@@ -742,9 +670,6 @@ else
 //------------------------------------------------------------------------------
 
 bool CParticle::IsVisible(int32_t nThread) {
-#if 0
-	return gameData.renderData.mine.Visible (m_nSegment);
-#else
     if ((m_nSegment < 0) || (m_nSegment >= gameData.segData.nSegments))
         return false;
     if (gameData.renderData.mine.Visible(m_nSegment))
@@ -754,16 +679,12 @@ bool CParticle::IsVisible(int32_t nThread) {
         if ((*pChild >= 0) && (gameData.renderData.mine.Visible(*pChild)))
             return true;
     }
-#if 1
+
     int32_t nSegment = FindSegByPosExhaustive(m_vPos, m_bSkybox, m_nSegment);
-#else
-    int32_t nSegment = FindSegByPos(m_vPos, m_nSegment, 0, 0, 0, nThread);
-#endif
     if (nSegment < 0)
         return false;
     m_nSegment = nSegment;
     return gameData.renderData.mine.Visible(nSegment);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -843,7 +764,6 @@ void CParticle::UpdateTexCoord(void) {
 void CParticle::UpdateColor(float fBrightness, int32_t nThread) {
     if (m_nType <= SMOKE_PARTICLES) {
         if (m_nFadeTime > 0) {
-#if 1
             if (m_nTTL - m_nLife < m_nFadeTime) {
                 m_color[0].Red() *= 0.95f;
                 m_color[0].Green() *= 0.8f;
@@ -854,30 +774,6 @@ void CParticle::UpdateColor(float fBrightness, int32_t nThread) {
                 m_bEmissive = false;
                 m_nFadeTime = -1;
             }
-#else
-            if (m_color[0].Green() < m_color[1].Green()) {
-#if SMOKE_SLOWMO
-                m_color[0].Green() += 1.0f / 40.0f / (float)gameStates.gameplay.slowmo[0].fSpeed;
-#else
-                m_color[0].Green() += 1.0f / 40.0f;
-#endif
-                if (m_color[0].Green() > m_color[1].Green()) {
-                    m_color[0].Green() = m_color[1].Green();
-                    m_nFadeTime--;
-                }
-            }
-            if (m_color[0].Blue() < m_color[1].Blue()) {
-#if SMOKE_SLOWMO
-                m_color[0].Blue() += 1.0f / 20.0f / (float)gameStates.gameplay.slowmo[0].fSpeed;
-#else
-                m_color[0].Blue() += 1.0f / 20.0f;
-#endif
-                if (m_color[0].Blue() > m_color[1].Blue()) {
-                    m_color[0].Blue() = m_color[1].Blue();
-                    m_nFadeTime--;
-                }
-            }
-#endif
         } else if (m_nFadeTime == 0) {
             m_color[0].Red() = m_color[1].Red() * RANDOM_FADE;
             m_color[0].Green() = m_color[1].Green() * RANDOM_FADE;
@@ -944,13 +840,6 @@ int32_t CParticle::UpdateDrift(int32_t nCurTime, int32_t nThread) {
     m_nUpdated = nCurTime;
     m_vPos += m_vDrift * t; // (I2X (t) / 1000);
 
-#if 0 // DBG
-CFixVector vDrift = m_vDrift;
-CFixVector::Normalize (vDrift);
-if (CFixVector::Dot (vDrift, m_vDir) < 0)
-	t = t;
-#endif
-
     if ((m_nType <= SMOKE_PARTICLES) || (m_nType == FIRE_PARTICLES)) {
         m_vDrift.v.coord.x = ChangeDir(m_vDrift.v.coord.x);
         m_vDrift.v.coord.y = ChangeDir(m_vDrift.v.coord.y);
@@ -976,18 +865,7 @@ if (CFixVector::Dot (vDrift, m_vDir) < 0)
     if (m_nSegment < -1)
         m_nSegment++;
     if (m_nSegment >= -1) {
-#if 1
         nSegment = FindSegByPosExhaustive(m_vPos, m_bSkybox, m_nSegment);
-#else
-        nSegment = FindSegByPos(
-            m_vPos,
-            m_nSegment,
-            1,
-            -1,
-            ((m_nType == BUBBLE_PARTICLES) || (m_nType == RAIN_PARTICLES) || (m_nType == SNOW_PARTICLES)) ? 0
-                                                                                                          : fix(m_nRad),
-            nThread);
-#endif
         if (nSegment < 0)
             m_nSegment = int32_t(--m_nDelayPosUpdate);
     }
@@ -1018,7 +896,6 @@ if (CFixVector::Dot (vDrift, m_vDir) < 0)
             m_nLife = -1;
             return 0;
         }
-#if 1
         if ((m_nSegment >= 0) && (nSegment != m_nSegment) && SEGMENT(m_nSegment)->HasFunction(SEGMENT_FUNC_SKYBOX)) {
             if (m_nTTL - m_nLife > 500) {
                 m_nLife = -1;
@@ -1026,7 +903,6 @@ if (CFixVector::Dot (vDrift, m_vDir) < 0)
             }
             nSegment = m_nSegment;
         }
-#endif
     }
     m_nSegment = nSegment;
 
@@ -1043,17 +919,7 @@ void CParticle::UpdateDecay(void) {
         (m_nType == WATERFALL_PARTICLES))
         m_decay = 1.0f;
     else if (m_nType == FIRE_PARTICLES) {
-#if 1
         m_decay = float(sin(double(m_nLife) / double(m_nTTL) * PI));
-#else
-        m_decay = float(m_nLife) / float(m_nTTL);
-        if (m_decay < 0.4)
-            m_decay = float(sin(double(m_decay) * PI * 1.25));
-        else if (m_decay > 0.15)
-            m_decay = float(sin(double(1.0 - m_decay) * PI * 0.5 / 0.15));
-        else
-            m_decay = 1.0f;
-#endif
     } else
         m_decay = float(m_nLife) / float(m_nTTL);
 }
@@ -1090,12 +956,6 @@ int32_t CParticle::Update(int32_t nCurTime, float fBrightness, int32_t nThread) 
     m_nLife -= (int32_t)(t / gameStates.gameplay.slowmo[0].fSpeed);
 #else
     m_nLife -= t;
-#if 0
-if ((m_nType == FIRE_PARTICLES) && !m_bReversed && (m_nLife <= m_nTTL / 4 + RandN (m_nTTL / 4))) {
-	m_vDrift = -m_vDrift;
-	m_bReversed = 1;
-}
-#endif
 #if DBG
     if ((m_nLife <= 0) && (m_nType == 2))
         m_nLife = -1;
@@ -1138,13 +998,9 @@ if ((m_nType == FIRE_PARTICLES) && !m_bReversed && (m_nLife <= m_nTTL / 4 + Rand
 //------------------------------------------------------------------------------
 
 int32_t CParticle::RenderType(void) {
-#if 0
-return m_nType;
-#else
     if ((m_nType != FIRE_PARTICLES) || /* (gameOpts->render.particles.nQuality < 2) ||*/ (m_iFrame < m_nFrames))
         return (m_nType == SNOW_PARTICLES) ? SIMPLE_SMOKE_PARTICLES : m_nType;
     return PARTICLE_TYPES + m_nType;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1156,10 +1012,6 @@ int32_t CParticle::Render(float fBrightness) {
         return 0;
     if ((m_nType < 0) || (m_nType >= PARTICLE_TYPES))
         return 0;
-#if 0 // DBG
-if (m_nType == BUBBLE_PARTICLES)
-	return 0;
-#endif
 
 #if !ENABLE_RENDER
     return 1;
@@ -1214,11 +1066,7 @@ int32_t CParticle::SetupColor(float fBrightness) {
     float fFade;
 
     if (m_nFadeType == 0) { // default (start fully visible, fade out)
-#if 1
         m_renderColor.Alpha() *= m_decay; // * 0.6f;
-#else
-        m_renderColor.Alpha() *= float(cos(double(sqr(1.0f - m_decay)) * PI) * 0.5 + 0.5) * 0.6f;
-#endif
     } else if (m_nFadeType == 1) { // quickly fade in, then gently fade out
         m_renderColor.Alpha() *= float(sin(double(sqr(1.0f - m_decay)) * PI * 1.5) * 0.5 + 0.5);
         if (m_decay >= 0.666f)
@@ -1242,20 +1090,6 @@ int32_t CParticle::SetupColor(float fBrightness) {
         if (m_decay >= 0.75f)
             return 1;
     } else if (m_nFadeType == 3) { // fire (additive, blend in)
-#if 0
-	if (m_decay > 0.5f)
-	fFade = 2.0f * (1.0f - m_decay);
-	else
-	fFade = m_decay * 2.0f;
-	if ((m_decay < 0.5f) && (fFade < 0.00333f)) {
-		m_nLife = -1;
-		return 0;
-	}
-	m_renderColor.Red () =
-	m_renderColor.Green () =
-	m_renderColor.Blue () = fFade;
-	m_color [0] = m_renderColor;
-#endif
         return 1;
     } else if (m_nFadeType == 4) { // light trail (additive, constant effect)
         m_renderColor.Red() /= 50.0f;
@@ -1353,41 +1187,21 @@ void CParticle::Setup(
     char nFrame,
     char nRotFrame,
     tParticleVertex *pb,
-    int32_t nThread) {
+    int32_t nThread
+) {
     CFloatVector3 vCenter, uVec, rVec;
     float fScale;
 
-#if 0
-vCenter.Assign (gameData.objData.pConsole->Orientation ().m.dir.f); //m_vPos);
-vCenter *= 10.0;
-fVec.Assign (gameData.objData.pConsole->Position ()); 
-vCenter += fVec;
-#else
     vCenter.Assign(m_vPos);
-#endif
 
     if (m_nType <= SMOKE_PARTICLES) {
-#if 1 // DBG
         if (m_nFadeType == 3)
             fScale = 1.0f;
         else {
-#if 1
             fScale = m_bBlowUp ? 1.0f / float(sqrt(m_decay)) : 1.0f;
-#else
-            fScale = m_bBlowUp ? 1.0f / float(pow(m_decay, 1.0f / 3.0f)) : 1.0f;
-#endif
             if ((m_bBlowUp >= 0) && (m_decay > 0.9f))
                 fScale *= sqrt((1.0f - m_decay) / 0.1f);
         }
-#else
-        fScale =
-            (m_nFadeType == 3)
-                ? 1.0f
-                : (m_decay >
-                   0.9f) // start from zero size by scaling with pow (m_decay, 44f) which is < 0.01 for m_decay == 0.9f
-                      ? (1.0f - pow(m_decay, 44.0f)) / float(pow(m_decay, 0.3333333f)) 0.1 - 1.0 + m_decay
-                      : 1.0f / float(pow(m_decay, 0.3333333f));
-#endif
     } else {
         fScale = m_decay;
     }

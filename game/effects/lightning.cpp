@@ -609,9 +609,6 @@ void CLightning::CreatePath(int32_t nDepth, int32_t nThread) {
     if (nStyle < 2) {
         Smoothe();
         ComputeOffsets();
-#if 0
-	Bump ();
-#endif
     }
     RETURN
 }
@@ -804,12 +801,9 @@ void CLightning::ComputeGlow(int32_t nDepth, int32_t nThread) {
     int32_t h, i, j;
     bool bGlow =
         !nDepth && (m_bGlow > 0) && gameOpts->render.lightning.bGlow; // && glowRenderer.Available (GLOW_LIGHTNING);
-#if 0
-	float					fWidth = bGlow ? 4.0f : (m_bGlow > 0) ? 2.0f : (m_bGlow < 0) ? (m_width / 16.0f) : (m_width / 8.0f);
-#else
+
     float fWidth = bGlow ? m_width / 2.0f
                          : (m_bGlow > 0) ? (m_width / 4.0f) : (m_bGlow < 0) ? (m_width / 16.0f) : (m_width / 8.0f);
-#endif
 
     fWidth = m_width * ComputeDistScale(-100.0f) * 0.25f;
     if (nThread < 0)
@@ -872,12 +866,6 @@ void CLightning::ComputeGlow(int32_t nDepth, int32_t nThread) {
                 pDest[i] = vPos[0] + vPos[1];
                 pDest[i + 1] = vPos[0] - vPos[1];
             }
-#if 0
-		m_plasmaVerts [j+1][0] += (m_plasmaVerts [j+1][2] - m_plasmaVerts [j+1][0]) / 4;
-		m_plasmaVerts [j+1][1] += (m_plasmaVerts [j+1][3] - m_plasmaVerts [j+1][1]) / 4;
-		m_plasmaVerts [j+1][h-2] += (m_plasmaVerts [j+1][h-2] - m_plasmaVerts [j+1][h-4]) / 4;
-		m_plasmaVerts [j+1][h-3] += (m_plasmaVerts [j+1][h-3] - m_plasmaVerts [j+1][h-1]) / 4;
-#endif
         }
     }
     RETURN
@@ -979,10 +967,7 @@ void CLightning::ComputeCore(void) {
 
 void CLightning::RenderCore(CFloatVector *pColor, int32_t nDepth, int32_t nThread) {
     ENTER(0, 0);
-#if 0 // DBG
-RenderTestImage ();
-RETURN
-#endif
+
     if (!m_coreVerts.Buffer())
         RETURN
     ogl.SetBlendMode(OGL_BLEND_ADD);
@@ -1056,29 +1041,11 @@ int32_t CLightning::SetupGlow(void) {
 
 //------------------------------------------------------------------------------
 
-#if 0 //! USE_OPENMP
-
-static inline void WaitForRenderThread (int32_t nThread)
-{
-if (gameStates.app.bMultiThreaded && (nThread > 0)) {	//thread 1 will always render after thread 0
-	tiRender.ti [1].bBlock = 0;
-	while (tiRender.ti [0].bBlock)
-		G3_SLEEP (0);
-	}
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 void CLightning::Draw(int32_t nDepth, int32_t nThread) {
     ENTER(0, 0);
     if (!m_nodes.Buffer() || (m_nNodes <= 0) || (m_nFrames < 0))
         RETURN
-#if 0 //! USE_OPENMP
-if (gameStates.app.bMultiThreaded && (nThread > 0))
-	tiRender.ti [nThread].bBlock = 1;
-#endif
+
     CFloatVector color = m_color;
     if (m_nLife > 0) {
         int32_t i = abs(m_nLife) - m_nTTL;
@@ -1131,10 +1098,6 @@ void CLightning::Render(int32_t nDepth, int32_t nThread) {
             RETURN
         if (!MayBeVisible(nThread))
             RETURN
-#if 0
-	if (!gameOpts->render.stereo.nGlasses) 
-		RenderSetup (0, nThread);
-#endif
         transparencyRenderer.AddLightning(this, nDepth);
         if (extraGameInfo[0].bUseLightning > 1)
             for (int32_t i = 0; i < m_nNodes; i++)
@@ -1143,9 +1106,6 @@ void CLightning::Render(int32_t nDepth, int32_t nThread) {
     } else {
         if (!nDepth)
             ogl.SetFaceCulling(false);
-#if 0 // DBG
-	nThread = -1;
-#endif
         if (nThread >= 0)
             ogl.SetupTransform(1);
         Draw(0, nThread);

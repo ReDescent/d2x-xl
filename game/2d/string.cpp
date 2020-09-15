@@ -357,10 +357,8 @@ static bool FillStringBitmap(
                     CRGBAColor *pc = reinterpret_cast<CRGBAColor *>(pBm->Buffer()) + (y + hy) * w + x;
                     uint8_t *pf = pBmf->Buffer() + hy * pBmf->RowSize();
                     for (int32_t hx = pBmf->Width(); hx; hx--, pc++, pf++) {
-#if 1 || DBG
                         if ((pc - reinterpret_cast<CRGBAColor *>(pBm->Buffer())) >= pBm->Width() * pBm->Height())
                             continue;
-#endif
                         if ((c = *pf) != transparencyColor) {
                             pColor = pPalette->Color() + c;
                             pc->Red() = pColor->Red() * 4;
@@ -388,10 +386,8 @@ static bool FillStringBitmap(
                     CRGBAColor *pc = reinterpret_cast<CRGBAColor *>(pBm->Buffer()) + (y + hy) * w + x;
                     uint8_t *pf = pBmf->Buffer() + hy * pBmf->RowSize();
                     for (int32_t hx = pBmf->Width(); hx; hx--, pc++, pf++) {
-#if 1 || DBG
                         if ((pc - reinterpret_cast<CRGBAColor *>(pBm->Buffer())) >= pBm->Width() * pBm->Height())
                             continue;
-#endif
                         if (*pf != transparencyColor)
                             *pc = bHotKey ? kc : hc;
                     }
@@ -517,36 +513,14 @@ int32_t GrString(int32_t x, int32_t y, const char *s, int32_t *idP) {
     if (clipped & 1) {
         // Partially clipped...
     }
-// Partially clipped...
-#if 1
+    // Partially clipped...
     return fontManager.Current()->DrawString(bCentered ? 0x8000 : x, y, s);
-#else
-    if (MODE == BM_OGL)
-        return fontManager.Current()->DrawString(x, y, s);
-    if (fontManager.Current()->Flags() & FT_COLOR)
-        return fontManager.Current()->DrawString(x, y, s);
-    if (CCanvas::Current()->FontColor(1).index == -1)
-        return GrInternalStringClippedM(gameData.X(x), y, s);
-    return GrInternalStringClipped(gameData.X(x), y, s);
-#endif
 }
 
 //------------------------------------------------------------------------------
 
 int32_t GrUString(int32_t x, int32_t y, const char *s) {
-#if 1
     return fontManager.Current()->DrawString(x, y, s);
-#else
-    if (MODE == BM_OGL)
-        return fontManager.Current()->DrawString(x, y, s);
-    if (fontManager.Current()->Flags() & FT_COLOR)
-        return fontManager.Current()->DrawString(x, y, s);
-    else if (MODE != BM_LINEAR)
-        return 0;
-    if (CCanvas::Current()->FontColor(1).index == -1)
-        return GrInternalString0m(x, y, s);
-    return GrInternalString0(x, y, s);
-#endif
 }
 
 //------------------------------------------------------------------------------

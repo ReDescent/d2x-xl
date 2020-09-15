@@ -57,7 +57,6 @@ void get_hostage_window_coords(int *x, int *y, int *w, int *h);
 // from testgaug.c
 
 void gauge_frame(void);
-void UpdateLaserWeaponInfo(void);
 void PlayHomingWarning(void);
 
 extern tRgbColorb playerColors[];

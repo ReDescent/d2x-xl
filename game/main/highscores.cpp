@@ -35,15 +35,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "menubackground.h"
 #include "songs.h"
 
-#if 0 // DBG
-#define MAX_VIEW_TIME 150000
-#define ENDLEVEL_IDLE_TIME 100000
-#define LEVEL_LOAD_TIME 180000
-#else
 #define MAX_VIEW_TIME 15000
 #define ENDLEVEL_IDLE_TIME 10000
 #define LEVEL_LOAD_TIME 180000
-#endif
 
 #define CENTERING_OFFSET(x) ((300 - (70 + (x)*25)) / 2)
 #define CENTERSCREEN (gameStates.menus.bHires ? 320 : 160)
@@ -483,17 +477,6 @@ int32_t CScoreTable::WaitForPlayers(void) {
     if (!networkThread.LockThread())
         networkThread.CheckPlayerTimeouts(); // wait for eventual player timeout checking to complete
     for (int32_t nPlayer = 0; nPlayer < N_PLAYERS; nPlayer++) {
-        // check timeouts for idle players
-#if 0 // handled by networkThread.CheckPlayerTimeouts () now
-	if ((nPlayer != N_LOCALPLAYER) && PLAYER (nPlayer).connected) {
-		if (SDL_GetTicks () > (uint32_t) networkData.nLastPacketTime [nPlayer] + ((PLAYER (nPlayer).connected == CONNECT_ADVANCE_LEVEL) ? LEVEL_LOAD_TIME : ENDLEVEL_IDLE_TIME)) {
-			CONNECT (nPlayer, CONNECT_DISCONNECTED);
-			if ((gameStates.multi.nGameType != UDP_GAME) || IAmGameHost ())
-				NetworkSendEndLevelSub (nPlayer);
-			}
-		}
-#endif
-
         if (PLAYER(nPlayer).connected != m_oldStates[nPlayer]) {
             if (szConditionLetters[PLAYER(nPlayer).connected] != szConditionLetters[m_oldStates[nPlayer]])
                 gameData.scoreData.nKillsChanged = 1;

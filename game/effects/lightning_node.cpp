@@ -306,7 +306,8 @@ CFixVector CLightningNode::CreateErratic(
     int32_t i,
     int32_t nNodes,
     int32_t nSmoothe,
-    int32_t bClamp) {
+    int32_t bClamp
+) {
     int32_t h, j, nDelta;
 
     m_vNewPos = m_vBase;
@@ -315,10 +316,6 @@ CFixVector CLightningNode::CreateErratic(
         if (!bRandom) {
             i -= bFromEnd;
             nDelta *= 3;
-#if 0
-		nDelta /= (nNodes - i);
-		nDelta *= 4;
-#endif
         }
         if (bFromEnd) {
             for (h = 1; h <= 2; h++)

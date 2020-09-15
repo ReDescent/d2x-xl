@@ -131,22 +131,12 @@ int32_t CControlsManager::AttenuateAxis(double a, int32_t nAxis) {
         return 0;
     else {
         double d;
-#if 0 // DBG
-            double	p, h, e;
-#endif
 
         if (a > dMaxAxis)
             a = dMaxAxis;
         else if (a < -dMaxAxis)
             a = -dMaxAxis;
-#if 1 //! DBG
         d = dMaxAxis * pow(fabs((double)a / dMaxAxis), (double)joySensMod[nAxis % 4] / 16.0);
-#else
-        h = fabs((double)vec / dMaxAxis);
-        e = (double)joySensMod[nAxis % 4] / 16.0;
-        p = pow(h, e);
-        d = dMaxAxis * p;
-#endif
         if (d < 1.0)
             d = 1.0;
         if (a < 0)
@@ -585,14 +575,7 @@ inline int32_t ipower(int32_t x, int32_t y) {
 //------------------------------------------------------------------------------
 
 int32_t CControlsManager::DeltaAxis(int32_t v) {
-#if 0 // DBG
-int32_t vec = gameOpts->input.joystick.bLinearSens ? m_joyAxis [dir] * 16 / joySensMod [dir % 4] : m_joyAxis [dir];
-if (vec)
-	HUDMessage (0, "%d", vec);
-return vec;
-#else
     return gameOpts->input.joystick.bLinearSens ? m_joyAxis[v] * 16 / joySensMod[v % 4] : m_joyAxis[v];
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -966,9 +949,6 @@ int32_t CControlsManager::ReadTrackIR(void) {
             pfnTIRStart();
         return 0;
     }
-#if 0 // DBG
-HUDMessage (0, "%1.0f %1.0f %1.0f", tirInfo.fvTrans.x, tirInfo.fvTrans.y, tirInfo.fvTrans.z);
-#endif
     return 1;
 }
 
@@ -988,9 +968,6 @@ void CControlsManager::DoTrackIR(void) {
 #endif
         x = gameData.trackIR.x;
         y = gameData.trackIR.y;
-#if 0 // DBG
-		HUDMessage (0, "%d/%d %d/%d", x, dx, y, dy);
-#endif
         if (abs(dx - x) > gameOpts->input.trackIR.nDeadzone * 4) {
             dx = dx * (gameOpts->input.trackIR.sensitivity[0] + 1) / 4;
             gameData.trackIR.x = dx;
@@ -1037,9 +1014,7 @@ void CControlsManager::DoTrackIR(void) {
             else
                 dy -= dz;
         }
-#if 0 // DBG
-	HUDMessage (0, "%d %d", dx, dy);
-#endif
+
         dx = 640 * dx / (gameData.renderData.screen.Width() / (gameOpts->input.trackIR.sensitivity[0] + 1));
         dy = 480 * dy / (gameData.renderData.screen.Height() / (gameOpts->input.trackIR.sensitivity[1] + 1));
         if (gameOpts->input.trackIR.bMove[0]) {
@@ -1165,7 +1140,7 @@ void CControlsManager::Reset(void) {
     memset(&m_info, 0, sizeof(m_info));
     // m_info [0].headingTime = ht;
     // m_info [0].pitchTime = pt;
-    LimitTurnRate(gameOpts->input.mouse.bUse && !gameStates.input.bCybermouseActive);
+    LimitTurnRate(gameOpts->input.mouse.bUse);
 }
 
 //------------------------------------------------------------------------------
@@ -1236,12 +1211,7 @@ int32_t CControlsManager::Read(void) {
 #endif
 
     if (gameOpts->input.mouse.bUse)
-        if (gameStates.input.bCybermouseActive) {
-#if 0
-            ReadOWL (externalControls.m_info);
-            CybermouseAdjust ();
-#endif
-        } else if (gameStates.input.nMouseType == CONTROL_CYBERMAN)
+        if (gameStates.input.nMouseType == CONTROL_CYBERMAN)
             bUseMouse = ReadCyberman(reinterpret_cast<int32_t *>(&mouseAxis[0]), &nMouseButtons);
         else
             bUseMouse = ReadMouse(reinterpret_cast<int32_t *>(&mouseAxis[0]), &nMouseButtons);
@@ -1307,13 +1277,6 @@ int32_t CControlsManager::Read(void) {
     if (!m_info[0].forwardThrustTime)
         m_info[0].forwardThrustTime = FixMul(gameStates.input.nCruiseSpeed, m_pollTime) / 100;
 
-#if 0 // LIMIT_CONTROLS_FPS
-    if (nBankSensMod > 2) {
-        m_info [0].bankTime *= 2;
-        m_info [0].bankTime /= nBankSensMod;
-        }
-#endif
-
     //----------- Clamp values between -m_pollTime and m_pollTime
     if (m_pollTime > I2X(1)) {
 #if TRACE
@@ -1355,51 +1318,6 @@ int32_t CControlsManager::Read(void) {
 //------------------------------------------------------------------------------
 
 void CControlsManager::ResetCruise(void) { gameStates.input.nCruiseSpeed = 0; }
-
-//------------------------------------------------------------------------------
-
-void CControlsManager::CybermouseAdjust(void) {
-#if 0
-if (N_LOCALPLAYER > -1) {
-	LOCALOBJECT->mType.physInfo.flags &= (~PF_TURNROLL);	// Turn off roll when turning
-	LOCALOBJECT->mType.physInfo.flags &= (~PF_LEVELLING);	// Turn off leveling to nearest CSide.
-	gameOpts->gameplay.nAutoLeveling = 0;
-
-	if (kc_externalVersion > 0) {
-		CFixMatrix tempm, ViewMatrix;
-		CAngleVector * Kconfig_abs_movement;
-		char * oem_message;
-
-		Kconfig_abs_movement = reinterpret_cast<CAngleVector*> (((uint32_t)externalControls.m_info + sizeof (tControlInfo));
-
-		if (Kconfig_abs_movement->p || Kconfig_abs_movement->b || Kconfig_abs_movement->h) {
-			VmAngles2Matrix (&tempm,Kconfig_abs_movement);
-			VmMatMul (&ViewMatrix, &LOCALOBJECT->info.position.mOrient, &tempm);
-			LOCALOBJECT->info.position.mOrient = ViewMatrix;
-			}
-		oem_message = reinterpret_cast<char*> (((uint32_t)Kconfig_abs_movement + sizeof (CAngleVector));
-		if (oem_message [0] != '\0')
-			HUDInitMessage (oem_message);
-		}
-	}
-#endif
-    m_info[0].pitchTime += FixMul(externalControls.m_info->pitchTime, gameData.timeData.xFrame);
-    m_info[0].verticalThrustTime += FixMul(externalControls.m_info->verticalThrustTime, gameData.timeData.xFrame);
-    m_info[0].headingTime += FixMul(externalControls.m_info->headingTime, gameData.timeData.xFrame);
-    m_info[0].sidewaysThrustTime += FixMul(externalControls.m_info->sidewaysThrustTime, gameData.timeData.xFrame);
-    m_info[0].bankTime += FixMul(externalControls.m_info->bankTime, gameData.timeData.xFrame);
-    m_info[0].forwardThrustTime += FixMul(externalControls.m_info->forwardThrustTime, gameData.timeData.xFrame);
-    // m_info [0].rearViewDownCount += externalControls.m_info->rearViewDownCount;
-    // m_info [0].rearViewDownState |= externalControls.m_info->rearViewDownState;
-    m_info[0].firePrimaryDownCount += externalControls.m_info->firePrimaryDownCount;
-    m_info[0].firePrimaryState |= externalControls.m_info->firePrimaryState;
-    m_info[0].fireSecondaryState |= externalControls.m_info->fireSecondaryState;
-    m_info[0].fireSecondaryDownCount += externalControls.m_info->fireSecondaryDownCount;
-    m_info[0].fireFlareDownCount += externalControls.m_info->fireFlareDownCount;
-    m_info[0].dropBombDownCount += externalControls.m_info->dropBombDownCount;
-    // m_info [0].automapDownCount += externalControls.m_info->automapDownCount;
-    // 	m_info [0].automapState |= externalControls.m_info->automapState;
-}
 
 //------------------------------------------------------------------------------
 

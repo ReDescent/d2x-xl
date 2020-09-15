@@ -97,7 +97,6 @@ class CInputStates {
     int nJoysticks;
     int bGrabMouse;
     int bHaveTrackIR;
-    ubyte bCybermouseActive;
     int bSkipControls;
     int bControlsSkipFrame;
     int bKeepSlackTime;

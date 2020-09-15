@@ -61,22 +61,6 @@ static int32_t nDrag, nFusionRamp;
 
 //------------------------------------------------------------------------------
 
-#if 0
-
-static const char *OmegaRampStr (void)
-{
-	static char szRamp [20];
-
-if (extraGameInfo [0].nOmegaRamp == 0)
-	return "1 sec";
-sprintf (szRamp, "%d secs", nOmegaDuration [(int32_t) extraGameInfo [0].nOmegaRamp]);
-return szRamp;
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 int32_t PhysicsOptionsCallback(CMenu &menu, int32_t &key, int32_t nCurItem, int32_t nState) {
     if (nState)
         return nCurItem;
@@ -102,16 +86,6 @@ int32_t PhysicsOptionsCallback(CMenu &menu, int32_t &key, int32_t nCurItem, int3
             m->m_bRebuild = 1;
         }
     }
-#if 0
-if ((m = menu ["hit detection"])) {
-	v = m->Value ();
-	if (extraGameInfo [0].nHitboxes != v) {
-		extraGameInfo [0].nHitboxes = v;
-		sprintf (m->m_text, TXT_HIT_DETECTION, pszStdAdv [v]);
-		m->m_bRebuild = 1;
-		}
-	}
-#endif
     if ((m = menu["unnerf D1 weapons"])) {
         v = m->Value();
         if (extraGameInfo[0].bUnnerfD1Weapons != v) {
@@ -310,11 +284,6 @@ void PhysicsOptionsMenu(void) {
         *szSlider = *(TXT_AUTOLEVEL - 1);
         m.AddSlider("auto leveling", szSlider + 1, gameOpts->gameplay.nAutoLeveling, 0, 3, KEY_S, HTX_AUTO_LEVELING);
 
-#if 0
-	sprintf (szSlider + 1, TXT_HIT_DETECTION, pszStdAdv [extraGameInfo [0].nHitboxes]);
-	*szSlider = *(TXT_HIT_DETECTION - 1);
-	mat.AddSlider ("hit detection", szSlider + 1, extraGameInfo [0].nHitboxes, 0, 1, KEY_H, HTX_GPLAY_HITBOXES);
-#endif
         sprintf(szSlider + 1, TXT_COLLISION_HANDLING, pszStdAdv[int32_t(extraGameInfo[0].bUseHitAngles)]);
         *szSlider = *(TXT_COLLISION_HANDLING - 1);
         m.AddSlider(
@@ -333,11 +302,7 @@ void PhysicsOptionsMenu(void) {
         } while (i >= 0);
     } while (i == -2);
 
-#if 0 // DBG
-extraGameInfo [0].nHitboxes = extraGameInfo [0].bUseHitAngles;
-#else
     extraGameInfo[0].nHitboxes = extraGameInfo[0].bUseHitAngles << 1;
-#endif
     extraGameInfo[0].nDrag = nDragTable[nDrag];
     if (gameOpts->app.bExpertMode == SUPERUSER) {
         if (m.Available("wiggle"))

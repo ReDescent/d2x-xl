@@ -25,19 +25,21 @@ uint8_t *QueryHost(char *buf);
 //------------------------------------------------------------------------------
 
 static int32_t ipx_win_GetMyAddress(void) {
-#if 1
-#if 0
-	char buf[256];
-	uint8_t *qhbuf;
 
-if (gethostname(buf,sizeof(buf)))
-	FAIL("Error getting my hostname");
-if (!(qhbuf = QueryHost(buf)))
-	FAIL("Querying my own hostname \"%s\"",buf);
-	ipx_MyAddress.SetServer (0);
-	ipx_MyAddress.SetNode (qhbuf);
-#endif
-#else
+    // FIXME: ipx_win_GetMyAddress has all code commented out
+/*
+    char buf[256];
+    uint8_t *qhbuf;
+
+    if (gethostname(buf,sizeof(buf)))
+        FAIL("Error getting my hostname");
+    if (!(qhbuf = QueryHost(buf)))
+        FAIL("Querying my own hostname \"%s\"",buf);
+    ipx_MyAddress.SetServer (0);
+    ipx_MyAddress.SetNode (qhbuf);
+*/
+
+/*
     int32_t sock;
     struct sockaddr_ipx ipxs;
     struct sockaddr_ipx ipxs2;
@@ -87,8 +89,7 @@ if (!(qhbuf = QueryHost(buf)))
   ipxs2.sa_nodenum[0], ipxs2.sa_nodenum[1], ipxs2.sa_nodenum[2], ipxs2.sa_nodenum[3], ipxs2.sa_nodenum[4],
   ipxs2.sa_nodenum[5]);
 */
-closesocket(sock);
-#endif
+*/
     return (0);
 }
 

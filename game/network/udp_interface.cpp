@@ -349,63 +349,64 @@ void CClientManager::Destroy(void) {
 #ifdef _WIN32
 
 int32_t CClientManager::BuildInterfaceList(void) {
-#if 0
-	uint32_t					i, j;
-	WSADATA					info;
-	INTERFACE_INFO*		ifo;
-	SOCKET					sock;
-	struct sockaddr_in*	sinp, * sinmp;
+    // FIXME: Unimplemented / commented out net interface list enumeration code on WIN32
+/*
+    uint32_t					i, j;
+    WSADATA					info;
+    INTERFACE_INFO*		ifo;
+    SOCKET					sock;
+    struct sockaddr_in*	sinp, * sinmp;
 
-m_broads.Destroy ();
-if ((sock = socket (AF_INET, SOCK_DGRAM,IPPROTO_UDP)) < 0) {
-	FAIL ("creating socket during broadcast detection");
-	return 0;
-	}
+    m_broads.Destroy ();
+    if ((sock = socket (AF_INET, SOCK_DGRAM,IPPROTO_UDP)) < 0) {
+        FAIL ("creating socket during broadcast detection");
+        return 0;
+    }
 
-#ifdef SIOCGIFCOUNT
-if (ioctl (sock, SIOCGIFCOUNT, &m_nBroads)) {
-	PrintLog (0, "getting interface count");
-	return 0;
-	}
-else
-	m_nBroads = 2 * m_nBroads + 2;
-#endif
+    #ifdef SIOCGIFCOUNT
+    if (ioctl (sock, SIOCGIFCOUNT, &m_nBroads)) {
+        PrintLog (0, "getting interface count");
+        return 0;
+    }
+    else
+        m_nBroads = 2 * m_nBroads + 2;
+    #endif
 
-ifo = NEW INTERFACE_INFO [cnt];
+    ifo = NEW INTERFACE_INFO [cnt];
 
-if (wsaioctl (sock, SIO_GET_INTERFACE_LIST, NULL, 0, ifo, cnt * sizeof (INTERFACE_INFO), &br, NULL, NULL)) != 0) {
-	closesocket(sock);
-	FAIL ("ioctl (SIOCGIFCONF) failure during broadcast detection.");
-	}
-m_broads.Create (m_nBroads);
+    if (wsaioctl (sock, SIO_GET_INTERFACE_LIST, NULL, 0, ifo, cnt * sizeof (INTERFACE_INFO), &br, NULL, NULL)) != 0) {
+        closesocket(sock);
+        FAIL ("ioctl (SIOCGIFCONF) failure during broadcast detection.");
+    }
+    m_broads.Create (m_nBroads);
 
-for (i = j = 0; i < cnt; i++) {
-	if (ioctl (sock, SIOCGIFFLAGS, ifconf.ifc_req + i)) {
-		closesocket (sock);
-		FAIL ("ioctl (UDP (%d), \"%s\", SIOCGIFFLAGS) error.", i, ifconf.ifc_req [i].ifr_name);
-		}
-	if (((ifconf.ifc_req [i].ifrFlags & IF_REQFLAGS) != IF_REQFLAGS) || (ifconf.ifc_req [i].ifrFlags & IF_NOTFLAGS))
-		continue;
-	if (ioctl (sock, (ifconf.ifc_req [i].ifrFlags & IFF_BROADCAST) ? SIOCGIFBRDADDR : SIOCGIFDSTADDR, ifconf.ifc_req + i)) {
-	closesocket (sock);
-	FAIL ("ioctl (UDP (%d), \"%s\", SIOCGIF{DST|BRD}ADDR) error", i, ifconf.ifc_req [i].ifr_name);
-	}
-	sinp = reinterpret_cast<struct sockaddr_in*> (&ifconf.ifc_req [i].ifr_broadaddr);
-	if (ioctl (sock, SIOCGIFNETMASK, ifconf.ifc_req + i)) {
-		closesocket (sock);
-		FAIL ("ioctl (UDP (%d), \"%s\", SIOCGIFNETMASK) error", i, ifconf.ifc_req [i].ifr_name);
-		}
-	sinmp = reinterpret_cast<struct sockaddr_in*> (&ifconf.ifc_req [i].ifr_addr);
-	if ((sinp->sin_family != AF_INET) || (sinmp->sin_family != AF_INET))
-		continue;
-	m_broads [j] = *sinp;
-	m_broads [j].sin_port = UDP_BASEPORT; //FIXME: No possibility to override from cmdline
-	m_masks [j] = *sinmp;
-	j++;
-	}
-m_nBroads =
-m_nMasks = j;
-#endif
+    for (i = j = 0; i < cnt; i++) {
+        if (ioctl (sock, SIOCGIFFLAGS, ifconf.ifc_req + i)) {
+            closesocket (sock);
+            FAIL ("ioctl (UDP (%d), \"%s\", SIOCGIFFLAGS) error.", i, ifconf.ifc_req [i].ifr_name);
+        }
+        if (((ifconf.ifc_req [i].ifrFlags & IF_REQFLAGS) != IF_REQFLAGS) || (ifconf.ifc_req [i].ifrFlags & IF_NOTFLAGS))
+            continue;
+        if (ioctl (sock, (ifconf.ifc_req [i].ifrFlags & IFF_BROADCAST) ? SIOCGIFBRDADDR : SIOCGIFDSTADDR, ifconf.ifc_req + i)) {
+            closesocket (sock);
+            FAIL ("ioctl (UDP (%d), \"%s\", SIOCGIF{DST|BRD}ADDR) error", i, ifconf.ifc_req [i].ifr_name);
+        }
+        sinp = reinterpret_cast<struct sockaddr_in*> (&ifconf.ifc_req [i].ifr_broadaddr);
+        if (ioctl (sock, SIOCGIFNETMASK, ifconf.ifc_req + i)) {
+            closesocket (sock);
+            FAIL ("ioctl (UDP (%d), \"%s\", SIOCGIFNETMASK) error", i, ifconf.ifc_req [i].ifr_name);
+        }
+        sinmp = reinterpret_cast<struct sockaddr_in*> (&ifconf.ifc_req [i].ifr_addr);
+        if ((sinp->sin_family != AF_INET) || (sinmp->sin_family != AF_INET))
+            continue;
+        m_broads [j] = *sinp;
+        m_broads [j].sin_port = UDP_BASEPORT; //FIXME: No possibility to override from cmdline
+        m_masks [j] = *sinmp;
+        j++;
+    }
+    m_nBroads =
+    m_nMasks = j;
+*/
     return m_nBroads;
 }
 
@@ -643,11 +644,9 @@ static int32_t UDPOpenSocket(ipx_socket_t *sk, int32_t port) {
 #ifdef _WIN32
     u_long sockBlockMode = 1; // non blocking
 #endif
-#if 0 // for testing only
-	static uint8_t inAddrLoopBack [4] = {127,0,0,1};
-#endif
-    uint16_t nServerPort = mpParams.udpPorts[0] + networkData.nPortOffset,
-             nLocalPort = gameStates.multi.bServer[0] ? nServerPort : mpParams.udpPorts[1];
+
+    uint16_t nServerPort = mpParams.udpPorts[0] + networkData.nPortOffset;
+    uint16_t nLocalPort = gameStates.multi.bServer[0] ? nServerPort : mpParams.udpPorts[1];
 
     PrintLog(1, "UDP interface: OpenSocket (port %d)\n", port);
 

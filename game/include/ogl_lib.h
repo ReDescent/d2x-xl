@@ -334,9 +334,6 @@ class COGL {
     GLuint CreateColorTexture(int32_t nTMU, int32_t bFBO);
     void DestroyColorTexture(void);
     GLuint CopyColorTexture(void);
-#if 0
-		GLuint CreateStencilTexture (int32_t nTMU, int32_t bFBO);
-#endif
     void CreateDrawBuffer(int32_t nType = 1);
     void DestroyDrawBuffer(void);
     void DestroyDrawBuffers(void);
@@ -489,10 +486,6 @@ class COGL {
     inline bool GetBlendUsage(void) { return m_data.bUseBlending; }
 
     inline bool SetTexturing(bool bUseTextures) {
-#if 0
-			if (!bUseTextures)
-				m_data.nTexture [m_data.nTMU [0]] = 0;
-#endif
         return Enable(m_data.bUseTextures[m_data.nTMU[0]], bUseTextures, GL_TEXTURE_2D);
     }
     inline bool GetTextureUsage(void) { return m_data.bUseTextures[m_data.nTMU[0]]; }
@@ -618,9 +611,6 @@ class COGL {
     }
 
     inline void BindTexture(GLuint handle) {
-#if 0 // DBG_OGL < 2
-			if (m_data.nTexture [m_data.nTMU [0]] != handle)
-#endif
         glBindTexture(GL_TEXTURE_2D, m_data.nTexture[m_data.nTMU[0]] = handle);
     }
 
@@ -716,11 +706,6 @@ extern COGL ogl;
 //------------------------------------------------------------------------------
 
 static inline void OglCullFace(int32_t bFront) {
-#if 0
-if (gameStates.render.bRearView)
-	ogl.SetCullMode (bFront ? GL_BACK : GL_FRONT);
-else
-#endif
     ogl.SetCullMode(bFront ? GL_FRONT : GL_BACK);
 }
 

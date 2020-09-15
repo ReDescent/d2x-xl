@@ -25,22 +25,6 @@ const size_t G = 1;
 const size_t B = 2;
 const size_t A = 3;
 
-#if 0
-const size_t X = 0;
-const size_t Y = 1;
-const size_t Z = 2;
-const size_t W = 3;
-
-const size_t PA = 0;
-const size_t BA = 1;
-const size_t HA = 2;
-
-const size_t RVEC = 0;
-const size_t UVEC = 1;
-const size_t FVEC = 2;
-const size_t HVEC = 3;
-#endif
-
 class CFixVector;
 class CFloatVector;
 class CFloatVector3;
@@ -146,16 +130,7 @@ class CFixVector {
     CFixVector &Assign(const CFloatVector3 &other);
     CFixVector &Assign(const CFloatVector &other);
     CFixVector &Assign(const CFixVector &other);
-#if 0
-        // access op for assignment
-        fix& operator[] (size_t i);
-        // read-only access op
-        const fix operator[] (size_t i) const;
 
-        inline fix& X (void) { return vec.coord.x; }
-        inline fix& Y (void) { return vec.coord.y; }
-        inline fix& Z (void) { return vec.coord.z; }
-#endif
     // compute intersection of a line through a point a, with the line being orthogonal relative
     // to the plane given by the Normal n and a point p lieing in the plane, and store it in i.
     const CFixVector PlaneProjection(const CFixVector &n, const CFixVector &p) const;
@@ -226,13 +201,6 @@ class CFloatVector {
     Perp(CFloatVector &dest, const CFloatVector &p0, const CFloatVector &p1, const CFloatVector &p2);
     static const CFloatVector Normal(const CFloatVector &p0, const CFloatVector &p1, const CFloatVector &p2);
     static const CFloatVector Reflect(const CFloatVector &d, const CFloatVector &n);
-
-#if 0
-        // access op for assignment
-        float& operator[] (size_t i);
-        // read-only access op
-        const float operator[] (size_t i) const;
-#endif
 
     bool IsZero(void) const;
 
@@ -335,12 +303,7 @@ class CFloatVector3 {
     Perp(CFloatVector3 &dest, const CFloatVector3 &p0, const CFloatVector3 &p1, const CFloatVector3 &p2);
     static const CFloatVector3 Normal(const CFloatVector3 &p0, const CFloatVector3 &p1, const CFloatVector3 &p2);
     static const CFloatVector3 Reflect(const CFloatVector3 &d, const CFloatVector3 &n);
-#if 0
-        // access op for assignment
-        float& operator[] (size_t i);
-        // read-only access op
-        const float operator[] (size_t i) const;
-#endif
+
     bool IsZero(void) const;
     void SetZero(void);
     void Set(const float f0, const float f1, const float f2);
@@ -393,7 +356,6 @@ class CFloatVector3 {
 
 #pragma pack(push, 1)
 class CAngleVector {
-#if 1
     public:
     union {
         struct {
@@ -401,10 +363,6 @@ class CAngleVector {
         } coord;
         fixang vec[3];
     } v;
-#else
-    private:
-    fixang vec[3];
-#endif
     public:
     static const CAngleVector ZERO;
     static const CAngleVector Create(const fixang p, const fixang b, const fixang h) {
@@ -414,12 +372,6 @@ class CAngleVector {
         a.v.coord.h = h;
         return a;
     }
-#if 0
-    // access op for assignment
-    fixang& operator[] (size_t i) { return vec.vec [i]; }
-    // read-only access op
-    const fixang operator[] (size_t i) const { return vec.vec [i]; }
-#endif
     bool IsZero(void) const { return !(v.coord.p || v.coord.h || v.coord.b); }
     void SetZero(void) { memset(&v, 0, sizeof(v)); }
     void Set(const fixang p, const fixang b, const fixang h) {
@@ -432,21 +384,6 @@ class CAngleVector {
         v.coord.b = other.v.coord.b;
         v.coord.h = other.v.coord.h;
     }
-#if 0
-    inline CAngleVector& operator+= (const CAngleVector& other) {
-        v.coord.p += other.v.coord.p;
-        v.coord.b += other.v.coord.b;
-        v.coord.h += other.v.coord.h;
-        return *this;
-        }
-
-    inline CAngleVector& operator-= (const CAngleVector& other) {
-        v.coord.p -= other.v.coord.p;
-        v.coord.b -= other.v.coord.b;
-        v.coord.h -= other.v.coord.h;
-        return *this;
-        }
-#endif
     inline CAngleVector &operator+=(const CAngleVector other) {
         v.coord.p += other.v.coord.p;
         v.coord.b += other.v.coord.b;
@@ -770,13 +707,7 @@ inline const CFloatVector CFloatVector::operator-(const CFixVector &other) const
 }
 
 inline const float CFloatVector::DistToPlane(const CFloatVector &n, const CFloatVector &p) const {
-#if 0
-CFloatVector t = *this;
-t -= p;
-return CFloatVector::Dot (t, n);
-#else
     return CFloatVector::Dot(v.coord.x - p.v.coord.x, v.coord.y - p.v.coord.y, v.coord.z - p.v.coord.z, n);
-#endif
 }
 
 // -----------------------------------------------------------------------------

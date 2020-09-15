@@ -270,12 +270,10 @@ uint8_t afterburnerBarTableHires[AFTERBURNER_GAUGE_H_H * 2] = {
 // -----------------------------------------------------------------------------
 
 void CCockpit::DrawAfterburnerBar(void) {
-#if 1
     if (!(LOCALPLAYER.flags & PLAYER_FLAGS_AFTERBURNER))
         return; // don't draw if don't have
     if (!gameData.physicsData.xAfterburnerCharge)
         return;
-#endif
     // CCanvas::Current ()->SetColorRGB (255, 255, 255, 255);
     BitBlt(GAUGE_AFTERBURNER, AFTERBURNER_GAUGE_X, AFTERBURNER_GAUGE_Y);
     int32_t yMax = FixMul(I2X(1) - gameData.physicsData.xAfterburnerCharge, AFTERBURNER_GAUGE_H);

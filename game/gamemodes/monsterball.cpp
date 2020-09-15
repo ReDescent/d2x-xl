@@ -26,9 +26,6 @@ int32_t CreateMonsterball(void) {
     RemoveMonsterball();
     if (!(IsMultiGame && (gameData.appData.GameMode(GM_MONSTERBALL))))
         return 0;
-#if 0 // DBG
-nDropSeg = gameData.hoardData.nMonsterballSeg;
-#else
     nDropSeg = gameData.hoardData.nMonsterballSeg;
     ResetMonsterball(false);
     if (nDropSeg >= 0)
@@ -37,7 +34,6 @@ nDropSeg = gameData.hoardData.nMonsterballSeg;
         nDropSeg = ChooseDropSegment(NULL, NULL, EXEC_DROP);
         gameData.hoardData.vMonsterballPos = SEGMENT(nDropSeg)->Center();
     }
-#endif
     if (nDropSeg >= 0) {
         nObject = DropPowerup(
             OBJ_POWERUP,

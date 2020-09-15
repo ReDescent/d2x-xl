@@ -357,13 +357,6 @@ void LoadTerrain(char *filename) {
         }
     }
     gameData.renderData.terrain.pBm = gameData.endLevelData.terrain.pBm;
-#if 0 // the following code turns the (palettized) terrain texture into a white TGA texture for testing
-gameData.renderData.terrain.pBm->props.rowSize *= 4;
-gameData.renderData.terrain.pBm->props.flags |= BM_FLAG_TGA;
-gameData.renderData.terrain.pBm->DestroyBuffer ();
-gameData.renderData.terrain.pBm->CreateBuffer (gameData.renderData.terrain.pBm->Height () * gameData.renderData.terrain.pBm->props.rowSize);
-gameData.renderData.terrain.pBm->Clear (0xFF);
-#endif
     PrintLog(1, "building terrain light map\n");
     BuildTerrainLightmap();
     PrintLog(-1);

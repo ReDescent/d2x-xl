@@ -38,17 +38,4 @@ void gr_linear_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1);
 
 extern uint32_t Table8to32[256];
 
-#if 0
-#define MINX 0
-#define MINY 0
-#define MAXX (CCanvas::Current()->Width() - 1)
-#define MAXY (CCanvas::Current()->Height() - 1)
-#define MODE CCanvas::Current()->Mode()
-#define XOFFSET CCanvas::Current()->Left()
-#define YOFFSET CCanvas::Current()->Top()
-#define ROWSIZE CCanvas::Current()->RowSize()
-#define DATA CCanvas::Current()->Buffer()
-#define COLOR CCanvas::Current()->Color()
-#endif
-
 void order(int32_t *x1, int32_t *x2);

@@ -103,8 +103,7 @@ class CBriefing {
     int32_t m_bAudioPlaying;
 
     public:
-    CBriefing() { Init(); }
-    void Init(void);
+    CBriefing() = default;
     void Run(const char *filename, int32_t nLevel);
 
     int32_t HandleA(void);

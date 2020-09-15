@@ -238,7 +238,6 @@ class CGenericCockpit {
     void DrawStatic(int nWindow, int nIndex);
     void DrawCockpit(int nCockpit, int y, bool bAlphaTest = false);
     void DrawPlayerShip(int nCloakState, int nOldCloakState, int y, int x);
-    void UpdateLaserWeaponInfo(void);
 
     inline int Mode(void) { return m_info.mode; }
     inline void SetMode(int mode) { m_info.mode = mode; }

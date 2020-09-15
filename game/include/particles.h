@@ -599,8 +599,6 @@ class CParticleManager {
     void InitShader(void);
 
     private:
-    void RebuildSystemList(void);
-
     int16_t Add(CParticle *pParticle, float brightness, int32_t nBuffer, bool &bFlushed);
 };
 

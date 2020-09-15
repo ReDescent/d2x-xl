@@ -153,9 +153,7 @@ int32_t CModel::BuildFromOOF(CObject *pObj, int32_t nModel) {
     m_nType = -1;
     gameData.modelData.polyModels[0][nModel].SetRad(Size(pObj, 1), 1);
     Setup(1, 1);
-#if 1
     SetGunPoints(pObj, 0);
-#endif
     if (gameStates.app.nLogLevel > 1)
         PrintLog(-1);
     return -1;

@@ -238,40 +238,6 @@ void PiggyCloseFile(void) {
 // retuns file handle of new pig
 int32_t CopyPigFileFromCD(CFile &cf, char *filename) {
     return cf.Open(filename, gameFolders.game.szData[0], "rb", 0);
-#if 0
-	char name [80];
-	FFS ffs;
-	int32_t ret;
-
-messageBox.Show ("Copying bitmap data from CD...");
-//paletteManager.ResumeEffect ();    //I don't think this line is really needed
-//First, delete all PIG files currently in the directory
-if (!FFF ("*.pig", &ffs, 0)) {
-	do {
-		cf.Delete (ffs.name, "");
-	} while (!FFN  (&ffs, 0));
-	FFC (&ffs);
-}
-//Now, copy over new pig
-redbook.Stop ();           //so we can read off the cd
-//new code to unarj file
-strcpy (name, CDROM_dir);
-strcat (name, "descent2.sow");
-do {
-// ret = unarj_specific_file (name,filename,filename);
-// DPH:FIXME
-	ret = !EXIT_SUCCESS;
-	if (ret != EXIT_SUCCESS) {
-		//delete file, so we don't leave partial file
-		cf.Delete (filename, "");
-		if (RequestCD () == -1)
-			//NOTE LINK TO ABOVE IF
-			Error ("Cannot load file <%s> from CD", filename);
-		}
-	} while (ret != EXIT_SUCCESS);
-mb.Clear ();
-return cfPiggy [gameStates.app.bD1Data].Open (filename, gameFolders.game.szData [0], "rb", 0);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -480,12 +446,6 @@ int32_t PiggyInit(void) {
     bitmapNames[1].Create(D1_MAX_BITMAP_FILES);
     soundNames[0].Create(MAX_SOUND_FILES);
     soundNames[1].Create(MAX_SOUND_FILES);
-
-#if 0
-/*---*/PrintLog (1, "Initializing sound data (%d sounds)\n", MAX_SOUND_FILES);
-for (i = 0; i < MAX_SOUND_FILES; i++)
-	soundOffset [0][i] = 0;
-#endif
 
     /*---*/ PrintLog(0, "Initializing bitmap index (%d indices)\n", MAX_BITMAP_FILES);
     for (i = 0; i < MAX_BITMAP_FILES; i++)

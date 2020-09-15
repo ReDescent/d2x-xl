@@ -288,19 +288,15 @@ int32_t G3FilterSubModel(
 
     if (!pSubModel->m_bRender)
         RETVAL(0)
-#if 1
     if (pSubModel->m_bFlare)
         RETVAL(1)
-#endif
     if (pSubModel->m_nGunPoint >= 0)
         RETVAL(1)
     if (pSubModel->m_bBullets)
         RETVAL(1)
-#if 1
     if (pSubModel->m_bThruster &&
         ((pSubModel->m_bThruster & (REAR_THRUSTER | FRONTAL_THRUSTER)) != (REAR_THRUSTER | FRONTAL_THRUSTER)))
         RETVAL(1)
-#endif
     if (pSubModel->m_bHeadlight)
         RETVAL(!HeadlightIsOn(nId))
     if (pSubModel->m_bBombMount)
@@ -464,12 +460,10 @@ void G3TransformSubModel(
     vo = pSubModel->m_vOffset;
     if (!gameData.modelData.vScale.IsZero())
         vo *= gameData.modelData.vScale;
-#if 1
     if (pvOffset) {
         transformation.Begin(vo, va, __FILE__, __LINE__);
         vo += *pvOffset;
     }
-#endif
     if (bEdges) {
         RenderModel::CModelEdge *pEdge = pSubModel->m_edges.Buffer();
         for (i = pSubModel->m_nEdges; i; i--, pEdge++)
@@ -598,11 +592,9 @@ void G3DrawSubModel(
             glGetFloatv(GL_MODELVIEW_MATRIX, modelView);
             // undo all rotations
             // beware all scaling is lost as well
-#if 1
             for (int32_t i = 0; i < 3; i++)
                 for (int32_t j = 0; j < 3; j++)
                     modelView[i * 4 + j] = (i == j) ? 1.0f : 0.0f;
-#endif
             glLoadMatrixf(modelView);
         }
 
@@ -768,10 +760,8 @@ void G3DrawSubModel(
     if (bRestoreMatrix)
         glPopMatrix();
 #endif
-#if 1
     if (pvOffset && (nExclusive < 0))
         transformation.End(__FILE__, __LINE__);
-#endif
     RETURN
 }
 
@@ -1144,7 +1134,6 @@ int32_t G3RenderModel(
         shield[0].Animate(10);
         CFixVector vPos;
         PolyObjPos(pObj, &vPos);
-#if 1
         glowRenderer.End();
         ogl.ResetClientStates(0);
         bBlur = (gameOpts->render.nImageQuality >= 4) && glowRenderer.Begin(BLUR_OUTLINE, 5, false, 1.0f);
@@ -1152,7 +1141,6 @@ int32_t G3RenderModel(
             glowRenderer.Done(BLUR_OUTLINE);
             bBlur = false;
         }
-#endif
     } else
         ogl.ResetClientStates(1);
 
@@ -1313,8 +1301,7 @@ int32_t G3RenderModel(
         if (bBlur)
             glowRenderer.End(/*gameStates.render.grAlpha*/);
 
-        if (gameStates.render.CartoonStyle() && !gameStates.render.bCloaked && !bRenderTransparency &&
-            (!pObj->IsWeapon() || pObj->IsMissile()))
+        if (gameStates.render.CartoonStyle() && !gameStates.render.bCloaked && !bRenderTransparency && (!pObj->IsWeapon() || pObj->IsMissile())) {
             G3DrawModel(
                 pObj,
                 nModel,
@@ -1330,9 +1317,10 @@ int32_t G3RenderModel(
                 nMissileId,
                 nMissiles,
                 1,
-                0);
+                0
+            );
+        }
 
-#if 1 //! DBG
         if (gameStates.render.nType != RENDER_TYPE_TRANSPARENCY) {
             if (pObj && ((pObj->info.nType == OBJ_PLAYER) || (pObj->info.nType == OBJ_ROBOT) ||
                          (pObj->info.nType == OBJ_REACTOR))) {
@@ -1361,7 +1349,6 @@ int32_t G3RenderModel(
                 }
             }
         }
-#endif
 #if DBG
         if (gameOpts->render.debug.bWireFrame & 2) {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

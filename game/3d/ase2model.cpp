@@ -66,11 +66,7 @@ void CModel::GetASEModelItems(int32_t nModel, ASE::CModel *pa, float fScale) {
         psm->InitMinMax();
         for (pfa = psa->m_faces.Buffer(), iFace = 0; iFace < nFaces; iFace++, pfa++, pmf++) {
             pmf->m_nIndex = nIndex;
-#if 1
             i = psa->m_nBitmap;
-#else
-            i = pfa->m_nBitmap;
-#endif
             pBm = pa->m_textures.m_bitmaps + i;
             bTextured = !pBm->Flat();
             pmf->m_nBitmap = bTextured ? i : -1;
@@ -97,12 +93,10 @@ void CModel::GetASEModelItems(int32_t nModel, ASE::CModel *pa, float fScale) {
                 psm->SetMinMax(&pmv->m_vertex);
                 nIndex++;
             }
-#if 1
             if (psm->m_bThruster) {
                 CFloatVector3 n = CFloatVector3::Normal((pmv - 3)->m_vertex, (pmv - 2)->m_vertex, (pmv - 1)->m_vertex);
                 pmf->m_vNormal.Assign(n);
             } else
-#endif
                 pmf->m_vNormal.Assign(pfa->m_vNormal);
         }
         nVerts += psa->m_nVerts;
@@ -147,9 +141,7 @@ int32_t CModel::BuildFromASE(CObject *pObj, int32_t nModel) {
     m_nType = 2;
     gameData.modelData.polyModels[0][nModel].SetRad(Size(pObj, 1), 1);
     Setup(1, 1);
-#if 1
     SetGunPoints(pObj, 1);
-#endif
     if (gameStates.app.nLogLevel > 1)
         PrintLog(-1);
     return -1;

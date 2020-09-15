@@ -50,9 +50,6 @@ class CSaveGameManager {
     void SaveReactorState(tReactorStates *pState);
     void SaveProducer(tProducerInfo *pProducer);
     void SaveObjectProducer(tObjectProducerInfo *pObjProducer);
-#if 0
-		void SaveObjTriggerRef (tObjTriggerRef *pRef);
-#endif
     void SavePlayer(CPlayerData *pPlayer);
     void SaveNetPlayers(void);
     void SaveNetGame(void);

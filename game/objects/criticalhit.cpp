@@ -49,10 +49,6 @@ CFixVector CObject::RegisterHit(CFixVector vHit, int16_t nModel) {
     if ((info.nType != OBJ_ROBOT) && (info.nType != OBJ_PLAYER) && (info.nType != OBJ_REACTOR))
         RETVAL(vHit)
 
-#if 0 // DBG
-HUDMessage (0, "set hit point %d,%d,%d", vHit [0], vHit [1], vHit [2]);
-#endif
-
     CFixVector vDir;
     vDir = vHit - info.position.vPos;
     CFixVector::Normalize(vDir);
@@ -73,52 +69,38 @@ HUDMessage (0, "set hit point %d,%d,%d", vHit [0], vHit [1], vHit [2]);
             else
                 HUDMessage(0, "crit. hit GUNS\n");
 #endif
-#if 1
             if (nModel < 2)
                 m_damage.nHits[0]++;
             else if (CFixVector::Dot(info.position.mOrient.m.dir.f, vDir) < -I2X(1) / 8)
                 m_damage.nHits[1]++;
             else
                 m_damage.nHits[2]++;
-#endif
             m_damage.tCritical = gameStates.app.nSDLTicks[0];
             m_damage.nCritical++;
             RETVAL(vHit)
         }
     }
 
-// avoid the shield effect lighting up to soon after a critical hit
-#if 1
+    // avoid the shield effect lighting up to soon after a critical hit
     if (gameStates.app.nSDLTicks[0] - m_damage.tCritical < SHIELD_EFFECT_TIME / 4)
         RETVAL(vHit)
-#else
-    if ((gameStates.app.nSDLTicks[0] - m_damage.tShield < SHIELD_EFFECT_TIME * 2) &&
-        (gameStates.app.nSDLTicks[0] - m_damage.tCritical < SHIELD_EFFECT_TIME / 4))
-        RETVAL(vHit)
-#endif
 
     vHit = vDir * info.xSize;
     m_damage.tShield = gameStates.app.nSDLTicks[0];
 
     for (int32_t i = 0; i < 3; i++)
-#if 1
-#if 0
-	if (CFixVector::Dot (m_hitInfo.dir [i], vHit) > I2X (1) - I2X (1) / 32) {
-#else
         if (CFixVector::Dist(m_hitInfo.v[i], vHit) < I2X(1) / 16) {
-#endif
-        vHit = CFixVector::Avg(m_hitInfo.v[i], vHit);
-    CFixVector::Normalize(vHit);
-    vHit *= info.xSize;
+            vHit = CFixVector::Avg(m_hitInfo.v[i], vHit);
+            CFixVector::Normalize(vHit);
+            vHit *= info.xSize;
+            m_hitInfo.v[m_hitInfo.i] = vHit;
+            m_hitInfo.t[i] = gameStates.app.nSDLTicks[0];
+            return m_hitInfo.v[m_hitInfo.i];
+        }
     m_hitInfo.v[m_hitInfo.i] = vHit;
-    m_hitInfo.t[i] = gameStates.app.nSDLTicks[0];
-    return m_hitInfo.v[m_hitInfo.i];
-}
-#endif
-m_hitInfo.v[m_hitInfo.i] = vHit;
-m_hitInfo.t[m_hitInfo.i] = gameStates.app.nSDLTicks[0];
-m_hitInfo.i = (m_hitInfo.i + 1) % 3;
-RETVAL(m_hitInfo.v[m_hitInfo.i])
+    m_hitInfo.t[m_hitInfo.i] = gameStates.app.nSDLTicks[0];
+    m_hitInfo.i = (m_hitInfo.i + 1) % 3;
+    RETVAL(m_hitInfo.v[m_hitInfo.i])
 }
 
 //------------------------------------------------------------------------------

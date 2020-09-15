@@ -358,19 +358,6 @@ class CTransparencyRenderer {
     int32_t AddFaceQuads(CSegFace *pFace);
 
     int32_t NeedDepthBuffer(void);
-#if 0
-		void RenderFace (CTranspPoly *item);
-		void RenderPoly (CTranspPoly *item);
-		void RenderObject (CTranspObject *item);
-		void RenderSprite (CTranspSprite *item);
-		void RenderSpark (CTranspSpark *item);
-		void RenderSphere (CTranspSphere *item);
-		void RenderBullet (CParticle *pParticle);
-		void RenderParticle (CTranspParticle *item);
-		void RenderLightning (CTranspLightning *item);
-		void RenderLightTrail (CTranspLightTrail *item);
-		void RenderThruster (CTranspThruster *item);
-#endif
     int32_t RenderItem(CTranspItem *item);
     void RenderBuffer(CTranspItemBuffers &buffer, bool bCleanup);
 };

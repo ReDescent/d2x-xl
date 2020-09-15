@@ -94,9 +94,6 @@ class CConsole {
     CBitmap *m_input; //! Dirty rectangle to draw over behind the users background
     int32_t m_DispX;
     int32_t m_DispY; //! The top left x and y coords of the console on the display screen
-#if 0
-		uint8_t ConsoleAlpha;	//! The consoles alpha level
-#endif
     int32_t m_CommandScrollBack; //! How much the users scrolled back in the command lines
     void(_CDECL_ *m_CmdFunction)(char *command); //! The Function that is executed if you press <Return> in the console
     char *(_CDECL_ *m_TabFunction)(char *command); //! The Function that is executed if you press <Tab> in the console
@@ -125,15 +122,6 @@ class CConsole {
     void Setup(CFont *Font, CScreen *DisplayScreen, int32_t lines, int32_t x, int32_t y, int32_t w, int32_t h);
     /*! printf for the console */
     void _CDECL_ Out(const char *str, ...);
-#if 0
-		/*! Sets the alpha channel of an SDL_Surface to the specified value (0 - transparend,
-			255 - opaque). Use this function also for OpenGL. */
-		void Alpha (uint8_t alpha);
-		/*! Internal: Sets the alpha channel of an SDL_Surface to the specified value.
-			Preconditions: the surface in question is RGBA. 0 <= a <= 255, where 0 is transparent and 255 opaque */
-		void AlphaGL (SDL_Surface *s, int32_t alpha);
-		/*! Sets a background image for the console */
-#endif
     void LoadBackground(const char *filename);
     int32_t SetBackground(CBitmap *image);
     /*! Sets font info for the console */

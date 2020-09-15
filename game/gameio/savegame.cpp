@@ -706,19 +706,6 @@ void CSaveGameManager::SavePlayer(CPlayerData *pPlayer) {
 
 //------------------------------------------------------------------------------
 
-#if 0
-
-void CSaveGameManager::SaveObjTriggerRef (tObjTriggerRef *pRef)
-{
-m_cf.WriteShort (pRef->prev);
-m_cf.WriteShort (pRef->next);
-m_cf.WriteShort (pRef->nObject);
-}
-
-#endif
-
-//------------------------------------------------------------------------------
-
 void CSaveGameManager::SaveObjectProducer(tObjectProducerInfo *pObjProducer) {
     int32_t i;
 
@@ -841,15 +828,6 @@ void CSaveGameManager::SaveGameData(void) {
         }
         // Save CObject info
         PrintLog(0, "saving objects ...\n", i);
-#if 0
-	CObject* pObj;
-	int16_t nId = 0;
-	FORALL_OBJS (pObj) {
-		int16_t nObject = (int16_t) pObj->Index ();
-		if (nObject >= 0)
-			pObj->SetId (nId++);
-			}
-#endif
         FORALL_OBJS(pObj) {
             int16_t nObject = (int16_t)pObj->Index();
             if (nObject >= 0) {
@@ -892,26 +870,6 @@ void CSaveGameManager::SaveGameData(void) {
         else {
             for (i = 0; i < gameData.trigData.m_nTriggers[1]; i++)
                 OBJTRIGGERS[i].SaveState(m_cf, true);
-#if 0
-		for (i = 0; i < gameData.trigData.m_nTriggers [1]; i++)
-			SaveObjTriggerRef (gameData.trigData.objTriggerRefs + i);
-		nObjsWithTrigger = 0;
-		FORALL_OBJS (pObj, nObject) {
-			nObject = pObj->Index ();
-			nFirstTrigger = gameData.trigData.firstObjTrigger [nObject];
-			if ((nFirstTrigger >= 0) && (nFirstTrigger < gameData.trigData.m_nTriggers [1]))
-				nObjsWithTrigger++;
-			}
-		m_cf.WriteShort (nObjsWithTrigger);
-		FORALL_OBJS (pObj, nObject) {
-			nObject = pObj->Index ();
-			nFirstTrigger = gameData.trigData.firstObjTrigger [nObject];
-			if ((nFirstTrigger >= 0) && (nFirstTrigger < gameData.trigData.m_nTriggers [1])) {
-				m_cf.WriteShort (nObject);
-				m_cf.WriteShort (nFirstTrigger);
-				}
-			}
-#endif
         }
         // Save tmap info
         for (i = 0; i <= gameData.segData.nLastSegment; i++)
@@ -1255,11 +1213,6 @@ int32_t CSaveGameManager::SetServerPlayer(
             else if (!N_LOCALPLAYER)
                 N_LOCALPLAYER = nServerPlayer;
         }
-#if 0
-	memcpy (NETPLAYER (N_LOCALPLAYER).network.Node (), IpxGetMyLocalAddress (), 6);
-	NETPLAYER (N_LOCALPLAYER).network.Port () = 
-		htons (NETPLAYER (N_LOCALPLAYER).network.Port ());
-#endif
     }
     *pnOtherObjNum = nOtherObjNum;
     *pnServerObjNum = nServerObjNum;
@@ -1628,12 +1581,6 @@ int32_t CSaveGameManager::LoadUniFormat(int32_t bMulti, fix xOldGameTime, int32_
 
     if (m_nVersion >= 39) {
         h = m_cf.ReadInt();
-#if 0
-	if (h != gameData.segData.nMaxSegments) {
-		Warning (TXT_MAX_SEGS_WARNING, h);
-		return 0;
-		}
-#endif
     }
 
     m_bBetweenLevels = m_cf.ReadInt();

@@ -1044,11 +1044,8 @@ int32_t SetupHardwareLighting(CSegFace *pFace, int32_t nType) {
     int32_t nLightRange, nLights;
     float fBrightness;
     CFloatVector ambient, diffuse;
-#if 0
-	CFloatVector		black = {{{0,0,0,0}}};
-#endif
     CFloatVector specular = {{{0.5f, 0.5f, 0.5f, 0.5f}}};
-    // CFloatVector		vPos = CFloatVector::Create(0,0,0,1);
+
     GLenum hLight;
     CActiveDynLight *pActiveLights;
     CDynLight *psl;
@@ -1090,26 +1087,7 @@ int32_t SetupHardwareLighting(CSegFace *pFace, int32_t nType) {
          pActiveLights++, nLightRange--) {
         if (!(psl = lightManager.GetActive(pActiveLights, 0)))
             continue;
-#if 0 // DBG
-	if (psl->info.nType == 2)
-		continue;
-	if (psl->info.nObject < 1)
-		continue;
-	if (OBJECT (psl->info.nObject)->info.nType != OBJ_LIGHT)
-		continue;
-#endif
-#if 0 // DBG
-	if (pFace && (pFace->m_info.nSegment == nDbgSeg) && ((nDbgSide < 0) || (pFace->m_info.nSide == nDbgSide)))
-		BRP;
-	if (pFace - FACES == nDbgFace)
-		BRP;
-	if ((psl->nTarget < 0) && (-psl->nTarget - 1 != pFace->m_info.nSegment))
-		BRP;
-	else if ((psl->nTarget > 0) && (psl->nTarget != pFace - FACES + 1))
-		BRP;
-	if (!psl->nTarget)
-		psl = psl;
-#endif
+
         if (psl->render.bUsed[0] == 2) { // nearest vertex light
             lightManager.ResetUsed(psl, 0);
             sli.nActive--;

@@ -608,11 +608,8 @@ int32_t CMenuItem::GetSize(
     int32_t &nAverageWidth,
     int32_t &nMenus,
     int32_t &nOthers,
-    int32_t bTiny) {
-#if 0
-if (!gameStates.app.bEnglish)
-	m_nKey = *(m_text - 1);
-#endif
+    int32_t bTiny
+) {
     if (m_nKey) {
         if (gameOpts->menus.nHotKeys < 0) {
             if ((m_nKey < KEY_1) || (m_nKey > KEY_0))

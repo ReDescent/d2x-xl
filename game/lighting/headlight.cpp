@@ -133,11 +133,6 @@ void CHeadlightManager::Prepare(void) {
 //------------------------------------------------------------------------------
 
 int32_t CHeadlightManager::Add(CObject *pObj) {
-#if 0
-	static float spotExps [] = {12.0f, 5.0f, 0.0f};
-	static float spotAngles [] = {0.9f, 0.5f, 0.5f};
-#endif
-
     objects[pObj->info.nId] = pObj;
     if (gameStates.render.nLightingMethod) {
         if (lightIds[pObj->info.nId] < 0) {

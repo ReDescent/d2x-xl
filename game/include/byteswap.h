@@ -34,30 +34,12 @@ typedef union dSwap {
 
 static inline double SWAPDOUBLE(double i) {
     char h;
-#if 0
-dSwap	s;
 
-s.i = i;
-h = s[BA][0];
-s[BA][0] = s[BA][7];
-s[BA][7] = h;
-h = s[BA][1];
-s[BA][1] = s[BA][6];
-s[BA][6] = h;
-h = s[BA][2];
-s[BA][2] = s[BA][5];
-s[BA][5] = h;
-h = s[BA][3];
-s[BA][3] = s[BA][4];
-s[BA][4] = h;
-return s.d;
-#else
     SWAP(h, DSWAP(i)->b[0], DSWAP(i)->b[7]);
     SWAP(h, DSWAP(i)->b[1], DSWAP(i)->b[6]);
     SWAP(h, DSWAP(i)->b[2], DSWAP(i)->b[5]);
     SWAP(h, DSWAP(i)->b[3], DSWAP(i)->b[4]);
     return DSWAP(i)->d;
-#endif
 }
 
 static inline double SwapDouble(double i, int32_t bEndian) {
@@ -77,22 +59,9 @@ typedef union fSwap {
 
 static inline float SWAPFLOAT(float i) {
     char h;
-#if 0
-fSwap	s;
-
-s.i = i;
-h = s[BA][0];
-s[BA][0] = s[BA][3];
-s[BA][3] = h;
-h = s[BA][1];
-s[BA][1] = s[BA][2];
-s[BA][2] = h;
-return s.i;
-#else
     SWAP(h, FSWAP(i)->b[0], FSWAP(i)->b[3]);
     SWAP(h, FSWAP(i)->b[1], FSWAP(i)->b[2]);
     return FSWAP(i)->f;
-#endif
 }
 
 static inline float SwapFloat(float i, int32_t bEndian) {
@@ -212,18 +181,6 @@ static inline CFixMatrix &SwapMatrix(CFixMatrix &m, int32_t bEndian) {
 
 #ifndef WORDS_NEED_ALIGNMENT
 
-#if 0
-
-// this causes dereferencing type punned pointer warnings from g++
-#define GET_INTEL_INT(s) INTEL_INT(*reinterpret_cast<uint32_t *>(s))
-#define GET_INTEL_SHORT(s) INTEL_SHORT(*reinterpret_cast<uint16_t *>(s))
-#define PUT_INTEL_INT(d, s) \
-    { *reinterpret_cast<uint32_t *>(d) = INTEL_INT((uint32_t)(s)); }
-#define PUT_INTEL_SHORT(d, s) \
-    { *reinterpret_cast<uint16_t *>(d) = INTEL_SHORT((uint16_t)(s)); }
-
-#else
-
 static inline uint32_t GET_INTEL_INT(void *s) { return INTEL_INT(*reinterpret_cast<uint32_t *>(s)); }
 
 static inline uint16_t GET_INTEL_SHORT(void *s) { return INTEL_SHORT(*reinterpret_cast<uint16_t *>(s)); }
@@ -231,8 +188,6 @@ static inline uint16_t GET_INTEL_SHORT(void *s) { return INTEL_SHORT(*reinterpre
 static inline void PUT_INTEL_INT(void *d, uint32_t s) { *reinterpret_cast<uint32_t *>(d) = INTEL_INT(s); }
 
 static inline void PUT_INTEL_SHORT(void *d, uint16_t s) { *reinterpret_cast<uint16_t *>(d) = INTEL_SHORT(s); }
-
-#endif
 
 #else // ! WORDS_NEED_ALIGNMENT
 

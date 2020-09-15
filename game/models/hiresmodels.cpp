@@ -191,10 +191,11 @@ tReplacementModel replacementModels[] = {
     {"bullettime", NULL, MAX_POLYGON_MODELS - 34, 0, 1, -1},
     {"hostage", NULL, HOSTAGE_MODEL, 0, 1, -1},
     {"bullet", NULL, BULLET_MODEL, 0, 1, -1}
-#if 0 // DBG
+// TODO: 3d cockpit for VR
+/*
 	,
 	{"cockpit", NULL, COCKPIT_MODEL, 0, 1, -1}
-#endif
+*/
 };
 
 // ----------------------------------------------------------------------------
@@ -299,10 +300,7 @@ int16_t LoadASEModel(ASE::CModel *pa, int16_t i, int32_t bCustom) {
         sprintf(szModel[1], "%s.ase", replacementModels[i].pszHires);
     else
         szModel[1][0] = '\0';
-#if 0 // DBG
-while (!ASE_ReadFile (szModel [1], pa, replacementModels [i].nType, bCustom))
-	;
-#endif
+
     if (!(pa->Read(szModel[1], nModel, bCustom) || pa->Read(szModel[0], nModel, bCustom)))
         return 0;
     do {

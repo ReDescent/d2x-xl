@@ -169,11 +169,7 @@ void NetworkMonsterballOptions(void) {
         m.SetValue("pyro force", pf->nForce - 1);
         m.SetValue("size mod", extraGameInfo[0].monsterball.nSizeMod - 2);
     }
-#if 0
-pf = extraGameInfo [0].monsterball.forces;
-for (i = 0; i < h; i++, pf++)
-	pf->nForce = nOptionToForce [m [i].Value ()];
-#endif
+
     pf->nForce = m.Value("pyro force") + 1;
     extraGameInfo[0].monsterball.nSizeMod = m.Value("size mod") + 2;
     extraGameInfo[0].monsterball.nBonus = m.Value("bonus") + 1;

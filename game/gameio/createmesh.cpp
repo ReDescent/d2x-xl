@@ -283,13 +283,6 @@ int32_t CTriMeshBuilder::CreateTriangles(void) {
     int32_t i, nFace = -1;
     int16_t nId = 0;
 
-#if 0
-if (gameStates.render.nMeshQuality) {
-	i = LEVEL_VERTICES + ((FACES.nTriangles ? FACES.nTriangles / 2 : FACES.nFaces) << (abs (gameStates.render.nMeshQuality)));
-	if (!(gameData.segData.fVertices.Resize (i) && gameData.segData.vertices.Resize (i) && gameData.renderData.mine.Resize (i)))
-		RETVAL (0)
-	}
-#endif
     for (i = FACES.nTriangles, pFaceTriangle = TRIANGLES.Buffer(); i; i--, pFaceTriangle++) {
         if (!(pTriangle = AddTriangle(NULL, pFaceTriangle->index, pFaceTriangle))) {
             FreeData();
@@ -437,13 +430,8 @@ int32_t CTriMeshBuilder::SplitEdge(CSegFace *pFace, tEdge *pEdge, int16_t nPass)
         gameData.segData.fVertices[gameData.segData.nVertices]);
     gameData.segData.vertexOwners[gameData.segData.nVertices].nSegment = pFace->m_info.nSegment;
     gameData.segData.vertexOwners[gameData.segData.nVertices].nSide = pFace->m_info.nSide;
-#if 0
-if (tris [1] >= 0) {
-	if (NewEdgeLen (tris [0], verts [0], verts [1]) + NewEdgeLen (tris [1], verts [0], verts [1]) < MAX_EDGE_LEN (m_nQuality))
-		RETVAL (-1)
-	}
-#endif
     gameData.segData.nVertices++;
+
     if (!SplitTriangleByEdge(tris[0], verts[0], verts[1], nPass))
         RETVAL(0)
     if (!SplitTriangleByEdge(tris[1], verts[0], verts[1], nPass))
@@ -1106,14 +1094,6 @@ void CQuadMeshBuilder::InitColoredFace(int16_t nSegment) {
 void CQuadMeshBuilder::SetupLMapTexCoord(tTexCoord2f *pTexCoord) {
     ENTER(0, 0);
 #define LMAP_SIZE 0.0f //(1.0f / 16.0f)
-#if 0
-	static tTexCoord2f lMapTexCoord [4] = {
-	 {{LMAP_SIZE, LMAP_SIZE}},
-	 {{1.0f - LMAP_SIZE, LMAP_SIZE}},
-	 {{1.0f - LMAP_SIZE, 1.0f - LMAP_SIZE}},
-	 {{LMAP_SIZE, 1.0f - LMAP_SIZE}}
-	};
-#endif
 #if DBG
     if ((m_pFace->m_info.nSegment == nDbgSeg) && ((nDbgSide < 0) || (m_pFace->m_info.nSide == nDbgSide)))
         BRP;
@@ -1122,11 +1102,8 @@ void CQuadMeshBuilder::SetupLMapTexCoord(tTexCoord2f *pTexCoord) {
     float x = (float)(i % LIGHTMAP_ROWSIZE);
     float y = (float)(i / LIGHTMAP_ROWSIZE);
     float step = 1.0f / (float)LIGHTMAP_ROWSIZE;
-#if 0
-const float border = 0.0f;
-#else
     const float border = 1.0f / (float)(LIGHTMAP_ROWSIZE * LIGHTMAP_WIDTH * 2);
-#endif
+
     pTexCoord[0].v.u = pTexCoord[3].v.u = x * step + border;
     pTexCoord[1].v.u = pTexCoord[2].v.u = (x + 1) * step - border;
     pTexCoord[0].v.v = pTexCoord[1].v.v = y * step + border;
@@ -1633,13 +1610,11 @@ int32_t CQuadMeshBuilder::Build(int32_t nLevel, bool bRebuild) {
             }
         }
     }
-#if 1
     // any additional vertices have been stored, so prune the buffers to the minimally required size
     if (!(gameData.segData.Resize() && gameData.renderData.lights.Resize() && gameData.renderData.color.Resize())) {
         PrintLog(-1);
         RETVAL(0)
     }
-#endif
     for (m_pColor = gameData.renderData.color.ambient.Buffer(), i = gameData.segData.nVertices; i; i--, m_pColor++)
         if (m_pColor->Alpha() > 1) {
             m_pColor->Red() /= m_pColor->Alpha();
@@ -1651,12 +1626,10 @@ int32_t CQuadMeshBuilder::Build(int32_t nLevel, bool bRebuild) {
         PrintLog(-1);
         RETVAL(0)
     }
-#if 1
     if (!(gameData.renderData.lights.Resize() && gameData.renderData.color.Resize())) {
         PrintLog(-1);
         RETVAL(0)
     }
-#endif
     BuildSlidingFaceList();
     if (gameStates.render.bTriangleMesh)
         cameraManager.Destroy();

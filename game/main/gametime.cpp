@@ -368,20 +368,6 @@ void CalcFrameTime(int32_t fps) {
 #if Arcade_mode
     gameData.timeData.xFrame /= 2;
 #endif
-// Set value to determine whether homing missile can see target.
-// The lower frametime is, the more likely that it can see its target.
-#if 0
-if (gameStates.limitFPS.bHomers)
-	gameData.weaponData.xMinTrackableDot = MIN_TRACKABLE_DOT;
-else if (gameData.timeData.xFrame <= I2X (1)/64)
-	gameData.weaponData.xMinTrackableDot = MIN_TRACKABLE_DOT;	// -- 3* (I2X (1) - MIN_TRACKABLE_DOT)/4 + MIN_TRACKABLE_DOT;
-else if (gameData.timeData.xFrame < I2X (1)/32)
-	gameData.weaponData.xMinTrackableDot = MIN_TRACKABLE_DOT + I2X (1)/64 - 2*gameData.timeData.xFrame;	// -- FixMul (I2X (1) - MIN_TRACKABLE_DOT, I2X (1)-4*gameData.timeData.xFrame) + MIN_TRACKABLE_DOT;
-else if (gameData.timeData.xFrame < I2X (1)/4)
-	gameData.weaponData.xMinTrackableDot = MIN_TRACKABLE_DOT + I2X (1)/64 - I2X (1)/16 - gameData.timeData.xFrame;	// -- FixMul (I2X (1) - MIN_TRACKABLE_DOT, I2X (1)-4*gameData.timeData.xFrame) + MIN_TRACKABLE_DOT;
-else
-	gameData.weaponData.xMinTrackableDot = MIN_TRACKABLE_DOT + I2X (1)/64 - I2X (1)/8;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -390,15 +376,9 @@ void GetSlowTicks(void) {
     gameData.timeData.tLast = gameStates.app.nSDLTicks[0];
     gameStates.app.nSDLTicks[0] = SDL_GetTicks();
     gameStates.app.tick40fps.nTime = gameStates.app.nSDLTicks[0] - gameStates.app.tick40fps.nLastTick;
-    if ((gameStates.app.tick40fps.bTick = (gameStates.app.tick40fps.nTime >= 25)))
+    if ((gameStates.app.tick40fps.bTick = (gameStates.app.tick40fps.nTime >= 25))) {
         gameStates.app.tick40fps.nLastTick = gameStates.app.nSDLTicks[0];
-#if 0
-gameStates.app.tick60fps.nTime = gameStates.app.nSDLTicks [0] - gameStates.app.tick60fps.nLastTick;
-if ((gameStates.app.tick60fps.bTick = (gameStates.app.tick60fps.nTime >= (50 + ++gameStates.app.tick60fps.nSlack) / 3))) {
-	gameStates.app.tick60fps.nLastTick = gameStates.app.nSDLTicks [0];
-	gameStates.app.tick60fps.nSlack %= 3;
-	}
-#endif
+    }
 }
 
 //------------------------------------------------------------------------------

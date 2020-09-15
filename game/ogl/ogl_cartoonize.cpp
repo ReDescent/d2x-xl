@@ -25,12 +25,8 @@
 #include "ogl_texture.h"
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 
 #define MAX_BLUR_RADIUS 15
-
-//------------------------------------------------------------------------------
 
 static inline int32_t Wrap(int32_t i, int32_t l) {
     if (i < 0)
@@ -38,12 +34,7 @@ static inline int32_t Wrap(int32_t i, int32_t l) {
     return i % l;
 }
 
-//------------------------------------------------------------------------------
-
 static inline int32_t Visible(tRGB &color) { return (color.r != 120) || (color.g != 88) || (color.b != 128); }
-
-//------------------------------------------------------------------------------
-
 static inline int32_t Visible(tRGBA &color) { return color.a && Visible((tRGB &)color); }
 
 //------------------------------------------------------------------------------
@@ -57,7 +48,8 @@ static void HBoxBlurRGBAWrapped(
     int32_t th,
     int32_t r,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
+    int32_t nStep = 1
+) {
     int32_t i = nStart * tw;
 
     for (int32_t y = nStart; y < h; y += nStep) {
@@ -109,7 +101,8 @@ static void VBoxBlurRGBAWrapped(
     int32_t th,
     int32_t r,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
+    int32_t nStep = 1
+) {
     int32_t l = 2 * r + 1;
 
     for (int32_t x = nStart; x < w; x += nStep) {
@@ -161,7 +154,8 @@ static void HBoxBlurRGBWrapped(
     int32_t th,
     int32_t r,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
+    int32_t nStep = 1
+) {
     int32_t i = nStart * tw;
     for (int32_t y = nStart; y < h; y += nStep) {
         int32_t l = 2 * r + 1;
@@ -214,7 +208,8 @@ static void VBoxBlurRGBWrapped(
     int32_t th,
     int32_t r,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
+    int32_t nStep = 1
+) {
     int32_t l = 2 * r + 1;
 
     for (int32_t x = nStart; x < w; x += nStep) {
@@ -270,7 +265,8 @@ static void HBoxBlurRGBAClamped(
     int32_t th,
     int32_t r,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
+    int32_t nStep = 1
+) {
     int32_t i = nStart * tw;
     for (int32_t y = nStart; y < h; y += nStep) {
         int32_t a[3] = {0, 0, 0};
@@ -326,7 +322,8 @@ static void VBoxBlurRGBAClamped(
     int32_t th,
     int32_t r,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
+    int32_t nStep = 1
+) {
     int32_t o[2] = {-(r + 1) * tw, r * tw};
 
     for (int32_t x = nStart; x < w; x += nStep) {
@@ -384,7 +381,8 @@ static void HBoxBlurRGBClamped(
     int32_t th,
     int32_t r,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
+    int32_t nStep = 1
+) {
     int32_t i = nStart * tw;
     for (int32_t y = nStart; y < h; y += nStep) {
         int32_t n = 0;
@@ -439,7 +437,8 @@ static void VBoxBlurRGBClamped(
     int32_t th,
     int32_t r,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
+    int32_t nStep = 1
+) {
     int32_t o[2] = {-(r + 1) * tw, r * tw};
 
     for (int32_t x = nStart; x < w; x += nStep) {
@@ -564,7 +563,8 @@ GLubyte *GaussianBlur(
     int32_t r,
     int32_t nColors,
     int32_t bWrap,
-    int32_t nStrength = 1) {
+    int32_t nStrength = 1
+) {
     r = Clamp(r, 3, MAX_BLUR_RADIUS) / 2;
 #if DBG
     if (nColors < 3)
@@ -590,7 +590,8 @@ inline uint8_t Posterize(int32_t nColor, int32_t nSteps = 15) {
 //------------------------------------------------------------------------------
 
 void PosterizeRGBA(tRGBA *src, int32_t w, int32_t h, int32_t tw, int32_t nStart = 0, int32_t nStep = 1) {
-#if 0
+// FIXME: why not posterize RGBA???
+/*
 for (int32_t y = nStart; y < h; y += nStep) {
 	tRGBA *dest = src + y * tw;
 	for (int32_t x = 0; x < w; x++) {
@@ -602,13 +603,12 @@ for (int32_t y = nStart; y < h; y += nStep) {
 		dest++;
 		}
 	}
-#endif
+*/
 }
 
 //------------------------------------------------------------------------------
 
 void PosterizeRGB(tRGB *src, int32_t w, int32_t h, int32_t tw, int32_t nStart = 0, int32_t nStep = 1) {
-#if 1
     for (int32_t y = nStart; y < h; y += nStep) {
         tRGB *dest = src + y * tw;
         for (int32_t x = 0; x < w; x++) {
@@ -620,7 +620,6 @@ void PosterizeRGB(tRGB *src, int32_t w, int32_t h, int32_t tw, int32_t nStart = 
             dest++;
         }
     }
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -658,10 +657,8 @@ void CreateOutlineRGBA(
     int32_t tw,
     int32_t nPasses,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
-#if 0
-	int32_t offsets [9] = { -tw - 1, -tw, -tw + 1, -1, 0, 1, tw - 1, tw, tw + 1};
-#else
+    int32_t nStep = 1
+) {
     int32_t offsets[8][2] = {
         {-1, -1},
         {0, -1},
@@ -674,7 +671,6 @@ void CreateOutlineRGBA(
         },
         {0, 1},
         {1, 1}};
-#endif
     int32_t nTag = 254, n = 0, a = 255;
 
     for (int32_t nPass = 0; nPass < nPasses; nPass++, nTag--) {
@@ -710,10 +706,8 @@ void CreateOutlineRGB(
     int32_t tw,
     int32_t nPasses,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
-#if 0
-	int32_t offsets [9] = { -tw - 1, -tw, -tw + 1, -1, 0, 1, tw - 1, tw, tw + 1};
-#else
+    int32_t nStep = 1
+) {
     int32_t offsets[8][2] = {
         {-1, -1},
         {0, -1},
@@ -726,7 +720,6 @@ void CreateOutlineRGB(
         },
         {0, 1},
         {1, 1}};
-#endif
     int32_t nTag = 254, n = 0;
 
     for (int32_t nPass = 0; nPass < nPasses; nPass++, nTag--) {
@@ -760,10 +753,8 @@ void CreateOutlineMask(
     int32_t tw,
     int32_t nPasses,
     int32_t nStart = 0,
-    int32_t nStep = 1) {
-#if 0
-	int32_t offsets [9] = { -tw - 1, -tw, -tw + 1, -1, 0, 1, tw - 1, tw, tw + 1};
-#else
+    int32_t nStep = 1
+) {
     int32_t offsets[8][2] = {
         {-1, -1},
         {0, -1},
@@ -776,7 +767,6 @@ void CreateOutlineMask(
         },
         {0, 1},
         {1, 1}};
-#endif
     int32_t nTag = 254, n = 0;
 
     for (int32_t nPass = 0; nPass < nPasses; nPass++, nTag--) {
@@ -853,18 +843,6 @@ void PrepareOutlineMask(uint8_t *pTexture, int32_t w, int32_t h, int32_t tw, int
 //------------------------------------------------------------------------------
 
 void Outline(GLubyte *src, int32_t w, int32_t h, int32_t tw, int32_t nColors, int32_t nPasses) {
-#if 0 // USE_OPENMP
-if (gameStates.app.bMultiThreaded) {
-#pragma omp parallel
-#pragma omp for
-	for (int32_t i = 0; i < gameStates.app.nThreads; i++)
-		PrepareOutline ((tRGBA*) src, w, h, tw, i, gameStates.app.nThreads);
-#pragma omp for
-	for (int32_t i = 0; i < gameStates.app.nThreads; i++)
-		CreateOutline ((tRGBA*) src, w, h, tw, nPasses, i, gameStates.app.nThreads);
-	}
-else
-#endif
     if (nColors == 4) {
         PrepareOutlineRGBA((tRGBA *)src, w, h, tw);
         CreateOutlineRGBA((tRGBA *)src, w, h, tw, nPasses);
@@ -878,11 +856,8 @@ else
 }
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 
 GLubyte *Cartoonize(CBitmap *pBm, GLubyte *pBuffer, int32_t dxo, int32_t dyo, int32_t nColors) {
-#if 1 //! DBG
     if (pBm->m_info.bCartoonizable && gameStates.render.CartoonStyle()) {
         static int32_t blurRads[4][4] = {{15, 13, 11, 9}, {13, 11, 9, 7}, {11, 9, 7, 5}, {9, 7, 5, 3}};
 
@@ -895,11 +870,7 @@ GLubyte *Cartoonize(CBitmap *pBm, GLubyte *pBuffer, int32_t dxo, int32_t dyo, in
         if (strstr(pBm->Name(), "door35"))
             BRP;
 #endif
-#if 1
-        if (gameStates.render.bBlurTextures)
-#if 0
-		pBuffer = GaussianBlur (ogl.m_data.buffer [1], pBuffer, w, h, tw, m_info.pTexture->TH (), blurRads [0][s], nColors, !gameStates.render.bClampBlur, 1);
-#elif 1
+        if (gameStates.render.bBlurTextures) {
             pBuffer = GaussianBlur(
                 ogl.m_data.buffer[1],
                 pBuffer,
@@ -911,15 +882,11 @@ GLubyte *Cartoonize(CBitmap *pBm, GLubyte *pBuffer, int32_t dxo, int32_t dyo, in
                 nColors,
                 !gameStates.render.bClampBlur,
                 gameStates.render.bBlurTextures);
-#endif
-#endif
-#if 1
-            if (gameStates.render.bPosterizeTextures && (nColors >= 3))
-                Posterize(pBuffer, w, h, tw, nColors);
-#endif
-#if 1
+        }
+        if (gameStates.render.bPosterizeTextures && (nColors >= 3)) {
+            Posterize(pBuffer, w, h, tw, nColors);
+        }
         if (gameStates.render.bOutlineTextures /*&& (nColors == 4) && !strstr (pBm->Name (), "lava") && !strstr (pBm->Name (), "water")*/) {
-#if 1 // DBG
             int32_t bResetOutlineColor = 1;
             if (strstr(pBm->Name(), "shield"))
                 gameStates.render.SetOutlineColor(64, 64, 64);
@@ -933,19 +900,10 @@ GLubyte *Cartoonize(CBitmap *pBm, GLubyte *pBuffer, int32_t dxo, int32_t dyo, in
                 gameStates.render.SetOutlineColor(2, 2, 2);
                 bResetOutlineColor = 0;
             }
-#endif
             Outline(pBuffer, w, h, tw, nColors, /*1 << s*/ s + 1);
-#if 1
             if (bResetOutlineColor)
                 gameStates.render.ResetOutlineColor();
-#endif
         }
-#endif
     }
-#endif
     return pBuffer;
 }
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------

@@ -6,14 +6,6 @@
 
 typedef uint8_t tUdpAddress[6];
 
-#if 0
-
-// this causes dereferencing type punned pointer warnings from g++
-#define UDP_ADDR(_a) *((uint32_t *)(_a))
-#define UDP_PORT(_a) *((uint16_t *)((char *)(_a) + 4))
-
-#else
-
 static inline uint32_t &UDP_ADDR(void *a) {
     uint32_t *tmp = reinterpret_cast<uint32_t *>(a);
     return *tmp;
@@ -23,8 +15,6 @@ static inline uint16_t &UDP_PORT(void *a) {
     uint16_t *tmp = reinterpret_cast<uint16_t *>(reinterpret_cast<uint8_t *>(a) + 4);
     return *tmp;
 }
-
-#endif
 
 #define MAX_TRACKER_SERVERS (512 / sizeof(tUdpAddress))
 

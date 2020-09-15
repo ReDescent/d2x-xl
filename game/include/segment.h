@@ -453,10 +453,6 @@ class CSegment {
     uint8_t SideDists(const CFixVector &intersection, fix *xSideDists, int32_t bBehind = 1);
     int32_t ConnectedSide(CSegment *other);
     inline CFixVector &Normal(int32_t nSide, int32_t nFace) { return m_sides[nSide].Normal(nFace); }
-#if 0
-		inline uint32_t PointToFaceRelation (CFixVector& intersection, int32_t nSide, int16_t iFace)
-		 { return m_sides [nSide].PointToFaceRelation (intersection, iFace, Normal (nSide, iFace)); }
-#endif
     inline int32_t SphereToFaceRelation(CFixVector &intersection, fix rad, int32_t nSide, int16_t iFace) {
         return m_sides[nSide].SphereToFaceRelation(intersection, rad, iFace, Normal(nSide, iFace));
     }

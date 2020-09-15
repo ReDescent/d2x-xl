@@ -116,10 +116,6 @@ int32_t CGlareRenderer::FaceHasCorona(int16_t nSegment, int16_t nSide, int32_t *
         if ((i < 0) || !lightManager.Lights()[i].info.bOn)
             return 0;
     }
-#if 0
-if (fIntensityP && (nBrightness < I2X (1)))
-	*fIntensityP *= X2F (nBrightness);
-#endif
     if (gameStates.app.bD1Mission) {
         switch (nTexture) {
         case 289: // empty light

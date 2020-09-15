@@ -17,17 +17,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "player.h"
 #include "mission.h"
 
-// CurrentLevel_num starts at 1 for the first level
-// -1,-2,-3 are secret levels
-// 0 means not a real level loaded
-#if 0
-extern int32_t CurrentLevel_num, NextLevel_num;
-extern char CurrentLevel_name [LEVEL_NAME_LEN];
-extern tObjPosition Player_init[MAX_PLAYERS];
-extern int32_t bPlayerIsTyping [MAX_PLAYERS];
-extern int32_t nTypingTimeout;
-#endif
-// This is the highest level the player has ever reached
 //
 // New game sequencing functions
 //

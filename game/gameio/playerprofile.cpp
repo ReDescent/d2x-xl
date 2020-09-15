@@ -265,10 +265,6 @@ void CPlayerProfile::RegisterConfig(kcItem *cfgP, int32_t nItems, const char *ps
     p = szTag + strlen(szTag);
 
     for (i = 0; i < nItems; i++) {
-#if 0
-	sprintf (p, "%s.type", cfgP [i].text);
-	Register (&cfgP [i].nType, szTag, 0, 0, sizeof (cfgP [i].nType));
-#endif
         j = FindInConfig(cfgP, nItems, i, cfgP[i].text);
         if (j < 0) {
             sprintf(p, "%s.value", cfgP[i].text);
@@ -555,90 +551,6 @@ void CPlayerProfile::Create(void) {
             RP(gameOptions[i].render.particles.bPlayers, i, 0);
             RP(gameOptions[i].render.particles.bRobots, i, 0);
             RP(gameOptions[i].render.weaponIcons.nSort, i, 0);
-#if 0
-		RP (gameOpts->render.cockpit.bWideDisplays, 0, 1);
-		RP (gameOptions [i].render.cockpit.bGuidedInMainView, 0, 0);
-		RP (extraGameInfo [i].bRotateMarkers, i, 0);
-		RP (extraGameInfo [i].bBrightObjects, i, 0);
-		RP (extraGameInfo [i].grWallTransparency, 0, 0);
-		RP (extraGameInfo [i].nOmegaRamp, 0, 0);
-		RP (extraGameInfo [i].nSpeedBoost, 0, 0);
-		RP (gameOptions [i].render.particles.bBubbles, i, 0);
-		RP (gameOptions [i].render.particles.bWobbleBubbles, i, 1);
-		RP (gameOptions [i].render.particles.bWiggleBubbles, i, 1);
-		RP (gameOptions [i].render.particles.bSyncSizes, i, 0);
-		RP (gameOptions [i].render.particles.bSort, i, 0);
-		RP (gameOptions [i].ogl.bLightObjects, i, 0);
-		RP (gameOptions [i].ogl.bHeadlight, i, 0);
-		RP (gameOptions [i].ogl.bLightPowerups, i, 0);
-		RP (gameOptions [i].ogl.bObjLighting, i, 0);
-		RP (gameOptions [i].ogl.nMaxLightsPerFace, i, 0);
-		RP (gameOptions [i].ogl.nMaxLightsPerObject, i, 0);
-		RP (gameOptions [i].render.nDebrisLife, i, 0);
-		RP (gameOptions [i].render.effects.bAutoTransparency, i, 0);
-		RP (gameOptions [i].render.effects.bMovingSparks, i, 0);
-		RP (gameOptions [i].render.coronas.bShots, i, 0);
-		RP (gameOptions [i].render.coronas.bPowerups, i, 0);
-		RP (gameOptions [i].render.coronas.bWeapons, i, 0);
-		RP (gameOptions [i].render.coronas.nIntensity, i, 0);
-		RP (gameOptions [i].render.coronas.nObjIntensity, i, 0);
-		RP (gameOptions [i].render.coronas.bAdditive, i, 0);
-		RP (gameOptions [i].render.coronas.bAdditiveObjs, i, 0);
-		RP (gameOptions [i].render.effects.bOnlyShieldHits, 0, 0);
-		RP (gameOptions [i].render.effects.bTransparent, i, 0);
-		RP (gameOptions [i].render.lightning.bAuxViews, i, 0);
-		RP (gameOptions [i].render.lightning.bMonitors, i, 0);
-		RP (gameOptions [i].render.lightning.bGlow, i, 0);
-		RP (gameOptions [i].render.lightning.bDamage, i, 0);
-		RP (gameOptions [i].render.lightning.bExplosions, i, 0);
-		RP (gameOptions [i].render.lightning.bOmega, i, 0);
-		RP (gameOptions [i].render.lightning.bRobotOmega, i, 0);
-		RP (gameOptions [i].render.lightning.bPlayers, i, 0);
-		RP (gameOptions [i].render.lightning.bRobots, i, 0);
-		RP (gameOptions [i].render.lightning.bStatic, i, 0);
-		RP (gameOptions [i].render.lightning.nStyle, i, 0);
-		RP (gameOptions [i].render.lightning.nQuality, i, 0);
-		RP (gameOptions [i].render.cameras.bFitToWall, i, 0);
-		RP (gameOptions [i].render.cameras.nFPS, i, 0);
-		RP (gameOptions [i].render.cameras.nSpeed, i, 0);
-		RP (gameOptions [i].render.automap.bCoronas, i, 0);
-		RP (gameOptions [i].render.automap.bGrayOut, i, 0);
-		RP (gameOptions [i].render.automap.bSparks, i, 0);
-		RP (gameOptions [i].render.automap.bParticles, i, 0);
-		RP (gameOptions [i].render.automap.bLightning, i, 0);
-		RP (gameOptions [i].render.automap.bSkybox, i, 0);
-		RP (gameOptions [i].render.automap.nColor, i, 0);
-		RP (gameOptions [i].render.cockpit.bRotateMslLockInd, i, 0);
-		RP (gameOptions [i].render.cockpit.bScaleGauges, i, 0);
-		RP (gameOptions [i].render.cockpit.bSplitHUDMsgs, i, 0);
-		RP (gameOptions [i].render.cockpit.bWideDisplays, i, !i);
-		RP (gameOptions [i].render.color.bCap, i, 0);
-		RP (gameOptions [i].render.color.bMix, i, 0);
-		RP (gameOptions [i].render.color.nSaturation, i, 0);
-		RP (gameOptions [i].render.color.bWalls, i, 0);
-		RP (gameOptions [i].render.powerups.nSpin, i, 0);
-		RP (gameOptions [i].render.shadows.bFast, i, 0);
-		RP (gameOptions [i].render.shadows.bMissiles, i, 0);
-		RP (gameOptions [i].render.shadows.bPowerups, i, 0);
-		RP (gameOptions [i].render.shadows.bPlayers, i, 0);
-		RP (gameOptions [i].render.shadows.bReactors, i, 0);
-		RP (gameOptions [i].render.shadows.bRobots, i, 0);
-
-		RP (gameOptions [i].render.ship.nWingtip, i, 0);
-		RP (gameOptions [i].render.ship.bBullets, i, 0);
-		RP (gameOptions [i].render.ship.nColor, i, 0);
-
-		RP (gameOptions [i].render.weaponIcons.alpha, i, 0);
-		RP (gameOptions [i].render.weaponIcons.bEquipment, i, 0);
-		RP (gameOptions [i].render.weaponIcons.bShowAmmo, i, 0);
-		RP (gameOptions [i].render.weaponIcons.bSmall, i, 0);
-		RP (gameOptions [i].render.weaponIcons.bBoldHighlight, i, 0);
-		RP (gameOptions [i].render.weaponIcons.nHiliteColor, i, 0);
-		RP (gameOptions [i].app.nVersionFilter, i, 0);
-		RP (gameOptions [i].sound.xCustomSoundVolume, i, 0);
-		RP (gameOptions [i].gameplay.bIdleAnims, i, 0);
-		RP (gameOptions [i].gameplay.bUseD1AI, i, 0);
-#endif
         }
         // options applicable for both enhanced and pure D2 mode
         for (j = 0; j < sizeofa(nWeaponOrder[i]); j++)
@@ -680,22 +592,6 @@ void CPlayerProfile::Create(void) {
         RP(gameOptions[i].render.cockpit.bMissileView, i, 0);
         RP(gameOptions[i].render.cockpit.bHUD, i, 0);
         RP(gameOptions[i].render.cockpit.bReticle, i, 0);
-
-#if 0
-	RP (extraGameInfo [i].bFlickerLights, i, 0);
-	RP (extraGameInfo [i].bKillMissiles, i, 0);
-	RP (extraGameInfo [i].bTripleFusion, i, 0);
-	RP (extraGameInfo [i].bEnhancedShakers, i, 0);
-	RP (extraGameInfo [i].bTagOnlyHitObjs, i, 0);
-	RP (extraGameInfo [i].nSpotSize, i, 0);
-	RP (gameOptions [i].gameplay.bFastRespawn, i, 0);
-	RP (gameOptions [i].movies.bResize, i, 0);
-	RP (gameOptions [i].movies.nQuality, i, 0);
-	RP (gameOptions [i].menus.bShowLevelVersion, i, 0);
-	RP (gameOptions [i].menus.bSmartFileSearch, i, 0);
-	RP (gameOptions [i].multi.bUseMacros, i, 0);
-	RP (gameOptions [i].render.cockpit.bWideDisplays, i, 0);
-#endif
     }
     RegisterConfig(kcKeyboard, KcKeyboardSize(), "keyboard.");
     RegisterConfig(kcMouse, KcMouseSize(), "mouse.");
@@ -1443,133 +1339,6 @@ tParamValue defaultParams[] = {
     {"gameOptions[0].render.particles.bRobots", "1"},
     {"gameOptions[0].render.particles.bBubbles", "1"},
     {"gameOptions[0].render.weaponIcons.nSort", "1"},
-
-#if 0
-	 {"gameData.appData.bUseMultiThreading[0]", "1"},
-	 {"gameData.appData.bUseMultiThreading[1]", "1"},
-	 {"gameData.appData.bUseMultiThreading[2]", "1"},
-	 {"gameData.appData.bUseMultiThreading[3]", "1"},
-	 {"gameData.appData.bUseMultiThreading[4]", "1"},
-	 {"gameData.appData.bUseMultiThreading[5]", "1"},
-	 {"gameData.appData.bUseMultiThreading[6]", "1"},
-	 {"gameData.appData.bUseMultiThreading[7]", "1"},
-	 {"extraGameInfo[1].bMouseLook", "0"},
-	 {"extraGameInfo[1].bPowerupLights", "0"},
-	 {"extraGameInfo[1].bKillMissiles", "0"},
-	 {"extraGameInfo[1].bTripleFusion", "1"},
-	 {"extraGameInfo[0].bFluidPhysics", "1"},
-	 {"extraGameInfo[0].bImmortalPowerups", "0"},
-	 {"extraGameInfo[0].bMultiBosses", "1"},
-	 {"extraGameInfo[0].nShieldEffect", "1"},
-	 {"extraGameInfo[0].bRobotsHitRobots", "1"},
-	 {"extraGameInfo[0].bTeleporterCams", "0"},
-	 {"extraGameInfo[0].bRotateMarkers", "0"},
-	 {"extraGameInfo[0].bWiggle", "1"},
-	 {"extraGameInfo[0].grWallTransparency", "19"},
-	 {"extraGameInfo[0].nOmegaRamp", "4"},
-	 {"extraGameInfo[0].nWeaponTurnSpeed", "0"},
-	 {"extraGameInfo[0].nMslStartSpeed", "0"},
-	 {"extraGameInfo[0].nSpeedBoost", "10"},
-	 {"extraGameInfo[0].nShieldEffect", "1"},
-	 {"extraGameInfo[0].headlight.bAvailable", "1"},
-	 {"gameOptions[0].render.particles.bWiggleBubbles", "1"},
-	 {"gameOptions[0].render.particles.bWobbleBubbles", "1"},
-	 {"gameOptions[0].render.particles.bSyncSizes", "1"},
-	 {"gameOptions[0].render.particles.bSort", "1"},
-	 {"gameOptions[0].input.bUseHotKeys", "1"},
-	 {"gameOptions[0].ogl.bLightObjects", "1"},
-	 {"gameOptions[0].ogl.bHeadlights", "0"},
-	 {"gameOptions[0].ogl.bLightPowerups", "0"},
-	 {"gameOptions[0].ogl.bObjLighting", "0"},
-	 {"gameOptions[0].ogl.nMaxLightsPerFace", "16"},
-	 {"gameOptions[0].ogl.nMaxLightsPerObject", "8"},
-	 {"gameOptions[0].render.nDebrisLife", "0"},
-	 {"gameOptions[0].render.effects.bAutoTransparency", "1"},
-	 {"gameOptions[0].render.effects.bMovingSparks", "0"},
-	 {"gameOptions[0].render.coronas.bUse", "1"},
-	 {"gameOptions[0].render.coronas.nStyle", "1"},
-	 {"gameOptions[0].render.coronas.bShots", "1"},
-	 {"gameOptions[0].render.coronas.bPowerups", "1"},
-	 {"gameOptions[0].render.coronas.bWeapons", "0"},
-	 {"gameOptions[0].render.coronas.nIntensity", "1"},
-	 {"gameOptions[0].render.coronas.nObjIntensity", "1"},
-	 {"gameOptions[0].render.coronas.bAdditive", "1"},
-	 {"gameOptions[0].render.effects.bOnlyShieldHits", "1"},
-	 {"gameOptions[0].render.effects.bTransparent", "1"},
-	 {"gameOptions[0].render.cameras.bFitToWall", "0"},
-	 {"gameOptions[0].render.cameras.nFPS", "0"},
-	 {"gameOptions[0].render.cameras.nSpeed", "5000"},
-	 {"gameOptions[0].render.automap.nColor", "1"},
-	 {"gameOptions[0].render.automap.bGrayOut", "1"},
-	 {"gameOptions[0].render.automap.bCoronas", "0"},
-	 {"gameOptions[0].render.automap.bSparks", "1"},
-	 {"gameOptions[0].render.automap.bParticles", "0"},
-	 {"gameOptions[0].render.automap.bLightning", "0"},
-	 {"gameOptions[0].render.automap.bSkybox", "0"},
-	 {"gameOptions[0].render.cockpit.bRotateMslLockInd", "1"},
-	 {"gameOptions[0].render.cockpit.bScaleGauges", "1"},
-	 {"gameOptions[0].render.cockpit.bSplitHUDMsgs", "1"},
-	 {"gameOptions[0].render.color.nLevel", "2"},
-	 {"gameOptions[0].render.color.bCap", "0"},
-	 {"gameOptions[0].render.color.bMix", "1"},
-	 {"gameOptions[0].render.color.nColorSaturation", "0"},
-	 {"gameOptions[0].render.color.bWalls", "1"},
-	 {"gameOptions[0].render.lightning.bAuxViews", "0"},
-	 {"gameOptions[0].render.lightning.bMonitors", "0"},
-	 {"gameOptions[0].render.lightning.bDamage", "1"},
-	 {"gameOptions[0].render.lightning.bExplosions", "1"},
-	 {"gameOptions[0].render.lightning.bOmega", "1"},
-	 {"gameOptions[0].render.lightning.bRobotOmega", "0"},
-	 {"gameOptions[0].render.lightning.bPlayers", "1"},
-	 {"gameOptions[0].render.lightning.bRobots", "1"},
-	 {"gameOptions[0].render.lightning.bStatic", "1"},
-	 {"gameOptions[0].render.lightning.bCoronas", "1"},
-	 {"gameOptions[0].render.lightning.nQuality", "1"},
-	 {"gameOptions[0].render.lightning.nStyle", "1"},
-	 {"gameOptions[0].render.powerups.nSpin", "1"},
-	 {"gameOptions[0].render.shadows.bFast", "1"},
-	 {"gameOptions[0].render.shadows.bMissiles", "1"},
-	 {"gameOptions[0].render.shadows.bPowerups", "1"},
-	 {"gameOptions[0].render.shadows.bPlayers", "1"},
-	 {"gameOptions[0].render.shadows.bReactors", "0"},
-	 {"gameOptions[0].render.shadows.bRobots", "1"},
-	 {"gameOptions[0].render.shadows.nLights", "2"},
-	 {"gameOptions[0].render.ship.nWingtip", "1"},
-	 {"gameOptions[0].render.ship.bBullets", "1"},
-	 {"gameOptions[0].render.ship.nColor", "0"},
-	 {"gameOptions[0].render.weaponIcons.alpha", "3"},
-	 {"gameOptions[0].render.weaponIcons.bEquipment", "1"},
-	 {"gameOptions[0].render.weaponIcons.bShowAmmo", "1"},
-	 {"gameOptions[0].render.weaponIcons.bSmall", "1"},
-	 {"gameOptions[0].render.weaponIcons.bBoldHighlight", "0"},
-	 {"gameOptions[0].render.weaponIcons.nHiliteColor", "0"},
-	 {"gameOptions[0].gameplay.bIdleAnims", "1"},
-	 {"gameOptions[0].gameplay.bShieldWarning", "1"},
-	 {"gameOptions[0].gameplay.nSlowMotionSpeedup", "6"},
-	 {"gameOptions[0].gameplay.bUseD1AI", "1"},
-	 {"extraGameInfo[0].bCloakedIndicators", "0"},
-	 {"extraGameInfo[0].bDamageIndicators", "1"},
-	 {"extraGameInfo[0].bDualMissileLaunch", "0"},
-	 {"extraGameInfo[0].bFlickerLights", "1"},
-	 {"extraGameInfo[0].bMslLockIndicators", "1"},
-	 {"extraGameInfo[0].bKillMissiles", "0"},
-	 {"extraGameInfo[0].bTripleFusion", "1"},
-	 {"extraGameInfo[0].bEnhancedShakers", "0"},
-	 {"extraGameInfo[0].bTagOnlyHitObjs", "1"},
-	 {"extraGameInfo[0].bTargetIndicators", "1"},
-	 {"gameOptions[0].gameplay.bFastRespawn", "0"},
-	 {"gameOptions[0].movies.bResize", "1"},
-	 {"gameOptions[0].movies.nQuality", "0"},
-	 {"gameOptions[0].menus.bShowLevelVersion", "1"},
-	 {"gameOptions[0].menus.bSmartFileSearch", "1"},
-	 {"gameOptions[0].multi.bUseMacros", "1"},
-	 {"gameOptions[0].render.cockpit.bWideDisplays", "1"},
-	 {"gameOptions[1].movies.nQuality", "0"},
-	 {"gameOptions[1].menus.bShowLevelVersion", "0"},
-	 {"gameOptions[1].menus.bSmartFileSearch", "1"},
-	 {"gameOptions[1].multi.bUseMacros", "0"},
-#endif
-
 };
 
 //------------------------------------------------------------------------------

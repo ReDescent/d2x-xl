@@ -227,7 +227,6 @@ class CGenericCockpit {
     void DrawKillList(int32_t x, int32_t y);
     void DrawModuleDamage(void);
     void DrawCockpit(int32_t nCockpit, int32_t y, bool bAlphaTest = false);
-    void UpdateLaserWeaponInfo(void);
     void DrawReticle(int32_t bForceBig, fix xStereoSeparation = 0);
     int32_t CanSeeObject(int32_t nObject, int32_t bCheckObjs);
     void DrawPlayerNames(void);

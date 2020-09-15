@@ -273,7 +273,6 @@ void DoMegaWowPowerup(int32_t quantity) {
         LOCALPLAYER.secondaryAmmo[PROXMINE_INDEX] = 12;
     else if (IsEntropyGame)
         LOCALPLAYER.secondaryAmmo[PROXMINE_INDEX] = 15;
-    cockpit->UpdateLaserWeaponInfo();
 }
 //#endif
 

@@ -121,14 +121,16 @@ const char *blurFS[2] = {
     "tc += texture2D(glowSource, uv + v).rgb * weight[4];\r\n"
     "tc += texture2D(glowSource, uv - v).rgb * weight[4];\r\n"
     "gl_FragColor = vec4(tc, 1.0) * brightness;\r\n"
-    "}\r\n"};
+    "}\r\n"
+};
 
 #endif
 
-const char *blurVS = "void main (void){\r\n"
-                     "gl_TexCoord [0] = gl_MultiTexCoord0;\r\n"
-                     "gl_Position = ftransform (); //gl_ModelViewProjectionMatrix * gl_Vertex;\r\n"
-                     "gl_FrontColor = gl_Color;}\r\n";
+const char *blurVS =
+    "void main (void){\r\n"
+    "gl_TexCoord [0] = gl_MultiTexCoord0;\r\n"
+    "gl_Position = ftransform (); //gl_ModelViewProjectionMatrix * gl_Vertex;\r\n"
+    "gl_FrontColor = gl_Color;}\r\n";
 
 //------------------------------------------------------------------------------
 
@@ -138,8 +140,9 @@ bool CGlowRenderer::LoadShader(int32_t const direction, float const radius) {
     m_shaderProg = GLhandleARB(shaderManager.Deploy(hBlurShader /*[direction]*/));
     if (!m_shaderProg)
         return false;
-    if (shaderManager.Rebuild(m_shaderProg))
-        /*nothing*/;
+    if (shaderManager.Rebuild(m_shaderProg)) {
+        // nothing
+    }
     shaderManager.Set("glowSource", 0);
     shaderManager.Set("direction", float(direction));
     shaderManager.Set("scale", fScale[direction]);
@@ -156,107 +159,31 @@ void CGlowRenderer::InitShader(void) {
         PrintLog(0, "building glow shader program\n");
         ogl.m_states.bGlowRendering = 1;
         m_shaderProg = 0;
-#if 1
         if (!shaderManager.Build(hBlurShader, blurFS, blurVS)) {
             ogl.ClearError(0);
             ogl.m_states.bGlowRendering = 0;
         }
-#else
-        for (int32_t i = 0; i < 2; i++) {
-            if (!shaderManager.Build(hBlurShader[i], blurFS[i], blurVS)) {
-                ogl.ClearError(0);
-                ogl.m_states.bGlowRendering = 0;
-            }
-        }
-#endif
     }
 }
 
 //-------------------------------------------------------------------------
 
 bool CGlowRenderer::ShaderActive(void) {
-#if 1
     if ((hBlurShader >= 0) && (shaderManager.Current() == hBlurShader))
         return true;
-#else
-    for (int32_t i = 0; i < 2; i++)
-        if ((hBlurShader[i] >= 0) && (shaderManager.Current() == hBlurShader[i]))
-            return true;
-#endif
     return false;
 }
 
 //------------------------------------------------------------------------------
 
 static void ClearDrawBuffer(int32_t nType) {
-#if 0 // DBG
-if (gameStates.render.cameras.bActive) {
-	glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
-	glClear (GL_COLOR_BUFFER_BIT);
-	float vertices [4][4][2] = {
-		{{0.0, 0.0}, {0.0, 0.5}, {0.5, 0.5}, {0.5, 0.0}},
-		{{0.5, 0.0}, {0.5, 0.5}, {1.0, 0.5}, {1.0, 0.0}},
-		{{0.0, 0.5}, {0.0, 1.0}, {0.5, 1.0}, {0.5, 0.5}},
-		{{0.5, 0.5}, {0.5, 1.0}, {1.0, 1.0}, {1.0, 0.5}},
-		};
-	float colors [4][4] = {
-		{1.0, 0.5, 0.0, 0.5},
-		{0.0, 0.5, 1.0, 0.5},
-		{1.0, 0.0, 0.5, 0.5},
-		{0.0, 1.0, 0.5, 0.5}
-	};
-
-	GLenum nBlendModes [2], nDepthMode = ogl.GetDepthMode ();
-	ogl.GetBlendMode (nBlendModes [0], nBlendModes [1]);
-
-	glMatrixMode (GL_MODELVIEW);
-	glPushMatrix ();
-	glLoadIdentity ();//clear matrix
-	glMatrixMode (GL_PROJECTION);
-	glPushMatrix ();
-	glLoadIdentity ();//clear matrix
-	glOrtho (0.0, 1.0, 1.0, 0.0, -1.0, 1.0);
-
-	ogl.EnableClientStates (1, 0, 0, GL_TEXTURE0);
-	ogl.SetTexturing (false);
-	ogl.SetBlendMode (OGL_BLEND_REPLACE);
-	ogl.SetDepthMode (GL_ALWAYS);
-	for (int32_t i = 0; i < 4; i++) {
-		ogl.EnableClientStates (1, 0, 0, GL_TEXTURE0);
-		ogl.SetTexturing (false);
-		glColor3fv (colors [i]);
-		OglVertexPointer (2, GL_FLOAT, 0, vertices [i]);
-		OglDrawArrays (GL_QUADS, 0, 4);
-		}
-	glMatrixMode (GL_PROJECTION);
-	glPopMatrix ();
-	glMatrixMode (GL_MODELVIEW);
-	glPopMatrix ();
-	ogl.SetBlendMode (nBlendModes [0], nBlendModes [1]);
-	ogl.SetDepthMode (nDepthMode);
-	return;
-	}
-#endif
     if (nType == BLUR_SHADOW)
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     else if (nType == BLUR_OUTLINE)
-#if 0 // DBG
-#if 0
-	if (gameStates.render.nWindow [0])
-		glClearColor (0.0f, 0.1f, 0.2f, 1.0f);
-	else
-#endif
-		glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
-#else
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-#endif
-        else
-#if 0 && DBG
-	glClearColor (1.0f, 0.5f, 0.0f, 0.25f);
-#else
+    else
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-#endif
-            glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 //------------------------------------------------------------------------------
@@ -297,25 +224,9 @@ inline int32_t ScreenScale(void) {
     return (!gameStates.render.cameras.bActive || gameOpts->render.cameras.bHires) ? 1 : 2;
 }
 
-#if 0
-
-inline int32_t ScreenWidth (void)
-{
-return gameData.renderData.screen.Width ();
-}
-
-inline int32_t ScreenHeight (void)
-{
-return gameData.renderData.screen.Height ();
-}
-
-#else
-
 inline int32_t ScreenWidth(void) { return CCanvas::Current()->Width(); }
 
 inline int32_t ScreenHeight(void) { return CCanvas::Current()->Height(); }
-
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -485,10 +396,6 @@ int32_t CGlowRenderer::SetViewport(int32_t const nType, CFixVector pos, float ra
 //------------------------------------------------------------------------------
 
 bool CGlowRenderer::Available(int32_t const nType, bool bForce) {
-#if 0 // DBG
-if (nType == GLOW_SHIELDS)
-	return false;
-#endif
     if (!ogl.m_features.bShaders)
         return false;
     if (ogl.m_features.bDepthBlending < 0)
@@ -645,31 +552,18 @@ void CGlowRenderer::Render(int32_t const source, int32_t const direction, float 
         {ScreenCoord(l, w), ScreenCoord(t, h)},
         {ScreenCoord(l, w), ScreenCoord(b, h)},
         {ScreenCoord(r, w), ScreenCoord(b, h)},
-        {ScreenCoord(r, w), ScreenCoord(t, h)}};
+        {ScreenCoord(r, w), ScreenCoord(t, h)}
+    };
 
-#if 1 //! DBG
     if (direction >= 0) {
-#if 0 // DBG
-	RenderTestImage ();
-	return;
-#endif
         LoadShader(direction, radius);
-    } else
-#endif
-    {
+    } else {
         shaderManager.Deploy(-1);
     }
-#if 0 && DBG
-ogl.EnableClientStates (0, 0, 0, GL_TEXTURE0);
-ogl.SetDepthTest (false);
-ogl.SetTexturing (false);
-glColor4f (0.0f, 0.5f, 1.0f, 0.25f);
-#else
     ogl.EnableClientStates(1, 0, 0, GL_TEXTURE0);
     ogl.BindTexture(ogl.BlurBuffer(source)->ColorBuffer(source < 0));
     OglTexCoordPointer(2, GL_FLOAT, 0, texCoord);
-// glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
-#endif
+    // glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
     OglVertexPointer(2, GL_FLOAT, 0, verts[bHaveViewport]);
     OglDrawArrays(GL_QUADS, 0, 4);
     ogl.BindTexture(0);
@@ -682,18 +576,10 @@ void CGlowRenderer::ChooseDrawBuffer(void) { ogl.ChooseDrawBuffer(); }
 //------------------------------------------------------------------------------
 
 void CGlowRenderer::Done(const int32_t nType) {
-#if 0
-End ();
-#else
     if (Available(nType)) {
-#if 1
         ogl.DrawBuffer()->SelectColorBuffers(0);
-#else
-        ogl.ChooseDrawBuffer();
-#endif
         CCanvas::Current()->SetViewport();
     }
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -710,28 +596,9 @@ bool CGlowRenderer::End(float fAlpha) {
     else
 #endif
     {
-#if 0 // DBG
-	if (m_nType == BLUR_SHADOW)
-		BRP;
-	if (m_nType == BLUR_OUTLINE) {
-		if (bNoEdgeBlurInWindows == (gameStates.render.nWindow [0] != 0)) {
-			ogl.ChooseDrawBuffer ();
-			m_nStrength = -1;
-			return false;
-			}
-		}
-	if (m_nType != BLUR_OUTLINE) {
-		ogl.ChooseDrawBuffer ();
-		m_nStrength = -1;
-		return false;
-		}
-
-#endif
-#if 1
         if (gameStates.render.nWindow[0])
             gameData.renderData.window.Activate("CGlowRenderer::End");
         else
-#endif
             gameData.renderData.scene.Activate("CGlowRenderer::End");
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
@@ -775,13 +642,8 @@ bool CGlowRenderer::End(float fAlpha) {
         ClearDrawBuffer(m_nType);
         Render(0, 1, radius, true); // Blur 0 -> Blur 1
 #if BLUR > 1
-#if 0
-	m_nStrength = (m_nStrength << 1) | 1;
-#endif
-#if 1
         if (m_nType < BLUR_OUTLINE)
             ogl.SetBlendMode(OGL_BLEND_ADD);
-#endif
         for (int32_t i = 1; i < m_nStrength; i++) {
             radius += BLUR_RADIUS;
             if (!ogl.SelectBlurBuffer(0))

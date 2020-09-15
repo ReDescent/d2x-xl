@@ -49,49 +49,6 @@ char *StrDup(const char *source) {
 
 //------------------------------------------------------------------------------
 
-#if 0
-// string compare without regard to case
-
-int32_t stricmp( char *s1, char *s2 )
-{
-	char c1, c2;
-
-for (;;) {
-	c1 = *s1;
-	c2 = *s2;
-	if (!(c1 && c2))
-		break;
-	if (tolower(c1) != tolower(c2))
-		return 1;
-	s1++;
-	s2++;
-	}
-if (c1 || *s2) 
-	return 1;
-return 0;
-}
-
-int32_t strnicmp( char *s1, char *s2, int32_t n )
-{
-	char c1, c2;
-
-while (n) {
-	c1 = *s1;
-	c2 = *s2;
-	if (!(c1 && c2))
-		break;
-	if (tolower(c1) != tolower(c2))
-		return 1;
-	s1++;
-	s2++;
-	n--;
-	}
-if (n) 
-	return 1;
-return 0;
-}
-#endif
-
 #ifndef _WIN32
 char *strlwr(char *s1) {
     char *p = s1;
@@ -174,23 +131,5 @@ void _splitpath(char *name, char *drive, char *path, char *base, char *ext) {
 
     if (ext)
         strcpy(ext, p);
-}
-#endif
-
-#if 0
-void main()
-{
-	char drive [10], path[50], name [16], ext[5];
-
-	drive [0] = path[0] = name [0] = ext[0] = '\0';
-	_splitpath("f:\\tmp\\x.out", drive, path, name, ext);
-	drive [0] = path[0] = name [0] = ext[0] = '\0';
-	_splitpath("tmp\\x.out", drive, path, name, ext);
-	drive [0] = path[0] = name [0] = ext[0] = '\0';
-	_splitpath("f:\\tmp\\a.out", NULL, NULL, name, NULL);
-	drive [0] = path[0] = name [0] = ext[0] = '\0';
-	_splitpath("tmp\\*.dem", drive, path, NULL, NULL);
-	drive [0] = path[0] = name [0] = ext[0] = '\0';
-	_splitpath(".\\tmp\\*.dem", drive, path, NULL, NULL);
 }
 #endif

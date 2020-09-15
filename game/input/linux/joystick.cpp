@@ -309,8 +309,6 @@ void JoyGetpos(int *x, int *y) {
     *y = JoyGetscaledReading(axis[1], 1);
 }
 
-int JoyGetBtns() { return 0; }
-
 int JoyGetbuttonState(int btn) {
     if (btn >= j_num_buttons)
         return 0;

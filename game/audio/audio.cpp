@@ -250,11 +250,7 @@ void SetupWAVInfo(uint8_t *buffer, int32_t nLength) {
 static int32_t ResampleFormat(uint16_t *pDest, uint8_t *srcP, int32_t nSrcLen) {
     ENTER(0, 0);
     for (int32_t i = nSrcLen; i; i--)
-#if 1
         *pDest++ = uint16_t(*srcP++) * 128;
-#else
-        *pDest++ = uint16_t(float(*srcP++) * (32767.0f / 255.0f));
-#endif
     RETVAL(nSrcLen)
 }
 

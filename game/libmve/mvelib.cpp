@@ -290,12 +290,13 @@ static int32_t _mvefile_open(MVEFILE *file, void *stream) {
 // allocate an MVEFILE
 
 static void _mvefile_reset(MVEFILE *file) {
-#if 0
-file->cur_chunk = NULL;
-file->buf_size = 0;
-file->cur_fill = 0;
-file->next_segment = 0;
-#endif
+    // FIXME: commented out code in _mvefile_reset
+    /*
+    file->cur_chunk = NULL;
+    file->buf_size = 0;
+    file->cur_fill = 0;
+    file->next_segment = 0;
+    */
 }
 
 //-----------------------------------------------------------------------

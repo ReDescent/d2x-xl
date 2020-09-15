@@ -401,35 +401,36 @@ void CockpitOptionsMenu(void) {
 
         m.AddCheck("show reticle", TXT_SHOW_RETICLE, gameOpts->render.cockpit.bReticle, KEY_S, HTX_CPIT_SHOWRETICLE);
         m.AddCheck("missile view", TXT_MISSILE_VIEW, gameOpts->render.cockpit.bMissileView, KEY_V, HTX_CPIT_MSLVIEW);
-#if 0
-	m.AddCheck ("compact hud", TXT_COMPACT_HUD, gameOpts->render.cockpit.nShipStateLayout, KEY_G, HTX_CPIT_GFXGAUGES);
-#endif
-        if (!gameOpts->render.cockpit.nShipStateLayout)
+
+        if (!gameOpts->render.cockpit.nShipStateLayout) {
             m.AddCheck(
                 "text gauges",
                 TXT_SHOW_GFXGAUGES,
                 !gameOpts->render.cockpit.bTextGauges,
                 KEY_G,
-                HTX_COMPACT_HUD);
+                HTX_COMPACT_HUD
+            );
+        }
+
         m.AddCheck("object tally", TXT_OBJECT_TALLY, gameOpts->render.cockpit.bObjectTally, KEY_Y, HTX_CPIT_OBJTALLY);
         m.AddCheck(
             "zoom style",
             TXT_ZOOM_SMOOTH,
             extraGameInfo[IsMultiGame].nZoomMode - 1,
             KEY_O,
-            HTX_GPLAY_ZOOMSMOOTH);
-        if (gameOpts->app.bExpertMode)
+            HTX_GPLAY_ZOOMSMOOTH
+        );
+
+        if (gameOpts->app.bExpertMode) {
             m.AddCheck(
                 "sort weapon icons",
                 TXT_SORT_WPNICONS,
                 gameOpts->render.weaponIcons.nSort,
                 KEY_S,
-                HTX_CPIT_SORTICONS);
-#if 0
-	m.AddCheck ("target indicators", TXT_TARGET_INDICATORS, extraGameInfo [0].bTargetIndicators, KEY_T, HTX_CPIT_TGTIND);
-#else
+                HTX_CPIT_SORTICONS
+            );
+        }
         m.AddText("", "");
-#if 1
         sprintf(szSlider, TXT_SHIP_STATE_LAYOUT, szLayout[gameOpts->render.cockpit.nShipStateLayout]);
         m.AddSlider(
             "compact hud",
@@ -438,7 +439,9 @@ void CockpitOptionsMenu(void) {
             0,
             2,
             KEY_M,
-            HTX_SHIP_STATE_LAYOUT);
+            HTX_SHIP_STATE_LAYOUT
+        );
+
         if (gameOpts->render.cockpit.nShipStateLayout) {
             sprintf(szSlider, TXT_HUD_COLOR_SCHEME, szColorScheme[gameOpts->render.cockpit.nColorScheme]);
             m.AddSlider(
@@ -448,7 +451,8 @@ void CockpitOptionsMenu(void) {
                 0,
                 2,
                 KEY_C,
-                HTX_HUD_COLOR_SCHEME);
+                HTX_HUD_COLOR_SCHEME
+            );
             if (gameOpts->render.cockpit.nShipStateLayout == 2) {
                 if (gameOpts->app.bExpertMode) {
                     sprintf(szSlider, TXT_COMPACT_HUD_WIDTH, szHUDWidth[gameOpts->render.cockpit.nCompactWidth]);
@@ -459,7 +463,8 @@ void CockpitOptionsMenu(void) {
                         0,
                         2,
                         KEY_W,
-                        HTX_COMPACT_HUD_WIDTH);
+                        HTX_COMPACT_HUD_WIDTH
+                    );
                     sprintf(szSlider, TXT_COMPACT_HUD_HEIGHT, szHUDHeight[gameOpts->render.cockpit.nCompactHeight]);
                     m.AddSlider(
                         "hud height",
@@ -468,28 +473,32 @@ void CockpitOptionsMenu(void) {
                         0,
                         2,
                         KEY_H,
-                        HTX_COMPACT_HUD_HEIGHT);
+                        HTX_COMPACT_HUD_HEIGHT
+                    );
                     m.AddCheck(
                         "hud separators",
                         TXT_HUD_SEPARATORS,
                         gameOpts->render.cockpit.bSeparators,
                         KEY_P,
-                        HTX_HUD_SEPARATORS);
+                        HTX_HUD_SEPARATORS
+                    );
                 }
             }
             m.AddText("", "");
         }
-#endif
+
         sprintf(szSlider, TXT_TARGET_INDICATORS, szTgtInd[nTgtInd]);
         m.AddSlider("target indicators", szSlider, nTgtInd, 0, 2, KEY_I, HTX_CPIT_TGTIND);
-        if (nTgtInd)
+        if (nTgtInd) {
             m.AddCheck(
                 "hide target indicators",
                 TXT_HIDE_TGTIND,
                 extraGameInfo[0].bHideIndicators,
                 KEY_B,
-                HTX_HIDE_TGTIND);
-#endif
+                HTX_HIDE_TGTIND
+            );
+        }
+
 #if WEAPON_ICONS
         m.AddText("", "");
         mat.AddCheck(TXT_SHOW_WEAPONICONS, bShowWeaponIcons, KEY_W, HTX_CPIT_WPNICONS, "weapon icons");

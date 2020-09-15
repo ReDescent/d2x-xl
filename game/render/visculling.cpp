@@ -297,8 +297,6 @@ int32_t QuickSortSegChildren(CSegment *pSeg, int16_t left, int16_t right, int16_
 // int16_t the children of CSegment to render in the correct order
 // returns non-zero if swaps were made
 static inline int32_t SortSegChildren(CSegment *pSeg, int32_t nChildren, int16_t *childList) {
-#if 1
-
     if (nChildren < 2)
         return 0;
     if (nChildren == 2) {
@@ -310,38 +308,6 @@ static inline int32_t SortSegChildren(CSegment *pSeg, int32_t nChildren, int16_t
         return 1;
     }
     return QuickSortSegChildren(pSeg, (int16_t)0, (int16_t)(nChildren - 1), childList);
-
-#else
-    int32_t i, j;
-    int32_t r;
-    int32_t made_swaps, count;
-
-    if (nChildren < 2)
-        return 0;
-    // for each child,  compare with other children and see if order matters
-    // if order matters, fix if wrong
-
-    count = 0;
-
-    do {
-        made_swaps = 0;
-
-        for (i = 0; i < nChildren - 1; i++)
-            for (j = i + 1; childList[i] != -1 && j < nChildren; j++)
-                if (childList[j] != -1) {
-                    r = CompareChildren(pSeg, childList[i], childList[j]);
-
-                    if (r == 1) {
-                        int32_t temp = childList[i];
-                        childList[i] = childList[j];
-                        childList[j] = temp;
-                        made_swaps = 1;
-                    }
-                }
-
-    } while (made_swaps && ++count < nChildren);
-    return count;
-#endif
 }
 
 #endif // SORT_RENDER_SEGS
@@ -412,7 +378,6 @@ int16_t CObject::Visible(void) {
 //------------------------------------------------------------------------------
 
 void GatherLeftoutVisibleObjects(void) {
-#if 1
     CObject *pObj;
 
     FORALL_OBJS(pObj) {
@@ -427,7 +392,6 @@ void GatherLeftoutVisibleObjects(void) {
             continue;
         AddObjectToSegList(pObj->Index(), nSegment);
     }
-#endif
 }
 
 //------------------------------------------------------------------------------

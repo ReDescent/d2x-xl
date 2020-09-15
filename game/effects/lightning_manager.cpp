@@ -441,15 +441,6 @@ void CLightningManager::Update(void) {
 }
 
 //------------------------------------------------------------------------------
-#if 0
-void MoveForObject (CObject* pObj)
-{
-SEM_ENTER (SEM_LIGHTNING)
-MoveForObjectInternal (pObj);
-SEM_LEAVE (SEM_LIGHTNING)
-}
-#endif
-//------------------------------------------------------------------------------
 
 void CLightningManager::DestroyForObject(CObject *pObj) {
     ENTER(0, 0);
@@ -913,11 +904,7 @@ void CLightningManager::CreateForTeleport(CObject *pObj, CFloatVector *pColor, f
 
 void CLightningManager::CreateForPlayerTeleport(CObject *pObj) {
     ENTER(0, 0);
-#if 0
-static CFloatVector color = {{{0.25f, 0.125f, 0.0f, 0.2f}}};
-#else
     static CFloatVector color = {{{0.0f, 0.125f, 0.25f, 0.2f}}};
-#endif
 
     CreateForTeleport(pObj, &color);
     RETURN

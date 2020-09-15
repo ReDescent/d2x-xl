@@ -1001,15 +1001,6 @@ static void CheckAndFixTriggers(void) {
                         (pTrigger->m_info.nType != TT_LIGHT_ON)) { // light triggers don't require walls
                         if (IS_WALL(nWall))
                             WALL(nWall)->controllingTrigger = i;
-                        else {
-#if 0
-						if (j < --h) {
-							pTrigger->m_segments [j] = pTrigger->m_segments [h];
-							pTrigger->m_sides [j] = pTrigger->m_sides [h];
-							}
-						continue;
-#endif
-                        }
                     }
                 }
             }
@@ -1111,42 +1102,6 @@ class CVertSegRef {
     int32_t nIndex;
     int16_t nSegments;
 };
-
-void CreateVertexSegmentList(void) {
-#if 0
-CArray<int16_t> segCount;
-segCount.Create (gameData.segData.nVertices);
-segCount.Clear ();
-
-CSegment* pSeg = SEGMENTS.Buffer ();
-for (int32_t i = gameData.segData.nSegments; i; i--, pSeg++) {
-	for (int32_t j = 0; j < 8; j++)
-		if (pSeg->m_vertices [j] != 0xFFFF)
-			segCount [pSeg->m_vertices [j]]++;
-	}
-
-CArray<CVertSegRef> vertSegIndex;
-vertSegIndex.Create (gameData.segData.nVertices);
-vertSegIndex.Clear ();
-CArray<int16_t> vertSegs;
-vertSegs.Create (8 * gameData.segData.nSegments);
-vertSegs.Clear ();
-for (int32_t h = 0, i = 0; i < gameData.segData.nSegments; i++) {
-	vertSegIndex [i].nIndex = h;
-	h += segCount [i];
-	}
-
-pSeg = SEGMENTS.Buffer ();
-for (int32_t i = gameData.segData.nSegments; i; i--, pSeg++) {
-	for (int32_t j = 0; j < 8; j++) {
-		if (pSeg->m_vertices [j] != 0xFFFF) {
-			CVertSegRef* pRef = &vertSegIndex [pSeg->m_vertices [j]];
-			vertSegs [pRef->nIndex + pRef->nSegments++] = i;
-			}
-		}
-	}
-#endif
-}
 
 // ----------------------------------------------------------------------------
 // loads a level (.LVL) file from disk
@@ -1259,7 +1214,6 @@ int32_t LoadLevelData(char *pszFilename, int32_t nLevel) {
         }
         cf.Close();
         networkData.nSegmentCheckSum = CalcSegmentCheckSum();
-        CreateVertexSegmentList();
         /*---*/ PrintLog(1, "building geometry mesh\n");
         if (meshBuilder.Build(nLevel)) {
             PrintLog(-1);
@@ -1279,9 +1233,6 @@ int32_t LoadLevelData(char *pszFilename, int32_t nLevel) {
         return 4;
     }
     PrintLog(-1);
-#if 0 //! DBG
-if (gameStates.render.CartoonStyle ())
-#endif
     gameData.segData.BuildEdgeList();
     // lightManager.Setup (nLevel);
     SetAmbientSoundFlags();

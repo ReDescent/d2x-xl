@@ -115,12 +115,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define NET_XDATA_SIZE 454
 
-// defines and other things for appletalk/ipx games on mac
-#if 0
-extern int32_t nNetworkGameType;
-extern int32_t nNetworkGameSubType;
-#endif
-
 #pragma pack(push, 1)
 typedef struct tPlayerSyncData {
     uint8_t nType;

@@ -116,11 +116,7 @@ int32_t GetPolyModelMinMax(void *pModel, tHitbox *phb, int32_t nSubModels) {
             break;
 
         case OP_SUBCALL:
-#if 1
             phb[++nSubModels].vOffset = phb->vOffset + *VECPTR(p + 4);
-#else
-            pvOffs[nSubModels] = *VECPTR(p + 4);
-#endif
             nSubModels += GetPolyModelMinMax(p + WORDVAL(p + 16), phb + nSubModels, 0);
             p += 20;
             break;

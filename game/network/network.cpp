@@ -309,9 +309,6 @@ int32_t NetworkTimeoutPlayer(int32_t nPlayer, int32_t t) {
             if (pObj)
                 MultiDestroyPlayerShip(nPlayer);
         }
-#if 0
-	if (pObj && (pObj->Type () == OBJ_GHOST))
-#endif
         return 0;
     }
 
@@ -531,10 +528,6 @@ void NetworkDoFrame(int bFlush) {
         // NetworkCheckPlayerTimeouts ();
     }
     NetworkListen();
-#if 0
-if ((networkData.syncInfo [0].nPlayer != -1) && !(gameData.appData.nFrameCount & 63))
-	ResendSyncDueToPacketLoss (); // This will resend to network_player_rejoining
-#endif
     XMLGameInfoHandler();
     NetworkDoSyncFrame();
     // NetworkAdjustPPS ();

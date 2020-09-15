@@ -113,11 +113,6 @@ CBitmap *CGenericCockpit::BitBlt(
             saveBmP = pBm->SetOverride(pOverride);
     }
     if (pBm) {
-#if 0
-	CBitmap* pBmo = pBm->HasOverride ();
-	if (pBmo)
-		pBm = pBmo;
-#endif
         int32_t w = pBm->Width();
         int32_t h = pBm->Height();
         if (bScalePos) {
@@ -742,7 +737,8 @@ void CGenericCockpit::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int
                 PRIMARY_WEAPON_NAMES_SHORT(nWeaponId),
                 SB_PRIMARY_W_TEXT_X,
                 SB_PRIMARY_W_TEXT_Y,
-                0);
+                0
+            );
         else
             DrawWeaponInfo(
                 nWeaponType,
@@ -753,7 +749,8 @@ void CGenericCockpit::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int
                 PRIMARY_WEAPON_NAMES_SHORT(nWeaponId),
                 PRIMARY_W_TEXT_X,
                 PRIMARY_W_TEXT_Y,
-                0);
+                0
+            );
     } else {
         nIndex = secondaryWeaponToWeaponInfo[nWeaponId];
 
@@ -767,7 +764,8 @@ void CGenericCockpit::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int
                 SECONDARY_WEAPON_NAMES_SHORT(nWeaponId),
                 SB_SECONDARY_W_TEXT_X,
                 SB_SECONDARY_W_TEXT_Y,
-                0);
+                0
+            );
         else
             DrawWeaponInfo(
                 nWeaponType,
@@ -778,7 +776,8 @@ void CGenericCockpit::DrawWeaponInfo(int32_t nWeaponType, int32_t nWeaponId, int
                 SECONDARY_WEAPON_NAMES_SHORT(nWeaponId),
                 SECONDARY_W_TEXT_X,
                 SECONDARY_W_TEXT_Y,
-                0);
+                0
+            );
     }
 }
 
@@ -960,15 +959,7 @@ void CGenericCockpit::DrawPlayerNames(void) {
         if ((bShowName || bHasFlag) && CanSeeObject(nObject, 1)) {
             CRenderPoint vPlayerPos;
 
-#if 1
             vPlayerPos.TransformAndEncode(OBJECT(nObject)->info.position.vPos);
-#else
-            // transformation.Push ();
-            SetupRenderView(0, NULL, 0);
-            vPlayerPos.TransformAndEncode(OBJECT(nObject)->info.position.vPos);
-            ogl.EndFrame();
-            // transformation.Pop ();
-#endif
             if (vPlayerPos.Visible()) { // on screen
                 vPlayerPos.Project();
                 if (!vPlayerPos.Overflow()) {
@@ -1030,7 +1021,6 @@ void CGenericCockpit::DrawPlayerNames(void) {
                         y0 = y - dy;
                         y1 = y + dy;
                         // draw the edges of a rectangle around the player (not a complete rectangle)
-#if 1
                         // draw the complete rectangle
                         OglDrawEmptyRect(x0, y0, x1, y1);
                         // now partially erase its sides
@@ -1039,16 +1029,6 @@ void CGenericCockpit::DrawPlayerNames(void) {
                         OglDrawLine(x - w, y1, x + w, y1);
                         OglDrawLine(x0, y - h, x0, y + h);
                         OglDrawLine(x1, y - h, x1, y + h);
-#else
-                        OglDrawLine(x1 - w, y0, x1, y0); // right
-                        OglDrawLine(x1, y0, x1, y0 + h); // down
-                        OglDrawLine(x0, y0, x0 + w, y0);
-                        OglDrawLine(x0, y0, x0, y0 + h);
-                        OglDrawLine(x1 - w, y1, x1, y1);
-                        OglDrawLine(x1, y1, x1, y1 - h);
-                        OglDrawLine(x0, y1, x0 + w, y1);
-                        OglDrawLine(x0, y1, x0, y1 - h);
-#endif
                     }
                 }
             }
@@ -1122,15 +1102,7 @@ void CGenericCockpit::DrawKillList(int32_t x, int32_t y) {
             }
             if (i == nLeft)
                 y0 = y;
-#if 0
-		if (netGameInfo.GetScoreGoal () || netGameInfo.GetPlayTimeAllowed ())
-			x1 -= LHX (18);
-#endif
         }
-#if 0
-	else if (netGameInfo.GetScoreGoal () || netGameInfo.GetPlayTimeAllowed ())
-		 x1 = int32_t (LHX (43) * fScale - LHX (18));
-#endif
         nPlayer = (gameData.multigame.score.bShowList == 3) ? i : playerList[i];
         if (PLAYER(nPlayer).HasLeft())
             continue;
@@ -1142,18 +1114,7 @@ void CGenericCockpit::DrawKillList(int32_t x, int32_t y) {
         }
         if (gameData.multigame.score.bShowList == 3) {
             if (N_LOCALPLAYER == i) {
-#if 0 // DBG
-			sprintf (name, "%c%-8s %d.%d.%d.%d:%d",
-						teamInd [0], netGameInfo.m_info.szTeamName [i],
-						NETPLAYER (i).network.Node () [0],
-						NETPLAYER (i).network.Node () [1],
-						NETPLAYER (i).network.Node () [2],
-						NETPLAYER (i).network.Node () [3],
-						NETPLAYER (i).network.Node () [5] +
-						 (uint32_t) NETPLAYER (i).network.Node () [4] * 256);
-#else
                 sprintf(name, "%c%s", teamInd[0], netGameInfo.m_info.szTeamName[GetTeam(i)]);
-#endif
                 indent = 0;
             } else {
 #if SHOW_PLAYER_IP
@@ -1172,28 +1133,7 @@ void CGenericCockpit::DrawKillList(int32_t x, int32_t y) {
                 fontManager.Current()->StringSize(teamInd, indent, sh, aw);
             }
         } else
-#if 0 // DBG
-		sprintf (name, "%-8s %d.%d.%d.%d:%d",
-					PLAYER (nPlayer).callsign,
-					NETPLAYER (nPlayer).network.Node () [0],
-					NETPLAYER (nPlayer).network.Node () [1],
-					NETPLAYER (nPlayer).network.Node () [2],
-					NETPLAYER (nPlayer).network.Node () [3],
-					NETPLAYER (nPlayer).network.Node () [5] +
-					 (uint32_t) NETPLAYER (nPlayer).network.Node () [4] * 256);
-#else
             strcpy(name, PLAYER(nPlayer).callsign); // Note link to above if!!
-#endif
-#if 0 // DBG
-	x1 += LHX (100);
-	int32_t l, sw, nWidth = x1 - x0 - LHX (2);
-	for (l = (int32_t) strlen (name); l;) {
-		fontManager.Current ()->StringSize (name, sw, sh, aw);
-		if (sw <= nWidth)
-			break;
-		name [--l] = '\0';
-		}
-#endif
             nIdKillList[0][i] = DrawHUDText(nIdKillList[0] + i, x0 + indent, y0, "%s", name);
 
         if (gameData.multigame.score.bShowList == 2) {
@@ -1236,20 +1176,14 @@ void CGenericCockpit::DrawKillList(int32_t x, int32_t y) {
             if (bGetPing)
                 PingPlayer(nPlayer);
             if (pingStats[nPlayer].sent) {
-#if 0 // DBG
-			nIdKillList [1][i] = DrawHUDText (nIdKillList [1] + i, x1 + xo, y0, "%lu %d %d",
-						  pingStats [nPlayer].ping,
-						  pingStats [nPlayer].sent,
-						  pingStats [nPlayer].received);
-#else
                 nIdKillList[1][i] = DrawHUDText(
                     nIdKillList[1] + i,
                     x1 + xo,
                     y0,
                     "%lu %i%%",
                     pingStats[nPlayer].ping,
-                    100 - ((pingStats[nPlayer].received * 100) / pingStats[nPlayer].sent));
-#endif
+                    100 - ((pingStats[nPlayer].received * 100) / pingStats[nPlayer].sent)
+                );
             }
         }
         y0 += fth + 1;
@@ -1265,12 +1199,6 @@ void CGenericCockpit::DrawModuleDamage(void) {
         return;
     if (gameStates.app.bPlayerIsDead)
         return;
-#if 0
-	static int32_t		nIdDamage [3] = {0, 0, 0};
-	static int32_t		nColor [3] = {GOLD_RGBA, ORANGE_RGBA, RED_RGBA};
-	static char*	szDamage [3] = {"AIM: %d%c", "DRIVES: %d%c", "GUNS: %d%c"};
-	static char*	szId = "ADG";
-#endif
     int32_t i;
 
     static uint32_t dmgColors[3][4] = {
@@ -1278,10 +1206,9 @@ void CGenericCockpit::DrawModuleDamage(void) {
         {RGBA(255, 96, 255, 96), RGBA(255, 0, 0, 96), RGBA(255, 255, 0, 96), RGBA(0, 255, 0, 96)},
         {RGBA(96, 32, 96, 96), RGBA(255, 0, 0, 96), RGBA(255, 255, 0, 96), RGBA(0, 255, 0, 96)}};
 
-#if 1 //! DBG
     if ((gameStates.app.nSDLTicks[0] - LOCALOBJECT->TimeLastRepaired() > 2000) && !LOCALOBJECT->CriticalDamage())
         return;
-#endif
+
     float fScale = float(CCanvas::Current()->Width()) / 640.0f;
     int32_t nRad = (int32_t)FRound(16.0f * fScale);
     int32_t y = CCanvas::Current()->Height() / 2 + 3 * nRad / 2;
@@ -1334,23 +1261,6 @@ void CGenericCockpit::DrawModuleDamage(void) {
         int32_t x = CCanvas::Current()->Width() / 2 - nRad;
         glLineWidth(fScale);
 
-#if 0
-	SetFontColor (nColor [2], 1, 0, 0);
-#if 0 // rectangular frame
-	CCanvas::Current ()->SetColorRGB (64, 32, 0, 64);
-	OglDrawFilledRect (x - 7, y - 7, x + 71, y + 71);
-	CCanvas::Current ()->SetColorRGB (255, 128, 0, 255);
-	OglDrawEmptyRect (x - 7, y - 7, x + 71, y + 71);
-#else // round frame
-	glColor4f (1.0f, 0.5f, 0.0f, 1.0f);
-	OglDrawEllipse (
-		sizeofa (sinCos), GL_LINE_LOOP,
-		40.0f / float (gameData.renderData.screen.Width ()), 0.5f,
-		40.0f / float (gameData.renderData.screen.Height ()), 1.0f - float (CCanvas::Current ()->Top () + y + 32) / float (gameData.renderData.screen.Height ()), sinCos);
-#endif
-	glLineWidth (1);
-#endif
-
         nRad *= 2;
         for (i = 0; i < 3; i++) {
             if (damageIcon[i].Load()) {
@@ -1367,7 +1277,6 @@ void CGenericCockpit::DrawModuleDamage(void) {
 // -----------------------------------------------------------------------------
 
 void CGenericCockpit::DrawCockpit(int32_t nCockpit, int32_t y, bool bAlphaTest) {
-#if 1
     if (gameOpts->render.cockpit.bHUD || (gameStates.render.cockpit.nType != CM_FULL_SCREEN)) {
         int32_t i = gameData.pigData.tex.cockpitBmIndex[nCockpit].index;
         CBitmap *pBm = gameData.pigData.tex.bitmaps[0] + i;
@@ -1383,7 +1292,6 @@ void CGenericCockpit::DrawCockpit(int32_t nCockpit, int32_t y, bool bAlphaTest) 
         pBm->RenderScaled(0, y, -1, CCanvas::Current()->Height() - y, I2X(1), 0, &CCanvas::Current()->Color());
         CCanvas::Current()->SetColorRGBi(BLACK_RGBA);
     }
-#endif
 }
 
 //------------------------------------------------------------------------------

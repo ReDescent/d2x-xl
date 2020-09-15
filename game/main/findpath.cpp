@@ -241,15 +241,9 @@ fix CRouter::PathLength(
     const int16_t nDestSeg,
     const int32_t nMaxDist,
     const int32_t nWidFlag,
-    const int32_t nCacheType) {
+    const int32_t nCacheType
+) {
     ENTER(1, 0);
-#if 0 // DBG
-//if (!m_cacheType) 
-	{
-	m_cache [m_cacheType].SetPathLength (10000);
-	RETVAL (-1)
-	}
-#endif
 
     if (0 > (m_nStartSeg = SetSegment(nStartSeg, p0)))
         RETVAL(-1)
@@ -451,10 +445,6 @@ fix CDACSUniDirRouter::BuildPath(int16_t nSegment) {
 
     fix xDist = 0;
 
-#if 0
-	CHitQuery	hitQuery (FQ_TRANSWALL | FQ_TRANSPOINT | FQ_VISIBILITY, &VERTICES [0], &VERTICES [0], route [0].nNode, -1, 1, 0);
-	CHitResult		hitResult;
-#endif
     CFixVector *p0, *p1;
     int16_t nStartSeg, nDestSeg;
 

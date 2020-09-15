@@ -370,12 +370,6 @@ int32_t FindDropInfo(int32_t nSignature) {
 int32_t MaybeDropNetPowerup(int16_t nObject, int32_t nPowerupType, int32_t nDropState) {
     ENTER(0, 0);
     if (EGI_FLAG(bImmortalPowerups, 0, 0, 0) || (IsMultiGame && !IsCoopGame)) {
-#if 0
-	if (IsNetworkGame && (nDropState < CHECK_DROP) && (nPowerupType >= 0)) {
-		if (gameData.multiplayer.powerupsInMine [nPowerupType] >= gameData.multiplayer.maxPowerupsAllowed [nPowerupType])
-			RETVAL (0)
-		}
-#endif
         if (gameData.reactorData.bDestroyed || gameStates.app.bEndLevelSequence)
             RETVAL(0)
         gameData.multigame.create.nCount = 0;
@@ -637,10 +631,6 @@ int32_t DropPowerup(
         if (!pObj)
             RETVAL(-1)
         if (IsMultiGame) {
-#if 0
-			if ((gameStates.multi.nGameType == UDP_GAME) && !bLocal)
-				MultiSendDropPowerup (nId, nSegment, nObject, &vNewPos, &vNewVel);
-#endif
             gameData.multigame.create.nObjNums[gameData.multigame.create.nCount++] = nObject;
         }
         pObj->mType.physInfo.velocity = vNewVel;
@@ -924,10 +914,6 @@ static void MaybeArmMines(CObject *pPlayerObj, CPlayerInfo *pPlayer, int32_t nTy
             int16_t nObject = CreateNewWeapon(&vRandom, &vDropPos, nNewSeg, OBJ_IDX(pPlayerObj), nId, 0);
             if (!OBJECT(nObject))
                 RETURN
-#if 0
-		if (IsMultiGame && (gameStates.multi.nGameType == UDP_GAME))
-			MultiSendCreateWeapon (nObject);
-#endif
         }
     } else {
         for (int32_t nThreshold = 30000; (pPlayer->secondaryAmmo[nType] % 4 == 1) && (RandShort() < nThreshold);
@@ -941,10 +927,6 @@ static void MaybeArmMines(CObject *pPlayerObj, CPlayerInfo *pPlayer, int32_t nTy
             int16_t nObject = CreateNewWeapon(&vRandom, &vDropPos, nNewSeg, OBJ_IDX(pPlayerObj), nId, 0);
             if (!OBJECT(nObject))
                 RETURN
-#if 0
-		if (IsMultiGame && (gameStates.multi.nGameType == UDP_GAME))
-			MultiSendCreateWeapon (nObject);
-#endif
         }
     }
     RETURN

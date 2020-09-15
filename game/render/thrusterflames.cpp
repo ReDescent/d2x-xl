@@ -439,11 +439,7 @@ void CThrusterFlames::Render(CObject *pObj, tThrusterInfo *pInfo, int32_t nThrus
             Render3D(nThruster);
             transformation.End(__FILE__, __LINE__);
             transformation.End(__FILE__, __LINE__);
-#if 1
             glowRenderer.Done(GLOW_THRUSTERS);
-#else
-            glowRenderer.End();
-#endif
         }
         ogl.SetTransform(0);
         ogl.SetBlendMode(OGL_BLEND_ALPHA);

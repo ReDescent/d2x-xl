@@ -82,10 +82,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 void EvalAutoNetGameArgs(void) {
     int32_t t, bHaveIp = 0;
     char *p;
-#if 0
-	static const char *pszTypes [] = {"anarchy", "coop", "ctf", "ctf+", "hoard", "entropy", NULL};
-	static const char	*pszConnect [] = {"ipx", "udp", "", "multicast", NULL};
-#endif
     memset(&gameData.multiplayer.autoNG, 0, sizeof(gameData.multiplayer.autoNG));
     if ((t = FindArg("-ng_player")) && (p = appConfig[t + 1])) {
         strncpy(gameData.multiplayer.autoNG.szPlayer, appConfig[t + 1], 8);
@@ -95,12 +91,6 @@ void EvalAutoNetGameArgs(void) {
         strncpy(gameData.multiplayer.autoNG.szFile, appConfig[t + 1], FILENAME_LEN - 1);
         gameData.multiplayer.autoNG.szFile[FILENAME_LEN - 1] = '\0';
     }
-#if 0
-if ((t = FindArg ("-ng_mission")) && (p = appConfig [t+1])) {
-	strncpy (gameData.multiplayer.autoNG.szMission, appConfig [t+1], 12);
-	gameData.multiplayer.autoNG.szMission [12] = '\0';
-	}
-#endif
     if ((t = FindArg("-ng_level")))
         gameData.multiplayer.autoNG.nLevel = NumArg(t, 1);
     else
@@ -111,31 +101,6 @@ if ((t = FindArg ("-ng_mission")) && (p = appConfig [t+1])) {
     if ((t = FindArg("-ng_team")))
         gameData.multiplayer.autoNG.bTeam = NumArg(t, 1);
 
-#if 0 // game host parameters
-if ((t = FindArg ("-ng_name")) && (p = appConfig [t+1])) {
-	strncpy (gameData.multiplayer.autoNG.szName, appConfig [t+1], 80);
-	gameData.multiplayer.autoNG.szName [80] = '\0';
-	}
-if ((t = FindArg ("-ng_host")))
-	gameData.multiplayer.autoNG.bHost = !strcmp (p, "host");
-if ((t = FindArg ("-ng_type")) && (p = appConfig [t+1])) {
-	strlwr (p);
-	for (t = 0; pszTypes [t]; t++)
-		if (!strcmp (p, pszTypes [t])) {
-			gameData.multiplayer.autoNG.uType = t;
-			break;
-			}
-	}
-if ((t = FindArg ("-ng_protocol")) && (p = appConfig [t+1])) {
-	strlwr (p);
-	for (t = 0; pszTypes [t]; t++)
-		if (*pszConnect [t] && !strcmp (p, pszConnect [t])) {
-			gameData.multiplayer.autoNG.uConnect = t;
-			break;
-			}
-	}
-else
-#endif
     gameData.multiplayer.autoNG.uConnect = 1;
 
     if (gameData.multiplayer.autoNG.bHost)
@@ -288,16 +253,6 @@ void EvalOglArgs(void) {
     if ((t = FindArg("-gl_alttexmerge")))
         gameOpts->ogl.bGlTexMerge = NumArg(t, 1);
 #endif
-#if 0 
-// lowmem only really makes senes together with limiting texture preloading
-if ((t = FindArg ("-lowmem")))
-	ogl.m_states.bLowMemory = NumArg (t, 1);
-// this parameter can lead to the game briefly pausing everytime a new weapon, robot etc. becomes visible
-// that is very annoying and not immediately understandable to players
-if ((t = FindArg ("-preload_textures")))
-	ogl.m_states.nPreloadTextures = NumArg (t, 6);
-else
-#endif
     ogl.m_states.nPreloadTextures = 6;
     if ((t = FindArg("-FSAA")))
         ogl.m_states.bFSAA = NumArg(t, 1);
@@ -327,10 +282,7 @@ void EvalRenderArgs(void) {
         gameOptions[0].render.bHiresModels[0] = gameOptions[0].render.bHiresModels[1] = NumArg(t, 1);
     if ((t = FindArg("-model_quality")) && *appConfig[t + 1])
         gameStates.render.nModelQuality = NumArg(t, 3);
-#if 0
-if ((t = FindArg ("-gl_texcompress")))
-	ogl.m_features.bTextureCompression.Apply (NumArg (t, 1));
-#endif
+
     if ((t = FindArg("-configure_light_components")))
         gameOptions[0].render.color.bConfigurable = NumArg(t, 1);
     gameOptions[0].render.bUseShaders = 1;
@@ -340,7 +292,7 @@ if ((t = FindArg ("-gl_texcompress")))
     gameStates.app.bCacheMeshes = 1;
     gameStates.app.bCacheLightmaps = 1;
     gameStates.app.bCacheLights = 1;
-#if 1 // DBG
+
     if ((t = FindArg("-readonly"))) {
         gameStates.app.bReadOnly = 1;
         gameStates.app.bCacheTextures = 0;
@@ -349,19 +301,7 @@ if ((t = FindArg ("-gl_texcompress")))
         gameStates.app.bCacheLightmaps = 0;
         gameStates.app.bCacheLights = 0;
     }
-#else
-    gameStates.app.bCacheTextures = NumArg(t, 1);
-    if ((t = FindArg("-cache_textures")))
-        gameStates.app.bCacheTextures = NumArg(t, 1);
-    if ((t = FindArg("-cache_models")))
-        gameStates.app.bCacheModelData = NumArg(t, 1);
-    if ((t = FindArg("-cache_meshes")))
-        gameStates.app.bCacheMeshes = NumArg(t, 1);
-    if ((t = FindArg("-cache_lightmaps")))
-        gameStates.app.bCacheLightmaps = NumArg(t, 1);
-    if ((t = FindArg("-cache_lights")))
-        gameStates.app.bCacheLights = NumArg(t, 1);
-#endif
+
     if ((t = FindArg("-use_shaders")))
         gameOptions[0].render.bUseShaders = NumArg(t, 1);
     if ((t = FindArg("-enable_freecam")))
@@ -391,10 +331,6 @@ void EvalShipArgs(void) {
 void EvalAppArgs(void) {
     int32_t t;
 
-#if 0
-if ((t = FindArg ("-gpgpu_lights")))
-	ogl.m_states.bVertexLighting = NumArg (t, 1);
-#endif
 #ifdef __unix__
     if ((t = FindArg("-linux_msgbox")))
         gameStates.app.bLinuxMsgBox = NumArg(t, 1);
@@ -403,10 +339,6 @@ if ((t = FindArg ("-gpgpu_lights")))
         gameStates.app.bShowVersionInfo = NumArg(t, 1);
     if ((t = FindArg("-check_setup")))
         gameStates.app.bCheckAndFixSetup = NumArg(t, 1);
-#if 0
-if ((t = FindArg ("-expertmode")))
-	gameOpts->app.bExpertMode = NumArg (t, 1);
-#endif
     if ((t = FindArg("-pured2")))
         SetNostalgia(3);
     else if ((t = FindArg("-nostalgia")))

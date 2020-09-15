@@ -445,9 +445,6 @@ int32_t CheckAndFixSetup(void) {
     if (CheckAndCopyFiles(addonSoundFiles, int32_t(sizeofa(addonSoundFiles))))
         nResult |= 64;
 
-#if 0 // DBG
-nResult = 255;
-#endif
     if (nResult) {
         *szMsg = '\0';
         if (nResult & 1) {
@@ -490,15 +487,6 @@ nResult = 255;
                 strcat(szMsg, " - http://www.descent2.de/d2x.html\n - http://www.sourceforge.net/projects/d2x-xl\n");
             if (nResult & 1)
                 strcat(szMsg, " - http://www.gog.com (buy the game here for little money)\n");
-#if 0
-		if (InitGraphics (false)) {
-			gameData.menuData.helpColor = RGB_PAL (47, 47, 47);
-			gameData.menuData.colorOverride = gameData.menuData.helpColor;
-			InfoBox (TXT_ERROR, (pMenuCallback) NULL, BG_STANDARD, -3, szMsg, " ", TXT_CLOSE);
-			gameData.menuData.colorOverride = 0;
-			}
-		else
-#endif
             Error(szMsg);
         } else if (
             (FindArg("-setup") || (gameConfig.nVersion != D2X_IVER)) &&
@@ -512,15 +500,6 @@ nResult = 255;
                 strcat(szMsg, "Additional image effects will be unavailable.\n");
             if (nResult & 32)
                 strcat(szMsg, "Additional sound effects will be unavailable.\n");
-#if 0
-		if (InitGraphics (false)) {
-			gameData.menuData.helpColor = RGB_PAL (47, 47, 47);
-			gameData.menuData.colorOverride = gameData.menuData.helpColor;
-			InfoBox (TXT_WARNING, (pMenuCallback) NULL, BG_STANDARD, -3, szMsg, " ", TXT_CLOSE);
-			gameData.menuData.colorOverride = 0;
-			}
-		else
-#endif
             Warning(szMsg);
         }
         CFile cf;
@@ -529,10 +508,6 @@ nResult = 255;
             cf.Close();
         }
     }
-#if 0 // DBG
-else
-	Warning ("No errors were found in your D2X-XL installation.");
-#endif
     return nResult;
 }
 

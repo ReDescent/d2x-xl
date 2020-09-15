@@ -671,7 +671,6 @@ int32_t LocalPlayerFireGun(void) {
             }
             if (LOCALPLAYER.flags & PLAYER_FLAGS_QUAD_LASERS)
                 flags |= LASER_QUAD;
-#if 1
             int32_t fired = FireWeapon(
                 (int16_t)LOCALPLAYER.nObject,
                 (uint8_t)gameData.weaponData.nPrimary,
@@ -695,22 +694,6 @@ int32_t LocalPlayerFireGun(void) {
                     pPlayer->UpdateEnergy(-(xEnergyUsed * fired) / WI_FireCount(nWeaponIndex));
                 }
             }
-#else
-            rVal += FireWeapon(
-                (int16_t)LOCALPLAYER.nObject,
-                (uint8_t)gameData.weaponData.nPrimary,
-                nLaserLevel,
-                flags,
-                nRoundsPerShot);
-            pPlayer->UpdateEnergy(-(xEnergyUsed * rVal) / WI_FireCount(nWeaponIndex));
-            if (rVal &&
-                ((gameData.weaponData.nPrimary == VULCAN_INDEX) || (gameData.weaponData.nPrimary == GAUSS_INDEX))) {
-                if (nAmmoUsed > pPlayer->primaryAmmo[VULCAN_INDEX])
-                    pPlayer->primaryAmmo[VULCAN_INDEX] = 0;
-                else
-                    pPlayer->primaryAmmo[VULCAN_INDEX] -= nAmmoUsed;
-            }
-#endif
             AutoSelectWeapon(0, 1); // Make sure the player can fire from this weapon.
         } else {
             AutoSelectWeapon(0, 1); // Make sure the player can fire from this weapon.

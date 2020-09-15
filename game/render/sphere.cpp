@@ -397,11 +397,7 @@ CSphereTriangle *CSphereQuad::Split(CSphereTriangle *pDest) {
 
 int16_t CSphere::FindVertex(CSphereVertex &v) {
     for (int16_t i = 0; i < m_nVertices; i++)
-#if 1
         if (m_worldVerts[i] == v)
-#else
-        if (CFloatVector::Dist(m_worldVerts[i].m_v, v.m_v) < 1e-6f)
-#endif
             return i;
     return -1;
 }
@@ -447,11 +443,9 @@ void CSphere::Pulsate(void) {
 // -----------------------------------------------------------------------------
 
 void CSphere::Animate(CBitmap *pBm) {
-#if 1
     for (int32_t i = 0; i < 2; i++)
         if (shield[i].IsMe(pBm))
             shield[i].Animate(10);
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -582,11 +576,11 @@ int32_t CSphere::Render(
     if (bAppearing) {
         float scale = pObj->AppearanceScale();
         scale = Min(1.0f, (float)pow(1.0f - scale, 0.25f));
-#if 1
+
         xScale *= scale;
         yScale *= scale;
         zScale *= scale;
-#endif
+
         red *= scale;
         green *= scale;
         blue *= scale;
@@ -638,11 +632,11 @@ int32_t CSphere::Render(
             transformation.End(__FILE__, __LINE__);
             RETVAL(0)
         }
-#if 1
+
         red *= 1.0f / 3.0f;
         green *= 1.0f / 3.0f;
         blue *= 1.0f / 3.0f;
-#endif
+
         ogl.SetBlendMode(OGL_BLEND_REPLACE);
     } else {
         ogl.SetBlendMode(bAdditive > 0);
@@ -660,7 +654,6 @@ int32_t CSphere::Render(
 
     bTextured = InitSurface(red, green, blue, bEffect ? 1.0f : fabs(alpha), fScale);
 
-#if 1
     if (alpha < 0.0f)
         glBlendEquation(GL_MAX);
     RenderFaces(xScale, nFaces, bTextured, bEffect, bGlow);
@@ -672,7 +665,6 @@ int32_t CSphere::Render(
         else
             glowRenderer.End(fabs(alpha));
     }
-#endif
 
     transformation.End(__FILE__, __LINE__);
     ogl.ResetTransform(0);
@@ -846,11 +838,7 @@ static inline float Sign(float v) { return (v < 0.0f) ? -1.0f : 1.0f; }
 
 static inline float Wrap(float v, float l) { return (v < 0.0f) ? v + l : (v > l) ? v - l : v; }
 
-#if 1
 static inline float ColorBump(float f) { return f; }
-#else
-static inline float ColorBump(float f) { return pow(f * f, 1.0f / 3.0f); }
-#endif
 
 // -----------------------------------------------------------------------------
 

@@ -1368,14 +1368,12 @@ void CWeaponInfo::SetChildren(CFile &cf, int32_t fileVersion, int32_t bD1Data) {
         case SMARTMINE_ID:
             children = SMARTMINE_BLOB_ID;
             break;
-#if 1 /* not present in shareware */
         case ROBOT_SMARTMINE_ID:
             children = ROBOT_SMARTMINE_BLOB_ID;
             break;
         case EARTHSHAKER_ID:
             children = EARTHSHAKER_MEGA_ID;
             break;
-#endif
         default:
             children = -1;
             break;

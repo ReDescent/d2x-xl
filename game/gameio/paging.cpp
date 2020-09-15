@@ -374,13 +374,6 @@ void LoadAddonTextures(void) {
 
 void LoadAllTextures(void) {
     StopTime();
-#if 0
-int32_t bBlackScreen = paletteManager.EffectDisabled ();
-if (paletteManager.EffectDisabled ()) {
-	CCanvas::Current ()->Clear (BLACK_RGBA);
-	//paletteManager.ResumeEffect ();
-	}
-#endif
     LoadSegmentTextures();
     LoadWallTextures();
     LoadPowerupTextures();
@@ -390,12 +383,6 @@ if (paletteManager.EffectDisabled ()) {
     LoadAnimationTextures(&gameData.effectData.animations[0][ANIM_PLAYER_APPEARANCE], 0);
     LoadAnimationTextures(&gameData.effectData.animations[0][ANIM_POWERUP_DISAPPEARANCE], 0);
     LoadAddonTextures();
-#if 0
-if (bBlackScreen) {
-	paletteManager.StopEffect ();
-	CCanvas::Current ()->Clear (BLACK_RGBA);
-	}
-#endif
     StartTime(0);
 }
 

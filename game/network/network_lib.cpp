@@ -74,18 +74,6 @@ int32_t IAmGameHost(void) {
         gameStates.multi.bServer[0] = (WhoIsGameHost() == N_LOCALPLAYER);
         // the following code is obsolete; Only a player with a local port identical to the server port can become new
         // game host
-#if 0
-	// if player wasn't host, but is host now (probably because the former host disconnected)
-	// then make sure he is now using the server port, or the other players won't be able to
-	// reach him
-
-	if (gameStates.multi.bServer [0] != gameStates.multi.bServer [1]) {
-		gameStates.multi.bServer [1] = gameStates.multi.bServer [0]; 
-		// check whether the client port (mpParams.updPorts [1]) differs from the server port (mpParams.udpPorts [0] + networkData.nPortOffset)
-		if (mpParams.udpPorts [0] + networkData.nPortOffset != mpParams.udpPorts [1])
-			IpxChangeDefaultSocket ((uint16_t) (IPX_DEFAULT_SOCKET + networkData.nPortOffset), 1);
-		}
-#endif
     }
     return gameStates.multi.bServer[0];
 }
@@ -142,13 +130,7 @@ int32_t CmpNetPlayers(char *callsign1, char *callsign2, CNetworkInfo *network1, 
 int32_t CmpLocalPlayer(CNetworkInfo *pNetwork, char *pszNetCallSign, char *pszLocalCallSign) {
     if (stricmp(pszNetCallSign, pszLocalCallSign))
         return 1;
-#if 0
-// if restoring a multiplayer game that had been played via UDP/IP,
-// CPlayerData network addresses may have changed, so we have to rely on the callsigns
-// This will cause problems if several players with identical callsigns participate
-if (gameStates.multi.nGameType == UDP_GAME)
-	return 0;
-#endif
+
     if (gameStates.multi.nGameType >= IPX_GAME) {
         if ((gameStates.multi.nGameType < UDP_GAME) && (LOCAL_NODE[0] == 127))
             return 0;

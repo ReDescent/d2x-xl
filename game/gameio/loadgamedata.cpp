@@ -56,18 +56,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //-----------------------------------------------------------------------------
 
 CPlayerShip defaultShipProps;
-#if 0
- = {
-	108, 58, 262144, 2162, 511180, 0, 0, I2X (1) / 2, 9175,
- {CFixVector::Create(146013, -59748, 35756),
-	 CFixVector::Create(-147477, -59892, 34430),
- 	 CFixVector::Create(222008, -118473, 148201),
-	 CFixVector::Create(-223479, -118213, 148302),
-	 CFixVector::Create(153026, -185, -91405),
-	 CFixVector::Create(-156840, -185, -91405),
-	 CFixVector::Create(1608, -87663, 184978),
-	 CFixVector::Create(-1608, -87663, -190825)}};
-#endif
 
 //-----------------------------------------------------------------------------
 
@@ -3016,26 +3004,6 @@ void BMReadGameDataD1(CFile &cf) {
 //------------------------------------------------------------------------------
 
 void BMReadWeaponInfoD1(CFile &cf) {
-#if 0
-cf.Seek (
-	sizeof (int32_t) +
-	sizeof (int32_t) +
-	sizeof (tBitmapIndex) * D1_MAX_TEXTURES +
-	sizeof (tTexMapInfoD1) * D1_MAX_TEXTURES +
-	sizeof (uint8_t) * D1_MAX_SOUNDS +
-	sizeof (uint8_t) * D1_MAX_SOUNDS +
-	sizeof (int32_t) +
-	sizeof (tAnimationInfo) * MAX_ANIMATIONS_D1 +
-	sizeof (int32_t) +
-	sizeof (D1_eclip) * D1_MAX_EFFECTS +
-	sizeof (int32_t) +
-	sizeof (tWallEffectD1) * D1_MAX_WALL_ANIMS +
-	sizeof (int32_t) +
-	sizeof (D1Robot_info) * D1_MAX_ROBOT_TYPES +
-	sizeof (int32_t) +
-	sizeof (tJointPos) * D1_MAX_ROBOT_JOINTS,
-	SEEK_SET);
-#endif
     gameData.weaponData.nTypes[1] = cf.ReadInt();
     /*---*/ PrintLog(1, "Loading %d weapon descriptions\n", gameData.weaponData.nTypes[1]);
 #if PRINT_WEAPON_INFO

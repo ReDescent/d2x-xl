@@ -376,9 +376,6 @@ void CMissionManager::AddBuiltinD1Mission(void) {
         break;
 
     default:
-#if 0 // DBG
-		Warning (TXT_D1_HOGSIZE, nBuiltInHogSize [1]);
-#endif
         // fall through
     case D1_MISSION_HOGSIZE:
     case D1_10_MISSION_HOGSIZE:
@@ -444,9 +441,6 @@ void CMissionManager::AddBuiltinMission(void) {
         break;
 
     default:
-#if 0 // DBG
-		Warning (TXT_HOGSIZE, nBuiltInHogSize [0], "descent2.hog");
-#endif
         nBuiltInHogSize[0] = FULL_MISSION_HOGSIZE; // fall through
 
     case FULL_MISSION_HOGSIZE:
@@ -1059,10 +1053,6 @@ int32_t CMissionManager::FindByName(char *szMissionName, int32_t nSubFolder) {
 //------------------------------------------------------------------------------
 
 int32_t CMissionManager::IsBuiltIn(const char *pszMission) {
-#if 0
-if (*pszMission)
-	return false;
-#endif
     if (!pszMission)
         pszMission = m_list[nCurrentMission].szMissionName;
 

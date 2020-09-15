@@ -182,14 +182,6 @@ void InitHoardData(void) {
         for (i = 0; i < gameData.hoardData.orb.nFrames; i++, nBitmap++) {
             Assert(nBitmap < MAX_BITMAP_FILES);
             pAnimInfo->frames[i].index = nBitmap;
-#if 0
-		InitHoardBitmap (&gameData.pigData.tex.bitmaps [0][nBitmap], 
-							  gameData.hoardData.orb.nWidth, 
-							  gameData.hoardData.orb.nHeight, 
-							  BM_FLAG_TRANSPARENT, 
-							  bmDataP);
-		bmDataP += gameData.hoardData.orb.nFrameSize;
-#endif
         }
 
         // Create hoard orb powerup
@@ -221,91 +213,37 @@ void InitHoardData(void) {
             0,
             0,
             gameData.hoardData.goal.nWidth,
-            gameData.hoardData.goal.nHeight * gameData.hoardData.goal.nFrames);
+            gameData.hoardData.goal.nHeight * gameData.hoardData.goal.nFrames
+        );
         gameData.hoardData.goal.bm.SetBuffer(bmDataP, 0, gameData.hoardData.goal.nSize);
         for (i = 0; i < gameData.hoardData.goal.nFrames; i++, nBitmap++) {
             Assert(nBitmap < MAX_BITMAP_FILES);
             pEffectInfo->animationInfo.frames[i].index = nBitmap;
-#if 0
-		InitHoardBitmap (&gameData.pigData.tex.bitmaps [0][nBitmap], 
-							  gameData.hoardData.goal.nWidth, 
-							  gameData.hoardData.goal.nHeight, 
-							  0, 
-							  bmDataP);
-		bmDataP += gameData.hoardData.goal.nFrameSize;
-#endif
         }
         nBitmap = InitMonsterball(nBitmap);
     } else {
         pEffectInfo = gameData.effectData.effects[0] + gameData.hoardData.goal.nClip;
     }
 
-// Load and remap bitmap data for orb
-#if 1
+    // Load and remap bitmap data for orb
     SetupHoardBitmapFrames(
         cf,
         gameData.hoardData.orb.bm,
         gameData.effectData.animations[0][gameData.hoardData.orb.nClip].frames,
         gameData.hoardData.orb.palette,
-        BM_FLAG_TRANSPARENT);
-#else
-    paletteManager.Game();
-    palette.Read(cf);
-    gameData.hoardData.orb.palette = paletteManager.Add(palette);
-    pAnimInfo = &gameData.effectData.animations[0][gameData.hoardData.orb.nClip];
-    gameData.hoardData.orb.bm.Read(cf);
-    bmDataP = gameData.hoardData.orb.bm.Buffer();
-    for (i = 0; i < gameData.hoardData.orb.nFrames; i++) {
-        CBitmap *pBm = &gameData.pigData.tex.bitmaps[0][pAnimInfo->frames[i].index];
-        InitHoardBitmap(pBm, gameData.hoardData.goal.nWidth, gameData.hoardData.goal.nHeight, 0, bmDataP);
-        bmDataP += gameData.hoardData.goal.nFrameSize;
-        pBm->SetPalette(gameData.hoardData.orb.palette, 255, -1);
-    }
-#endif
+        BM_FLAG_TRANSPARENT
+    );
+
     // Load and remap bitmap data for goal texture
     cf.ReadShort(); // skip frame count
-#if 1
+
     SetupHoardBitmapFrames(
         cf,
         gameData.hoardData.goal.bm,
         pEffectInfo->animationInfo.frames,
         gameData.hoardData.goal.palette,
-        0);
-#else
-    paletteManager.Game();
-    palette.Read(cf);
-    gameData.hoardData.goal.palette = paletteManager.Add(palette);
-    gameData.hoardData.goal.bm.Read(cf);
-    bmDataP = gameData.hoardData.goal.bm.Buffer();
-    for (i = 0; i < gameData.hoardData.goal.nFrames; i++) {
-        CBitmap *pBm = gameData.pigData.tex.bitmaps[0] + pEffectInfo->animationInfo.frames[i].index;
-        InitHoardBitmap(pBm, gameData.hoardData.goal.nWidth, gameData.hoardData.goal.nHeight, 0, bmDataP);
-        bmDataP += gameData.hoardData.goal.nFrameSize;
-        pBm->SetPalette(gameData.hoardData.goal.palette, 255, -1);
-    }
-#endif
-    // Load and remap bitmap data for HUD icons
-
-#if 0
-for (i = 0; i < 2; i++) {
-	gameData.hoardData.icon [i].nFrames = 1;
-	gameData.hoardData.icon [i].nHeight = cf.ReadShort ();
-	gameData.hoardData.icon [i].nWidth = cf.ReadShort ();
-	CalcHoardItemSizes (gameData.hoardData.icon [i]);
-	if (!gameData.hoardData.bInitialized) {
-		InitHoardBitmap (&gameData.hoardData.icon [i].bm, 
-							  gameData.hoardData.icon [i].nHeight, 
-							  gameData.hoardData.icon [i].nWidth, 
-							  BM_FLAG_TRANSPARENT, 
-							  NULL);
-		gameData.hoardData.icon [i].bm.CreateBuffer ();
-		}
-	palette.Read (cf);
-	gameData.hoardData.icon [i].palette = paletteManager.Add (palette);
-	gameData.hoardData.icon [i].bm.Read (cf, gameData.hoardData.icon [i].nFrameSize);
-	gameData.hoardData.icon [i].bm.Remap (gameData.hoardData.icon [i].palette, 255, -1);
-	}
-#endif
+        0
+    );
 
     cf.Seek(60677, SEEK_SET);
     if (!gameData.hoardData.bInitialized) {
@@ -329,21 +267,6 @@ for (i = 0; i < 2; i++) {
         gameData.pigData.sound.nSoundFiles[0] += 4;
     }
     cf.Close();
-}
-
-//-----------------------------------------------------------------------------
-
-void ResetHoardData(void) {
-#if 0
-gameData.hoardData.orb.bm.SetTexture (NULL);
-gameData.hoardData.goal.bm.SetTexture (NULL);
-if (gameData.hoardData.monsterball.bm.Override ())
-	gameData.hoardData.monsterball.bm.Override ()->SetTexture (NULL);
-else
-	gameData.hoardData.monsterball.bm.SetTexture (NULL);
-for (int32_t i = 0; i < 2; i++)
-	gameData.hoardData.icon [i].bm.SetTexture (NULL);
-#endif
 }
 
 //-----------------------------------------------------------------------------

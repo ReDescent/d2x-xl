@@ -345,10 +345,6 @@ bool CParticleBuffer::Flush(float fBrightness, bool bForce) {
     PROF_END(ptParticles)
 #endif
     Reset();
-#if 0
-if (ogl.m_features.bShaders && !glareRenderer.ShaderActive ())
-	shaderManager.Deploy (-1);
-#endif
     return true;
 }
 
