@@ -100,9 +100,9 @@ class CSongManager {
     void Setup(void);
     void CheckRepeat(void);
     void StopAll(void);
-    int32_t PlayCustomSong(char *pszFolder, char *pszSong, int32_t bLoop);
+    int32_t PlayCustomSong(const char *pszFolder, const char *pszSong, int32_t bLoop);
     void Play(int32_t nSong, int32_t repeat);
-    int32_t PlayCustomLevelSong(char *pszFolder, int32_t nLevel);
+    int32_t PlayCustomLevelSong(const char *pszFolder, int32_t nLevel);
     void PlayLevelSong(int32_t nLevel, int32_t bFromHog, bool bWaitForThread = true);
     void PlayCurrent(int32_t repeat = 0);
     void Shuffle(void);

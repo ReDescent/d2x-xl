@@ -54,11 +54,16 @@ set(ai_sources
 set(audio_sources
     game/audio/linux/hmiplay.cpp
     game/audio/hmpfile.cpp
+    game/audio/hmpfile.h
     game/audio/audio.cpp
+    game/audio/audio.h
     game/audio/midi.cpp
+    game/audio/midi.h
     game/audio/objectaudio.cpp
     game/audio/songs.cpp
+    game/audio/songs.h
     game/audio/soundthreads.cpp
+    game/audio/soundthreads.h
 )
 
 set(cockpit_sources

@@ -319,7 +319,7 @@ void CSongManager::StopAll(void) {
 
 //------------------------------------------------------------------------------
 
-int32_t CSongManager::PlayCustomSong(char *pszFolder, char *pszSong, int32_t bLoop) {
+int32_t CSongManager::PlayCustomSong(const char *pszFolder, const char *pszSong, int32_t bLoop) {
     char szFilename[FILENAME_LEN];
 
     if (pszFolder && *pszFolder) {
@@ -384,7 +384,7 @@ void CSongManager::PlayCurrent(int32_t bLoop) { songManager.Play(m_info.nCurrent
 
 //------------------------------------------------------------------------------
 
-int32_t CSongManager::PlayCustomLevelSong(char *pszFolder, int32_t nLevel) {
+int32_t CSongManager::PlayCustomLevelSong(const char *pszFolder, int32_t nLevel) {
     if (*pszFolder) {
         char szFilename[FILENAME_LEN];
 
@@ -456,7 +456,9 @@ int32_t CSongManager::LoadDescentPlaylists(void) {
     return m_descent[0].Load(gameFolders.game.szMusic[0]) & (m_descent[1].Load(gameFolders.game.szMusic[1]) << 1);
 }
 
-int32_t CSongManager::LoadUserPlaylist(char *pszPlaylist) { return m_user.Load(NULL, pszPlaylist); }
+int32_t CSongManager::LoadUserPlaylist(char *pszPlaylist) {
+    return m_user.Load(NULL, pszPlaylist);
+}
 
 int32_t CSongManager::LoadModPlaylist(void) {
     return *gameFolders.mods.szMusic ? m_mod.Load(gameFolders.mods.szMusic) : 0;
