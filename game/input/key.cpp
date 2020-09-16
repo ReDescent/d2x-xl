@@ -493,7 +493,9 @@ static int32_t KeyDvorak(int32_t keyCode) {
 
 void KeyHandler(SDL_KeyboardEvent *event) {
     uint8_t state;
-    int32_t keyCode, keyState = (event->state == SDL_PRESSED), nKeyboard = gameOpts->input.keyboard.nType;
+    int32_t keyCode;
+    int32_t keyState = (event->state == SDL_PRESSED);
+    int32_t nKeyboard = gameOpts->input.keyboard.nType;
     SDL_Keycode keySym = event->keysym.sym;
 #if UNICODE_KEYS
     wchar_t unicode = event->keysym.unicode;
@@ -524,11 +526,6 @@ void KeyHandler(SDL_KeyboardEvent *event) {
 #if UNICODE_KEYS
         if (unicode && (keyProperties[i].asciiValue != wchar_t(255))) {
             if ((keyProperties[i].asciiValue == unicode) || (keyProperties[i].shiftedAsciiValue == unicode))
-#if DBG
-                if (pKey->lastState)
-                    state = keyState;
-                else
-#endif
                     state = keyState;
             else
                 state = pKey->lastState;

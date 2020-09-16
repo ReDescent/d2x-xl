@@ -14,6 +14,17 @@
 #include <SDL.h>
 
 #include "descent.h"
+#include "gamecntl.h"
+
+namespace {
+void WindowFocusHandler(int window, bool gained) {
+    // TODO: implement game pause when losing focus
+}
+
+void WindowCloseHandler(int window) {
+    // TODO: implement proper closing
+}
+}
 
 extern void KeyHandler(SDL_KeyboardEvent *event);
 extern void MouseButtonHandler(SDL_MouseButtonEvent *mbe);
@@ -37,8 +48,6 @@ void event_poll() {
 
         switch (event.type) {
         case SDL_KEYDOWN:
-            KeyHandler(reinterpret_cast<SDL_KeyboardEvent *>(&event));
-            break;
         case SDL_KEYUP:
             KeyHandler(reinterpret_cast<SDL_KeyboardEvent *>(&event));
             break;
@@ -63,9 +72,27 @@ void event_poll() {
         case SDL_JOYBALLMOTION:
             break;
 #endif
+        case SDL_WINDOWEVENT: {
+            switch(event.window.event) {
+            case SDL_WINDOWEVENT_FOCUS_GAINED:
+                WindowFocusHandler(event.window.windowID, true);
+                break;
+            case SDL_WINDOWEVENT_FOCUS_LOST:
+                WindowFocusHandler(event.window.windowID, false);
+                break;
+            case SDL_WINDOWEVENT_CLOSE:
+                WindowCloseHandler(event.window.windowID);
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+
         case SDL_QUIT:
             break;
         }
+
         if (!gameOpts->legacy.bInput && (_t - t0 >= TO_EVENT_POLL))
             break;
     }
