@@ -1104,10 +1104,10 @@ int32_t CMenu::FindClickedOption(int32_t iMin, int32_t iMax) {
 int32_t CMenu::SelectClickedOption(void) {
     int32_t i = FindClickedOption(0, int32_t(ToS()));
     if (i < 0)
-        return 0;
+        return -1;
     i += m_props.nScrollOffset - m_props.nMaxNoScroll;
     if ((i < 0) || (i >= int32_t(ToS())))
-        return 0;
+        return -1;
     return m_nChoice = i;
 }
 
