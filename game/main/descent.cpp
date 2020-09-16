@@ -378,13 +378,12 @@ void LoadHoardData(void) {}
 // ----------------------------------------------------------------------------
 
 void GrabMouse(int32_t bGrab, int32_t bForce) {
-#if 1
+/*
     SDL_SetRelativeMouseMode(SDL_FALSE);
-#else
-    auto grabMouse = (bGrab && gameStates.input.bGrabMouse) || ogl.m_states.bFullScreen;
+*/
+    auto grabMouse = (bGrab && gameStates.input.bGrabMouse);
     PrintLog(0, "GrabMouse (%d)\n", grabMouse);
     SDL_SetRelativeMouseMode(grabMouse ? SDL_TRUE : SDL_FALSE);
-#endif
 }
 
 // ----------------------------------------------------------------------------
