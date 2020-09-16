@@ -14,7 +14,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _PIGGY_H
 #define _PIGGY_H
 
-#include "audio.h"
+#include "audio/audio.h"
 #include "sounds.h"
 #include "cfile.h"
 #include "tga.h"

@@ -46,10 +46,10 @@
 #include "objrender.h"
 #include "sparkeffect.h"
 #include "renderthreads.h"
-#include "soundthreads.h"
 #include "menubackground.h"
-#include "midi.h"
-#include "songs.h"
+
+#include "audio/songs.h"
+#include "audio/midi.h"
 
 extern tDetailData detailData;
 

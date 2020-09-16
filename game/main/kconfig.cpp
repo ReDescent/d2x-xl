@@ -38,7 +38,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE EVE.  ALL RIGHTS RESERVED.
 #include "strutil.h"
 #include "collide.h"
 #include "menubackground.h"
-#include "songs.h"
+#include "audio/songs.h"
 #include "headlight.h"
 #include "ogl_render.h"
 #include "renderframe.h"

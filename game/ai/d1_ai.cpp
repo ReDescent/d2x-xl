@@ -34,7 +34,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "player.h"
 #include "wall.h"
 #include "vclip.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "fireball.h"
 #include "morph.h"
 #include "effects.h"

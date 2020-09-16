@@ -47,7 +47,6 @@
 #include "objrender.h"
 #include "sparkeffect.h"
 #include "renderthreads.h"
-#include "soundthreads.h"
 #include "menubackground.h"
 
 void DefaultEffectSettings(bool bSetup = false);

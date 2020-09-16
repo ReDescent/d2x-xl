@@ -28,7 +28,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "text.h"
 #include "strutil.h"
 #include "menubackground.h"
-#include "songs.h"
 #include "ogl_lib.h"
 #include "renderlib.h"
 #include "cockpit.h"

@@ -84,13 +84,14 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
 #include "interp.h"
 #include "autodl.h"
 #include "hiresmodels.h"
-#include "soundthreads.h"
 #include "automap.h"
 #include "banlist.h"
 #include "menubackground.h"
-#include "songs.h"
 #include "console.h"
 #include "IpToCountry.h"
+
+#include "audio/songs.h"
+#include "audio/soundthreads.h"
 
 #ifndef DESCENT_EXECUTABLE_VERSION
 #ifdef __macosx__
@@ -377,10 +378,13 @@ void LoadHoardData(void) {}
 // ----------------------------------------------------------------------------
 
 void GrabMouse(int32_t bGrab, int32_t bForce) {
-    // if (gameStates.input.bGrabMouse && (bForce || gameStates.app.bGameRunning))
-    auto relativeMode = ((bGrab && gameStates.input.bGrabMouse) || ogl.m_states.bFullScreen) ? SDL_TRUE : SDL_FALSE;
-    PrintLog(0, "GrabMouse (%d)\n", relativeMode);
-    SDL_SetRelativeMouseMode(relativeMode);
+#if 1
+    SDL_SetRelativeMouseMode(SDL_FALSE);
+#else
+    auto grabMouse = (bGrab && gameStates.input.bGrabMouse) || ogl.m_states.bFullScreen;
+    PrintLog(0, "GrabMouse (%d)\n", grabMouse);
+    SDL_SetRelativeMouseMode(grabMouse ? SDL_TRUE : SDL_FALSE);
+#endif
 }
 
 // ----------------------------------------------------------------------------

@@ -66,7 +66,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "monsterball.h"
 #include "dropobject.h"
 #include "trackobject.h"
-#include "soundthreads.h"
 #include "sparkeffect.h"
 #include "createmesh.h"
 #ifdef __macosx__
@@ -77,7 +76,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "renderthreads.h"
 #include "collision_math.h"
 #include "banlist.h"
-#include "songs.h"
 #include "headlight.h"
 #include "playerprofile.h"
 #include "addon_bitmaps.h"
@@ -86,6 +84,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "findpath.h"
 #include "waypoint.h"
 #include "network_lib.h"
+
+#include "audio/songs.h"
+#include "audio/soundthreads.h"
 
 #define PHYSICS_IN_BACKGROUND 0
 

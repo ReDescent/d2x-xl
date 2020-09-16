@@ -25,7 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "mission.h"
 #include "loadgame.h"
 #include "briefings.h"
-#include "songs.h"
+#include "audio/songs.h"
 #include "mono.h"
 #include "error.h"
 #include "findfile.h"

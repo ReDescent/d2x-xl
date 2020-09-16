@@ -62,9 +62,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "objrender.h"
 #include "sparkeffect.h"
 #include "renderthreads.h"
-#include "soundthreads.h"
 #include "menubackground.h"
-#include "songs.h"
 
 //------------------------------------------------------------------------------
 

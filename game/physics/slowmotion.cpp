@@ -2,9 +2,10 @@
 #include "error.h"
 #include "input.h"
 #include "text.h"
-#include "songs.h"
 #include "slowmotion.h"
-#include "soundthreads.h"
+
+#include "audio/songs.h"
+#include "audio/soundthreads.h"
 
 static int32_t nSlowMotionChannel = -1;
 

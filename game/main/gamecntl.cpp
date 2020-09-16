@@ -54,7 +54,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "rendermine.h"
 #include "marker.h"
 #include "systemkeys.h"
-#include "songs.h"
 
 #if defined(FORCE_FEEDBACK)
 #include "tactile.h"

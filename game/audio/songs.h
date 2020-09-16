@@ -14,9 +14,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _SONGS_H
 #define _SONGS_H
 
-#include "maths.h"
-#include "carray.h"
-#include "cfile.h"
+#include "include/maths.h"
+#include "include/carray.h"
+#include "include/cfile.h"
 
 #define MAX_NUM_SONGS 100
 

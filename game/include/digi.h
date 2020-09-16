@@ -24,10 +24,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vecmat.h"
 #include "carray.h"
 
-#ifdef ALLEGRO
-#include "allg_snd.h"
-typedef SAMPLE;
-#else
 class CDigiSound {
     public:
     ubyte bHires;
@@ -41,7 +37,6 @@ class CDigiSound {
         nLength[0] = nLength[1] = 0;
     }
 };
-#endif
 
 #define SOUND_MAX_VOLUME (I2X(1) / 2)
 

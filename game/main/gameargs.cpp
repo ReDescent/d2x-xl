@@ -72,8 +72,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "interp.h"
 #include "autodl.h"
 #include "hiresmodels.h"
-#include "soundthreads.h"
-#include "songs.h"
+#include "audio/songs.h"
 #include "cvar.h"
 #include "lightcluster.h"
 

@@ -20,6 +20,8 @@
 #include "error.h"
 #include "strutil.h"
 #include "menubackground.h"
+#include "cstack.h"
+
 // returns number of item chosen
 
 //------------------------------------------------------------------------------

@@ -55,7 +55,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "cheats.h"
 #include "input.h"
 #include "marker.h"
-#include "songs.h"
+#include "audio/songs.h"
 #include "hudicons.h"
 #include "renderlib.h"
 #include "network_lib.h"

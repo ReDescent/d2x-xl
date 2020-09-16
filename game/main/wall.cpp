@@ -32,7 +32,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "dynlight.h"
 #include "loadobjects.h"
 #include "savegame.h"
-#include "audio.h"
+#include "audio/audio.h"
 
 // Special door on boss level which is locked if not in multiplayer...sorry for this awful solution --MK.
 #define BOSS_LOCKED_DOOR_LEVEL 7

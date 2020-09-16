@@ -32,7 +32,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "text.h"
 #include "menu.h"
 #include "movie.h"
-#include "songs.h"
+#include "audio/songs.h"
 #include "mouse.h"
 #include "gamepal.h"
 #include "strutil.h"

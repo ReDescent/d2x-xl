@@ -34,7 +34,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "textures.h"
 #include "wall.h"
 #include "object.h"
-#include "audio.h"
 #include "loadgeometry.h"
 #include "loadobjects.h"
 #include "error.h"

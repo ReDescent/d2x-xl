@@ -38,7 +38,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "compbit.h"
 #include "menubackground.h"
 #include "credits.h"
-#include "songs.h"
+#include "audio/songs.h"
 #include "ogl_render.h"
 #include "renderlib.h"
 

@@ -32,7 +32,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "player.h"
 #include "joy.h"
 #include "kconfig.h"
-#include "audio.h"
 #include "crypt.h"
 #include "menu.h"
 #include "joydefs.h"

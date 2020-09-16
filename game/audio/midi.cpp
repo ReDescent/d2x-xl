@@ -3,8 +3,8 @@
 #include "descent.h"
 #include "error.h"
 #include "hmpfile.h"
-#include "audio.h"
-#include "songs.h"
+#include "audio/audio.h"
+#include "audio/songs.h"
 #include "config.h"
 #include "midi.h"
 
@@ -46,9 +46,6 @@ void CMidi::Fadeout(void) {
         Mix_FadeOutMusic(300);
         SDL_Delay(330);
     }
-    int32_t nVolume = m_nVolume;
-    SetVolume(0);
-    m_nVolume = nVolume;
     Mix_HaltMusic();
     Mix_FreeMusic(m_music);
     m_music = NULL;
@@ -153,7 +150,7 @@ int32_t CMidi::PlaySong(const char *pszSong, char *melodicBank, char *drumBank, 
         try {
             m_music = Mix_LoadMUS(pfnSong);
         } catch (...) { // critical problem in midi playback -> turn it off
-            SetVolume(gameConfig.nMidiVolume = 0);
+            return 0;
         }
         if (!m_music) {
             PrintLog(0, "SDL_mixer failed to load %s\n(%s)\n", fnSong, Mix_GetError());

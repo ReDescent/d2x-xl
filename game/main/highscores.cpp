@@ -33,7 +33,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "network.h"
 #include "network_lib.h"
 #include "menubackground.h"
-#include "songs.h"
+#include "audio/songs.h"
 
 #define MAX_VIEW_TIME 15000
 #define ENDLEVEL_IDLE_TIME 10000

@@ -28,7 +28,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "mono.h"
 #include "error.h"
 #include "sounds.h"
-#include "songs.h"
+#include "audio/songs.h"
 #include "loadgamedata.h"
 #include "bmread.h"
 #include "loadgeometry.h"

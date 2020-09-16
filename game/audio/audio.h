@@ -17,13 +17,6 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-#ifdef ALLEGRO
-
-#include "allg_snd.h"
-typedef SAMPLE;
-
-#else //! defined ALLEGRO
-
 class CSoundSample {
     public:
     char szName[9];
@@ -39,8 +32,6 @@ class CSoundSample {
         nLength[0] = nLength[1] = 0;
     }
 };
-
-#endif //! defined ALLEGRO
 
 //------------------------------------------------------------------------------
 
@@ -230,7 +221,6 @@ class CAudio {
         int32_t nMaxChannels;
         int32_t nFreeChannel;
         int32_t nVolume[2];
-        int32_t nMidiVolume;
         int32_t nNextSignature;
         int32_t nActiveObjects;
         int16_t nLoopingSound;

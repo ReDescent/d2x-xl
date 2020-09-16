@@ -22,7 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _SOUNDS_H
 
 #include "vecmat.h"
-#include "audio.h"
+#include "audio/audio.h"
 
 //------------------- List of sound effects --------------------
 
@@ -80,8 +80,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define SOUND_HUD_MESSAGE 117
 #define SOUND_HUD_KILL 118
 
-#define SOUND_HOMING_WARNING \
-    122 // Warning beep: You are being tracked by a missile! Borrowed from old repair center sounds.
+// Warning beep: You are being tracked by a missile! Borrowed from old repair center sounds.
+#define SOUND_HOMING_WARNING 122
 
 #define SOUND_HUD_JOIN_REQUEST 123
 #define SOUND_HUD_BLUE_GOT_FLAG 124

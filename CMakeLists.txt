@@ -53,9 +53,9 @@ set(ai_sources
 
 set(audio_sources
     game/audio/linux/hmiplay.cpp
-    game/audio/linux/hmpfile.cpp
-    game/audio/win32/midi.cpp
+    game/audio/hmpfile.cpp
     game/audio/audio.cpp
+    game/audio/midi.cpp
     game/audio/objectaudio.cpp
     game/audio/songs.cpp
     game/audio/soundthreads.cpp
@@ -425,6 +425,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
 include_directories(game/include)
 include_directories(game/input/include)
 include_directories(game/effects)
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	include_directories(game/network/linux/include)
 endif()
@@ -466,5 +467,6 @@ target_link_libraries(d2x-xl
     ZLIB::ZLIB
     OpenGL::GLU
 )
+target_include_directories(d2x-xl PRIVATE game)
 
 install(TARGETS d2x-xl DESTINATION .)

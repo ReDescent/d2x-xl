@@ -35,11 +35,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "libmve.h"
 #include "text.h"
 #include "screens.h"
-#include "midi.h"
-#include "songs.h"
 #include "config.h"
 #include "cockpit.h"
 #include "renderlib.h"
+
+#include "audio/midi.h"
+#include "audio/songs.h"
 
 //-----------------------------------------------------------------------
 

@@ -46,7 +46,6 @@
 #include "objrender.h"
 #include "sparkeffect.h"
 #include "renderthreads.h"
-#include "soundthreads.h"
 #include "paging.h"
 #include "menubackground.h"
 

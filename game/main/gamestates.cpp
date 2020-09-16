@@ -59,7 +59,6 @@
 #include "interp.h"
 #include "autodl.h"
 #include "hiresmodels.h"
-#include "soundthreads.h"
 #include "gameargs.h"
 #include "cockpit.h"
 #include "segmath.h"

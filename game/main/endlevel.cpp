@@ -39,7 +39,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "segmath.h"
 #include "key.h"
 #include "joy.h"
-#include "songs.h"
+#include "audio/songs.h"
 
 //------------------------------------------------------------------------------
 

@@ -18,7 +18,6 @@
 #include "midi.h"
 #include "audio.h"
 #include "lightning.h"
-#include "soundthreads.h"
 
 // end changes by adb
 #define SOUND_BUFFER_SIZE (512)
@@ -1060,7 +1059,6 @@ void CAudio::StopCurrentSong() {
     ENTER(0, 0);
     if (songManager.Playing()) {
         midi.Fadeout();
-        m_info.nMidiVolume = midi.SetVolume(0);
 #if defined(_WIN32)
         midi.Shutdown();
 #endif

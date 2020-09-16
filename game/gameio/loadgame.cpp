@@ -56,7 +56,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ai.h"
 #include "producers.h"
 #include "trigger.h"
-#include "audio.h"
 #include "loadobjects.h"
 #include "scores.h"
 #include "ibitblt.h"
@@ -99,7 +98,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "paging.h"
 #include "mission.h"
 #include "savegame.h"
-#include "songs.h"
+#include "audio/songs.h"
 #include "gamepal.h"
 #include "movie.h"
 #include "credits.h"
@@ -117,7 +116,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "sparkeffect.h"
 #include "transprender.h"
 #include "slowmotion.h"
-#include "soundthreads.h"
 #include "menubackground.h"
 #include "monsterball.h"
 #include "systemkeys.h"
@@ -131,6 +129,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "transprender.h"
 #include "scores.h"
 #include "hudicons.h"
+
+#include "audio/audio.h"
+#include "audio/soundthreads.h"
 
 #if defined(FORCE_FEEDBACK)
 #include "tactile.h"
@@ -616,10 +617,13 @@ void SetVertigoRobotFlags(void) {
 //------------------------------------------------------------------------------
 
 char *LevelName(int32_t nLevel) {
-    return (gameStates.app.bAutoRunMission && *szAutoMission)
-               ? szAutoMission
-               : (nLevel < 0) ? missionManager.szSecretLevelNames[-nLevel - 1]
-                              : missionManager.szLevelNames[nLevel - 1];
+    if(gameStates.app.bAutoRunMission && *szAutoMission) {
+        return szAutoMission;
+    }
+    if(nLevel < 0) {
+        return missionManager.szSecretLevelNames[-nLevel - 1];
+    }
+    return missionManager.szLevelNames[nLevel - 1];
 }
 
 //------------------------------------------------------------------------------
@@ -631,12 +635,11 @@ char *MakeLevelFilename(int32_t nLevel, char *pszFilename, const char *pszFileEx
 
 //------------------------------------------------------------------------------
 
-char *LevelSongName(int32_t nLevel) {
-    char szNoSong[] = "";
-
-    return (gameStates.app.bAutoRunMission || !missionManager.nSongs)
-               ? szNoSong
-               : missionManager.szSongNames[missionManager.songIndex[nLevel & missionManager.nSongs]];
+const char *LevelSongName(int32_t nLevel) {
+    if(gameStates.app.bAutoRunMission || !missionManager.nSongs) {
+        return "";
+    }
+    return missionManager.szSongNames[missionManager.songIndex[nLevel & missionManager.nSongs]];
 }
 
 //------------------------------------------------------------------------------
