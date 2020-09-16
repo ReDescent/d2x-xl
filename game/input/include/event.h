@@ -19,7 +19,6 @@
 #include <ggi/input/xwin.h>
 #endif
 
-int32_t event_init();
 void event_poll();
 
 #ifdef GII_XWIN

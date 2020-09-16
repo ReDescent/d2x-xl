@@ -35,8 +35,6 @@ extern void JoyHatHandler(SDL_JoyHatEvent *jhe);
 extern void JoyAxisHandler(SDL_JoyAxisEvent *jae);
 #endif
 
-static int32_t initialised = 0;
-
 void event_poll() {
     SDL_Event event;
     time_t t0 = SDL_GetTicks();
@@ -96,11 +94,4 @@ void event_poll() {
         if (!gameOpts->legacy.bInput && (_t - t0 >= TO_EVENT_POLL))
             break;
     }
-}
-
-int32_t event_init() {
-    // We should now be active and responding to events.
-    initialised = 1;
-
-    return 0;
 }
