@@ -325,6 +325,7 @@ class CThreadedObjectRenderer {
     SDL_Thread *m_threads[MAX_THREADS];
     int32_t m_nThreadIds[MAX_THREADS];
     SDL_sem *m_lightObjects[MAX_THREADS];
+    bool m_threadExitFlags[MAX_THREADS];
     SDL_mutex *m_lightLock;
     SDL_sem *m_lightDone;
     SDL_sem *m_renderDone;
@@ -380,8 +381,12 @@ void CThreadedObjectRenderer::Destroy(void) {
         SDL_DestroySemaphore(m_lightDone);
         SDL_DestroySemaphore(m_renderDone);
         for (int32_t i = 0; i < gameStates.app.nThreads; i++) {
+            m_threadExitFlags[i] = true;
+            SDL_SemPost(m_lightObjects[i]);
+
             int status;
             SDL_WaitThread(m_threads[i], &status);
+
             SDL_DestroySemaphore(m_lightObjects[i]);
         }
         Reset();
@@ -400,6 +405,7 @@ void CThreadedObjectRenderer::Create(void) {
         m_renderDone = SDL_CreateSemaphore(0);
         for (int32_t i = 0; i < gameStates.app.nThreads; i++) {
             m_nThreadIds[i] = i;
+            m_threadExitFlags[i] = false;
             m_lightObjects[i] = SDL_CreateSemaphore(0);
             m_threads[i] = SDL_CreateThread(LightObjectsThread, "LightObject", m_nThreadIds + i);
         }
@@ -422,10 +428,9 @@ int32_t CThreadedObjectRenderer::Illuminate(void *pnThread) {
 
     for (;;) {
         SDL_SemWait(m_lightObjects[nThread]);
-#if DBG
-        if (!m_nActiveThreads)
-            BRP;
-#endif
+        if(m_threadExitFlags[nThread]) {
+            break;
+        }
         for (int32_t i = nThread; i < gameData.renderData.mine.nObjRenderSegs; i += m_nRenderThreads) {
             nSegment = gameData.renderData.mine.objRenderSegList[i];
             if (gameStates.render.bApplyDynLight) {
@@ -433,10 +438,6 @@ int32_t CThreadedObjectRenderer::Illuminate(void *pnThread) {
                 lightManager.SetNearestStatic(nSegment, 1, nThread);
             }
             SDL_LockMutex(m_lightLock); // renderer must only be called by one thread at a time
-#if DBG
-            if (lightManager.ThreadId(nThread) != nThread)
-                BRP;
-#endif
             lightManager.SetThreadId(nThread);
             SDL_SemPost(m_lightDone); // tell the renderer it can render some objects
             SDL_SemWait(m_renderDone); // wait until the renderer is done
@@ -444,14 +445,12 @@ int32_t CThreadedObjectRenderer::Illuminate(void *pnThread) {
             if (gameStates.render.bApplyDynLight)
                 lightManager.ResetNearestStatic(nSegment, nThread);
         }
-        SDL_LockMutex(m_lightLock); // active render thread count must only be decremented by one thread at a time
-#if DBG
-        if (!m_nActiveThreads)
-            BRP;
-        else
-#endif
-            if (!--m_nActiveThreads)
-            SDL_SemPost(m_lightDone); // tell the renderer to quit rendering and continue program execution
+        // active render thread count must only be decremented by one thread at a time
+        SDL_LockMutex(m_lightLock);
+        if (!--m_nActiveThreads) {
+            // tell the renderer to quit rendering and continue program execution
+            SDL_SemPost(m_lightDone);
+        }
         SDL_UnlockMutex(m_lightLock);
     }
     RETVAL(1)
