@@ -1133,8 +1133,12 @@ void CGameLoop::HandleQuit(void) {
     if (gameStates.app.bConfigMenu)
         ConfigMenu();
 
-    if ((gameStates.app.nFunctionMode != FMODE_GAME) && gameData.demoData.bAuto && !gameOpts->demo.bRevertFormat &&
-        (gameData.demoData.nState != ND_STATE_NORMAL)) {
+    if (
+        (gameStates.app.nFunctionMode != FMODE_GAME) &&
+        gameData.demoData.bAuto &&
+        !gameOpts->demo.bRevertFormat &&
+        (gameData.demoData.nState != ND_STATE_NORMAL)
+    ) {
         int32_t choice, fmode;
         fmode = gameStates.app.nFunctionMode;
         SetFunctionMode(FMODE_GAME);
@@ -1149,8 +1153,12 @@ void CGameLoop::HandleQuit(void) {
         }
     }
 
-    if ((gameStates.app.nFunctionMode != FMODE_GAME) && (gameData.demoData.nState != ND_STATE_PLAYBACK) &&
-        (gameStates.app.nFunctionMode != FMODE_EDITOR) && !gameStates.multi.bIWasKicked) {
+    if (
+        (gameStates.app.nFunctionMode != FMODE_GAME) &&
+        (gameData.demoData.nState != ND_STATE_PLAYBACK) &&
+        (gameStates.app.nFunctionMode != FMODE_EDITOR) &&
+        !gameStates.multi.bIWasKicked
+    ) {
         if (QuitSaveLoadMenu())
             SetFunctionMode(FMODE_GAME);
     }

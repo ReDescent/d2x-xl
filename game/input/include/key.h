@@ -48,7 +48,6 @@ extern int32_t KeyCheckChar(); // Returns 1 if a char is waiting
 extern int32_t KeyGetChar(); // Gets key if one waiting other waits for one.
 extern int32_t KeyInKey(); // Gets key if one, other returns 0.
 extern int32_t KeyInKeyTime(fix *time); // Same as inkey, but returns the time the key was pressed down.
-extern int32_t KeyPeekKey(); // Same as inkey, but doesn't remove key from buffer.
 
 extern uint8_t KeyToASCII(int32_t keyCode);
 

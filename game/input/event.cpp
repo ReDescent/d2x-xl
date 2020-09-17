@@ -18,12 +18,22 @@
 
 namespace {
 void WindowFocusHandler(int window, bool gained) {
-    // TODO: implement game pause when losing focus
+    PrintLog(0, "Window %s focus: %d\n", (gained ? "gained" : "lost") , window);
 }
 
 void WindowCloseHandler(int window) {
-    // TODO: implement proper closing
+    PrintLog(0, "Window closed: %d\n", window);
 }
+
+// TODO SEE: https://wiki.libsdl.org/Tutorials/TextInput
+void TextInputHandler(SDL_TextInputEvent *event) {
+    PrintLog(0, "Text input: \"%s\"\n", event->text);
+}
+void TextEditingHandler(SDL_TextEditingEvent *event) {
+    PrintLog(0, "Text editing: start %d length %d text \"%s\"\n", event->start, event->length, event->text);
+}
+
+
 }
 
 extern void KeyHandler(SDL_KeyboardEvent *event);
@@ -48,6 +58,12 @@ void event_poll() {
         case SDL_KEYDOWN:
         case SDL_KEYUP:
             KeyHandler(reinterpret_cast<SDL_KeyboardEvent *>(&event));
+            break;
+        case SDL_TEXTINPUT:
+            TextInputHandler(reinterpret_cast<SDL_TextInputEvent *>(&event));
+            break;
+        case SDL_TEXTEDITING:
+            TextEditingHandler(reinterpret_cast<SDL_TextEditingEvent *>(&event));
             break;
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:

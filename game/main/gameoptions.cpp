@@ -443,7 +443,6 @@ void CInputOptions::Init(int32_t i) {
         mouse.bJoystick = 0;
         mouse.nDeadzone = 0;
         joystick.bSyncAxis = 1;
-        keyboard.bUse = 1;
         bUseHotKeys = 1;
         keyboard.nRamp = 100;
         keyboard.bRamp[0] = keyboard.bRamp[1] = keyboard.bRamp[2] = 0;
@@ -463,7 +462,6 @@ void CInputOptions::Init(int32_t i) {
         mouse.nDeadzone = 0;
         mouse.bJoystick = 0;
         joystick.bSyncAxis = 1;
-        keyboard.bUse = 1;
         bUseHotKeys = 1;
         mouse.nDeadzone = 2;
         mouse.sensitivity[0] = mouse.sensitivity[1] = mouse.sensitivity[2] = 8;

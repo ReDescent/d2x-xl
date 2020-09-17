@@ -437,7 +437,6 @@ void CPlayerProfile::Create(void) {
             RP(gameOptions[i].input.oculusRift.nDeadzone, i, 0);
             RP(gameOptions[i].input.trackIR.nMode, i, 0);
             RP(gameOptions[i].input.trackIR.nDeadzone, i, 0);
-            RP(gameOptions[i].input.keyboard.nType, i, 0);
             RP(gameOptions[i].input.keyboard.nRamp, i, 0);
             RP(gameOptions[i].ogl.nMaxLightsPerPass, i, 0);
             RP(gameOptions[i].render.nLightingMethod, i, 0);

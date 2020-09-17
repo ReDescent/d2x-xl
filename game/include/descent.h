@@ -568,8 +568,6 @@ typedef struct tTrackIRInputOptions {
 //------------------------------------------------------------------------------
 
 typedef struct tKeyboardInputOptions {
-    int32_t nType;
-    int32_t bUse;
     int32_t nRamp;
     int32_t bRamp[3];
 } tKeyboardInputOptions;
@@ -794,8 +792,6 @@ class CKeyStates {
     uint8_t nBufferType; // 0=No buffer, 1=buffer ASCII, 2=buffer scans
     uint8_t bRepeat;
     uint8_t bEditorMode;
-    uint8_t nLastPressed;
-    uint8_t nLastReleased;
     uint8_t pressed[256];
     int32_t xLastPressTime;
 };

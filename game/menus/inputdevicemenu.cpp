@@ -738,7 +738,6 @@ void TrackIRConfigMenu(void) {
 //------------------------------------------------------------------------------
 
 static const char *kbdRampIds[] = {"acceleration", "rotation", "sliding"};
-static const char *kbdLayoutIds[] = {"qwerty", "qwertz", "azerty", "dvorak"};
 
 int32_t KeyboardConfigCallback(CMenu &menu, int32_t &key, int32_t nCurItem, int32_t nState) {
     if (nState)
@@ -829,19 +828,9 @@ void KeyboardConfigMenu(void) {
                     }
                 }
             }
-            m.AddText("", "");
-            m.AddText(TXT_KEYBOARD_LAYOUT, 0);
-            m.AddRadio(kbdLayoutIds[0], TXT_QWERTY, gameOpts->input.keyboard.nType == 0, KEY_E, HTX_KEYBOARD_LAYOUT);
-            m.AddRadio(kbdLayoutIds[1], TXT_QWERTZ, gameOpts->input.keyboard.nType == 1, KEY_G, HTX_KEYBOARD_LAYOUT);
-            m.AddRadio(kbdLayoutIds[2], TXT_AZERTY, gameOpts->input.keyboard.nType == 2, KEY_F, HTX_KEYBOARD_LAYOUT);
-            m.AddRadio(kbdLayoutIds[3], TXT_DVORAK, gameOpts->input.keyboard.nType == 3, KEY_D, HTX_KEYBOARD_LAYOUT);
             i = m.Menu(NULL, TXT_KEYBOARD_CONFIG, KeyboardConfigCallback, &choice);
         } while (i == -2);
-        for (int32_t j = 0; j < 4; j++)
-            if (m.Value(kbdLayoutIds[j]) != 0) {
-                gameOpts->input.keyboard.nType = j;
-                break;
-            }
+
         if (i == -1)
             return;
         if (choice == m.IndexOf("customize device"))
